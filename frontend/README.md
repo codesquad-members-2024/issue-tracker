@@ -1,46 +1,20 @@
-# Getting Started with Create React App
+# 프론트엔드 1주차 기능 목록
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 로그인
+- [ ] 로그인 페이지의 아이디와 비밀번호 입력
+- [ ] 아이디와 비밀번호 창이 비어있는 채로 로그인 버튼 클릭 시 오류 메시지 출력
+- [ ] 아이디, 비밀번호 입력 값에 유효하지 않은 값이 입력된 채로 로그인 버튼 클릭 시 오류 메시지 출력
+- [ ] 아이디, 비밀번호 입력 값에 유효한 값이 입력된 채로 로그인 버튼 클릭 시 메인 목록 페이지로 이동
+- [ ] 회원가입 버튼 클릭 시 회원가입 페이지로 이동
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 회원가입
+- [ ] 각 입력 창에 유효한 길이와 형식의 입력 값 입력
+  - [ ] 아이디: 최소 6자, 최대 16자의 알파벳, 숫자
+  - [ ] 비밀번호: 최소 6자, 최대 12자의 알파벳, 숫자
+  - [ ] 닉네임: 최소 2자, 최대 8자의 알파벳, 숫자
+- [ ] 글자 수가 맞지 않거나 입력 값 형식이 맞지 않을 시 오류 메시지 출력
+- [ ] 동일한 아이디가 존재하는 경우 오류 메시지 출력
+- [ ] 각 입력 값의 길이와 형식이 맞고, 아이디에 중복이 없을 시 회원가입 확인 버튼 활성화
+- [ ] 회원가입 확인 버튼 클릭 시 서버 요청
+  - [ ] 서버 요청이 실패한 경우, 오류 페이지로 이동
+  - [ ] 서버 요청이 성공한 경우, 로그인 페이지로 이동
