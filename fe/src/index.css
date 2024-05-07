@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+
+@layer components {
+	.btn-large {
+		border-radius: 16px;
+		font-weight: 500;
+		font-size: large;
+		width: 320px;
+		height: 56px;
+		box-shadow: theme("boxShadow.xl");
+	}
+	.btn-outline {
+		border: 1px solid theme("colors[accent.blue]");
+		color: theme("colors[accent.blue]");
+	}
+	.btn-container {
+		background-color: theme("colors[accent.blue]");
+	}
+}
+
+body {
+	font-family: "Noto Sans KR";
+}

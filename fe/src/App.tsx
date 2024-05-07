@@ -2,7 +2,7 @@ import Login from "./routes/Login";
 
 function App() {
 	return (
-		<div className="App">
+		<div className="w-screen h-screen bg-grayscale.100">
 			<Login />
 		</div>
 	);
