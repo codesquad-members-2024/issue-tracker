@@ -36,26 +36,36 @@ public class UserService {
     }
 
     private boolean verifyUserInfo(User user){
-        if(!isLengthVaild(user.getUserId(), 6, 16)){
+        if(!isLengthValid(user.getUserId(), 6, 16)){
             log.error("사용자 ID 길이가 유효하지 않음: {}", user.getUserId());
 
             return false;
         }
-        if(!isLengthVaild(user.getUserPassword(), 6 , 12)){
+        if(!isUserIdAlphanumeric(user.getUserId())){
+            log.error("사용자 ID에 영문자와 숫자만 포함되어야 함: {}", user.getUserId());
+
+            return false;
+        }
+        if(!isLengthValid(user.getUserPassword(), 6 , 12)){
             log.error("사용자 비밀번호 길이가 유효하지 않음: {}", user.getUserId());
 
             return false;
         }
-        if(!isLengthVaild(user.getUserNickname(), 2, 6)){
-            log.error("사용자 닉네임 길이가 유효하지 않음: {}", user.getUserId());
+        if(!isLengthValid(user.getUserNickname(), 2, 6)){
 
+            log.error("사용자 닉네임 길이가 유효하지 않음: {}", user.getUserId());
             return false;
         }
 
         return true;
     }
 
-    private boolean isLengthVaild(String field, int min, int max){
+    private boolean isUserIdAlphanumeric(String userId){
+
+        return userId.matches("[a-zA-Z0-9]+");
+    }
+
+    private boolean isLengthValid(String field, int min, int max){
 
         return field.length() >= min && field.length() <= max;
     }
