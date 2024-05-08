@@ -6,7 +6,6 @@ interface LoginFormProps {
   onInputChange: (value: string) => void;
 }
 
-const MIN_LENGTH = 6;
 const MAX_LENGTH = {
   id: 16,
   password: 12,
@@ -32,7 +31,6 @@ function LoginForm({ type, onInputChange }: LoginFormProps) {
         <LoginInput
           type={inputType}
           value={inputValue}
-          minLength={MIN_LENGTH}
           maxLength={MAX_LENGTH[type]}
           onChange={(event) => handleInputChange(event)}
           required
