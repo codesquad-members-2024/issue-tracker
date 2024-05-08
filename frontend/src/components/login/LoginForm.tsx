@@ -6,6 +6,11 @@ interface LoginFormProps {
   onInputChange: (value: string) => void;
 }
 
+const MIN_LENGTH = 6;
+const MAX_LENGTH = {
+  id: 16,
+  password: 12,
+};
 const LABEL_TEXT = {
   id: "아이디",
   password: "비밀번호",
@@ -19,23 +24,25 @@ function LoginForm({ type, onInputChange }: LoginFormProps) {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
     onInputChange(event.target.value);
-  }
+  };
 
   return (
     <Form isFocused={isFocused}>
-      <StyledParagraph>
-        <StyledInput
+      <LoginParagraph>
+        <LoginInput
           type={inputType}
           value={inputValue}
+          minLength={MIN_LENGTH}
+          maxLength={MAX_LENGTH[type]}
           onChange={(event) => handleInputChange(event)}
           required
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
-        <StyledLabel>
+        <LoginInputLabel>
           <span>{LABEL_TEXT[type]}</span>
-        </StyledLabel>
-      </StyledParagraph>
+        </LoginInputLabel>
+      </LoginParagraph>
     </Form>
   );
 }
@@ -60,14 +67,14 @@ const Form = styled.div<{ isFocused: boolean }>`
     `}
 `;
 
-const StyledParagraph = styled.p`
+const LoginParagraph = styled.p`
   position: relative;
   width: 100%;
   height: 24px;
   margin: 0;
 `;
 
-const StyledInput = styled.input`
+const LoginInput = styled.input`
   position: relative;
   top: 35%;
   width: 100%;
@@ -92,7 +99,7 @@ const StyledInput = styled.input`
   }
 `;
 
-const StyledLabel = styled.label`
+const LoginInputLabel = styled.label`
   position: absolute;
   top: -50%;
   left: 0%;

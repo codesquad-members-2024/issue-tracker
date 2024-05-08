@@ -4,16 +4,19 @@ import LoginForm from "./LoginForm";
 import useLoginStore from "../../hooks/useLoginStore";
 
 function Login() {
-  const { setIdValue, setPasswordValue, allFilled } = useLoginStore();
+  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick } = useLoginStore();
 
   return (
     <LoginWrapper>
-      <img src={pageLogo} />
+      <img src={pageLogo} alt="page-logo" />
       <GithubLoginButton>Github 계정으로 로그인</GithubLoginButton>
       <div>or</div>
       <LoginForm type="id" onInputChange={setIdValue} />
       <LoginForm type="password" onInputChange={setPasswordValue} />
-      <LoginButton allFilled={allFilled}>아이디로 로그인</LoginButton>
+      <LoginButton onClick={handleLoginClick} allFilled={allFilled}>
+        아이디로 로그인
+      </LoginButton>
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <RegistrationButton>회원가입</RegistrationButton>
     </LoginWrapper>
   );
@@ -50,7 +53,7 @@ const LoginButton = styled.button<{ allFilled: boolean }>`
   font-size: 20px;
   color: white;
   opacity: ${({ allFilled }) => (allFilled ? "1" : "0.32")};
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 `;
 
 const RegistrationButton = styled.button`
@@ -58,6 +61,11 @@ const RegistrationButton = styled.button`
   background-color: transparent;
   font-size: 16px;
   color: #4e4b66;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-top: 10px;
 `;
 
 export default Login;
