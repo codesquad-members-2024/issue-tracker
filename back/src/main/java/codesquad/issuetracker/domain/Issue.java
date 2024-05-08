@@ -1,10 +1,15 @@
 package codesquad.issuetracker.domain;
 
+import lombok.Getter;
+import org.springframework.data.annotation.Id;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class Issue {
 
-    private int id;
+    @Id
+    private Long id;
     private String title;
     private String content;
     private String profileImage;
@@ -15,7 +20,7 @@ public class Issue {
     private LocalDateTime createTime;
     private boolean deleted;
 
-    public Issue(int id,
+    public Issue(Long id,
                  String title,
                  String content,
                  String profileImage,
@@ -33,45 +38,5 @@ public class Issue {
         this.writer = writer;
         this.createTime = LocalDateTime.now();
         this.deleted = false;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public String getMilestoneId() {
-        return milestoneId;
-    }
-
-    public String getLabelId() {
-        return labelId;
-    }
-
-    public String getManager() {
-        return manager;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public String getWriter() {
-        return writer;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
     }
 }
