@@ -12,11 +12,12 @@ const LABEL_TEXT = {
 
 function LoginForm({ type }: LoginFormProps) {
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const inputType = type === "password" ? type : "text";
 
   return (
     <Form isFocused={isFocused}>
       <StyledParagraph>
-        <StyledInput type="text" required onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} />
+        <StyledInput type={inputType} required onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} />
         <StyledLabel>
           <span>{LABEL_TEXT[type]}</span>
         </StyledLabel>
