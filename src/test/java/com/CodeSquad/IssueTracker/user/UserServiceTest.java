@@ -10,8 +10,8 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.any;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -35,14 +35,14 @@ public class UserServiceTest {
     @DisplayName("유효한 사용자 정보 테스트")
     @Test
     public void testSaveSuccess() {
-        String result = userService.save(validUser);
-        assertThat(result, is("success"));
+        boolean result = userService.save(validUser);
+        assertTrue(result);
     }
 
     @DisplayName("유효하지 않은 사용자 정보 테스트")
     @Test
     public void testSaveFail() {
-        String result = userService.save(invalidUser);
-        assertThat(result, is("fail"));
+        boolean result = userService.save(invalidUser);
+        assertFalse(result);
     }
 }
