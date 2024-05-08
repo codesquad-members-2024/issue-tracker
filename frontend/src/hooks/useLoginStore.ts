@@ -20,7 +20,7 @@ const useLoginStore = () => {
     if (idValue.length < MIN_LENGTH || passwordValue.length < MIN_LENGTH) {
       setErrorMessage(INPUT_LENGTH_ERROR_MESSAGE);
       return;
-    } 
+    }
 
     setErrorMessage("");
   };
