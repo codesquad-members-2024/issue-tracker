@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 
 interface LoginFormProps {
   type: "id" | "password";
+  onInputChange: (value: string) => void;
 }
 
 const LABEL_TEXT = {
@@ -10,14 +11,27 @@ const LABEL_TEXT = {
   password: "비밀번호",
 };
 
-function LoginForm({ type }: LoginFormProps) {
+function LoginForm({ type, onInputChange }: LoginFormProps) {
+  const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const inputType = type === "password" ? type : "text";
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    onInputChange(event.target.value);
+  }
 
   return (
     <Form isFocused={isFocused}>
       <StyledParagraph>
-        <StyledInput type={inputType} required onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} />
+        <StyledInput
+          type={inputType}
+          value={inputValue}
+          onChange={(event) => handleInputChange(event)}
+          required
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
         <StyledLabel>
           <span>{LABEL_TEXT[type]}</span>
         </StyledLabel>
