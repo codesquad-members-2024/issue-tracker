@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MIN_LENGTH = 6;
 const INPUT_REGEX = /^[A-Za-z0-9]+$/;
@@ -10,6 +11,7 @@ const useLoginStore = () => {
   const [passwordValue, setPasswordValue] = useState("");
   const [allFilled, setAllFilled] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleLoginClick = () => {
     if (!INPUT_REGEX.test(idValue) || !INPUT_REGEX.test(passwordValue)) {
@@ -25,9 +27,19 @@ const useLoginStore = () => {
     setErrorMessage("");
   };
 
+  const handleRegistrationClick = () => navigate("/registration");
+
   useEffect(() => setAllFilled(!!(idValue && passwordValue)), [idValue, passwordValue]);
 
-  return { setIdValue, setPasswordValue, allFilled, setAllFilled, errorMessage, handleLoginClick };
+  return {
+    setIdValue,
+    setPasswordValue,
+    allFilled,
+    setAllFilled,
+    errorMessage,
+    handleLoginClick,
+    handleRegistrationClick,
+  };
 };
 
 export default useLoginStore;

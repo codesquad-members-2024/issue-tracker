@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 import useLoginStore from "../../hooks/useLoginStore";
 
 function Login() {
-  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick } = useLoginStore();
+  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick, handleRegistrationClick } = useLoginStore();
 
   return (
     <LoginWrapper>
@@ -17,7 +17,7 @@ function Login() {
         아이디로 로그인
       </LoginButton>
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      <RegistrationButton>회원가입</RegistrationButton>
+      <RegistrationButton onClick={handleRegistrationClick}>회원가입</RegistrationButton>
     </LoginWrapper>
   );
 }
@@ -53,6 +53,7 @@ const LoginButton = styled.button<{ allFilled: boolean }>`
   font-size: 20px;
   color: white;
   opacity: ${({ allFilled }) => (allFilled ? "1" : "0.32")};
+  cursor: ${({ allFilled }) => (allFilled ? "pointer" : "default")};
   transition: all 0.5s ease-in-out;
 `;
 
@@ -61,6 +62,7 @@ const RegistrationButton = styled.button`
   background-color: transparent;
   font-size: 16px;
   color: #4e4b66;
+  cursor: pointer;
 `;
 
 const ErrorMessage = styled.div`
