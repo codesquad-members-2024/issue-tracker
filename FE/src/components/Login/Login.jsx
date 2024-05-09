@@ -1,16 +1,20 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { Logo } from "./logo";
+import { Logo } from "../../assets/logo";
+
 export function Login() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = () => {
-    if (id === "aa" && password === "aa") { // 수정 예정
+    if (id === "aa" && password === "aa") {
       setIsAuthenticated(true);
       setErrorMessage("");
+      navigate('/issues'); // 로그인 성공 시 /issues로 이동
     } else {
       setErrorMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
     }
@@ -20,7 +24,7 @@ export function Login() {
 
   return (
     <form>
-      <LoginContainer>
+      <LoginContainer className="logoContainer">
         {!isAuthenticated && (
           <>
             <Logo />
@@ -33,12 +37,11 @@ export function Login() {
               autoComplete="off"
               onChange={(event) => setPassword(event.target.value)}
             />
-            <LoginBtn type="button" onClick={handleLogin}disabled={isInputEmpty}>아이디로 로그인</LoginBtn>
+            <LoginBtn type="button" onClick={handleLogin} disabled={isInputEmpty}>아이디로 로그인</LoginBtn>
             {errorMessage && <StyledMessage>{errorMessage}</StyledMessage>}
             <JoinBtn>회원가입</JoinBtn>
           </>
         )}
-        {isAuthenticated && <p>main 화면</p>} {/* 수정예정 */}
       </LoginContainer>
     </form>
   );
@@ -60,10 +63,6 @@ const LoginContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 600px;
-  img {
-    width: 320px;
-    padding: 5px 0;
-  }
   p {
     margin: 5px 0px;
   }
@@ -71,6 +70,7 @@ const LoginContainer = styled.div`
 
 const GitHubBtn = styled.button`
   ${LoginButtonStyles}
+  margin: 50px 0 10px;
   background-color: unset;
   color: #007bff;
   border: 1px solid #007bff;
