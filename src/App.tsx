@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./app/page";
-import OpenPage from "./app/OpenPage/page";
-import ClosePage from "./app/ClosePage/page";
+import IssuePage from "./app/IssuePage/page";
 import LabelsPage from "./app/LabelsPage/page";
 import MilestonesPage from "./app/MilestonesPage/page";
-import NewPage from "./app/newPage/page";
+import NewPage from "./app/NewPage/page";
+import IssueProduct from "./app/IssueProduct/page";
 
 function App() {
     return (
@@ -12,8 +12,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginPage />}></Route>
-                    <Route path="/open" element={<OpenPage />}></Route>
-                    <Route path="/closed" element={<ClosePage />}></Route>
+                    <Route path="/issue" element={<IssuePage />}></Route>
+                    <Route path="/issue/:productId" element={<IssueProduct />}></Route>
                     <Route path="/labels" element={<LabelsPage />}></Route>
                     <Route path="/milestones" element={<MilestonesPage />}></Route>
                     <Route path="/new" element={<NewPage />}></Route>

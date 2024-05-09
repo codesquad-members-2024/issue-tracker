@@ -1,6 +1,5 @@
-- "/" : 로그인 페이지
-- "/open" : 오픈페이지
-- "/closed" : 클로즈 페이지
+- "/" : open/closed SPA 페이지
+- "/Login" : Login 페이지
 - "/labels" : 레이블 페이지
 - "/milestones" : 마일스톤 페이지
 - "/news" : news 이슈 페이지
@@ -17,3 +16,10 @@ const onClick = () => {
 
 }
 ```
+
+- dropbox 생성 컨테이너 만들기
+- API 객체 만들기
+
+- issuePage - Nav		
+            - IssueFeed - FeedNav
+                        - IssueCard

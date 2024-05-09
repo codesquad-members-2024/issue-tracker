@@ -5,7 +5,7 @@ const LoginPage = () => {
 
     const handelSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
-        navigate("/open", { replace: true });
+        navigate("/issue", { replace: true });
     };
     return (
         <main className="h-full flex justify-center items-center">
@@ -41,3 +41,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

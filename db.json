@@ -1,3 +1,40 @@
 {
-    
+    "issues": [
+        {
+            "id": 1,
+            "author": "John Doe",
+            "title": "Sample Issue 1",
+            "contents": "This is the contents of the sample issue 1.",
+            "created_at": "2024-05-08T12:00:00Z",
+            "updated_at": "2024-05-08T12:30:00Z",
+            "closed_at": null,
+            "milestone_id": 1,
+            "is_open": true,
+            "is_deleted": false
+        },
+        {
+            "id": 2,
+            "author": "Jane Smith",
+            "title": "Sample Issue 2",
+            "contents": "This is the contents of the sample issue 2.",
+            "created_at": "2024-05-07T10:00:00Z",
+            "updated_at": "2024-05-08T09:45:00Z",
+            "closed_at": "2024-05-08T09:50:00Z",
+            "milestone_id": null,
+            "is_open": false,
+            "is_deleted": false
+        },
+        {
+            "id": 3,
+            "author": "Alice Johnson",
+            "title": "Sample Issue 3",
+            "contents": "This is the contents of the sample issue 3.",
+            "created_at": "2024-05-06T15:00:00Z",
+            "updated_at": "2024-05-08T10:20:00Z",
+            "closed_at": null,
+            "milestone_id": 2,
+            "is_open": true,
+            "is_deleted": false
+        }
+    ]
 }
