@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import pageLogo from "../../img/pageLogo.svg";
-import LoginForm from "./LoginForm";
 import useLoginStore from "../../hooks/useLoginStore";
+import AuthorizationForm from "../authorization/AuthorizationForm";
 
 function Login() {
   const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick, handleRegistrationClick } = useLoginStore();
@@ -11,8 +11,8 @@ function Login() {
       <img src={pageLogo} alt="page-logo" />
       <GithubLoginButton>Github 계정으로 로그인</GithubLoginButton>
       <div>or</div>
-      <LoginForm type="id" onInputChange={setIdValue} />
-      <LoginForm type="password" onInputChange={setPasswordValue} />
+      <AuthorizationForm type="id" onInputChange={setIdValue} />
+      <AuthorizationForm type="password" onInputChange={setPasswordValue} />
       <LoginButton onClick={handleLoginClick} allFilled={allFilled}>
         아이디로 로그인
       </LoginButton>

@@ -1,19 +1,19 @@
 import styled from "styled-components";
-import RegistrationForm from "./RegistrationForm";
 import pageLogo from "../../img/pageLogo.svg";
+import AuthorizationForm from "../authorization/AuthorizationForm";
 
 function Registration() {
   return (
     <RegistrationWrapper>
       <img src={pageLogo} alt="page-logo" />
-      <RegistrationForm type="id" onInputChange={() => {}} />
+      <AuthorizationForm type="id" onInputChange={() => {}} />
       <ValidationWrapper>
         <DuplicateValidation>중복 확인</DuplicateValidation>
         <span>중복 확인 성공!</span>
       </ValidationWrapper>
-      <RegistrationForm type="password" onInputChange={() => {}} />
-      <RegistrationForm type="password-validation" onInputChange={() => {}} />
-      <RegistrationForm type="nickname" onInputChange={() => {}} />
+      <AuthorizationForm type="password" onInputChange={() => {}} />
+      <AuthorizationForm type="password-validation" onInputChange={() => {}} />
+      <AuthorizationForm type="nickname" onInputChange={() => {}} />
       <SubmitButton allFilled={false}>회원가입</SubmitButton>
     </RegistrationWrapper>
   );

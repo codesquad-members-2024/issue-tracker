@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 
-interface RegistrationFormProps {
+interface AuthorizationFormProps {
   type: "id" | "password" | "password-validation" | "nickname";
   onInputChange: (value: string) => void;
 }
@@ -19,7 +19,7 @@ const LABEL_TEXT = {
   nickname: "닉네임",
 };
 
-function RegistrationForm({ type, onInputChange }: RegistrationFormProps) {
+function AuthorizationForm({ type, onInputChange }: AuthorizationFormProps) {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const inputType = type === "password" || type === "password-validation" ? "password" : "text";
@@ -30,9 +30,9 @@ function RegistrationForm({ type, onInputChange }: RegistrationFormProps) {
   };
 
   return (
-    <Form isFocused={isFocused}>
-      <RegistrationParagraph>
-        <RegistrationInput
+    <Wrapper isFocused={isFocused}>
+      <FormParagraph>
+        <FormInput
           type={inputType}
           value={inputValue}
           maxLength={MAX_LENGTH[type]}
@@ -41,15 +41,15 @@ function RegistrationForm({ type, onInputChange }: RegistrationFormProps) {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
-        <RegistrationInputLabel>
+        <FormInputLabel>
           <span>{LABEL_TEXT[type]}</span>
-        </RegistrationInputLabel>
-      </RegistrationParagraph>
-    </Form>
+        </FormInputLabel>
+      </FormParagraph>
+    </Wrapper>
   );
 }
 
-const Form = styled.div<{ isFocused: boolean }>`
+const Wrapper = styled.div<{ isFocused: boolean }>`
   width: 288px;
   height: 56px;
   display: flex;
@@ -69,14 +69,14 @@ const Form = styled.div<{ isFocused: boolean }>`
     `}
 `;
 
-const RegistrationParagraph = styled.p`
+const FormParagraph = styled.p`
   position: relative;
   width: 100%;
   height: 24px;
   margin: 0;
 `;
 
-const RegistrationInput = styled.input`
+const FormInput = styled.input`
   position: relative;
   top: 35%;
   width: 100%;
@@ -101,7 +101,7 @@ const RegistrationInput = styled.input`
   }
 `;
 
-const RegistrationInputLabel = styled.label`
+const FormInputLabel = styled.label`
   position: absolute;
   top: -50%;
   left: 0%;
@@ -130,4 +130,4 @@ const RegistrationInputLabel = styled.label`
   }
 `;
 
-export default RegistrationForm;
+export default AuthorizationForm;
