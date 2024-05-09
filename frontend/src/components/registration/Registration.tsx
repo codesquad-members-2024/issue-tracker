@@ -2,22 +2,38 @@ import styled from "styled-components";
 import pageLogo from "../../img/pageLogo.svg";
 import AuthorizationForm from "../authorization/AuthorizationForm";
 import { useNavigate } from "react-router-dom";
+import useRegistrationStore from "../../hooks/useRegistrationStore";
 
 function Registration() {
+  const {
+    setIdValue,
+    setPasswordValue,
+    setPasswordValidationValue,
+    setNicknameValue,
+    allFilled,
+    errorMessage,
+    handleRegistrationClick,
+    handleValidationClick,
+    isValidated,
+    validationMessage,
+  } = useRegistrationStore();
   const navigate = useNavigate();
 
   return (
     <RegistrationWrapper>
       <Logo src={pageLogo} alt="page-logo" onClick={() => navigate("/")} />
-      <AuthorizationForm type="id" onInputChange={() => {}} />
+      <AuthorizationForm type="id" onInputChange={setIdValue} />
       <ValidationWrapper>
-        <DuplicateValidation>중복 확인</DuplicateValidation>
-        <span>중복 확인 성공!</span>
+        <DuplicateValidation onClick={handleValidationClick}>중복 확인</DuplicateValidation>
+        <ValidationMessageWrapper>
+          <ValidationMessage validated={isValidated}>{validationMessage}</ValidationMessage>
+        </ValidationMessageWrapper>
       </ValidationWrapper>
-      <AuthorizationForm type="password" onInputChange={() => {}} />
-      <AuthorizationForm type="password-validation" onInputChange={() => {}} />
-      <AuthorizationForm type="nickname" onInputChange={() => {}} />
-      <SubmitButton allFilled={false}>회원가입</SubmitButton>
+      <AuthorizationForm type="password" onInputChange={setPasswordValue} />
+      <AuthorizationForm type="password-validation" onInputChange={setPasswordValidationValue} />
+      <AuthorizationForm type="nickname" onInputChange={setNicknameValue} />
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      <SubmitButton allFilled={allFilled} onClick={handleRegistrationClick}>회원가입</SubmitButton>
     </RegistrationWrapper>
   );
 }
@@ -52,6 +68,15 @@ const DuplicateValidation = styled.button`
   cursor: pointer;
 `;
 
+const ValidationMessageWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ValidationMessage = styled.span<{ validated: boolean }>`
+  color: ${({ validated }) => (validated ? "green" : "red")};
+`;
+
 const SubmitButton = styled.button<{ allFilled: boolean }>`
   width: 320px;
   height: 56px;
@@ -63,6 +88,11 @@ const SubmitButton = styled.button<{ allFilled: boolean }>`
   opacity: ${({ allFilled }) => (allFilled ? "1" : "0.32")};
   cursor: ${({ allFilled }) => (allFilled ? "pointer" : "default")};
   transition: all 0.5s ease-in-out;
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-top: 10px;
 `;
 
 export default Registration;

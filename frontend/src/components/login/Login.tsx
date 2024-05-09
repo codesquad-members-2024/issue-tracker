@@ -49,6 +49,7 @@ const GithubLoginButton = styled.button`
   background-color: transparent;
   font-size: 20px;
   font-color: white;
+  cursor: pointer;
 `;
 
 const LoginButton = styled.button<{ allFilled: boolean }>`
