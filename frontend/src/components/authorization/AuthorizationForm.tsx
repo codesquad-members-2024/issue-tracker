@@ -1,24 +1,28 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 
-interface LoginFormProps {
-  type: "id" | "password";
+interface AuthorizationFormProps {
+  type: "id" | "password" | "password-validation" | "nickname";
   onInputChange: (value: string) => void;
 }
 
 const MAX_LENGTH = {
   id: 16,
   password: 12,
+  "password-validation": 12,
+  nickname: 8,
 };
 const LABEL_TEXT = {
   id: "아이디",
   password: "비밀번호",
+  "password-validation": "비밀번호 확인",
+  nickname: "닉네임",
 };
 
-function LoginForm({ type, onInputChange }: LoginFormProps) {
+function AuthorizationForm({ type, onInputChange }: AuthorizationFormProps) {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const inputType = type === "password" ? type : "text";
+  const inputType = type === "password" || type === "password-validation" ? "password" : "text";
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -26,9 +30,9 @@ function LoginForm({ type, onInputChange }: LoginFormProps) {
   };
 
   return (
-    <Form isFocused={isFocused}>
-      <LoginParagraph>
-        <LoginInput
+    <Wrapper isFocused={isFocused}>
+      <FormParagraph>
+        <FormInput
           type={inputType}
           value={inputValue}
           maxLength={MAX_LENGTH[type]}
@@ -37,15 +41,15 @@ function LoginForm({ type, onInputChange }: LoginFormProps) {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
-        <LoginInputLabel>
+        <FormInputLabel>
           <span>{LABEL_TEXT[type]}</span>
-        </LoginInputLabel>
-      </LoginParagraph>
-    </Form>
+        </FormInputLabel>
+      </FormParagraph>
+    </Wrapper>
   );
 }
 
-const Form = styled.div<{ isFocused: boolean }>`
+const Wrapper = styled.div<{ isFocused: boolean }>`
   width: 288px;
   height: 56px;
   display: flex;
@@ -65,14 +69,14 @@ const Form = styled.div<{ isFocused: boolean }>`
     `}
 `;
 
-const LoginParagraph = styled.p`
+const FormParagraph = styled.p`
   position: relative;
   width: 100%;
   height: 24px;
   margin: 0;
 `;
 
-const LoginInput = styled.input`
+const FormInput = styled.input`
   position: relative;
   top: 35%;
   width: 100%;
@@ -97,7 +101,7 @@ const LoginInput = styled.input`
   }
 `;
 
-const LoginInputLabel = styled.label`
+const FormInputLabel = styled.label`
   position: absolute;
   top: -50%;
   left: 0%;
@@ -126,4 +130,4 @@ const LoginInputLabel = styled.label`
   }
 `;
 
-export default LoginForm;
+export default AuthorizationForm;
