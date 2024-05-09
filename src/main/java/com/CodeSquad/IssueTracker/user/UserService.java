@@ -18,11 +18,6 @@ public class UserService {
     public boolean save(User user) {
         log.info("사용자 저장 시도: {}", user.getUserId());
 
-        if (userRepository.existsByUserID(user.getUserId())) {
-            log.error("사용자 ID 중복: {}", user.getUserId());
-            return false;
-        }
-
         if (verifyUserInfo(user)) {
             userRepository.save(user);
             log.info("사용자 저장 성공: {}", user.getUserId());
@@ -46,5 +41,8 @@ public class UserService {
             return false;
         }
         return true;
+    }
+    public boolean isUserIdDuplicated(String userId) {
+        return userRepository.existsByUserID(userId);
     }
 }

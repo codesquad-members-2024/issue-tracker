@@ -1,8 +1,9 @@
 package com.CodeSquad.IssueTracker.user;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+;
 
 @RestController
 public class UserController {
@@ -13,13 +14,20 @@ public class UserController {
     }
 
     @PostMapping("/post/registration")
-    public String postRegistration(@RequestBody User user){
+    public String postRegistration(@RequestBody User user) {
         userService.save(user);
 
         return "success";
     }
 
+    @GetMapping("/get/validation/{id}")
+    public ResponseEntity<?> getValidationId(@PathVariable("id") String id) {
+        boolean isDuplicated = userService.isUserIdDuplicated(id);
 
+        if (isDuplicated) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
-
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

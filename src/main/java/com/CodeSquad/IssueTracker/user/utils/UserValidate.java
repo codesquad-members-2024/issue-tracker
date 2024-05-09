@@ -1,6 +1,5 @@
 package com.CodeSquad.IssueTracker.user.utils;
 
-// 사용자 정보 검증을 위한 별도의 유틸리티 클래스
 public class UserValidate {
 
     public static boolean isUserIdValid(String userId) {

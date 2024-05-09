@@ -13,14 +13,15 @@ public class UserRepository {
     }
 
     public void save(User user) {
-        String sql = "insert into IssueTracker.users (userId, userPassword, userNickname) values (?, ?, ?)";
+        String sql = "insert into users (userId, userPassword, userNickname) values (?, ?, ?)";
         jdbcTemplate.update(sql,user.getUserId(),user.getUserPassword(),user.getUserNickname());
     }
 
     public boolean existsByUserID(String userID){
-        String sql = "select count(*) from IssueTracker.users where userID = ?";
+        String sql = "select count(*) from users where userId = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userID);
 
         return count != null && count > 0;
     }
+
 }
