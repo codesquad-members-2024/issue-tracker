@@ -27,7 +27,7 @@ function Login() {
 						id="id"
 						ref={idRef}
 						placeholder=""
-						className="invalid:input--invalid input-56 my-5 peer/id"
+						className="invalid:input--invalid input-56 my-5 peer/id focus:input-text--focus"
 						type="text"
 						pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,16}$"
 						onBlur={onIdBlur}
@@ -42,7 +42,7 @@ function Login() {
 						id="pw"
 						ref={pwRef}
 						placeholder=""
-						className="input-56 mb-5 peer/pw"
+						className="input-56 mb-5 peer/pw focus:input-text--focus"
 						type="password"
 						pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,12}$"
 						onBlur={onPwBlur}

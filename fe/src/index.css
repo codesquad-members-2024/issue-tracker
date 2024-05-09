@@ -23,19 +23,22 @@
 	.btn-ghost {
 		color: theme("colors[grayscale.700]");
 	}
+
 	.input-56 {
 		width: 320px;
 		height: 56px;
 		background-color: theme("colors[grayscale.200]");
 		border-radius: 16px;
 		padding: 14px 14px 5px;
-		&:focus {
-			outline: 1px solid theme("colors[grayscale.900]");
-			background-color: theme("colors[grayscale.50]");
-			caret-color: theme("colors[accent.blue]");
-			color: theme("colors.black");
-		}
 	}
+
+	.input-text--focus {
+		outline: 1px solid theme("colors[grayscale.900]");
+		background-color: theme("colors[grayscale.50]");
+		caret-color: theme("colors[grayscale.700]");
+		color: theme("colors.black");
+	}
+
 	.input-label {
 		position: absolute;
 		top: 30px;
