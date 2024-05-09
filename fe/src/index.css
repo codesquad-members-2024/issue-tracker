@@ -18,7 +18,6 @@
 	}
 	.btn-container {
 		background-color: theme("colors[accent.blue]");
-		opacity: 32%;
 		color: theme("colors.white");
 	}
 	.btn-ghost {
@@ -50,7 +49,27 @@
 	.input--invalid {
 		outline-color: theme("colors[accent.red]");
 		border: 1px solid theme("colors[accent.red]");
-		color: red;
+		color: theme("colors[accent.red]");
+	}
+
+	.animated-path {
+		stroke: #14142b;
+		stroke-width: 2px;
+		animation: pathAnimation 3s 1 linear forwards;
+	}
+
+	@keyframes pathAnimation {
+		0% {
+			stroke-dasharray: 0 500;
+			fill: theme("colors.white");
+		}
+		60% {
+			fill: theme("colors[grayscale.900]");
+		}
+		100% {
+			stroke-dasharray: 500 0;
+			fill: theme("colors[grayscale.900]");
+		}
 	}
 }
 
