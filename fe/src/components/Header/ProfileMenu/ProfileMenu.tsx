@@ -14,7 +14,7 @@ function ProfileMenu({ darkMode, setDarkMode }: Props) {
 				<FontAwesomeIcon
 					icon={darkMode ? faSun : faMoon}
 					onClick={() => setDarkMode((prev) => (prev ? "" : "dark"))}
-					className="mr-5 text-xl cursor-pointer hover:animate-wiggle dark:text-yellow-400 transition-colors"
+					className="mr-5 text-xl cursor-pointer hover:animate-wiggle dark:text-yellow-400"
 				/>
 			</div>
 			<div className="w-full h-1/2 text-grayscale.700 flex items-center dark:text-grayscale.400">
