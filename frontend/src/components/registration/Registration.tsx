@@ -2,7 +2,7 @@ import styled from "styled-components";
 import pageLogo from "../../img/pageLogo.svg";
 import AuthorizationForm from "../authorization/AuthorizationForm";
 import { useNavigate } from "react-router-dom";
-import useRegistrationStore from "../../hooks/useRegistrationStore";
+import useRegistrationLogic from "../../hooks/useRegistrationLogic";
 
 function Registration() {
   const {
@@ -16,7 +16,7 @@ function Registration() {
     handleValidationClick,
     isValidated,
     validationMessage,
-  } = useRegistrationStore();
+  } = useRegistrationLogic();
   const navigate = useNavigate();
 
   return (

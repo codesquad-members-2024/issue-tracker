@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import pageLogo from "../../img/pageLogo.svg";
-import useLoginStore from "../../hooks/useLoginStore";
 import AuthorizationForm from "../authorization/AuthorizationForm";
 import { useNavigate } from "react-router-dom";
+import useLoginLogic from "../../hooks/useLoginLogic";
 
 function Login() {
-  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick, handleRegistrationClick } =
-    useLoginStore();
+  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick } =
+    useLoginLogic();
   const navigate = useNavigate();
 
   return (
@@ -20,7 +20,7 @@ function Login() {
         아이디로 로그인
       </LoginButton>
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      <RegistrationButton onClick={handleRegistrationClick}>회원가입</RegistrationButton>
+      <RegistrationButton onClick={() => navigate("/registration")}>회원가입</RegistrationButton>
     </LoginWrapper>
   );
 }
