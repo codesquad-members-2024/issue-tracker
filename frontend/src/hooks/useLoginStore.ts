@@ -14,6 +14,8 @@ const useLoginStore = () => {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
+    if (!allFilled) return;
+
     if (!INPUT_REGEX.test(idValue) || !INPUT_REGEX.test(passwordValue)) {
       setErrorMessage(INPUT_REGEX_ERROR_MESSAGE);
       return;
