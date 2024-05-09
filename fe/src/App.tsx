@@ -10,7 +10,7 @@ function App() {
 		>
 			{/* <Login />  */}
 
-			<Main setDarkMode={setDarkMode}/>
+			<Main darkMode={darkMode} setDarkMode={setDarkMode}/>
 		</div>
 	);
 }
