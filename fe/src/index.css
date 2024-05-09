@@ -9,7 +9,7 @@
 		font-size: large;
 		width: 320px;
 		height: 56px;
-		box-shadow: theme("boxShadow.xl");
+		box-shadow: theme("boxShadow.lg");
 	}
 	.btn-outline {
 		border: 1px solid theme("colors[grayscale.700]");

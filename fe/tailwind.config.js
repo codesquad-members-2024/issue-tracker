@@ -19,6 +19,18 @@ module.exports = {
 				"accent.navy": "#0025E6",
 				"accent.red": "#FF3B30",
 			},
+			boxShadow: {
+				profile: "5px 3px 20px 0px rgba(0,0,0,0.15)",
+			},
+			animation: {
+				wiggle: "wiggle 1s ease-in-out infinite",
+			},
+			keyframes: {
+				wiggle: {
+					"0%, 100%": { transform: "rotate(-10deg)" },
+					"50%": { transform: "rotate(10deg)" },
+				},
+			},
 		},
 	},
 	plugins: [],
