@@ -33,7 +33,7 @@ class IssueControllerTest {
 
         IssueCreateRequest request = new IssueCreateRequest("testMember", "testTitle", "testContent");
         final String requestJson = objectMapper.writeValueAsString(request);
-        given(issueService.create(request)).willReturn(1L);
+        given(issueService.create(any(IssueCreateRequest.class))).willReturn(1L);
 
         // when
         final ResultActions result = mockMvc.perform(
@@ -45,4 +45,5 @@ class IssueControllerTest {
         result.andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/issues/1"));
     }
+
 }
