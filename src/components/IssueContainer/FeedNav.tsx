@@ -1,3 +1,4 @@
+
 import React from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
 import { IssueFeedProps } from "./IssueFeed";
@@ -9,18 +10,20 @@ const FeedNav: React.FC<IssueFeedProps> = ({ isOpen, setOpen, issueInfo }) => {
     }
 
     return (
-        <div className="h-45 bg-gray-200 flex justify-between text-sm font-normal">
-            <div className="flex gap-2 ml-6">
-                <input type="checkbox" />
-                <button className={isOpen ? "font-bold" : ""} onClick={() => setOpen(true)}><InfoCircleOutlined /> 열린 이슈({issuesLength.open})</button>
+        <div className="h-45 bg-gray-200 flex text-sm">
+            <div className="flex h-full w-70% items-center">
+                <input type="checkbox" checked={false} className="w-7%"/>
+                <button className={`mr-6 ${isOpen ? "font-bold" : ""}`} onClick={() => setOpen(true)}><InfoCircleOutlined /> 열린 이슈({issuesLength.open})</button>
                 <button className={isOpen ? "" : "font-bold"} onClick={() => setOpen(false)}><CreditCardOutlined /> 닫힌 이슈({issuesLength.closed})</button>
             </div>
-            <div className="flex items-center gap-5 mr-6">
-                <div>담당자</div>
-                <div>레이블</div>
-                <div>마일스톤</div>
-                <div>작성자</div>
+            <div className="flex h-full w-30% items-center">
+                <div className="flex-grow">담당자</div>
+                <div className="flex-grow">레이블</div>
+                <div className="flex-grow">마일스톤</div>
+                <div className="flex-grow">작성자</div>
             </div>
+
+
         </div>
     );
 };
