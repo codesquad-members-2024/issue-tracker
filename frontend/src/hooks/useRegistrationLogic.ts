@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useRegistrationStore from "./useRegistrationStore";
 import { sendIdValidationRequest, sendRegistrationRequest } from "../api/LoginAPI";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
 
 const INPUT_MIN_LENGTH = 6;
 const NICKNAME_MIN_LENGTH = 2;
@@ -12,6 +13,7 @@ const INPUT_REGEX_ERROR_MESSAGE = "ID, 비밀번호와 닉네임은 알파벳과
 const INPUT_LENGTH_ERROR_MESSAGE = "ID와 비밀번호는 최소 6자이여야 합니다.";
 const PASSWORD_VALIDATION_ERROR_MESSAGE = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
 const NICKNAME_LENGTH_ERROR_MESSAGE = "닉네임은 최소 2자이여야 합니다.";
+const REGISTRATION_FAILURE_MESSAGE = "회원가입에 실패하였습니다.";
 
 const useRegistrationLogic = () => {
   const registrationStore = useRegistrationStore();
@@ -29,6 +31,25 @@ const useRegistrationLogic = () => {
   } = registrationStore;
   const navigate = useNavigate();
 
+  const { mutate: validateId } = useMutation(sendIdValidationRequest, {
+    onSuccess: (data) => {
+      if (!data) {
+        setIsValidated(false);
+        setValidationMessage(VALIDATION_FAILURE_MESSAGE);
+        return;
+      }
+
+      setIsValidated(true);
+      setValidationMessage(VALIDATION_SUCCESS_MESSAGE);
+    },
+  });
+
+  const { mutate: register } = useMutation(sendRegistrationRequest, {
+    onSuccess: () => navigate("/login"),
+    onError: () => setErrorMessage(REGISTRATION_FAILURE_MESSAGE),
+  });
+
+  const handleValidationClick = () => validateId(idValue);
   const handleRegistrationClick = () => {
     if (!allFilled) return;
 
@@ -48,22 +69,7 @@ const useRegistrationLogic = () => {
     if (nicknameValue.length < NICKNAME_MIN_LENGTH) setErrorMessage(NICKNAME_LENGTH_ERROR_MESSAGE);
 
     setErrorMessage("");
-    sendRegistrationRequest({ userId: idValue, userPassword: passwordValue, userNickname: nicknameValue })
-      .then(() => navigate("/login"))
-      .catch(() => setErrorMessage("회원가입에 실패하였습니다."));
-  };
-
-  const handleValidationClick = async () => {
-    const validationResult = await sendIdValidationRequest(idValue);
-
-    if (!validationResult) {
-      setIsValidated(false);
-      setValidationMessage(VALIDATION_FAILURE_MESSAGE);
-      return;
-    }
-
-    setIsValidated(true);
-    setValidationMessage(VALIDATION_SUCCESS_MESSAGE);
+    register({ userId: idValue, userPassword: passwordValue, userNickname: nicknameValue });
   };
 
   useEffect(checkAllFilled, [idValue, passwordValue, passwordValidationValue, nicknameValue, isValidated]);
