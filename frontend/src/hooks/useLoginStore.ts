@@ -11,7 +11,9 @@ interface LoginState {
   checkAllFilled: () => void;
 }
 
-const filledCallback = ({ idValue, passwordValue }: LoginState) => ({ allFilled: !!(idValue && passwordValue) });
+const filledCallback = ({ idValue, passwordValue }: LoginState) => ({
+  allFilled: !!(idValue && passwordValue),
+});
 
 const useLoginStore = create<LoginState>((set) => ({
   idValue: "",

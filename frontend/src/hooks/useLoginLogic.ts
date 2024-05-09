@@ -24,8 +24,8 @@ const useLoginLogic = () => {
     },
     onError: () => {
       setErrorMessage(LOGIN_VALIDATION_ERROR_MESSAGE);
-    }
-  })
+    },
+  });
 
   const handleLoginClick = async () => {
     if (!allFilled) return;
