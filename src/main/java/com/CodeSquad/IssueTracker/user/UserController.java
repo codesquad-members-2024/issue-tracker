@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 public class UserController {
     private final UserService userService;
@@ -40,5 +41,17 @@ public class UserController {
             return new ResponseEntity<>(session.getId(),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+}
+
+    @GetMapping("/get/validation/{id}")
+    public ResponseEntity<?> getValidationId(@PathVariable("id") String id) {
+        boolean isDuplicated = userService.isUserIdDuplicated(id);
+
+        if (isDuplicated) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
