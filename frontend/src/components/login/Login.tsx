@@ -1,23 +1,26 @@
 import styled from "styled-components";
 import pageLogo from "../../img/pageLogo.svg";
-import LoginForm from "./LoginForm";
-import useLoginStore from "../../hooks/useLoginStore";
+import AuthorizationForm from "../authorization/AuthorizationForm";
+import { useNavigate } from "react-router-dom";
+import useLoginLogic from "../../hooks/useLoginLogic";
 
 function Login() {
-  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick } = useLoginStore();
+  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick } =
+    useLoginLogic();
+  const navigate = useNavigate();
 
   return (
     <LoginWrapper>
-      <img src={pageLogo} alt="page-logo" />
+      <Logo src={pageLogo} alt="page-logo" onClick={() => navigate("/")} />
       <GithubLoginButton>Github 계정으로 로그인</GithubLoginButton>
       <div>or</div>
-      <LoginForm type="id" onInputChange={setIdValue} />
-      <LoginForm type="password" onInputChange={setPasswordValue} />
+      <AuthorizationForm type="id" onInputChange={setIdValue} />
+      <AuthorizationForm type="password" onInputChange={setPasswordValue} />
       <LoginButton onClick={handleLoginClick} allFilled={allFilled}>
         아이디로 로그인
       </LoginButton>
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      <RegistrationButton>회원가입</RegistrationButton>
+      <RegistrationButton onClick={() => navigate("/registration")}>회원가입</RegistrationButton>
     </LoginWrapper>
   );
 }
@@ -31,6 +34,11 @@ const LoginWrapper = styled.div`
   color: #6e7191;
 `;
 
+const Logo = styled.img`
+  margin-bottom: 48px;
+  cursor: pointer;
+`;
+
 const GithubLoginButton = styled.button`
   width: 320px;
   height: 56px;
@@ -41,7 +49,7 @@ const GithubLoginButton = styled.button`
   background-color: transparent;
   font-size: 20px;
   font-color: white;
-  margin-top: 48px;
+  cursor: pointer;
 `;
 
 const LoginButton = styled.button<{ allFilled: boolean }>`
@@ -53,6 +61,7 @@ const LoginButton = styled.button<{ allFilled: boolean }>`
   font-size: 20px;
   color: white;
   opacity: ${({ allFilled }) => (allFilled ? "1" : "0.32")};
+  cursor: ${({ allFilled }) => (allFilled ? "pointer" : "default")};
   transition: all 0.5s ease-in-out;
 `;
 
@@ -61,6 +70,7 @@ const RegistrationButton = styled.button`
   background-color: transparent;
   font-size: 16px;
   color: #4e4b66;
+  cursor: pointer;
 `;
 
 const ErrorMessage = styled.div`
