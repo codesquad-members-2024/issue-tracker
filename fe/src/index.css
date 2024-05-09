@@ -52,6 +52,15 @@
 		color: theme("colors[accent.red]");
 	}
 
+	.component-border {
+		border: 1px solid theme("colors[grayscale.300]");
+		border-radius: 12px;
+	}
+
+	.component-border--dark {
+		border: 1px solid theme("colors[grayscale.600]");
+	}
+
 	.animated-path {
 		stroke: #14142b;
 		stroke-width: 2px;
@@ -75,4 +84,5 @@
 
 body {
 	font-family: "Noto Sans KR";
+	overflow: hidden;
 }
