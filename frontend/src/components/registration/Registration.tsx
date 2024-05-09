@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import pageLogo from "../../img/pageLogo.svg";
 import AuthorizationForm from "../authorization/AuthorizationForm";
+import { useNavigate } from "react-router-dom";
 
 function Registration() {
+  const navigate = useNavigate();
+
   return (
     <RegistrationWrapper>
-      <img src={pageLogo} alt="page-logo" />
+      <Logo src={pageLogo} alt="page-logo" onClick={() => navigate("/")} />
       <AuthorizationForm type="id" onInputChange={() => {}} />
       <ValidationWrapper>
         <DuplicateValidation>중복 확인</DuplicateValidation>
@@ -28,6 +31,11 @@ const RegistrationWrapper = styled.div`
   color: #6e7191;
 `;
 
+const Logo = styled.img`
+  margin-bottom: 48px;
+  cursor: pointer;
+`;
+
 const ValidationWrapper = styled.div`
   width: 320px;
   display: flex;
@@ -41,6 +49,7 @@ const DuplicateValidation = styled.button`
   border: 1px solid #595959;
   border-radius: 16px;
   color: white;
+  cursor: pointer;
 `;
 
 const SubmitButton = styled.button<{ allFilled: boolean }>`

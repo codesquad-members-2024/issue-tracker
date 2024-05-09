@@ -2,13 +2,16 @@ import styled from "styled-components";
 import pageLogo from "../../img/pageLogo.svg";
 import useLoginStore from "../../hooks/useLoginStore";
 import AuthorizationForm from "../authorization/AuthorizationForm";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick, handleRegistrationClick } = useLoginStore();
+  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick, handleRegistrationClick } =
+    useLoginStore();
+  const navigate = useNavigate();
 
   return (
     <LoginWrapper>
-      <img src={pageLogo} alt="page-logo" />
+      <Logo src={pageLogo} alt="page-logo" onClick={() => navigate("/")} />
       <GithubLoginButton>Github 계정으로 로그인</GithubLoginButton>
       <div>or</div>
       <AuthorizationForm type="id" onInputChange={setIdValue} />
@@ -31,6 +34,11 @@ const LoginWrapper = styled.div`
   color: #6e7191;
 `;
 
+const Logo = styled.img`
+  margin-bottom: 48px;
+  cursor: pointer;
+`;
+
 const GithubLoginButton = styled.button`
   width: 320px;
   height: 56px;
@@ -41,7 +49,6 @@ const GithubLoginButton = styled.button`
   background-color: transparent;
   font-size: 20px;
   font-color: white;
-  margin-top: 48px;
 `;
 
 const LoginButton = styled.button<{ allFilled: boolean }>`
