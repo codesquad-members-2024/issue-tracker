@@ -1,4 +1,4 @@
-import UI from "./UI/UI";
+import UI from "./UIBar/UIBar";
 
 function IssueList() {
 	return (
