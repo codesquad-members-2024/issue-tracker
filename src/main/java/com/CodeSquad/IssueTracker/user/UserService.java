@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.user;
 
+import com.CodeSquad.IssueTracker.user.utils.UserValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,63 +11,40 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public boolean save(User user){
+    public boolean save(User user) {
         log.info("사용자 저장 시도: {}", user.getUserId());
 
-        if(userRepository.existsByUserID(user.getUserId())){
+        if (userRepository.existsByUserID(user.getUserId())) {
             log.error("사용자 ID 중복: {}", user.getUserId());
-
             return false;
         }
+
         if (verifyUserInfo(user)) {
             userRepository.save(user);
             log.info("사용자 저장 성공: {}", user.getUserId());
-
             return true;
-        }
-        else{
-            log.error("사용자 정보 검증 실패: {}", user.getUserId());
-
+        } else {
             return false;
         }
     }
 
-    private boolean verifyUserInfo(User user){
-        if(!isLengthValid(user.getUserId(), 6, 16)){
-            log.error("사용자 ID 길이가 유효하지 않음: {}", user.getUserId());
-
+    private boolean verifyUserInfo(User user) {
+        if (!UserValidate.isUserIdValid(user.getUserId())) {
+            log.error("사용자 ID 유효성 검증 실패: {}", user.getUserId());
             return false;
         }
-        if(!isUserIdAlphanumeric(user.getUserId())){
-            log.error("사용자 ID에 영문자와 숫자만 포함되어야 함: {}", user.getUserId());
-
+        if (!UserValidate.isUserPasswordValid(user.getUserPassword())) {
+            log.error("사용자 비밀번호 유효성 검증 실패: {}", user.getUserId());
             return false;
         }
-        if(!isLengthValid(user.getUserPassword(), 6 , 12)){
-            log.error("사용자 비밀번호 길이가 유효하지 않음: {}", user.getUserId());
-
+        if (!UserValidate.isUserNicknameValid(user.getUserNickname())) {
+            log.error("사용자 닉네임 유효성 검증 실패: {}", user.getUserId());
             return false;
         }
-        if(!isLengthValid(user.getUserNickname(), 2, 6)){
-
-            log.error("사용자 닉네임 길이가 유효하지 않음: {}", user.getUserId());
-            return false;
-        }
-
         return true;
-    }
-
-    private boolean isUserIdAlphanumeric(String userId){
-
-        return userId.matches("[a-zA-Z0-9]+");
-    }
-
-    private boolean isLengthValid(String field, int min, int max){
-
-        return field.length() >= min && field.length() <= max;
     }
 }

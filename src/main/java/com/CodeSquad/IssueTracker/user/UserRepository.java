@@ -13,7 +13,7 @@ public class UserRepository {
     }
 
     public void save(User user) {
-        String sql = "insert into IssueTracker.USERS (userId, userPassword, userNickname) values (?, ?, ?)";
+        String sql = "insert into IssueTracker.users (userId, userPassword, userNickname) values (?, ?, ?)";
         jdbcTemplate.update(sql,user.getUserId(),user.getUserPassword(),user.getUserNickname());
     }
 
