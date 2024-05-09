@@ -2,14 +2,14 @@ import styled from 'styled-components';
 import { SignContainer } from '../containers/SignContainer';
 export function SignInPage() {
 	return (
-		<StyledWrapper>
+		<StyledFormWrapper>
 			<StyledSignIn>
 				<SignContainer />
 			</StyledSignIn>
-		</StyledWrapper>
+		</StyledFormWrapper>
 	);
 }
-const StyledWrapper = styled.div`
+const StyledFormWrapper = styled.form`
 	width: 100%;
 	height: 100vh;
 	display: flex;
