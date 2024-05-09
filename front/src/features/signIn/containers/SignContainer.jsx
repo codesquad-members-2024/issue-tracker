@@ -1,20 +1,33 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+
 import { Logo } from '../../../common/Logo';
 import { Button } from '../../../common/components/Button';
 import { Input } from 'antd';
 
 export function SignContainer() {
+	const [id, setId] = useState('');
+	const [password, setPassword] = useState('');
 	return (
 		<StyledWrapper>
 			<StyledLogo />
-			<StyledButton>GitHub 계정으로 로그인</StyledButton>
+			<StyledButton type='button' buttonType='outline' size='large'>
+				GitHub 계정으로 로그인
+			</StyledButton>
 			<b>or</b>
 			<StyledInputWrap>
-				<StyledId placeholder='아이디' />
-				<StyledPassword placeholder='비밀번호' />
+				<StyledId placeholder='아이디' onChange={e => setId(e.target.value)} />
+				<StyledPassword
+					placeholder='비밀번호'
+					onChange={e => setPassword(e.target.value)}
+				/>
 			</StyledInputWrap>
-			<StyledButton type='primary'>아이디로 로그인</StyledButton>
-			<StyledJoinButton type='text'>회원가입</StyledJoinButton>
+			<StyledButton size='large' buttonType='container'>
+				아이디로 로그인
+			</StyledButton>
+			<StyledJoinButton buttonType='ghost' size='large'>
+				회원가입
+			</StyledJoinButton>
 		</StyledWrapper>
 	);
 }
@@ -33,10 +46,6 @@ const StyledLogo = styled(Logo)`
 `;
 const StyledButton = styled(Button)`
 	width: 100%;
-	height: 56px;
-	font-size: 20px;
-	font-weight: 500;
-	border-radius: 16px;
 `;
 const StyledInputWrap = styled.div``;
 const StyledId = styled(Input)`
