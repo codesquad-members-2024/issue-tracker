@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ReactComponent as Logo } from "./logo.svg";
+import { ReactComponent as Logo } from "./Logo.svg";
 
 function Login() {
 	const [validId, setValidId] = useState(false);
