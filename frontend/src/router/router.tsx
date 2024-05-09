@@ -2,6 +2,7 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import useUserStore from "../hooks/useUserStore"
 import Login from "../components/login/Login";
 import Registration from "../components/registration/Registration";
+import IssueList from "../components/list/IssueList";
 
 interface AuthRouteProps {
   children: React.ReactNode;
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <AuthRoute>
-        <div></div>
+        <IssueList />
       </AuthRoute>
     )
   },

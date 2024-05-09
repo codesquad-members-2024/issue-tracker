@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { create } from "zustand";
 
-const useUserStore = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  return { isLoggedIn };
+interface UserStoreState {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 };
+
+const useUserStore = create<UserStoreState>((set) => ({
+  isLoggedIn: false,
+  setIsLoggedIn: (isLoggedIn: boolean) => set(() => ({ isLoggedIn })),
+}));
 
 export default useUserStore;
