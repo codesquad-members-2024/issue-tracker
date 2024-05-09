@@ -5,14 +5,18 @@ export function Login() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = () => {
-    if (id === "aaaaaa" && password === "aaaaaa") { // 수정 예정
+    if (id === "aa" && password === "aa") { // 수정 예정
       setIsAuthenticated(true);
+      setErrorMessage("");
     } else {
-      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+      setErrorMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
     }
   };
+
+  const isInputEmpty = id.trim() === "" || password.trim() === "";
 
   return (
     <form>
@@ -22,15 +26,15 @@ export function Login() {
             <Logo />
             <GitHubBtn>GitHub 계정으로 로그인</GitHubBtn>
             <p>or</p>
-            <Input type="text" placeholder="아이디"
-              value={id}
+            <Input type="text" placeholder="아이디" value={id}
               onChange={(event) => setId(event.target.value)}
             />
-            <Input type="password" autoComplete="off" placeholder="비밀번호"
-              value={password}
+            <Input type="password" placeholder="비밀번호" value={password}
+              autoComplete="off"
               onChange={(event) => setPassword(event.target.value)}
             />
-            <LoginBtn type="button" onClick={handleLogin}>로그인</LoginBtn>
+            <LoginBtn type="button" onClick={handleLogin}disabled={isInputEmpty}>아이디로 로그인</LoginBtn>
+            {errorMessage && <StyledMessage>{errorMessage}</StyledMessage>}
             <JoinBtn>회원가입</JoinBtn>
           </>
         )}
@@ -77,12 +81,18 @@ const Input = styled.input`
   width: 300px;
   background-color: #edeeef;
   padding: 0px 10px;
+  cursor: text;
+  &:focus {
+    background-color: white;
+  }
 `;
 
 const LoginBtn = styled.button`
   ${LoginButtonStyles}
-  background-color: #007bff;
+  background-color: ${(props) => (props.disabled ? "#a8cffd" : "#007bff")};
   color: #f7f7fc;
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+  // not-allowed
 `;
 
 const JoinBtn = styled.button`
@@ -90,6 +100,11 @@ const JoinBtn = styled.button`
   cursor: pointer;
   padding: 10px;
   border: none;
+`;
+
+const StyledMessage = styled.div`
+  color: red;
+  margin-top: 10px;
 `;
 
 export default Login;
