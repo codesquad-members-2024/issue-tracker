@@ -1,8 +1,11 @@
 package com.CodeSquad.IssueTracker.user;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -17,11 +20,17 @@ public class UserRepository {
         jdbcTemplate.update(sql,user.getUserId(),user.getUserPassword(),user.getUserNickname());
     }
 
-    public boolean existsByUserID(String userID){
-        String sql = "select count(*) from users where userId = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userID);
-
-        return count != null && count > 0;
+    public Optional<User> findUserById(String userId) {
+        String sql = "SELECT * FROM users WHERE userId = ?";
+        List<User> user = jdbcTemplate.query(sql, userRowMapper(), userId);
+        return user.stream().findAny();
     }
 
+    private RowMapper<User> userRowMapper() {
+        return (rs, rowNum) -> new User(
+                rs.getString("userId"),
+                rs.getString("userPassword"),
+                rs.getString("userNickname")
+        );
+    }
 }

@@ -1,9 +1,11 @@
 package com.CodeSquad.IssueTracker.user;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-;
+
 
 @RestController
 public class UserController {
@@ -14,11 +16,33 @@ public class UserController {
     }
 
     @PostMapping("/post/registration")
-    public String postRegistration(@RequestBody User user) {
+    public ResponseEntity<?> registerNewUser(@RequestBody User user){
+        if (userService.isUserNotExists(user)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         userService.save(user);
-
-        return "success";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/post/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
+                                       HttpServletRequest request){
+        if (userService.isLoginRequestNotExists(loginRequest)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        String userId = loginRequest.getUserId();
+        String userPassword = loginRequest.getUserPassword();
+
+        if (userService.authenticate(userId, userPassword)){
+            HttpSession session = request.getSession(true);
+            session.setMaxInactiveInterval(1800);
+            session.setAttribute("userId", userId);
+
+            return new ResponseEntity<>(session.getId(),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+}
 
     @GetMapping("/get/validation/{id}")
     public ResponseEntity<?> getValidationId(@PathVariable("id") String id) {
