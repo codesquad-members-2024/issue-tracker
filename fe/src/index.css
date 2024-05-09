@@ -12,12 +12,12 @@
 		box-shadow: theme("boxShadow.xl");
 	}
 	.btn-outline {
-		border: 1px solid theme("colors[accent.blue]");
-		color: theme("colors[accent.blue]");
+		border: 1px solid theme("colors[grayscale.700]");
+		color: theme("colors[grayscale.700]");
 		font-weight: 500;
 	}
 	.btn-container {
-		background-color: theme("colors[accent.blue]");
+		background-color: theme("colors[grayscale.700]");
 		color: theme("colors.white");
 	}
 	.btn-ghost {
