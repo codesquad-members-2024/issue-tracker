@@ -16,12 +16,12 @@ public class UserRepository {
     }
 
     public void save(User user) {
-        String sql = "insert into IssueTracker.users (userId, userPassword, userNickname) values (?, ?, ?)";
+        String sql = "insert into users (userId, userPassword, userNickname) values (?, ?, ?)";
         jdbcTemplate.update(sql,user.getUserId(),user.getUserPassword(),user.getUserNickname());
     }
 
     public Optional<User> findUserById(String userId) {
-        String sql = "SELECT * FROM IssueTracker.users WHERE userId = ?";
+        String sql = "SELECT * FROM users WHERE userId = ?";
         List<User> user = jdbcTemplate.query(sql, userRowMapper(), userId);
         return user.stream().findAny();
     }

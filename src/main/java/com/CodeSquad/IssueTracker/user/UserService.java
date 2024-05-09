@@ -21,6 +21,7 @@ public class UserService {
 
     public boolean authenticate(String userId, String userPassword) {
         Optional<User> userOptional = userRepository.findUserById(userId);
+
         return userOptional.isPresent() && Objects.equals(userOptional.get().getUserPassword(), userPassword);
     }
 }
