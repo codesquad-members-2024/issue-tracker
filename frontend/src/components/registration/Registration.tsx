@@ -33,7 +33,9 @@ function Registration() {
       <AuthorizationForm type="password-validation" onInputChange={setPasswordValidationValue} />
       <AuthorizationForm type="nickname" onInputChange={setNicknameValue} />
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      <SubmitButton allFilled={allFilled} onClick={handleRegistrationClick}>회원가입</SubmitButton>
+      <SubmitButton allFilled={allFilled} onClick={handleRegistrationClick}>
+        회원가입
+      </SubmitButton>
     </RegistrationWrapper>
   );
 }

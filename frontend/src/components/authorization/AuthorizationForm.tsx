@@ -24,9 +24,9 @@ function AuthorizationForm({ type, onInputChange }: AuthorizationFormProps) {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const inputType = type === "password" || type === "password-validation" ? "password" : "text";
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    onInputChange(event.target.value);
+  const handleInputChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(value);
+    onInputChange(value);
   };
 
   return (
