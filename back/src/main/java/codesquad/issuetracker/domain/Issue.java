@@ -12,31 +12,31 @@ public class Issue {
     private Long id;
     private String title;
     private String content;
-    private String profileImage;
+    private String imageLink;
     private String milestoneId;
-    private String labelId;
     private String manager;
     private String writer;
     private LocalDateTime createTime;
-    private boolean deleted;
+    private boolean isClosed; // 기본 값 false
+
+//    Spring Data Jdbc의 연관관계 매핑을 위한 설정 예정
+//    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
+//    private List<IssueLabel> labels = new ArrayList<>();
 
     public Issue(Long id,
                  String title,
                  String content,
-                 String profileImage,
+                 String imageLink,
                  String milestoneId,
-                 String labelId,
                  String manager,
                  String writer) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.profileImage = profileImage;
+        this.imageLink = imageLink;
         this.milestoneId = milestoneId;
-        this.labelId = labelId;
         this.manager = manager;
         this.writer = writer;
         this.createTime = LocalDateTime.now();
-        this.deleted = false;
     }
 }
