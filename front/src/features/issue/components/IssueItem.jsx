@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Checkbox } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { IconUser } from '../../../common/icons/IconUser';
@@ -10,11 +11,10 @@ export function IssueItem() {
 				<StyledCheckbox />
 				<StyledFlex>
 					<ExclamationCircleOutlined />
-					<p>이슈제목</p>
+					<StyledIssueTitle to='/'>이슈제목</StyledIssueTitle>
+
 					<strong>documentaion</strong>
 				</StyledFlex>
-
-				<></>
 				<StyledDetail>
 					<p>이슈번호</p>
 					<StyledAuthour>작성자 및 타임스탬프</StyledAuthour>
@@ -33,6 +33,7 @@ const StyledWrapper = styled.div`
 	padding: 0;
 `;
 const StyledInner = styled.div`
+	display: block;
 	border-bottom: 1px solid #d9dbe9;
 	width: 100%;
 	position: relative;
@@ -54,10 +55,7 @@ const StyledFlex = styled.div`
 	span {
 		color: #007aff;
 	}
-	p {
-		font-size: 20px;
-		margin: 0 8px;
-	}
+
 	strong {
 		height: 24px;
 		font-weight: 500;
@@ -68,6 +66,10 @@ const StyledFlex = styled.div`
 		color: #fff;
 		background: blue;
 	}
+`;
+const StyledIssueTitle = styled(Link)`
+	font-size: 20px;
+	margin: 0 8px;
 `;
 const StyledDetail = styled.div`
 	display: flex;

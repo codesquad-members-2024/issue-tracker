@@ -1,15 +1,14 @@
 import styled from 'styled-components';
-import { SignInPage } from './features/signIn/pages/SignInPage';
-import { IssueListViewsPage } from './features/issue/pages/IssueListViewsPage';
+
 import { GlobalStyle } from './styles/globalStyle';
+import { Router } from './Routes';
 
 function App() {
 	return (
 		<>
 			<GlobalStyle />
 			<StyledWrapper>
-				{/* <SignInPage /> */}
-				<IssueListViewsPage />
+				<Router />
 			</StyledWrapper>
 		</>
 	);

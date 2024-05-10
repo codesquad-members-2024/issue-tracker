@@ -4,10 +4,16 @@ import styled from 'styled-components';
 import { Logo } from '../../../common/Logo';
 import { Button } from '../../../common/components/Button';
 import { Input } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 export function SignContainer() {
 	const [id, setId] = useState('');
 	const [password, setPassword] = useState('');
+	const navigate = useNavigate();
+	const submitLogin = () => {
+		navigate('/issue');
+	};
+
 	return (
 		<StyledWrapper>
 			<StyledLogo />
@@ -16,13 +22,25 @@ export function SignContainer() {
 			</StyledButton>
 			<b>or</b>
 			<StyledInputWrap>
-				<StyledId placeholder='아이디' onChange={e => setId(e.target.value)} />
+				<StyledId
+					placeholder='아이디'
+					name='id'
+					password='id'
+					onChange={e => setId(e.target.value)}
+				/>
 				<StyledPassword
 					placeholder='비밀번호'
+					name='password'
+					id='password'
 					onChange={e => setPassword(e.target.value)}
 				/>
 			</StyledInputWrap>
-			<StyledButton size='large' buttonType='container'>
+			<StyledButton
+				type='button'
+				size='large'
+				buttonType='container'
+				onClick={submitLogin}
+			>
 				아이디로 로그인
 			</StyledButton>
 			<StyledJoinButton buttonType='ghost' size='large'>
