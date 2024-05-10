@@ -2,6 +2,8 @@ package com.issuetracker.domain.issue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issuetracker.domain.issue.request.IssueCreateRequest;
+import com.issuetracker.domain.issue.request.IssueUpdateRequest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,4 +49,24 @@ class IssueControllerTest {
                 .andExpect(header().string("Location", "/issues/1"));
     }
 
+    @Test
+    @DisplayName("이슈 id가 1번의 제목을 'Hello update' 로 수정 요청하면 '/issues/1' 로 리다이렉트 된다")
+    void editTitle() throws Exception {
+        // given
+        String url = "/issues/1";
+        String updatedTitle = "Hello update";
+
+        IssueUpdateRequest request = new IssueUpdateRequest(1L, updatedTitle, null);
+        String requestJson = objectMapper.writeValueAsString(request);
+
+        // when
+        ResultActions result = mockMvc.perform(
+                patch(url).content(requestJson)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        result.andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/issues/1"));
+    }
 }
