@@ -25,12 +25,11 @@ public class UserService {
             userRepository.save(user);
             log.info("사용자 저장 성공: {}", user.getUserId());
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    private boolean verifyUserInfo(User user) {
+    public boolean verifyUserInfo(User user) {
         if (!UserValidate.isUserIdValid(user.getUserId())) {
             log.error("사용자 ID 유효성 검증 실패: {}", user.getUserId());
             return false;
@@ -46,12 +45,14 @@ public class UserService {
         return true;
     }
     public boolean isUserIdDuplicated(String userId) {
-        return userRepository.existsByUserID(userId);
+        Optional<User> userOptional = userRepository.findUserById(userId);
+        System.out.println(userOptional);
+        return userOptional.isPresent();
     }
 
     public boolean authenticate(String userId, String userPassword) {
         Optional<User> userOptional = userRepository.findUserById(userId);
-
+        System.out.println(userOptional);
         if (userOptional.isPresent()) {
             if (Objects.equals(userOptional.get().getUserPassword(), userPassword)){
                 log.info("로그인 성공: {}", userId);
