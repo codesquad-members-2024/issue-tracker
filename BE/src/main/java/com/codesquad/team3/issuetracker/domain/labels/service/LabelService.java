@@ -21,17 +21,17 @@ public class LabelService {
     }
 
     public void update(Long id, Label label){
-        labelRepository.update(id, label);
+//        labelRepository.(id, label);
     }
-
-    public void delete(Long id){
-        labelRepository.delete(id);
-    }
-
-
-    public Label getLabel(Long id) {
-        return labelRepository.get(id);
-
-
-    }
+//
+//    public void delete(Long id){
+//        labelRepository.delete(id);
+//    }
+//
+//
+//    public Label getLabel(Long id) {
+//        return labelRepository.findById(id);
+//
+//
+//    }
 }
