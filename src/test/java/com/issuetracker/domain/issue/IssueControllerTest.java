@@ -66,7 +66,6 @@ class IssueControllerTest {
         );
 
         // then
-        result.andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/issues/1"));
+        result.andExpect(status().isOk());
     }
 }

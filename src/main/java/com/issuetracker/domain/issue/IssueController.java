@@ -5,7 +5,6 @@ import com.issuetracker.domain.issue.request.IssueUpdateRequest;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +31,7 @@ public class IssueController {
     public ResponseEntity<Void> edit(@PathVariable("id") Long id, @Valid @RequestBody IssueUpdateRequest request) {
         issueService.edit(request);
         return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .location(URI.create("/issues/" + id))
+                .ok()
                 .build();
     }
 }
