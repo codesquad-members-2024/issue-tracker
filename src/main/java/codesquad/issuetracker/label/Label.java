@@ -11,6 +11,7 @@ public class Label {
 
     @Id
     private Long id;
+    private String name;
     private String description;
     private String color;
     private boolean isDeleted;
@@ -19,10 +20,11 @@ public class Label {
 
     @Builder
     @PersistenceCreator
-    public Label(Long id, String description, String color, boolean isDeleted,
+    public Label(Long id, String name, String description, String color, boolean isDeleted,
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
         this.id = id;
+        this.name = name;
         this.description = description;
         this.color = color;
         this.isDeleted = isDeleted;

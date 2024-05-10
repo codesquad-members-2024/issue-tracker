@@ -16,7 +16,7 @@ public class Milestone {
     private LocalDateTime dueDate;
     private boolean isOpen;
     private boolean isDeleted;
-    private LocalDateTime createdAt;
+    private LocalDateTime openAt;
     private LocalDateTime updatedAt;
 
 
@@ -24,14 +24,14 @@ public class Milestone {
     @PersistenceCreator
     public Milestone(Long id, String title, String description, LocalDateTime dueDate,
         boolean isOpen,
-        boolean isDeleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        boolean isDeleted, LocalDateTime openAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.isOpen = isOpen;
         this.isDeleted = isDeleted;
-        this.createdAt = createdAt;
+        this.openAt = openAt;
         this.updatedAt = updatedAt;
     }
 }
