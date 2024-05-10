@@ -1,6 +1,7 @@
 package com.issuetracker.domain.issue;
 
 import com.issuetracker.domain.issue.request.IssueCreateRequest;
+import com.issuetracker.domain.issue.request.IssueUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,6 @@ public class IssueService {
                  .content(issue.getContent())
                  .build();
     }
-}
 
     public void edit(IssueUpdateRequest form) {
         if (form.getTitle() == null && form.getContent() == null) {
