@@ -39,7 +39,7 @@ public class UserController {
 
         if (userService.authenticate(userId, userPassword)){
             HttpSession session = request.getSession(true);
-            session.setMaxInactiveInterval(1800);
+            session.setMaxInactiveInterval(32400); //9시간
             session.setAttribute("userId", userId);
 
             return new ResponseEntity<>(session.getId(),HttpStatus.OK);
