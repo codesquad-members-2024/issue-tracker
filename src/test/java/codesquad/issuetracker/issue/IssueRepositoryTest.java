@@ -57,4 +57,16 @@ class IssueRepositoryTest {
 
         assertThat(savedIssued).usingRecursiveComparison().isEqualTo(issue);
     }
+
+    @Test
+    @DisplayName("레이블 레퍼런스를 가져올 수 있다.")
+    @Sql("/sql/label-data.sql")
+    void findLabels() {
+        Set<LabelRef> labelRefs = Set.of(new LabelRef(1L), new LabelRef(2L), new LabelRef(3L));
+        Issue issue = Issue.from(1L, "cori1234", "제목", "내용", 1L, labelRefs);
+        Issue savedIssued = issueRepository.save(issue);
+
+        log.info("labels = {}", savedIssued.getLabelRefs());
+
+    }
 }
