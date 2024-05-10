@@ -1,8 +1,8 @@
 package com.issuetracker.domain.issue;
 
 import com.issuetracker.domain.issue.request.IssueCreateRequest;
-import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import lombok.RequiredArgsConstructor;
+import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class IssueService {
 
     private final IssueRepository issueRepository;
+    private final IssueMapper issueMapper;
 
     public Long create(IssueCreateRequest request) {
         Issue issue = request.toEntity();
@@ -24,5 +25,13 @@ public class IssueService {
                  .title(issue.getTitle())
                  .content(issue.getContent())
                  .build();
+    }
+}
+
+    public void edit(IssueUpdateRequest form) {
+        if (form.getTitle() == null && form.getContent() == null) {
+            throw new IllegalArgumentException();
+        }
+        issueMapper.update(form);
     }
 }
