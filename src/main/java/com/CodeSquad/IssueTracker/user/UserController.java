@@ -20,8 +20,12 @@ public class UserController {
         if (userService.isUserNotExists(user)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        userService.save(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        if (userService.save(user)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/post/login")
@@ -42,16 +46,13 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-}
 
     @GetMapping("/get/validation/{id}")
     public ResponseEntity<?> getValidationId(@PathVariable("id") String id) {
-        boolean isDuplicated = userService.isUserIdDuplicated(id);
-
-        if (isDuplicated) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (userService.isUserIdDuplicated(id)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
