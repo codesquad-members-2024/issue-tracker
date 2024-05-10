@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(origins = "*") //나중에 변경
 @RestController
 public class UserController {
     private final UserService userService;
@@ -15,7 +15,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/post/registration")
+    @PostMapping("/registration")
     public ResponseEntity<?> registerNewUser(@RequestBody User user){
         if (userService.isUserNotExists(user)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -28,7 +28,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/post/login")
+    @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
                                        HttpServletRequest request){
         if (userService.isLoginRequestNotExists(loginRequest)){
@@ -42,12 +42,12 @@ public class UserController {
             session.setMaxInactiveInterval(32400); //9시간
             session.setAttribute("userId", userId);
 
-            return new ResponseEntity<>(session.getId(),HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/get/validation/{id}")
+    @GetMapping("/validation/{id}")
     public ResponseEntity<?> getValidationId(@PathVariable("id") String id) {
         if (userService.isUserIdDuplicated(id)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
