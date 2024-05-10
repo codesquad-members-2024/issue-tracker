@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import DropdownPanel from "../shared-components/DropdownPanel";
+import DropdownPanel from "../../common/DropdownPanel";
 import { useState } from "react";
 
 const textColor = "text-grayscale.700 dark:text-grayscale.400";
@@ -16,7 +16,7 @@ function Filter() {
 
 	return (
 		<>
-			<div className="component-border h-[40px] w-2/5 flex items-center dark:component-border--dark">
+			<div className="component-border h-full w-2/5 flex items-center dark:component-border--dark">
 				<details
 					open={open}
 					className={`w-[20%] min-w-[90px] relative h-full cursor-pointer border-r-2 ${rounded} border-grayscale.300 dark:border-grayscale.600`}
@@ -28,7 +28,7 @@ function Filter() {
 						<span className={`ml-5 ${textColor} z-20`}>필터</span>
 						<FontAwesomeIcon icon={faAngleDown} className={`mr-5 ${textColor} z-20`} />
 					</summary>
-					<DropdownPanel setOpen={setOpen} />
+					<DropdownPanel />
 				</details>
 				<div className="relative w-[80%] h-full ">
 					<input

@@ -4,6 +4,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
 
 @layer components {
+	/* TODO : 차후 공통 컴포넌트 화 예정이라 이하 클래스  삭제하면 됨 */
 	.btn-large {
 		border-radius: 16px;
 		font-size: large;
