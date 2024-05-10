@@ -1,8 +1,10 @@
 package com.codesquad.team3.issuetracker.domain.labels.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Builder
 @Getter
 @RequiredArgsConstructor
 public class Label {
@@ -11,9 +13,4 @@ public class Label {
     private final String description;
     private final String color;
 
-    public Label(String name, String description, String color) {
-        this.name = name;
-        this.description = description;
-        this.color = color;
-    }
 }
