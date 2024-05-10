@@ -1,10 +1,10 @@
-import { useState } from "react";
+interface Props {
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const borderBottom = "border-b-2 border-grayscale.300 dark:border-grayscale.600";
 
-function DropdownPanel() {
-	const [isChecked, setIsChecked] = useState(false);
-
+function DropdownPanel({ setOpen }: Props) {
 	//TODO : 이하 변수들은 차후 props로 변경 예정
 	const w = "w-[240px]";
 	const filterTitle = "이슈 필터";
@@ -24,10 +24,8 @@ function DropdownPanel() {
 	];
 	//
 
-	const handleListClick = () => {};
-
 	return (
-		<div className={`absolute top-12 ${w} component-border dark:component-border--dark`}>
+		<div className={`absolute top-12 ${w} component-border dark:component-border--dark z-20`}>
 			<h3 className={`${borderBottom} flex items-center cursor-default`}>
 				<span className="mx-3 my-2 text-xs text-grayscale.600 dark:text-grayscale.500">
 					{filterTitle}
