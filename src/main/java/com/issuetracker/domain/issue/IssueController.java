@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/vi/issues")
+@RequestMapping("/issues")
 @RequiredArgsConstructor
 public class IssueController {
 
