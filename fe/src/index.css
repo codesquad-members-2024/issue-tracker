@@ -64,6 +64,35 @@
 		border: 2px solid theme("colors[grayscale.600]");
 	}
 
+	.checkbox {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		border: 2px solid theme("colors[grayscale.700]");
+		border-radius: 100%;
+		position: relative;
+		cursor: pointer;
+	}
+
+	.checkbox--checked {
+		content: "✔";
+		font-size: 12px;
+		font-weight: 900;
+		position: absolute;
+		left: 1px;
+		top: -3px;
+		color: theme("colors[grayscale.700]");
+	}
+
+	.checkbox--checked--dark {
+		content: "✔";
+		font-size: 12px;
+		position: absolute;
+		left: 1px;
+		top: -3px;
+		color: theme("colors[grayscale.100]");
+	}
+
 	.animated-path {
 		stroke: #14142b;
 		stroke-width: 2px;
