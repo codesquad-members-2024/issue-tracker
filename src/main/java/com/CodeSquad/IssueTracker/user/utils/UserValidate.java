@@ -11,7 +11,7 @@ public class UserValidate {
     }
 
     public static boolean isUserNicknameValid(String userNickname) {
-        return isLengthValid(userNickname, 2, 6);
+        return isLengthValid(userNickname, 2, 8);
     }
 
     private static boolean isLengthValid(String field, int min, int max) {
