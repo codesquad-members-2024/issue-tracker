@@ -42,11 +42,9 @@ class IssueControllerTest {
 
         List<Issue> openIssues = List.of(issue1, issue2);
         List<Issue> closedIssues = List.of(issue3, issue4);
-        List<Issue> allIssues = List.of(issue1, issue2, issue3, issue4);
 
         when(issueService.findIssuesByIsOpen(true)).thenReturn(openIssues);
         when(issueService.findIssuesByIsOpen(false)).thenReturn(closedIssues);
-        when(issueService.findAllIssues()).thenReturn(allIssues);
     }
 
     @Test
@@ -62,16 +60,9 @@ class IssueControllerTest {
     @DisplayName("닫힌 이슈 목록을 가져올 수 있다.")
     void getClosedIssues() throws Exception {
 
-        mockMvc.perform(get("/api/issues?isOpen=false"))
+        mockMvc.perform(get("/api/issues"))
             .andExpect(jsonPath("$[0].open").value(false))
             .andExpect(jsonPath("$[1].open").value(false));
     }
 
-    @Test
-    @DisplayName("모든 이슈 목록을 가져올 수 있다.")
-    void getAllIssues() throws Exception {
-
-        mockMvc.perform(get("/api/issues?isOpen=false"))
-            .andExpect(jsonPath("$.length()").value(4));
-    }
 }
