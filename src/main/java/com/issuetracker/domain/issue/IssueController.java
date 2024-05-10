@@ -5,13 +5,14 @@ import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
 @RestController
-@RequestMapping("/issues")
+@RequestMapping("/api/vi/issues")
 @RequiredArgsConstructor
 public class IssueController {
 
@@ -28,5 +29,14 @@ public class IssueController {
     public ResponseEntity<IssueDetailResponse> detail(@PathVariable Long issueId) {
         return ResponseEntity
                 .ok(issueService.getDetail(issueId));
+    }
+
+    @DeleteMapping("/{issueId}")
+    public ResponseEntity<Void> delete(@PathVariable Long issueId) {
+        issueService.delete(issueId);
+        String redirectUrl = "/";
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", redirectUrl)
+                .build();
     }
 }

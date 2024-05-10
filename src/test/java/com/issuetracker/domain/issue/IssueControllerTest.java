@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(IssueController.class)
@@ -34,7 +35,7 @@ class IssueControllerTest {
     @Test
     void create() throws Exception {
         // given
-        final String url = "/issues";
+        final String url = "/api/v1/issues";
 
         IssueCreateRequest request = new IssueCreateRequest("testMember", "testTitle", "testContent");
         final String requestJson = objectMapper.writeValueAsString(request);
@@ -56,7 +57,7 @@ class IssueControllerTest {
     @DisplayName("이슈의 id를 통해 해당 id issue의 상세 내용을 조회할 수 있다")
     void detail(Long issueId) throws Exception {
         // given
-        String url = "/issues/" + issueId.toString();
+        String url = "/api/v1/issues/" + issueId.toString();
         IssueDetailResponse response = IssueDetailResponse.builder()
                 .id(issueId)
                 .build();
@@ -69,5 +70,23 @@ class IssueControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    @DisplayName("이슈의 id를 통해 해당 id의 issue를 db에서 삭제할 수 있다")
+    void deletion() throws Exception {
+        // given
+        Long issueId = 1L;
+        String url = "/api/v1/issues/" + issueId;
+        willDoNothing().given(issueService).delete(issueId);
+
+        // when
+        ResultActions result = mockMvc.perform(
+                delete(url)
+        );
+
+        // then
+        result.andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/"));
     }
 }

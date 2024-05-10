@@ -25,4 +25,8 @@ public class IssueService {
                  .content(issue.getContent())
                  .build();
     }
+
+    public void delete(Long issueId) {
+        issueRepository.deleteById(issueId);
+    }
 }
