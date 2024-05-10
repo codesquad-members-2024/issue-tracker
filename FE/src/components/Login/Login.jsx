@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { Logo } from "../../assets/logo";
+import { Logo } from "../../icons/logo";
+import { LoginButtonStyles } from "../../styles/commonStyles";
 
 export function Login() {
   const [id, setId] = useState("");
@@ -24,7 +25,7 @@ export function Login() {
 
   return (
     <form>
-      <LoginContainer className="logoContainer">
+      <LoginContainer>
         {!isAuthenticated && (
           <>
             <Logo />
@@ -46,16 +47,6 @@ export function Login() {
     </form>
   );
 }
-
-const LoginButtonStyles = `
-  width: 320px;
-  height: 56px;
-  margin: 10px 0px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 18px;
-`;
 
 const LoginContainer = styled.div`
   display: flex;
