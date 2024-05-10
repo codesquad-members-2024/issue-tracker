@@ -58,15 +58,25 @@ const useRegistrationLogic = () => {
       !INPUT_REGEX.test(passwordValue) ||
       !INPUT_REGEX.test(passwordValidationValue) ||
       !INPUT_REGEX.test(nicknameValue)
-    )
+    ) {
       setErrorMessage(INPUT_REGEX_ERROR_MESSAGE);
+      return;
+    }
+    
+    if (passwordValue !== passwordValidationValue) {
+      setErrorMessage(PASSWORD_VALIDATION_ERROR_MESSAGE);
+      return;
+    }
 
-    if (passwordValue !== passwordValidationValue) setErrorMessage(PASSWORD_VALIDATION_ERROR_MESSAGE);
-
-    if (idValue.length < INPUT_MIN_LENGTH || passwordValue.length < INPUT_MIN_LENGTH)
+    if (idValue.length < INPUT_MIN_LENGTH || passwordValue.length < INPUT_MIN_LENGTH) {
       setErrorMessage(INPUT_LENGTH_ERROR_MESSAGE);
+      return;
+    }
 
-    if (nicknameValue.length < NICKNAME_MIN_LENGTH) setErrorMessage(NICKNAME_LENGTH_ERROR_MESSAGE);
+    if (nicknameValue.length < NICKNAME_MIN_LENGTH) {
+      setErrorMessage(NICKNAME_LENGTH_ERROR_MESSAGE);
+      return;
+    }
 
     setErrorMessage("");
     register({ userId: idValue, userPassword: passwordValue, userNickname: nicknameValue });
