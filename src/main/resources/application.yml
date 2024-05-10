@@ -19,3 +19,23 @@ spring:
 
     prefix : classpath:/templates/
     suffix : .html
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# logging
+logging:
+  level:
+    org:
+      springframework:
+        data: INFO
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+    com:
+      issuetracker:
+        domain:
+          issue: TRACE
