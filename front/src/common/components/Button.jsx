@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
 export function Button({
@@ -8,6 +8,7 @@ export function Button({
 	size = 'small',
 	buttonType = 'container',
 	disabled = false,
+	onClick,
 }) {
 	return (
 		<StyledAntdButton
@@ -16,6 +17,7 @@ export function Button({
 			$size={size}
 			$buttonType={buttonType}
 			disabled={disabled}
+			onClick={onClick}
 		>
 			{children}
 		</StyledAntdButton>
