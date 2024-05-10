@@ -27,6 +27,12 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// H2 Database
+	runtimeOnly 'com.h2database:h2'
+
+	// MySQL Driver
+	runtimeOnly 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {
