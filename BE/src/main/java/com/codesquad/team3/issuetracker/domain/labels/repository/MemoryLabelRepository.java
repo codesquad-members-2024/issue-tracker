@@ -13,7 +13,6 @@ public class MemoryLabelRepository {
     private Long sequence=0L;
 
 
-
     public Label save(Label label) {
         repo.put(++sequence, label);
         return label;
