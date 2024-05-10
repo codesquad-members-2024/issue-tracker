@@ -1,6 +1,7 @@
 package com.issuetracker.domain.issue;
 
 import com.issuetracker.domain.issue.request.IssueCreateRequest;
+import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +15,14 @@ public class IssueService {
         Issue issue = request.toEntity();
         Issue savedIssue = issueRepository.save(issue);
         return savedIssue.getId();
+    }
+
+    public IssueDetailResponse getDetail(Long issueId) {
+         Issue issue = issueRepository.findById(issueId).orElseThrow(RuntimeException::new);
+         return IssueDetailResponse.builder()
+                 .memberId(issue.getMemberId())
+                 .title(issue.getTitle())
+                 .content(issue.getContent())
+                 .build();
     }
 }

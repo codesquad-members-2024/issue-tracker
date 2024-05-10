@@ -1,13 +1,12 @@
 package com.issuetracker.domain.issue;
 
 import com.issuetracker.domain.issue.request.IssueCreateRequest;
+import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -23,5 +22,11 @@ public class IssueController {
         return ResponseEntity
                 .created(URI.create("/issues/" + issueService.create(request)))
                 .build();
+    }
+
+    @GetMapping("/{issueId}")
+    public ResponseEntity<IssueDetailResponse> detail(@PathVariable Long issueId) {
+        return ResponseEntity
+                .ok(issueService.getDetail(issueId));
     }
 }
