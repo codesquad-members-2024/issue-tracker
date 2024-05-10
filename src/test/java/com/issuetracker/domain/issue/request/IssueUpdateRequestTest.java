@@ -21,7 +21,7 @@ class IssueUpdateRequestTest {
 
     @Test
     @DisplayName("issueId 필드가 Null 이면 @NotNull 검증을 통과하지 못한다")
-    void validate_fail_when_id_id_null() {
+    void validate_fail_when_id_is_null() {
         // given
         IssueUpdateRequest form = IssueUpdateRequest.builder().build();
 
