@@ -10,7 +10,7 @@
     import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 
     @DataJdbcTest
-    public class MilestoneRepositoryTest {
+    class MilestoneRepositoryTest {
 
         @Autowired
         private MilestoneRepository milestoneRepository;
