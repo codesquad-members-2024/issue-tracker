@@ -21,7 +21,7 @@
     <section>
         <h2>새로운 이슈 작성</h2>
         <hr/>
-        <form id="addIssue" action="/issues" method="post">
+        <form id="add-issue" action="/issues" method="post">
             <a href="">
                 <img src="" alt="작성자 프로필">
                 <label id="memberId">
@@ -33,9 +33,13 @@
                 <input type="text" name="title" placeholder="제목">
             </label>
             <label id="content">
-                <textarea name="content" placeholder="코멘트를 입력하세요" cols="100" rows="15"></textarea>
+                <textarea name="content" placeholder="코멘트를 입력하세요"></textarea>
             </label>
         </form>
+        <button id="img-upload" onclick="">
+            <img src="" alt="첨부파일 아이콘">
+            파일 첨부하기
+        </button>
         <hr/>
     </section>
     <aside>
@@ -70,9 +74,9 @@
         e.preventDefault();
 
         const formData = {
-            memberId: $("#addIssue input[name=memberId]").val(),
-            title: $("#addIssue input[name=title]").val(),
-            content: $("#addIssue textarea[name=content]").val()
+            memberId: $("#add-issue input[name=memberId]").val(),
+            title: $("#add-issue input[name=title]").val(),
+            content: $("#add-issue textarea[name=content]").val()
         }
 
         $.ajax({
