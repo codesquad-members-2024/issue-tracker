@@ -1,5 +1,10 @@
+import { useState } from "react";
+
 const borderBottom = "border-b-2 border-grayscale.300 dark:border-grayscale.600";
+
 function DropdownPanel() {
+	const [isChecked, setIsChecked] = useState(false);
+
 	//TODO : 이하 변수들은 차후 props로 변경 예정
 	const w = "w-[240px]";
 	const filterTitle = "이슈 필터";
@@ -19,6 +24,8 @@ function DropdownPanel() {
 	];
 	//
 
+	const handleListClick = () => {};
+
 	return (
 		<div className={`absolute top-12 ${w} component-border dark:component-border--dark`}>
 			<h3 className={`${borderBottom} flex items-center cursor-default`}>
@@ -34,7 +41,11 @@ function DropdownPanel() {
 							i === contents.length - 1 ? " rounded-b-xl" : borderBottom
 						}`}
 					>
-						<div className="flex items-center">
+						<input className="hidden peer" type="checkbox" id={content} />
+						<label
+							className="flex items-center w-full cursor-pointer peer-checked:font-black"
+							htmlFor={content}
+						>
 							{imgs.length !== 0 && (
 								<img
 									className="w-[20px] h-[20px] rounded-full ml-3"
@@ -43,8 +54,7 @@ function DropdownPanel() {
 								/>
 							)}
 							<span className="ml-2 text-grayscale.700 dark:text-grayscale.400">{content}</span>
-						</div>
-						<input className="hidden peer" type="checkbox" id={content} />
+						</label>
 						<label
 							className="mx-3 checkbox dark:border-grayscale.400 peer-checked:after:checkbox--checked dark:peer-checked:after:checkbox--checked--dark"
 							htmlFor={content}

@@ -76,20 +76,20 @@
 
 	.checkbox--checked {
 		content: "✔";
-		font-size: 12px;
+		font-size: 10px;
 		font-weight: 900;
 		position: absolute;
 		left: 1px;
-		top: -3px;
+		top: -2px;
 		color: theme("colors[grayscale.700]");
 	}
 
 	.checkbox--checked--dark {
 		content: "✔";
-		font-size: 12px;
+		font-size: 10px;
 		position: absolute;
 		left: 1px;
-		top: -3px;
+		top: -2px;
 		color: theme("colors[grayscale.100]");
 	}
 
