@@ -17,7 +17,7 @@ const useLoginLogic = () => {
   const { setIsLoggedIn } = useUserStore();
   const navigate = useNavigate();
 
-  const { mutate: login } = useMutation(sendLoginRequest, {
+  const { mutate: login, isLoading } = useMutation(sendLoginRequest, {
     onSuccess: () => {
       setIsLoggedIn(true);
       navigate("/");
@@ -46,7 +46,7 @@ const useLoginLogic = () => {
 
   useEffect(checkAllFilled, [idValue, passwordValue]);
 
-  return { ...loginStore, handleLoginClick };
+  return { ...loginStore, isLoading, handleLoginClick };
 };
 
 export default useLoginLogic;
