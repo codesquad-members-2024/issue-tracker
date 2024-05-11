@@ -11,7 +11,7 @@ export function SignContainer() {
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
 	const submitLogin = () => {
-		navigate('/issue');
+		navigate('/');
 	};
 
 	return (
