@@ -47,9 +47,6 @@ const IssueCard: React.FC<IssueCardProps> = ({ isOpen, issueInfo }) => {
                         </div>
                         <div className="flex h-full w-30% items-center">
                             <div className="flex-grow"></div>
-                            <div className="flex-grow"></div>
-                            <div className="flex-grow"></div>
-                            <div className="flex-grow"></div>
                         </div>
                     </Link>
                 ))
