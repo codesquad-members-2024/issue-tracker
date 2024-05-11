@@ -14,6 +14,7 @@ interface RegistrationState extends UserState {
   userPassword: string;
 }
 
+const LOGIN_VALIDATION_ERROR_MESSAGE = "아이디나 비밀번호가 일치하지 않습니다.";
 const VALIDATION_SUCCESS_MESSAGE = "사용할 수 있는 아이디입니다.";
 const VALIDATION_FAILURE_MESSAGE = "이미 존재하는 아이디입니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
@@ -29,6 +30,7 @@ export const sendLoginRequest: (loginState: LoginState) => Promise<Response> = a
     };
     const response = await fetch(`${SERVER}/login`, request);
     
+    if (response.status === 400) throw new Error(LOGIN_VALIDATION_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
     return response;
