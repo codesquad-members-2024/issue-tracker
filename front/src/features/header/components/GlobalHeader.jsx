@@ -29,7 +29,6 @@ const StyledInnerLayout = styled(InnerLayout)`
 `;
 const StyledLink = styled(Link)`
 	display: block;
-	background-color: gold;
 	width: 199px;
 `;
 const StyledUser = styled(IconUser)`
