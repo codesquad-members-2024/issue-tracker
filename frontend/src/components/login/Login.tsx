@@ -3,10 +3,10 @@ import pageLogo from "../../img/pageLogo.svg";
 import AuthorizationForm from "../authorization/AuthorizationForm";
 import { useNavigate } from "react-router-dom";
 import useLoginLogic from "../../hooks/useLoginLogic";
+import Loading from "./Loading";
 
 function Login() {
-  const { setIdValue, setPasswordValue, allFilled, errorMessage, handleLoginClick } =
-    useLoginLogic();
+  const { setIdValue, setPasswordValue, allFilled, errorMessage, isLoading, handleLoginClick } = useLoginLogic();
   const navigate = useNavigate();
 
   return (
@@ -21,6 +21,7 @@ function Login() {
       </LoginButton>
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <RegistrationButton onClick={() => navigate("/registration")}>회원가입</RegistrationButton>
+      {isLoading && <Loading />}
     </LoginWrapper>
   );
 }
