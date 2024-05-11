@@ -1,7 +1,12 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { getIssues } from '../apis/getIssues';
 import { IssueItem } from '../components/IssueItem';
 
 export function IssueListViewContainer() {
+	useEffect(() => {
+		getIssues().then(data => console.log('data', data));
+	}, []);
 	return (
 		<>
 			<StyledWrapper>
