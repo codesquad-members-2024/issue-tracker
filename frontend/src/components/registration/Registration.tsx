@@ -6,16 +6,13 @@ import useRegistrationLogic from "../../hooks/useRegistrationLogic";
 
 function Registration() {
   const {
+    state: { isValidated, validationMessage, allFilled, errorMessage },
     setIdValue,
     setPasswordValue,
     setPasswordValidationValue,
     setNicknameValue,
-    allFilled,
-    errorMessage,
     handleRegistrationClick,
     handleValidationClick,
-    isValidated,
-    validationMessage,
   } = useRegistrationLogic();
   const navigate = useNavigate();
 

@@ -1,46 +1,39 @@
-import { useEffect } from "react";
-import useRegistrationStore from "./useRegistrationStore";
+import useRegistrationState from "./useRegistrationState";
 import { sendIdValidationRequest, sendRegistrationRequest } from "../api/LoginAPI";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
+import { useEffect } from "react";
 
 const INPUT_MIN_LENGTH = 6;
 const NICKNAME_MIN_LENGTH = 2;
-const VALIDATION_SUCCESS_MESSAGE = "사용할 수 있는 아이디입니다.";
-const VALIDATION_FAILURE_MESSAGE = "이미 존재하는 아이디입니다.";
 const INPUT_REGEX = /^[A-Za-z0-9]+$/;
 const INPUT_REGEX_ERROR_MESSAGE = "ID, 비밀번호와 닉네임은 알파벳과 숫자만 포함해야 합니다.";
 const INPUT_LENGTH_ERROR_MESSAGE = "ID와 비밀번호는 최소 6자이여야 합니다.";
 const PASSWORD_VALIDATION_ERROR_MESSAGE = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
 const NICKNAME_LENGTH_ERROR_MESSAGE = "닉네임은 최소 2자이여야 합니다.";
 const REGISTRATION_FAILURE_MESSAGE = "회원가입에 실패하였습니다.";
+const UNKNOWN_ERROR_MESSAGE = "알 수 없는 에러가 발생하였습니다.";
 
 const useRegistrationLogic = () => {
-  const registrationStore = useRegistrationStore();
+  const registrationState = useRegistrationState();
   const {
-    idValue,
-    passwordValue,
-    passwordValidationValue,
-    nicknameValue,
-    isValidated,
-    allFilled,
+    state: { idValue, passwordValue, passwordValidationValue, nicknameValue, allFilled },
     setErrorMessage,
     setIsValidated,
     setValidationMessage,
     checkAllFilled,
-  } = registrationStore;
+  } = registrationState;
   const navigate = useNavigate();
 
   const { mutate: validateId } = useMutation(sendIdValidationRequest, {
-    onSuccess: (data) => {
-      if (!data) {
-        setIsValidated(false);
-        setValidationMessage(VALIDATION_FAILURE_MESSAGE);
-        return;
-      }
-
+    onSuccess: (message) => {
+      setValidationMessage(message);
       setIsValidated(true);
-      setValidationMessage(VALIDATION_SUCCESS_MESSAGE);
+    },
+    onError: (error) => {
+      const errorMessage = error instanceof Error ? error.message : UNKNOWN_ERROR_MESSAGE;
+      setValidationMessage(errorMessage);
+      setIsValidated(false);
     },
   });
 
@@ -53,16 +46,14 @@ const useRegistrationLogic = () => {
   const handleRegistrationClick = () => {
     if (!allFilled) return;
 
-    if (
-      !INPUT_REGEX.test(idValue) ||
-      !INPUT_REGEX.test(passwordValue) ||
-      !INPUT_REGEX.test(passwordValidationValue) ||
-      !INPUT_REGEX.test(nicknameValue)
-    ) {
+    const inputValues = [idValue, passwordValue, passwordValidationValue, nicknameValue];
+    const hasInvalidInput = inputValues.some((value) => !INPUT_REGEX.test(value));
+
+    if (hasInvalidInput) {
       setErrorMessage(INPUT_REGEX_ERROR_MESSAGE);
       return;
     }
-    
+
     if (passwordValue !== passwordValidationValue) {
       setErrorMessage(PASSWORD_VALIDATION_ERROR_MESSAGE);
       return;
@@ -82,9 +73,13 @@ const useRegistrationLogic = () => {
     register({ userId: idValue, userPassword: passwordValue, userNickname: nicknameValue });
   };
 
-  useEffect(checkAllFilled, [idValue, passwordValue, passwordValidationValue, nicknameValue, isValidated]);
+  useEffect(checkAllFilled, [idValue, passwordValue, passwordValidationValue, nicknameValue, allFilled]);
 
-  return { ...registrationStore, handleRegistrationClick, handleValidationClick };
+  return {
+    ...registrationState,
+    handleRegistrationClick,
+    handleValidationClick,
+  };
 };
 
 export default useRegistrationLogic;
