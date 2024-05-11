@@ -1,31 +1,30 @@
-{
-	"todos": [
-		{
-			"id": 1,
-			"content": "HTML",
-			"completed": true
-		},
-		{
-			"id": 2,
-			"content": "CSS",
-			"completed": false
-		},
-		{
-			"id": 3,
-			"content": "Javascript",
-			"completed": true
-		}
-	],
-	"users": [
-		{
-			"id": 1,
-			"name": "Lee",
-			"role": "developer"
-		},
-		{
-			"id": 2,
-			"name": "Kim",
-			"role": "designer"
-		}
-	]
-}
+[
+	{
+		"list": [
+			{
+				"id": 1,
+				"title": "title1",
+				"content": "content1",
+				"profileImage": null,
+				"milestoneId": "m1",
+				"labelId": "bug",
+				"manager": "JK",
+				"writer": "jin",
+				"createTime": "2024-05-10T01:40:23.229352603",
+				"deleted": false
+			},
+			{
+				"id": 2,
+				"title": "title2",
+				"content": "content2",
+				"profileImage": null,
+				"milestoneId": "m2",
+				"labelId": "documentation",
+				"manager": "JK",
+				"writer": "daniel",
+				"createTime": "2024-05-10T01:40:23.232974483",
+				"deleted": false
+			}
+		]
+	}
+]
