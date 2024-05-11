@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 import { IssueListViewContainer } from '../containers/IssueListViewContainer';
+import { InnerLayout } from '../../../common/components/InnerLayout';
 
 export function IssueListViewsPage() {
 	return (
-		<StyledWrapper>
+		<InnerLayout>
 			<IssueListViewContainer />
-		</StyledWrapper>
+		</InnerLayout>
 	);
 }
-const StyledWrapper = styled.div`
-	width: 1280px;
-	margin: 30px auto 0;
-`;
