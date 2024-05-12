@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdateMember {
     private final String id;
     private final String password;
-    private final String name;
+    private final String nickName;
     private final LocalDateTime birthday;
     private final String email;
 }
