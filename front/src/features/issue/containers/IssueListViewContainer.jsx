@@ -1,16 +1,20 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getIssues } from '../apis/getIssues';
 import { IssueItem } from '../components/IssueItem';
 
 export function IssueListViewContainer() {
+	const [issueData, setIssueData] = useState([]);
 	useEffect(() => {
-		getIssues().then(data => console.log('data', data));
+		getIssues().then(issueData => setIssueData(issueData));
 	}, []);
 	return (
 		<>
 			<StyledWrapper>
 				<StyledFilter></StyledFilter>
+				{issueData.map(issue => (
+					<IssueItem key={issue.id} issue={issue} />
+				))}
 				<IssueItem />
 			</StyledWrapper>
 		</>
