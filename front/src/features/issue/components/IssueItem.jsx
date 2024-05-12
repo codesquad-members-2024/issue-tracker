@@ -7,32 +7,27 @@ import { IconLandmark } from '../../../common/icons/IconLandmark';
 export function IssueItem() {
 	return (
 		<StyledWrapper>
-			<StyledInner>
-				<StyledCheckbox />
-				<StyledFlex>
-					<ExclamationCircleOutlined />
-					<StyledIssueTitle to='/'>이슈제목</StyledIssueTitle>
+			<StyledCheckbox />
+			<StyledFlex>
+				<ExclamationCircleOutlined />
+				<StyledIssueTitle to='/'>이슈제목</StyledIssueTitle>
 
-					<strong>documentaion</strong>
-				</StyledFlex>
-				<StyledDetail>
-					<p>이슈번호</p>
-					<StyledAuthour>작성자 및 타임스탬프</StyledAuthour>
-					<StyledMilestone>
-						<IconLandmark />
-						<p>그룹프로젝트:이슈트래커</p>
-					</StyledMilestone>
-				</StyledDetail>
+				<strong>documentaion</strong>
+			</StyledFlex>
+			<StyledDetail>
+				<p>이슈번호</p>
+				<StyledAuthour>작성자 및 타임스탬프</StyledAuthour>
+				<StyledMilestone>
+					<IconLandmark />
+					<p>그룹프로젝트:이슈트래커</p>
+				</StyledMilestone>
+			</StyledDetail>
 
-				<StyledIconUser />
-			</StyledInner>
+			<StyledIconUser />
 		</StyledWrapper>
 	);
 }
 const StyledWrapper = styled.div`
-	padding: 0;
-`;
-const StyledInner = styled.div`
 	display: block;
 	border-bottom: 1px solid #d9dbe9;
 	width: 100%;
@@ -42,6 +37,7 @@ const StyledInner = styled.div`
 		border-bottom: 0;
 	}
 `;
+
 const StyledCheckbox = styled(Checkbox)`
 	position: absolute;
 	top: 50%;
