@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { theme } from '../../styles/theme';
 import { Radio } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
-export function Dropdown({ title = 'Label', data = [] }) {
+export function Dropdown({ title = 'Label', data = [], className }) {
 	const [value, setValue] = useState(1);
 	const onChange = e => {
 		console.log('radio checked', e.target.value);
 		setValue(e.target.value);
 	};
 	return (
-		<StyledWrapper>
+		<StyledWrapper className={className}>
 			<h5>{title}</h5>
 
 			<StyledRadioGroup onChange={onChange} value={value}>
@@ -30,14 +30,15 @@ export function Dropdown({ title = 'Label', data = [] }) {
 }
 const StyledWrapper = styled.div`
 	position: absolute;
-	// TODO: 지울 코드임
-	top: 50%;
-	left: 50%;
+	z-index: 10;
+	top: auto;
+	left: auto;
 	min-width: 240px;
 	transform: translate(-50%, -50%);
 	border: 1px solid ${theme.color.neutral.border.default};
 	border-radius: ${theme.radius.large};
 	overflow: hidden;
+	background-color: ${theme.color.neutral.surface.strong};
 	h5 {
 		text-align: left;
 		padding: 8px 16px;
