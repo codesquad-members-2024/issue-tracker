@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Button from "./Button";
 
+const border = "component-border dark:component-border--dark";
+
 function TabButton() {
 	const [left, setLeft] = useState("DEFAULT");
 	const [right, setRight] = useState("DEFAULT");
@@ -16,7 +18,7 @@ function TabButton() {
 	};
 
 	return (
-		<div className="component-border w-[320px] h-[40px] flex items-center">
+		<div className={`border-[1px] rounded-xl ${border} w-[320px] h-[40px] flex items-center`}>
 			<Button
 				onClick={onLeftClick}
 				size="M"
@@ -25,7 +27,7 @@ function TabButton() {
 				text="레이블(3)"
 				state={left}
 			/>
-			<div className="border-r-2 h-full"></div>
+			<div className={`border-r-[1px] ${border} h-full`}></div>
 			<Button
 				onClick={onRightClick}
 				size="M"

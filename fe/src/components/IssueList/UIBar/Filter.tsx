@@ -4,7 +4,7 @@ import DropdownPanel from "../../common/DropdownPanel";
 import { useState } from "react";
 
 const textColor = "text-grayscale.700 dark:text-grayscale.400";
-const rounded = "rounded-l-xl";
+const border = "component-border dark:component-border--dark";
 
 function Filter() {
 	const [open, setOpen] = useState(false);
@@ -16,13 +16,13 @@ function Filter() {
 
 	return (
 		<>
-			<div className="component-border h-full lg:w-2/5 w-full flex items-center dark:component-border--dark">
+			<div className={`border-[1px] ${border} h-full lg:w-2/5 w-full flex items-center rounded-xl`}>
 				<details
 					open={open}
-					className={`w-[20%] min-w-[90px] relative h-full cursor-pointer border-r-2 ${rounded} border-grayscale.300 dark:border-grayscale.600`}
+					className={`w-[20%] min-w-[90px] relative h-full cursor-pointer border-r-[1px] rounded-l-xl ${border}`}
 				>
 					<summary
-						className={`h-full flex justify-between items-center ${rounded} hover:bg-grayscale.200 dark:hover:bg-grayscale.700`}
+						className={`h-full flex justify-between items-center rounded-l-xl hover:bg-grayscale.200 dark:hover:bg-grayscale.700`}
 						onClick={onToggle}
 					>
 						<span className={`ml-5 ${textColor} z-20`}>필터</span>

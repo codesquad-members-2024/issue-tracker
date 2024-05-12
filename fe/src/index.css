@@ -56,20 +56,22 @@
 		color: theme("colors[accent.red]");
 	}
 
+	/* 아래는 재활용 가능 */
 	.component-border {
-		border: 2px solid theme("colors[grayscale.300]");
-		border-radius: 12px;
+		border-style: solid;
+		border-color: theme("colors[grayscale.300]");
 	}
 
 	.component-border--dark {
-		border: 2px solid theme("colors[grayscale.600]");
+		border-style: solid;
+		border-color: theme("colors[grayscale.600]");
 	}
 
 	.checkbox {
 		display: inline-block;
 		width: 16px;
 		height: 16px;
-		border: 2px solid theme("colors[grayscale.700]");
+		border: 1px solid theme("colors[grayscale.700]");
 		border-radius: 100%;
 		position: relative;
 		cursor: pointer;
