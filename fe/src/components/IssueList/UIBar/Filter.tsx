@@ -16,7 +16,7 @@ function Filter() {
 
 	return (
 		<>
-			<div className="component-border h-full w-2/5 flex items-center dark:component-border--dark">
+			<div className="component-border h-full lg:w-2/5 w-full flex items-center dark:component-border--dark">
 				<details
 					open={open}
 					className={`w-[20%] min-w-[90px] relative h-full cursor-pointer border-r-2 ${rounded} border-grayscale.300 dark:border-grayscale.600`}
