@@ -7,7 +7,7 @@ function UIBar() {
 		<div className="container mx-lg my-10 flex justify-between h-[40px] flex-wrap-reverse content-end">
 			<Filter />
 			<div className="flex justify-between h-full lg:w-[500px] w-full lg:mb-0 mb-4">
-				<TabButton />
+				<TabButton position="UI_BAR" />
 				<Button size="S" type="CONTAINED" icon="PLUS" text="이슈 작성" state="DEFAULT" />
 			</div>
 		</div>
