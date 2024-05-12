@@ -2,7 +2,7 @@ import Button from "../../common/Button";
 import Filter from "./Filter";
 import TabButton from "../../common/TabButton";
 
-function UI() {
+function UIBar() {
 	return (
 		<div className="container mx-lg my-14 flex justify-between h-[40px] flex-wrap-reverse content-end">
 			<Filter />
@@ -13,4 +13,4 @@ function UI() {
 		</div>
 	);
 }
-export default UI;
+export default UIBar;

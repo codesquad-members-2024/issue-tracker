@@ -1,9 +1,9 @@
-import UI from "./UIBar/UIBar";
+import UIBar from "./UIBar/UIBar";
 
 function IssueList() {
 	return (
 		<div className="flex justify-center">
-			<UI />
+			<UIBar />
 		</div>
 	);
 }
