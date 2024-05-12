@@ -6,10 +6,13 @@ import {
 	faCircleExclamation,
 	faBoxArchive,
 	faPaperclip,
+	faTag,
+	faSignsPost,
 } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare, faFaceSmile, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 interface PropsType {
+	onClick?: () => void;
 	size: string;
 	type: string;
 	icon: string | null;
@@ -42,6 +45,8 @@ const ICON: IconType = {
 	SMLILE: faFaceSmile,
 	PEN: faPenToSquare,
 	TRASH: faTrashCan,
+	TAG: faTag,
+	POST: faSignsPost,
 };
 const TYPE: DesignMap = {
 	CONTAINED: "bg-grayscale.700 text-grayscale.50",
@@ -56,9 +61,10 @@ const STATE: DesignMap = {
 	DISABLED: "opacity-[32%] cursor-default",
 };
 
-function Button({ size, type, icon, text, state }: PropsType) {
+function Button({ onClick, size, type, icon, text, state }: PropsType) {
 	return (
 		<button
+			onClick={onClick}
 			className={`${SIZE[size]} ${TYPE[type]} ${STATE[state]} relative flex items-center justify-center rounded-xl`}
 		>
 			{icon && <FontAwesomeIcon className="mt-[1.4px]" icon={ICON[icon]} />}
