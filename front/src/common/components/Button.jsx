@@ -4,9 +4,9 @@ import { theme } from '../../styles/theme';
 export function Button({
 	children,
 	className,
-	type,
-	size = 'small',
-	buttonType = 'container',
+	type, // button, submit, reset
+	size = 'small', // small, medium, large
+	buttonType = 'container', // container, outline, ghost
 	disabled = false,
 	onClick,
 }) {
@@ -25,7 +25,9 @@ export function Button({
 }
 
 const StyledAntdButton = styled.button`
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	${props => theme.buttonSizes[props.$size]}
 	${props => theme.buttonStyles[props.$buttonType]}
 `;
