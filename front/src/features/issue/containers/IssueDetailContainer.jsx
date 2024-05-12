@@ -4,6 +4,8 @@ import { Button } from '../../../common/components/Button';
 import { IconEdit } from '../../../common/icons/IconEdit';
 import { IconTrash } from '../../../common/icons/IconTrash';
 import { IconAlertCircle } from '../../../common/icons/IconAlertCircle';
+import { IssueCommentItem, IssueSidebar } from '~/features/issue/components';
+
 export function IssueDetailContainer() {
 	return (
 		<StyledWrapper>
@@ -17,9 +19,7 @@ export function IssueDetailContainer() {
 							type='button'
 							size='small'
 							buttonType='outline'
-							onClick={() => {
-								console.log();
-							}}
+							onClick={() => {}}
 						>
 							<IconEdit />
 							제목 편집
@@ -28,9 +28,7 @@ export function IssueDetailContainer() {
 							type='button'
 							size='small'
 							buttonType='outline'
-							onClick={() => {
-								console.log('delete');
-							}}
+							onClick={() => {}}
 						>
 							<IconTrash />
 							이슈 닫기
@@ -51,6 +49,12 @@ export function IssueDetailContainer() {
 					</p>
 				</StyledSubHeader>
 			</StyledDetailHeader>
+			<StyledContents>
+				<section>
+					<IssueCommentItem />
+				</section>
+				<IssueSidebar />
+			</StyledContents>
 		</StyledWrapper>
 	);
 }
@@ -59,6 +63,7 @@ const StyledWrapper = styled.div`
 `;
 const StyledDetailHeader = styled.div`
 	padding-bottom: 24px;
+	margin-bottom: 24px;
 	border-bottom: 1px solid ${theme.color.neutral.border.default};
 `;
 const StyledTitle = styled.div`
@@ -110,5 +115,17 @@ const StyledBadge = styled.span`
 	${theme.typography.medium[12]};
 	i {
 		padding-right: 4px;
+	}
+`;
+const StyledContents = styled.div`
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	section {
+		width: 960px;
+	}
+	aside {
+		width: 288px;
+		height: 100px;
 	}
 `;
