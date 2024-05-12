@@ -1,11 +1,11 @@
-import Table from "../common/Table";
+import IssueTable from "./IssueTable/IssueTable";
 import UIBar from "./UIBar/UIBar";
 
 function IssueList() {
 	return (
 		<div className="flex flex-col justify-center">
 			<UIBar />
-			<Table />
+			<IssueTable />
 		</div>
 	);
 }
