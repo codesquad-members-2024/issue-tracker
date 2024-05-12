@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-
-import { GlobalStyle } from './styles/globalStyle';
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyle, theme } from './styles';
 import { Router } from './Routes';
 
 function App() {
 	return (
-		<>
+		<ThemeProvider theme={theme}>
 			<GlobalStyle />
 			<StyledWrapper>
 				<Router />
 			</StyledWrapper>
-		</>
+		</ThemeProvider>
 	);
 }
 
