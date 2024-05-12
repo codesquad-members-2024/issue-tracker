@@ -10,7 +10,7 @@ public class Member {
 
     private final String id;
     private final String password;
-    private final String name;
+    private final String nickName;
     private final LocalDateTime birthday;
     private final LocalDateTime joinDate;
     private final String email;
