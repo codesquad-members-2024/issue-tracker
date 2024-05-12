@@ -86,7 +86,7 @@ const FilterUI: React.FC<FilterProps> = ({
                 <DownOutlined />
             </div>
             {isOpen && (
-                <div className="absolute bg-gray-100 border border-gray-200 shadow-md z-10 mt-1 w-230px flex flex-col rounded-xl">
+                <div className="absolute bg-gray-100 dark:bg-darkModeBorderBG border border-gray-200 shadow-md z-10 mt-1 w-230px flex flex-col rounded-xl">
                     {filterInfo.map((type, idx) => (
                         <div
                             onClick={() => handleClick(type)}

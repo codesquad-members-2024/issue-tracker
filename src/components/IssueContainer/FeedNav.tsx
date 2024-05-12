@@ -44,7 +44,7 @@ const FeedNav: React.FC<IssueFeedProps> = ({
     };
 
     return (
-        <div className="h-45 bg-gray-200 flex text-sm rounded-t-lg">
+        <div className="h-45 bg-gray-200 transition-colors duration-500 dark:bg-darkModeBG flex text-sm rounded-t-lg">
             <div className="flex h-full w-70% items-center">
                 <input type="checkbox" className="w-7%" />
                 <button

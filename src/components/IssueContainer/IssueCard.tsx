@@ -20,7 +20,7 @@ const IssueCard: React.FC<IssueCardProps> = ({ isOpen, issueInfo }) => {
                     <Link
                         to={`/issue/${idx}`}
                         state={curIssue}
-                        className="h-90 flex border-t-2 border-gray-300"
+                        className={`${info.length -1 === idx ? "rounded-b-xl" : ""} h-90 flex border-t-2 border-gray-300 dark:bg-darkModeBorderBG`}
                         key={idx}
                     >
                         <div className="h-full w-70%">

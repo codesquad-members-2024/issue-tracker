@@ -42,10 +42,10 @@ const Nav: React.FC<NavProps> = ({ resetFilterUI, setResetFilterUI, handleResetF
                     <div className="border-l-2 border-t-2 border-b-2 rounded-l-lg border-gray-300 h-full w-1/5 flex items-center">
                         <FilterUI  filterInfo={ISSUES_FILTER} filterType={"필터"} resetFilterUI={resetFilterUI} setResetFilterUI={setResetFilterUI}/>
                     </div>
-                    <div className="bg-gray-200 flex border-2 rounded-r-lg border-gray-300 overflow-hidden h-full w-4/5 px-4 gap-2">
+                    <div className="bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG flex border-2 rounded-r-lg border-gray-300 overflow-hidden h-full w-4/5 px-4 gap-2">
                         <SearchOutlined className="" />
                         <input
-                            className="bg-gray-200 w-full outline-none "
+                            className="bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG w-full outline-none "
                             type="text"
                             value={FilterState.req_query}
                             onChange={handleChange}
