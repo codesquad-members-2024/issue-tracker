@@ -3,6 +3,7 @@ import { IssueListViewsPage } from './features/issue/pages/IssueListViewsPage';
 import { MainPage } from './features/main/pages/MainPage';
 import { SignInPage } from './features/signIn/pages/SignInPage';
 import { GlobalHeader } from './features/header/components/GlobalHeader';
+import { IssueDetailPage } from './features/issue/pages/IssueDetailPage';
 export const Router = () => (
 	<BrowserRouter>
 		<GlobalHeader />
@@ -10,6 +11,7 @@ export const Router = () => (
 			<Route path='/' element={<MainPage />} />
 			<Route path='/signIn' element={<SignInPage />} />
 			<Route path='/issue' element={<IssueListViewsPage />} />
+			<Route path='/issue/:id' element={<IssueDetailPage />} />
 
 			{/* <Route path='issue' element={<IssueListViewsPage />} />
 			<Route path='issue/:id' element={<IssueDetailViewPage />} /> */}
