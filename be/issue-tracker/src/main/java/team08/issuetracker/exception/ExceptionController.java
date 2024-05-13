@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
+import team08.issuetracker.exception.member.MemberNotFoundException;
+import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 
 @ControllerAdvice
 @Slf4j
@@ -20,6 +22,22 @@ public class ExceptionController {
         log.error(e.getClass().getSimpleName() + " : " + error_msg);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error_msg);
     }
+
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ResponseEntity<String> handleMemberNotFoundException(MemberNotFoundException e) {
+        error_msg = "존재하는 ID가 없습니다.";
+        log.error(e.getClass().getSimpleName() + " : " + error_msg);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error_msg);
+    }
+
+    @ExceptionHandler(MemberPasswordMismatchException.class)
+    public ResponseEntity<String> handleMemberPasswordMismatchException(MemberPasswordMismatchException e) {
+        error_msg = "회원정보의 비밀번호가 일치하지 않습니다.";
+        log.error(e.getClass().getSimpleName() + " : " + error_msg);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error_msg);
+    }
+
+
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<String> handleDuplicateKeyException(DuplicateKeyException e) {

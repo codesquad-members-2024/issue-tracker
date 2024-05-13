@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
+import team08.issuetracker.exception.member.MemberNotFoundException;
+import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.model.dto.MemberCreationDto;
+import team08.issuetracker.member.model.dto.MemberLoginDto;
 import team08.issuetracker.member.repository.MemberRepository;
 
 import java.util.regex.Matcher;
@@ -21,14 +24,29 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public void registerUser(MemberCreationDto memberCreationDto) {
+    public void registerMember(MemberCreationDto memberCreationDto) {
         validateRegisterForm(memberCreationDto);
 
         Member member = new Member(memberCreationDto.getMemberId(), memberCreationDto.getPassword());
 
-        memberRepository.save(member);
+        memberRepository.insert(member);
 
         log.info("회원가입 성공! 아이디 : {}", member.getMemberId());
+    }
+
+    public Member loginMember(MemberLoginDto memberLoginDto) {
+        Member member = memberRepository.findById(memberLoginDto.getMemberId())
+                .orElseThrow(MemberNotFoundException::new);
+
+        validateLoginCredential(member, memberLoginDto.getPassword());
+
+        return member;
+    }
+
+    private void validateLoginCredential(Member member, String inputPassword) {
+        if (!member.getPassword().equals(inputPassword)) {
+            throw new MemberPasswordMismatchException();
+        }
     }
 
     private void validateRegisterForm(MemberCreationDto memberCreationDto) {
@@ -55,5 +73,6 @@ public class MemberService {
             throw new InvalidRegisterFormException();
         }
     }
+
 
 }
