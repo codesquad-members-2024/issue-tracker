@@ -1,12 +1,14 @@
 package com.codesquad.team3.issuetracker.domain.labels;
 
 
-import com.codesquad.team3.issuetracker.domain.labels.dto.Label;
-import com.codesquad.team3.issuetracker.domain.labels.dto.LabelForm;
+import com.codesquad.team3.issuetracker.domain.labels.entity.Label;
+import com.codesquad.team3.issuetracker.domain.labels.dto.request.LabelForm;
 import com.codesquad.team3.issuetracker.domain.labels.service.LabelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,28 +21,34 @@ public class Controller {
     @PostMapping("")
     public Label create(@RequestBody LabelForm form) {
 
-        Label label = new Label(form.getName(), form.getDescription(), form.getColor());
+        Label label =
+                new Label(form.getTitle(), form.getDescription(), form.getColor(),
+                        LocalDateTime.now());
+
         service.create(label);
         return label;
     }
 
-//    @GetMapping("/{id}")
-//    public Label get(@PathVariable("id")Long id) {
-////        return service.getLabel(id);
-//    }
+    @GetMapping("/{title}")
+    public Label get(@PathVariable("title") String title) {
 
-    @PutMapping("/{id}")
-    public Label update(@PathVariable("id")Long id, @RequestBody LabelForm form){
+        log.info("title={}", title);
+        return service.getLabel(title);
+    }
 
-        Label newLabel = new Label(form.getName(), form.getDescription(), form.getColor());
-        service.update(id, newLabel);
+    @PutMapping("/{title}")
+    public Label update(@PathVariable("title") String title, @RequestBody LabelForm form) {
+
+        Label newLabel = new Label(form.getTitle(), form.getDescription(), form.getColor(),
+               LocalDateTime.now());
+        service.update(title, newLabel);
 
         return newLabel;
     }
-//
-//    @DeleteMapping("/{id}")
-//    public void delete(@PathVariable("id")Long id){
-//        service.delete(id);
-//    }
+
+    @DeleteMapping("/{title}")
+    public void delete(@PathVariable("title") String title) {
+        service.delete(title);
+    }
 
 }
