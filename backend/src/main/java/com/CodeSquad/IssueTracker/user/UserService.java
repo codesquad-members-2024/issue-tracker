@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.user;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
+import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.user.utils.UserValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,15 @@ public class UserService {
     public boolean verifyUserInfo(User user) {
         if (!UserValidate.isUserIdValid(user.getUserId())) {
             log.error("사용자 ID 유효성 검증 실패: {}", user.getUserId());
-            return false;
+            throw new InvalidUserFormatException("ID가 형식에 맞지 않습니다.");
         }
         if (!UserValidate.isUserPasswordValid(user.getUserPassword())) {
             log.error("사용자 비밀번호 유효성 검증 실패: {}", user.getUserId());
-            return false;
+            throw new InvalidUserFormatException("비밀번호가 형식에 맞지 않습니다.");
         }
         if (!UserValidate.isUserNicknameValid(user.getUserNickname())) {
             log.error("사용자 닉네임 유효성 검증 실패: {}", user.getUserId());
-            return false;
+            throw new InvalidUserFormatException("닉네임이 형식에 맞지 않습니다.");
         }
         return true;
     }
