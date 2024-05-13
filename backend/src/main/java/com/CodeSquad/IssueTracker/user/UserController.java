@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.user;
 
+import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.UserAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
