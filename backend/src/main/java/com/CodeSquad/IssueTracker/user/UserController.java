@@ -1,5 +1,7 @@
 package com.CodeSquad.IssueTracker.user;
 
+import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
+import com.CodeSquad.IssueTracker.Exception.user.UserAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -44,13 +46,13 @@ public class UserController {
 
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        throw new InvalidCredentialException("잘못된 로그인 정보입니다.");
     }
 
     @GetMapping("/validation/{id}")
     public ResponseEntity<?> getValidationId(@PathVariable("id") String id) {
         if (userService.isUserIdDuplicated(id)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new UserAlreadyExistsException("이미 존재하는 ID입니다.");
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
