@@ -13,13 +13,14 @@ import team08.issuetracker.label.repository.LabelRepository;
 public class LabelService {
     private final LabelRepository labelRepository;
 
-    public void createLabel(LabelCreationDto labelCreationDto) {
+    public Label createLabel(LabelCreationDto labelCreationDto) {
         // 1) DTO -> Entity 변환
         Label label = convertToEntity(labelCreationDto);
-        // 2) 저장
-        labelRepository.save(label);
 
         log.info("라벨 생성 성공 : {}", labelCreationDto.getName());
+
+        // 2) 저장 및 반환
+        return labelRepository.save(label);
     }
 
     private Label convertToEntity(LabelCreationDto labelCreationDto) {

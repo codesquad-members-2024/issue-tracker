@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team08.issuetracker.label.model.Label;
 import team08.issuetracker.label.model.dto.LabelCreationDto;
 import team08.issuetracker.label.service.LabelService;
 
@@ -18,9 +19,9 @@ public class LabelController {
     // Create
     @PostMapping
     public ResponseEntity<String> createLabel(@RequestBody LabelCreationDto labelCreationDto) {
-        labelService.createLabel(labelCreationDto);
+        Label label =  labelService.createLabel(labelCreationDto);
 
-        return ResponseEntity.ok("라벨생성 성공!");
+        return ResponseEntity.ok("라벨생성 성공! #" + label);
     }
 
 }
