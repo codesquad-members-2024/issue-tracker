@@ -32,13 +32,12 @@ CREATE TABLE member (
 );
 
 CREATE TABLE label (
-                        id INTEGER PRIMARY KEY auto_increment,
-                       title varchar(10),
+                       title varchar(10) PRIMARY KEY,
                        description varchar(50) NOT NULL,
                        create_Time timestamp NOT NULL,
                        color char(6) DEFAULT '000000',
-                       is_Deleted bool DEFAULT false
-
+                       is_Deleted bool DEFAULT false,
+                       version BIGINT NOT NULL
 
 );
 

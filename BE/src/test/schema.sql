@@ -1,22 +1,23 @@
 CREATE TABLE issue (
-                       id int PRIMARY KEY AUTO_INCREMENT,
+                       id int PRIMARY KEY,
                        writer_name varchar(20) NOT NULL UNIQUE ,
                        title varchar(60) NOT NULL,
-                       create_time timestamp NOT NULL,
-                       is_close bool DEFAULT false,
+                       contents text NOT NULL,
+                       createTime timestamp NOT NULL,
+                       isClose bool DEFAULT false,
                        writer_id varchar(16) NOT NULL UNIQUE ,
                        milestone_title varchar(20),
-                       is_deleted bool DEFAULT false
+                       isDeleted bool DEFAULT false
 );
 
 CREATE TABLE comment (
-                         id int PRIMARY KEY AUTO_INCREMENT,
+                         id int PRIMARY KEY,
                          writer_id varchar(16) NOT NULL UNIQUE ,
                          writer_name varchar(20) NOT NULL UNIQUE ,
                          contents varchar(500) NOT NULL,
-                         create_time timestamp NOT NULL,
+                         createTime timestamp NOT NULL,
                          issue_id int NOT NULL UNIQUE ,
-                         is_delete bool DEFAULT false
+                         isDeleted bool DEFAULT false
 );
 
 CREATE TABLE member (
@@ -25,31 +26,39 @@ CREATE TABLE member (
                         nickname varchar(20) NOT NULL UNIQUE ,
                         profile_img varchar(50),
                         birthday timestamp NOT NULL,
-                        join_time timestamp NOT NULL,
+                        joinTime timestamp NOT NULL,
                         email varchar(50) NOT NULL,
-                        is_delete bool DEFAULT false
+                        isDeleted bool DEFAULT false
 );
 
 CREATE TABLE label (
                        title varchar(10) PRIMARY KEY,
                        description varchar(50) NOT NULL,
-                       createTime timestamp NOT NULL,
+                       create_Time timestamp NOT NULL,
                        color char(6) DEFAULT '000000',
-                       isDeleted bool DEFAULT false
+                            is_Deleted bool DEFAULT false,
+                       version BIGINT NOT NULL
+
 );
 
 CREATE TABLE milestone (
                            title varchar(20) PRIMARY KEY,
                            description varchar(100),
-                           deadline timestamp,
-                           is_close bool DEFAULT false,
-                           is_deleted bool DEFAULT false
+                           deadLine timestamp,
+                           isClosed bool DEFAULT false,
+                           isDeleted bool DEFAULT false
 );
 
 CREATE TABLE labels_in_issue (
                                  label_title varchar(10) NOT NULL,
                                  issue_id int NOT NULL,
                                  PRIMARY KEY (label_title, issue_id)
+);
+
+CREATE TABLE uploaded_file_in_issue (
+                                        file varchar(50),
+                                        issue_id int,
+                                        PRIMARY KEY (file, issue_id)
 );
 
 CREATE TABLE uploaded_file_in_comment (
@@ -59,14 +68,16 @@ CREATE TABLE uploaded_file_in_comment (
 );
 
 CREATE TABLE assigner(
-    issue_id int,
-    assigner_id varchar(16),
-    PRIMARY KEY (issue_id, assigner_id)
+                         issue_id int,
+                         assigner_id varchar(16),
+                         PRIMARY KEY (issue_id, assigner_id)
 
 );
 
 ALTER TABLE assigner ADD FOREIGN KEY (issue_id) REFERENCES issue(id);
 ALTER TABLE assigner ADD FOREIGN KEY (assigner_id) REFERENCES member(id);
+
+ALTER TABLE uploaded_file_in_issue ADD FOREIGN KEY (issue_id) REFERENCES issue (id);
 
 ALTER TABLE uploaded_file_in_comment ADD FOREIGN KEY (comment_id) REFERENCES comment (id);
 
