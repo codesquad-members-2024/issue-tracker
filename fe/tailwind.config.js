@@ -20,7 +20,8 @@ module.exports = {
 				"accent.red": "#FF3B30",
 			},
 			boxShadow: {
-				profile: "5px 3px 20px 0px rgba(0,0,0,0.15)",
+				modal: "5px 3px 20px 0px rgba(0,0,0,0.15)",
+				dark: "0px 0px 15px 5px #14142B",
 			},
 			animation: {
 				wiggle: "wiggle 1s ease-in-out infinite",

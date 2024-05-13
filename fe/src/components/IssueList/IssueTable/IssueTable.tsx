@@ -4,7 +4,7 @@ const border = "component-border dark:component-border--dark";
 
 function IssueTable() {
 	return (
-		<div className={`border-[1px] ${border} rounded-2xl`}>
+		<div className={`border-[1px] ${border} rounded-2xl lg:mt-0 mt-14`}>
 			<header className={`h-[64px] border-b-[1px] ${border} flex items-center`}>
 				<div className="flex">
 					<input type="checkbox" />

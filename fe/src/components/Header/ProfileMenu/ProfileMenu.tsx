@@ -15,7 +15,7 @@ function ProfileMenu({ darkMode, setDarkMode, setIsVisible }: Props) {
 				onClick={() => setIsVisible(false)}
 			></div>
 
-			<div className="absolute top-10 right-0 w-[170px] h-[100px] rounded-xl shadow-profile dark:bg-gray-800 z-10">
+			<div className="absolute top-10 right-0 w-[170px] h-[100px] rounded-xl shadow-modal bg-grayscale.100 dark:bg-grayscale.800 z-10 dark:shadow-dark">
 				<div className="w-full h-1/2 border-b-[1px] text-grayscale.700 flex items-center justify-between dark:text-grayscale.400 dark:border-grayscale.600">
 					<span className="mx-3 text-sm cursor-default">모드전환</span>
 					<FontAwesomeIcon

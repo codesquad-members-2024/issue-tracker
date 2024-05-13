@@ -1,4 +1,5 @@
-const borderBottom = "border-b-2 border-grayscale.300 dark:border-grayscale.600";
+const border = "component-border dark:component-border--dark";
+const borderBottom = `border-b-[1px] ${border}`;
 
 function DropdownPanel() {
 	//TODO : 이하 변수들은 차후 props로 변경 예정
@@ -21,8 +22,12 @@ function DropdownPanel() {
 	//
 
 	return (
-		<div className={`absolute top-12 ${w} component-border dark:component-border--dark z-20`}>
-			<h3 className={`${borderBottom} flex items-center cursor-default`}>
+		<div
+			className={`absolute top-12 ${w} ${border} border-[1px] rounded-xl z-20 shadow-modal dark:shadow-dark`}
+		>
+			<h3
+				className={`${borderBottom} flex items-center cursor-default bg-grayscale.100 dark:bg-grayscale.900 rounded-t-xl`}
+			>
 				<span className="mx-3 my-2 text-xs text-grayscale.600 dark:text-grayscale.500">
 					{filterTitle}
 				</span>
