@@ -1,7 +1,5 @@
-package codesquad.issuetracker.service;
+package codesquad.issuetracker.issue;
 
-import codesquad.issuetracker.domain.Issue;
-import codesquad.issuetracker.repository.IssueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

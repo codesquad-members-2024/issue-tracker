@@ -1,6 +1,5 @@
-package codesquad.issuetracker.repository;
+package codesquad.issuetracker.issue;
 
-import codesquad.issuetracker.domain.Issue;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 

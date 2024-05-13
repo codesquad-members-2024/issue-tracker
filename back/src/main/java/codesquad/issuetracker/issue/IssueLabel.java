@@ -1,4 +1,4 @@
-package codesquad.issuetracker.domain;
+package codesquad.issuetracker.issue;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

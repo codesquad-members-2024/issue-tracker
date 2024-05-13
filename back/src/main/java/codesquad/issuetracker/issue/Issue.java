@@ -1,4 +1,4 @@
-package codesquad.issuetracker.domain;
+package codesquad.issuetracker.issue;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -17,7 +17,7 @@ public class Issue {
     private String content;
     private String milestoneId;
     @MappedCollection(idColumn = "issue_id")
-    private Set<Issue_Assignee> managers;
+    private Set<IssueAssignee> managers;
     private String writer;
     private LocalDateTime createTime;
     private boolean isClosed; // 기본 값 false

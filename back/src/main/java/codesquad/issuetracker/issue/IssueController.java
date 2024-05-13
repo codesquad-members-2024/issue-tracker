@@ -1,7 +1,5 @@
-package codesquad.issuetracker.controller;
+package codesquad.issuetracker.issue;
 
-import codesquad.issuetracker.domain.Issue;
-import codesquad.issuetracker.service.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
