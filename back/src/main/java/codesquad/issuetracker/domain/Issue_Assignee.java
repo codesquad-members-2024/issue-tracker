@@ -5,11 +5,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
-@Table("user_manager")
-public class Assignees {
+@Table("issue_assignee")
+public class Issue_Assignee {
 
     @Id
     private Long id;
-    private String user_id;
-    private Long issue_id;
+    private String userLoginId;
+    private Long issueId;
 }

@@ -7,12 +7,12 @@ import org.springframework.data.annotation.Id;
 public class User {
 
     @Id
-    private String userId;
+    private String loginId;
     private String password;
 
-    public User(String userId,
+    public User(String loginId,
                 String password) {
-        this.userId = userId;
+        this.loginId = loginId;
         this.password = password;
     }
 }
