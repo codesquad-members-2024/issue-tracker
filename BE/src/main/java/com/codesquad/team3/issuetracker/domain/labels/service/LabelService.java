@@ -1,6 +1,6 @@
 package com.codesquad.team3.issuetracker.domain.labels.service;
 
-import com.codesquad.team3.issuetracker.domain.labels.dto.Label;
+import com.codesquad.team3.issuetracker.domain.labels.entity.Label;
 import com.codesquad.team3.issuetracker.domain.labels.repository.LabelRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,21 +17,20 @@ public class LabelService {
 
     public void create(Label label){
         labelRepository.save(label);
+    }
 
+    public void update(String title, Label updateLabel){
+        labelRepository.updateByTitle(title,
+                updateLabel.getDescription(),
+                updateLabel.getColor(),
+                updateLabel.getTitle());
+    }
+
+    public void delete(String id){
+        labelRepository.deleteById(id);
     }
 
     public void update(Long id, Label label){
 //        labelRepository.(id, label);
     }
-//
-//    public void delete(Long id){
-//        labelRepository.delete(id);
-//    }
-//
-//
-//    public Label getLabel(Long id) {
-//        return labelRepository.findById(id);
-//
-//
-//    }
 }

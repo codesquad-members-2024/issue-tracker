@@ -32,11 +32,14 @@ CREATE TABLE member (
 );
 
 CREATE TABLE label (
-                       title varchar(10) PRIMARY KEY,
+                        id INTEGER PRIMARY KEY auto_increment,
+                       title varchar(10),
                        description varchar(50) NOT NULL,
-                       createTime timestamp NOT NULL,
+                       create_Time timestamp NOT NULL,
                        color char(6) DEFAULT '000000',
-                       isDeleted bool DEFAULT false
+                       is_Deleted bool DEFAULT false
+
+
 );
 
 CREATE TABLE milestone (
