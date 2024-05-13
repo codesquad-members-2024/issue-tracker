@@ -4,7 +4,11 @@ import { Button } from '../../../common/components/Button';
 import { IconEdit } from '../../../common/icons/IconEdit';
 import { IconTrash } from '../../../common/icons/IconTrash';
 import { IconAlertCircle } from '../../../common/icons/IconAlertCircle';
-import { IssueCommentItem, IssueSidebar } from '~/features/issue/components';
+import {
+	IssueCommentItem,
+	IssueSidebar,
+	IssueCommentEdit,
+} from '~/features/issue/components';
 
 export function IssueDetailContainer() {
 	return (
@@ -53,6 +57,7 @@ export function IssueDetailContainer() {
 				<section>
 					<IssueCommentItem />
 					<IssueCommentItem />
+					<IssueCommentEdit />
 				</section>
 				<IssueSidebar />
 			</StyledContents>
@@ -60,7 +65,8 @@ export function IssueDetailContainer() {
 	);
 }
 const StyledWrapper = styled.div`
-	padding: 0;
+	//TODO: padding-bottom: 100px; 삭제
+	padding-bottom: 100px;
 `;
 const StyledDetailHeader = styled.div`
 	padding-bottom: 24px;
