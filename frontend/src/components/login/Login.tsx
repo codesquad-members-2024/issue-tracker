@@ -6,7 +6,13 @@ import useLoginLogic from "../../hooks/useLoginLogic";
 import Loading from "./Loading";
 
 function Login() {
-  const { setIdValue, setPasswordValue, allFilled, errorMessage, isLoading, handleLoginClick } = useLoginLogic();
+  const {
+    state: { allFilled, errorMessage },
+    isLoading,
+    setIdValue,
+    setPasswordValue,
+    handleLoginClick,
+  } = useLoginLogic();
   const navigate = useNavigate();
 
   return (
@@ -49,7 +55,6 @@ const GithubLoginButton = styled.button`
   color: #7e7e7e;
   background-color: transparent;
   font-size: 20px;
-  font-color: white;
   cursor: pointer;
 `;
 
