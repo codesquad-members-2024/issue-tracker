@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class IssueService {
@@ -28,10 +31,15 @@ public class IssueService {
         issueRepository.deleteById(issueId);
     }
 
-    public void edit(IssueUpdateRequest form) {
+    public void edit(Long issueId, IssueUpdateRequest form) {
         if (form.getTitle() == null && form.getContent() == null) {
             throw new IllegalArgumentException();
         }
-        issueMapper.update(form);
+
+        Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("issueId", issueId);
+        requestMap.put("form", form);
+
+        issueMapper.update(requestMap);
     }
 }

@@ -130,7 +130,7 @@ class IssueControllerTest {
         String url = urlPrefix + "/issues/1";
         String updatedTitle = "Hello update";
 
-        IssueUpdateRequest request = new IssueUpdateRequest(1L, updatedTitle, null);
+        IssueUpdateRequest request = new IssueUpdateRequest(updatedTitle, null);
         String requestJson = objectMapper.writeValueAsString(request);
 
         // when

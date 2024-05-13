@@ -40,11 +40,9 @@ public class IssueController {
                 .build();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> edit(@PathVariable("id") Long id, @Valid @RequestBody IssueUpdateRequest request) {
-        issueService.edit(request);
     @PatchMapping("/{issueId}")
     public ResponseEntity<Void> edit(@PathVariable("issueId") Long issueId, @Valid @RequestBody IssueUpdateRequest request) {
+        issueService.edit(issueId, request);
         return ResponseEntity
                 .ok()
                 .build();

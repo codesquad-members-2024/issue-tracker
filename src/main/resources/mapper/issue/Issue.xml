@@ -3,14 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.issuetracker.domain.issue.IssueMapper">
 
-    <update id="update" parameterType="com.issuetracker.domain.issue.request.IssueUpdateRequest">
+    <update id="update" parameterType="map">
         UPDATE ISSUE
         <set>
-            <if test="title != null">
-                TITLE = #{title},
+            <if test="form.title != null">
+                TITLE = #{form.title},
             </if>
-            <if test="content != null">
-                CONTENT = #{content},
+            <if test="form.content != null">
+                CONTENT = #{form.content},
             </if>
         </set>
         WHERE ISSUE_ID = #{issueId}
