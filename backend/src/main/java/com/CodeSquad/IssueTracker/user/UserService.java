@@ -1,4 +1,5 @@
 package com.CodeSquad.IssueTracker.user;
+import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.utils.UserValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,6 @@ public class UserService {
     }
     public boolean isUserIdDuplicated(String userId) {
         Optional<User> userOptional = userRepository.findUserById(userId);
-        System.out.println(userOptional);
         return userOptional.isPresent();
     }
 
