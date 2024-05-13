@@ -22,4 +22,8 @@ public class IssueService {
         return (List<Issue>) issueRepository.findAll();
     }
 
+    public List<Issue> findAllByLabelId(Long labelId) {
+        return issueRepository.findAllByLabelId(labelId);
+    }
+
 }
