@@ -1,9 +1,12 @@
-package codesquad.issuetracker.domain;
+package codesquad.issuetracker.issue;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 public class Issue {
@@ -12,31 +15,27 @@ public class Issue {
     private Long id;
     private String title;
     private String content;
-    private String imageLink;
     private String milestoneId;
-    private String manager;
+    @MappedCollection(idColumn = "issue_id")
+    private Set<IssueAssignee> assignees;
     private String writer;
     private LocalDateTime createTime;
     private boolean isClosed; // 기본 값 false
-
-//    Spring Data Jdbc의 연관관계 매핑을 위한 설정 예정
-//    @MappedCollection(idColumn = "issue_id", keyColumn = "id")
-//    private List<IssueLabel> labels = new ArrayList<>();
+    @MappedCollection(idColumn = "issue_id")
+    private Set<IssueLabel> labels;
 
     public Issue(Long id,
                  String title,
                  String content,
-                 String imageLink,
                  String milestoneId,
-                 String manager,
                  String writer) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.imageLink = imageLink;
         this.milestoneId = milestoneId;
-        this.manager = manager;
+        this.assignees = new HashSet<>();
         this.writer = writer;
         this.createTime = LocalDateTime.now();
+        this.labels = new HashSet<>();
     }
 }
