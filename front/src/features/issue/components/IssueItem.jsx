@@ -4,7 +4,7 @@ import { Checkbox } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { IconLandmark } from '../../../common/icons/IconLandmark';
-export function IssueItem({ issue, index, isLoading }) {
+export function IssueItem({ issue, index }) {
 	return (
 		<>
 			<StyledWrapper>

@@ -52,6 +52,7 @@ export function IssueDetailContainer() {
 			<StyledContents>
 				<section>
 					<IssueCommentItem />
+					<IssueCommentItem />
 				</section>
 				<IssueSidebar />
 			</StyledContents>

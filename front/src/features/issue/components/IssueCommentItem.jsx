@@ -3,6 +3,7 @@ import { Button } from '~/common/components/Button';
 import { IconEdit, IconSmile } from '~/common/icons';
 
 export function IssueCommentItem() {
+	const isAuthor = true;
 	return (
 		<StyledWrapper>
 			<StyledHeader>
@@ -15,7 +16,8 @@ export function IssueCommentItem() {
 					<p>3분 전</p>
 				</span>
 				<span className='action'>
-					<p className='badge'>작성자</p>
+					{isAuthor && <p className='badge'>작성자</p>}
+
 					<Button
 						type='button'
 						size='small'
@@ -53,6 +55,7 @@ const StyledWrapper = styled.div`
 	overflow: hidden;
 	border: 1px solid ${({ theme }) => theme.color.neutral.border.default};
 	border-radius: ${({ theme }) => theme.radius.large};
+	margin-bottom: 24px;
 `;
 const StyledHeader = styled.div`
 	display: flex;
