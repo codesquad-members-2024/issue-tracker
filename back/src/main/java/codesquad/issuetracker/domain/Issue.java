@@ -18,7 +18,7 @@ public class Issue {
     private String imageLink;
     private String milestoneId;
     @MappedCollection(idColumn = "issue_id")
-    private Set<UserManager> managers;
+    private Set<Assignees> managers;
     private String writer;
     private LocalDateTime createTime;
     private boolean isClosed; // 기본 값 false

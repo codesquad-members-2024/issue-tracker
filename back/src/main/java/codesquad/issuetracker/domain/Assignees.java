@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Table("user_manager")
-public class UserManager {
+public class Assignees {
 
     @Id
     private Long id;
