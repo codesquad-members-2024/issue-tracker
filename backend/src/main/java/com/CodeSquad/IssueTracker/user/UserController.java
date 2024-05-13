@@ -19,12 +19,12 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerNewUser(@RequestBody User user){
-        if (userService.isUserNotExists(user)){
+    public ResponseEntity<?> registerNewUser(@RequestBody User user) {
+        if (userService.isUserNotExists(user)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (userService.save(user)){
+        if (userService.save(user)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
@@ -33,14 +33,14 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
-                                       HttpServletRequest request){
-        if (userService.isLoginRequestNotExists(loginRequest)){
+                                       HttpServletRequest request) {
+        if (userService.isLoginRequestNotExists(loginRequest)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         String userId = loginRequest.getUserId();
         String userPassword = loginRequest.getUserPassword();
 
-        if (userService.authenticate(userId, userPassword)){
+        if (userService.authenticate(userId, userPassword)) {
             HttpSession session = request.getSession(true);
             session.setMaxInactiveInterval(32400); //9시간
             session.setAttribute("userId", userId);

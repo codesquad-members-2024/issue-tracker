@@ -3,6 +3,7 @@ package com.CodeSquad.IssueTracker.Exception;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.Exception.user.UserAlreadyExistsException;
+import com.CodeSquad.IssueTracker.Exception.user.UserNotLoginException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,5 +25,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidCredentialException.class)
     public ResponseEntity<String> handleAuthenticationFailedException(InvalidCredentialException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserNotLoginException.class)
+    public ResponseEntity<String> handleUserNotLoginException(UserNotLoginException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 }
