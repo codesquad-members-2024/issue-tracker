@@ -2,6 +2,7 @@ package com.issuetracker.domain.label;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issuetracker.domain.label.request.LabelCreateRequest;
+import com.issuetracker.domain.label.request.LabelUpdateRequest;
 import com.issuetracker.domain.label.response.LabelListResponse;
 import com.issuetracker.domain.label.response.LabelResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -17,13 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LabelController.class)
-class ElementControllerTest {
+class LabelControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -93,5 +93,41 @@ class ElementControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(labelListResponse)));
+    }
+
+    @Test
+    @DisplayName("레이블 이름으로 조회한 레이블의 이름과 색상코드를 수정하면 수정한 결과가 응답되어야 한다.")
+    void edit() throws Exception {
+        // given
+        String labelId = "bug";
+        String url = urlPrefix + "/labels/" + labelId;
+        Label labelBeforeUpdate = Label.builder()
+                .id(labelId)
+                .description("버그 수정")
+                .textColor("#FFFFFF")
+                .colorCode("#010101")
+                .build();
+
+        LabelUpdateRequest request = new LabelUpdateRequest("bugfix", null, null, "#010101");
+        LabelResponse response = LabelResponse.of(
+                Label.builder()
+                        .id(request.getLabelId())
+                        .description(labelBeforeUpdate.getDescription())
+                        .textColor(labelBeforeUpdate.getTextColor())
+                        .colorCode(request.getColorCode())
+                        .build()
+        );
+
+        given(labelService.edit(any(String.class), any(LabelUpdateRequest.class))).willReturn(response);
+
+        // when
+        ResultActions result = mockMvc.perform(
+                patch(url).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 }
