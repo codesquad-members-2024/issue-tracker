@@ -17,7 +17,7 @@ public class Issue {
     private String content;
     private String milestoneId;
     @MappedCollection(idColumn = "issue_id")
-    private Set<IssueAssignee> managers;
+    private Set<IssueAssignee> assignees;
     private String writer;
     private LocalDateTime createTime;
     private boolean isClosed; // 기본 값 false
@@ -33,7 +33,7 @@ public class Issue {
         this.title = title;
         this.content = content;
         this.milestoneId = milestoneId;
-        this.managers = new HashSet<>();
+        this.assignees = new HashSet<>();
         this.writer = writer;
         this.createTime = LocalDateTime.now();
         this.labels = new HashSet<>();
