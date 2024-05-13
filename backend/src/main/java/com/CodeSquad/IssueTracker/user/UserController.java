@@ -57,9 +57,4 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @GetMapping("/")
-    public ResponseEntity<?> getUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body("asdasd");
-    }
 }

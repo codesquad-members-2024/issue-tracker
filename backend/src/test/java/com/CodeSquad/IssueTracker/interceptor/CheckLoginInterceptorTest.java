@@ -30,17 +30,17 @@ public class CheckLoginInterceptorTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-    @DisplayName("로그인하지 않은 상태로 시작페이지에 접근 시, 401 Unathorized 코드를 반환해야한다.")
+    @DisplayName("로그인하지 않은 상태로 존재하지 않는 페이지에 접근 시, 인터셉터에 걸려 401 Unathorized 코드를 반환해야한다.")
     @Test
     public void testInterceptorWithoutLogin() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/notExistPage"))
                 .andExpect(status().isUnauthorized());
     }
 
-    @DisplayName("로그인 상태로 시작페이지에 접근 시, 200 코드를 반환해야한다.")
+    @DisplayName("로그인 상태로 존재하지 않는 페이지에 접근 시, 인터셉터에 걸리지 않아 404 코드를 반환해야한다.")
     @Test
     public void testInterceptorWithLogin() throws Exception {
-        mockMvc.perform(get("/").session(session))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/notExistPage").session(session))
+                .andExpect(status().isNotFound());
     }
 }
