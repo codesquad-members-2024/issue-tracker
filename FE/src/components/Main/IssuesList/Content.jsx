@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ContentButtonStyles } from "../../../styles/commonStyles";
+import { ContentNavStyles } from "../../../styles/commonStyles";
 import { Label } from "../../../icons/label";
 import { Milestones } from "../../../icons/milestones";
 import { FilterBar } from "./FilterBar";
@@ -12,14 +12,14 @@ export function Content() {
         <FilterBar />
         <Nav>
           <Tabs>
-            <button className="label">
+            <NavLabel>
               <Label />
-              label
-            </button>
-            <button className="milestones">
+              <div>레이블</div>
+            </NavLabel>
+            <NavMilestones>
               <Milestones />
-              milestones
-            </button>
+              <div>마일스톤</div>
+            </NavMilestones>
           </Tabs>
           <Issue>+ 이슈 작성</Issue>
         </Nav>
@@ -48,21 +48,21 @@ const Tabs = styled.div`
   border-radius: 10px;
   width: 320px;
   justify-content: center;
-  .label,
-  .milestones {
-    ${ContentButtonStyles}
-  }
-  .label {
-    border-right: solid #dadbef;
-  }
 `;
 
-const Issue = styled.button`
-background-color: #007bff;
-border: none;
-color: white;
-border-radius: 10px;
-cursor: pointer;
-font-size: 18px;
-width: 120px;
+const NavLabel = styled.div`
+  ${ContentNavStyles}
+  border-right: solid #dadbef;
+`;
+
+const NavMilestones = styled.div`
+  ${ContentNavStyles}
+`;
+
+const Issue = styled.div`
+  ${ContentNavStyles}
+  background-color: #007bff;
+  color: white;
+  border-radius: 10px;
+  width: 120px;
 `;
