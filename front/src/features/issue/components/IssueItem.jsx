@@ -2,29 +2,32 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Checkbox } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { IconUser } from '../../../common/icons/IconUser';
+
 import { IconLandmark } from '../../../common/icons/IconLandmark';
-export function IssueItem() {
+export function IssueItem({ issue, index, isLoading }) {
 	return (
-		<StyledWrapper>
-			<StyledCheckbox />
-			<StyledFlex>
-				<ExclamationCircleOutlined />
-				<StyledIssueTitle to='/'>이슈제목</StyledIssueTitle>
+		<>
+			<StyledWrapper>
+				<StyledCheckbox />
+				<StyledFlex>
+					<ExclamationCircleOutlined />
+					<StyledIssueTitle to='/'>{issue?.title}</StyledIssueTitle>
 
-				<strong>documentaion</strong>
-			</StyledFlex>
-			<StyledDetail>
-				<p>이슈번호</p>
-				<StyledAuthour>작성자 및 타임스탬프</StyledAuthour>
-				<StyledMilestone>
-					<IconLandmark />
-					<p>그룹프로젝트:이슈트래커</p>
-				</StyledMilestone>
-			</StyledDetail>
-
-			<StyledIconUser />
-		</StyledWrapper>
+					<strong>{issue?.labelId}</strong>
+				</StyledFlex>
+				<StyledDetail>
+					<p>{index}</p>
+					<StyledAuthour>
+						{issue?.writer} {issue?.createTime}
+					</StyledAuthour>
+					<StyledMilestone>
+						<IconLandmark />
+						<p>{issue?.milestoneId}</p>
+					</StyledMilestone>
+				</StyledDetail>
+				<StyledIconUser src={issue?.profileImage} />
+			</StyledWrapper>
+		</>
 	);
 }
 const StyledWrapper = styled.div`
@@ -78,13 +81,14 @@ const StyledDetail = styled.div`
 const StyledAuthour = styled.p`
 	margin: 0 16px;
 `;
-const StyledIconUser = styled(IconUser)`
+const StyledIconUser = styled.img`
 	width: 20px;
 	height: 20px;
 	position: absolute;
 	top: 50%;
 	right: 54px;
 	transform: translateY(-50%);
+	border-radius: 50%;
 `;
 const StyledMilestone = styled.div`
 	display: flex;
