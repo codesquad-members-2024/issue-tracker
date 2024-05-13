@@ -1,6 +1,7 @@
 package com.CodeSquad.IssueTracker.interceptor;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,17 +31,31 @@ public class CheckLoginInterceptorTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-    @DisplayName("로그인하지 않은 상태로 존재하지 않는 페이지에 접근 시, 인터셉터에 걸려 401 Unathorized 코드를 반환해야한다.")
+    @DisplayName("로그인하지 않은 상태로 존재하지 않는 페이지에 접근 시, 404 코드를 반환해야한다.")
     @Test
-    public void testInterceptorWithoutLogin() throws Exception {
+    public void testNotExistPageWithoutLogin() throws Exception {
         mockMvc.perform(get("/notExistPage"))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("로그인 상태로 존재하지 않는 페이지에 접근 시, 404 코드를 반환해야한다.")
+    @Test
+    public void testNotExistPageWithLogin() throws Exception {
+        mockMvc.perform(get("/notExistPage").session(session))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("로그인하지 않은 상태로 권한이 필요한 페이지에 접근 시, 401 코드를 반환해야한다.")
+    @Test
+    public void testNeedAuthPageWithoutLogin() throws Exception {
+        mockMvc.perform(get("/issues"))
                 .andExpect(status().isUnauthorized());
     }
 
-    @DisplayName("로그인 상태로 존재하지 않는 페이지에 접근 시, 인터셉터에 걸리지 않아 404 코드를 반환해야한다.")
+    @DisplayName("로그인 상태로 권한이 필요한 페이지에 접근 시, 200 코드를 반환해야한다.")
     @Test
-    public void testInterceptorWithLogin() throws Exception {
-        mockMvc.perform(get("/notExistPage").session(session))
-                .andExpect(status().isNotFound());
+    public void testNeedAuthPageWithLogin() throws Exception {
+        mockMvc.perform(get("/issues").session(session))
+                .andExpect(status().isOk());
     }
 }
