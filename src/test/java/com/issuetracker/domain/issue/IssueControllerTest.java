@@ -26,9 +26,8 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(IssueController.class)
 class IssueControllerTest {
@@ -45,6 +44,7 @@ class IssueControllerTest {
     @Test
     @DisplayName("이슈를 생성하면 201 상태코드와 Location 헤더로 해당 이슈 상세조회 uri를 응답한다.")
     void create() throws Exception {
+      
         // given
         String url = "/issues";
 
@@ -146,7 +146,7 @@ class IssueControllerTest {
     @DisplayName("이슈의 id를 통해 해당 id issue의 상세 내용을 조회할 수 있다")
     void detail(Long issueId) throws Exception {
         // given
-        String url = "/issues/" + issueId.toString();
+        String url = "/api/v1/issues/" + issueId.toString();
         IssueDetailResponse response = IssueDetailResponse.builder()
                 .id(issueId)
                 .build();
@@ -159,5 +159,23 @@ class IssueControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    @DisplayName("이슈의 id를 통해 해당 id의 issue를 db에서 삭제할 수 있다")
+    void deletion() throws Exception {
+        // given
+        Long issueId = 1L;
+        String url = "/api/v1/issues/" + issueId;
+        willDoNothing().given(issueService).delete(issueId);
+
+        // when
+        ResultActions result = mockMvc.perform(
+                delete(url)
+        );
+
+        // then
+        result.andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/"));
     }
 }

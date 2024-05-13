@@ -28,6 +28,10 @@ public class IssueService {
                  .build();
     }
 
+    public void delete(Long issueId) {
+        issueRepository.deleteById(issueId);
+    }
+
     public void edit(IssueUpdateRequest form) {
         if (form.getTitle() == null && form.getContent() == null) {
             throw new IllegalArgumentException();
