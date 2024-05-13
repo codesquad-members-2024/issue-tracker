@@ -13,7 +13,7 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping("/issues")
-    public List<Issue> getAllIssues() {
+    public List<IssueShowDto> getAllIssues() {
         return issueService.getAllIssues();
     }
 }
