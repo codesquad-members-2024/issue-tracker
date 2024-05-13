@@ -1,9 +1,9 @@
 package com.issuetracker.domain.issue;
 
 import com.issuetracker.domain.issue.request.IssueCreateRequest;
+import com.issuetracker.domain.issue.request.IssueUpdateRequest;
 import com.issuetracker.domain.issue.response.IssueDetailResponse;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +37,14 @@ public class IssueController {
         String redirectUrl = "/";
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", redirectUrl)
+                .build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> edit(@PathVariable("id") Long id, @Valid @RequestBody IssueUpdateRequest request) {
+        issueService.edit(request);
+        return ResponseEntity
+                .ok()
                 .build();
     }
 }
