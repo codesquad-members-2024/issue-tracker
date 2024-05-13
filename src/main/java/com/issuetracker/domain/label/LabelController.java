@@ -1,6 +1,7 @@
 package com.issuetracker.domain.label;
 
 import com.issuetracker.domain.label.request.LabelCreateRequest;
+import com.issuetracker.domain.label.request.LabelUpdateRequest;
 import com.issuetracker.domain.label.response.LabelListResponse;
 import com.issuetracker.domain.label.response.LabelResponse;
 import jakarta.validation.Valid;
@@ -26,6 +27,14 @@ public class LabelController {
     public ResponseEntity<LabelListResponse> getLabels() {
         return ResponseEntity.ok(
                 labelService.getLabels()
+        );
+    }
+
+    @PatchMapping("/{labelId}")
+    public ResponseEntity<LabelResponse> edit(@PathVariable("labelId") String labelId,
+                                              @Valid @RequestBody LabelUpdateRequest labelUpdateRequest) {
+        return ResponseEntity.ok(
+                labelService.edit(labelId, labelUpdateRequest)
         );
     }
 }

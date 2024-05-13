@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class LabelListResponse {
-    private List<LabelResponse> elements;
+    private List<LabelResponse> labels;
 
     public static LabelListResponse of (List<LabelResponse> elements) {
         return new LabelListResponse(elements);
