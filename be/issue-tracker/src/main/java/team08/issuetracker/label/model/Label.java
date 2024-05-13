@@ -17,4 +17,15 @@ public class Label {
         this.background_color = background_color;
         this.text_color = text_color;
     }
+
+    @Override
+    public String toString() {
+        return "Label{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", background_color='" + background_color + '\'' +
+                ", text_color='" + text_color + '\'' +
+                '}';
+    }
 }
