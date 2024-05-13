@@ -30,7 +30,8 @@ public class LabelService {
         labelRepository.deleteById(id);
     }
 
-    public void update(Long id, Label label){
-//        labelRepository.(id, label);
+
+    public Label getLabel(String id) {
+        return labelRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 }
