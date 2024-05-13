@@ -37,4 +37,10 @@ public class LabelController {
                 labelService.edit(labelId, labelUpdateRequest)
         );
     }
+
+    @DeleteMapping("/{labelId}")
+    public ResponseEntity<Void> delete(@PathVariable("labelId") String labelId) {
+        labelService.delete(labelId);
+        return ResponseEntity.noContent().build();
+    }
 }

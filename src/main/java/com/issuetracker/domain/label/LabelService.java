@@ -52,4 +52,8 @@ public class LabelService {
         labelMapper.update(requestMap);
         return LabelResponse.of(request.toEntity());
     }
+
+    public void delete(String labelId) {
+        labelRepository.deleteById(labelId);
+    }
 }

@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +38,7 @@ class LabelControllerTest {
     private final String urlPrefix = "/api/v1";
 
     @Test
-    @DisplayName("라벨을 생성하면 200 상태코드를 응답한다.")
+    @DisplayName("레이블을 생성하면 200 상태코드와 레이블의 생성 결과를 응답한다.")
     void create() throws Exception {
 
         // given
@@ -62,7 +63,7 @@ class LabelControllerTest {
     }
 
     @Test
-    @DisplayName("모든 라벨 목록을 조회할 수 있다.")
+    @DisplayName("모든 레이블 목록을 조회할 수 있다.")
     void getLabels() throws Exception {
 
         // given
@@ -129,5 +130,22 @@ class LabelControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    @DisplayName("레이블 이름으로 레이블을 삭제할 수 있다.")
+    void deletion() throws Exception{
+        // given
+        String labelId = "bug";
+        String url = urlPrefix + "/labels/" + labelId;
+        willDoNothing().given(labelService).delete(labelId);
+
+        // when
+        ResultActions result = mockMvc.perform(
+                delete(url)
+        );
+
+        // then
+        result.andExpect(status().isNoContent());
     }
 }
