@@ -1,8 +1,11 @@
 package codesquad.issuetracker.domain;
 
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-// 다대다 연관관계 해결을 위한 중간 테이블 구현 예정
+@Getter
+@Table("issue_label")
 public class IssueLabel {
 
     @Id
