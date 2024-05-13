@@ -8,10 +8,9 @@ export const LoginButtonStyles = `
   font-size: 18px;
 `;
 
-export const ContentButtonStyles = `
+export const ContentNavStyles = `
+display: flex;
+  align-items: center;
   width: 50%;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  background-color: unset;
-`;
+  justify-content: center;
+  cursor: pointer;`;
