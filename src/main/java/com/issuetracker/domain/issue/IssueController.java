@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/issues")
+@RequestMapping("/api/v1/issues")
 @RequiredArgsConstructor
 public class IssueController {
 
@@ -26,13 +26,13 @@ public class IssueController {
     }
 
     @GetMapping("/{issueId}")
-    public ResponseEntity<IssueDetailResponse> detail(@PathVariable Long issueId) {
+    public ResponseEntity<IssueDetailResponse> getDetail(@PathVariable("issueId") Long issueId) {
         return ResponseEntity
                 .ok(issueService.getDetail(issueId));
     }
 
     @DeleteMapping("/{issueId}")
-    public ResponseEntity<Void> delete(@PathVariable Long issueId) {
+    public ResponseEntity<Void> delete(@PathVariable("issueId") Long issueId) {
         issueService.delete(issueId);
         String redirectUrl = "/";
         return ResponseEntity.status(HttpStatus.FOUND)
@@ -43,6 +43,8 @@ public class IssueController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> edit(@PathVariable("id") Long id, @Valid @RequestBody IssueUpdateRequest request) {
         issueService.edit(request);
+    @PatchMapping("/{issueId}")
+    public ResponseEntity<Void> edit(@PathVariable("issueId") Long issueId, @Valid @RequestBody IssueUpdateRequest request) {
         return ResponseEntity
                 .ok()
                 .build();

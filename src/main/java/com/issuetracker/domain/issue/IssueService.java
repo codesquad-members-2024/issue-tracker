@@ -20,12 +20,8 @@ public class IssueService {
     }
 
     public IssueDetailResponse getDetail(Long issueId) {
-         Issue issue = issueRepository.findById(issueId).orElseThrow(RuntimeException::new);
-         return IssueDetailResponse.builder()
-                 .memberId(issue.getMemberId())
-                 .title(issue.getTitle())
-                 .content(issue.getContent())
-                 .build();
+        Issue issue = issueRepository.findById(issueId).orElseThrow(RuntimeException::new);
+        return IssueDetailResponse.from(issue);
     }
 
     public void delete(Long issueId) {

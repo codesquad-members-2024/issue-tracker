@@ -41,12 +41,14 @@ class IssueControllerTest {
     @MockBean
     private IssueService issueService;
 
+    private final String urlPrefix = "/api/v1";
+
     @Test
     @DisplayName("이슈를 생성하면 201 상태코드와 Location 헤더로 해당 이슈 상세조회 uri를 응답한다.")
     void create() throws Exception {
       
         // given
-        String url = "/issues";
+        String url = urlPrefix + "/issues";
 
         IssueCreateRequest request = new IssueCreateRequest("testMember", "testTitle", "testContent");
         String requestJson = objectMapper.writeValueAsString(request);
@@ -66,7 +68,7 @@ class IssueControllerTest {
     @TestFactory
     @DisplayName("이슈 생성 시 요청값에 대한 validation을 진행한다")
     Stream<DynamicTest> create_validation() throws Exception{
-        final String url = "/issues";
+        final String url = urlPrefix + "/issues";
         final String memberId = "testMember";
         final String title = "t";
         final String content = "c";
@@ -125,7 +127,7 @@ class IssueControllerTest {
     @DisplayName("이슈 id가 1번의 제목을 'Hello update' 로 수정 요청하면 '/issues/1' 로 리다이렉트 된다")
     void editTitle() throws Exception {
         // given
-        String url = "/issues/1";
+        String url = urlPrefix + "/issues/1";
         String updatedTitle = "Hello update";
 
         IssueUpdateRequest request = new IssueUpdateRequest(1L, updatedTitle, null);
@@ -146,7 +148,7 @@ class IssueControllerTest {
     @DisplayName("이슈의 id를 통해 해당 id issue의 상세 내용을 조회할 수 있다")
     void detail(Long issueId) throws Exception {
         // given
-        String url = "/api/v1/issues/" + issueId.toString();
+        String url = urlPrefix + "/issues/" + issueId.toString();
         IssueDetailResponse response = IssueDetailResponse.builder()
                 .id(issueId)
                 .build();
@@ -166,7 +168,7 @@ class IssueControllerTest {
     void deletion() throws Exception {
         // given
         Long issueId = 1L;
-        String url = "/api/v1/issues/" + issueId;
+        String url = urlPrefix + "/issues/" + issueId;
         willDoNothing().given(issueService).delete(issueId);
 
         // when
