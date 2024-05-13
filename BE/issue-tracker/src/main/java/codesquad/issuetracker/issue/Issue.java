@@ -8,13 +8,11 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 
 @Getter
 @ToString
-public class Issue implements Persistable<Long> {
+public class Issue {
 
     @Id
     private Long id;
@@ -29,13 +27,6 @@ public class Issue implements Persistable<Long> {
     private boolean isDeleted;
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<LabelRef> labelRefs = new HashSet<>();
-    @Transient
-    private boolean isNew;
-
-    @Override
-    public boolean isNew() {
-        return isNew;
-    }
 
     @Builder
     @PersistenceCreator
@@ -54,14 +45,22 @@ public class Issue implements Persistable<Long> {
         this.isOpen = isOpen;
         this.isDeleted = isDeleted;
         this.labelRefs = labelRefs;
-        this.isNew = false;
     }
 
-    public static Issue from(Long id, String authorId, String title, String description,
+    public static Issue from(String authorId, String title, String description,
         Long milestoneId, Set<LabelRef> labelRefs) {
-        Issue issue = new Issue(id, authorId, title, description, LocalDateTime.now(),
-            LocalDateTime.now(), LocalDateTime.now(), milestoneId, true, false, labelRefs);
-        issue.isNew = true;
+        Issue issue  = Issue.builder()
+            .authorId(authorId)
+            .title(title)
+            .description(description)
+            .openAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
+            .closedAt(LocalDateTime.now())
+            .milestoneId(milestoneId)
+            .isOpen(true)
+            .isDeleted(false)
+            .labelRefs(labelRefs)
+            .build();
         return issue;
     }
 
