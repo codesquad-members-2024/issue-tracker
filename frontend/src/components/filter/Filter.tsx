@@ -3,11 +3,12 @@ import filterClickIcon from "../../img/filterClickIcon.svg";
 import searchIcon from "../../img/searchIcon.svg";
 import labelIcon from "../../img/labelIcon.svg";
 import milestoneIcon from "../../img/milestoneIcon.svg";
+import plusIcon from "../../img/plusIcon.svg";
 
 function Filter() {
   return (
     <>
-    <FilterTab>
+      <FilterTab>
         <FilterBox>
           <MyFilterBar>
             <MyFilterTitle>필터</MyFilterTitle>
@@ -18,16 +19,22 @@ function Filter() {
             <SearchTitle>is:issue is:open</SearchTitle>
           </SearchBar>
         </FilterBox>
-        <FilterBox>
-          <LabelBar>
-            <SmallIcon src={labelIcon} />
-            <LargeTitle>레이블(0)</LargeTitle>
-          </LabelBar>
-          <MilestoneBar>
-            <SmallIcon src={milestoneIcon} />
-            <LargeTitle>마일스톤(0)</LargeTitle>
-          </MilestoneBar>
-        </FilterBox>
+        <RightBox>
+          <FilterBox>
+            <LabelBar>
+              <SmallIcon src={labelIcon} />
+              <LargeTitle>레이블(0)</LargeTitle>
+            </LabelBar>
+            <MilestoneBar>
+              <SmallIcon src={milestoneIcon} />
+              <LargeTitle>마일스톤(0)</LargeTitle>
+            </MilestoneBar>
+          </FilterBox>
+          <NewIssueButton>
+            <img src={plusIcon} />
+            <span>이슈 작성</span>
+          </NewIssueButton>
+        </RightBox>
       </FilterTab>
     </>
   );
@@ -45,6 +52,12 @@ const FilterBox = styled.div`
   display: flex;
   border: 1px solid #d9dbe9;
   border-radius: 12px;
+  overflow: hidden;
+`;
+
+const RightBox = styled.div`
+  display: flex;
+  gap: 1em;
 `;
 
 const MyFilterBar = styled.div`
@@ -71,7 +84,7 @@ const SearchBar = styled.div`
   align-items: center;
   gap: 0.5em;
   border-left: 1px solid #d9dbe9;
-  background-color: #EFF0F6;
+  background-color: #eff0f6;
 `;
 
 const SmallIcon = styled.img`
@@ -80,13 +93,14 @@ const SmallIcon = styled.img`
 `;
 
 const SearchTitle = styled.span`
-  color: #6E7191;
+  color: #6e7191;
 `;
 
 const LargeTitle = styled.span`
-  margin-left: 0.25em;
+  height: 1em;
+  margin-left: 0.5em;
   font-size: 1em;
-`
+`;
 
 const LabelBar = styled.div`
   width: 8.4em;
@@ -94,7 +108,7 @@ const LabelBar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #4E4B66;
+  color: #4e4b66;
 `;
 
 const MilestoneBar = styled.div`
@@ -104,7 +118,21 @@ const MilestoneBar = styled.div`
   justify-content: center;
   align-items: center;
   border-left: 1px solid #d9dbe9;
-  color: #4E4B66;
+  color: #4e4b66;
+`;
+
+const NewIssueButton = styled.button`
+  width: 9.5em; 
+  padding: 0 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  color: white;
+  background-color: #007aff;
+  border: 0;
+  border-radius: 0.725em;
+  cursor: pointer;
 `;
 
 export default Filter;

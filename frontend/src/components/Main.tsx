@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import Header from "./header/Header";
 import Filter from "./filter/Filter";
+import IssueList from "./list/IssueList";
 
 function Main() {
   return (
     <Wrapper>
       <Header />
       <Filter />
-      <List>list</List>
+      <IssueList />
     </Wrapper>
   );
 }
