@@ -15,7 +15,6 @@ public class Issue {
     private Long id;
     private String title;
     private String content;
-    private String imageLink;
     private String milestoneId;
     @MappedCollection(idColumn = "issue_id")
     private Set<Issue_Assignee> managers;
@@ -28,13 +27,11 @@ public class Issue {
     public Issue(Long id,
                  String title,
                  String content,
-                 String imageLink,
                  String milestoneId,
                  String writer) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.imageLink = imageLink;
         this.milestoneId = milestoneId;
         this.managers = new HashSet<>();
         this.writer = writer;
