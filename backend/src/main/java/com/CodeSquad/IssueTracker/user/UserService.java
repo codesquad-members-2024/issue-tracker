@@ -47,12 +47,12 @@ public class UserService {
         return true;
     }
     public boolean isUserIdDuplicated(String userId) {
-        Optional<User> userOptional = userRepository.findUserById(userId);
+        Optional<User> userOptional = userRepository.findById(userId);
         return userOptional.isPresent();
     }
 
     public boolean authenticate(String userId, String userPassword) {
-        Optional<User> userOptional = userRepository.findUserById(userId);
+        Optional<User> userOptional = userRepository.findById(userId);
         System.out.println(userOptional);
         if (userOptional.isPresent()) {
             if (Objects.equals(userOptional.get().getUserPassword(), userPassword)){

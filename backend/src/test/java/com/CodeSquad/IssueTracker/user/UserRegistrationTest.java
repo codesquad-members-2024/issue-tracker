@@ -45,7 +45,7 @@ public class UserRegistrationTest {
     public void testIsUserIdDuplicated() {
         String userId = "existingUserId";
         User user = new User(userId, "invalidPassword", "invalidNickname");
-        when(userRepository.findUserById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         assertTrue(userService.isUserIdDuplicated(userId));
     }
 
@@ -56,7 +56,7 @@ public class UserRegistrationTest {
         User user = new User(existId, "invalidPassword", "invalidNickname");
 
         String userId = "newUserId";
-        when(userRepository.findUserById(existId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(existId)).thenReturn(Optional.of(user));
         assertFalse(userService.isUserIdDuplicated(userId));
     }
 }

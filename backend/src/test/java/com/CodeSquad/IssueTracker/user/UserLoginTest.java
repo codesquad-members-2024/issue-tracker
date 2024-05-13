@@ -28,7 +28,7 @@ public class UserLoginTest {
         String userPassword = "validPassword";
         String userNickname = "Nickname";
         User user = new User(userId, userPassword, userNickname);
-        when(userRepository.findUserById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         boolean result = userService.authenticate(userId, userPassword);
 
@@ -40,7 +40,7 @@ public class UserLoginTest {
     public void authenticate_InvalidUserId_ReturnsFalse() {
         String userId = "invalidUser";
         String userPassword = "validPassword";
-        when(userRepository.findUserById(userId)).thenReturn(Optional.empty());
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         boolean result = userService.authenticate(userId, userPassword);
 
@@ -54,7 +54,7 @@ public class UserLoginTest {
         String userPassword = "invalidPassword";
         String userNickname = "Nickname";
         User user = new User(userId, "validPassword",userNickname);
-        when(userRepository.findUserById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         boolean result = userService.authenticate(userId, userPassword);
 
@@ -79,7 +79,7 @@ public class UserLoginTest {
         String userPassword = null;
         String userNickname = "Nickname";
         User user = new User(userId, "validPassword", userNickname);
-        when(userRepository.findUserById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         boolean result = userService.authenticate(userId, userPassword);
 
