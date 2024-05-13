@@ -19,10 +19,10 @@ public class LabelCreateRequest {
     @Size(max = 50)
     private String description;
 
-    @Size(max = 7)
+    @Size(min=7, max = 7)
     private String textColor;
 
-    @Size(max = 7)
+    @Size(min=7, max = 7)
     private String colorCode;
 
     public Label toEntity() {
