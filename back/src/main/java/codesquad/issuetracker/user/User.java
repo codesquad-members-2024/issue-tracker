@@ -9,10 +9,13 @@ public class User {
     @Id
     private String loginId;
     private String password;
+    private String profileImage;
 
     public User(String loginId,
-                String password) {
+                String password,
+                String profileImage) {
         this.loginId = loginId;
         this.password = password;
+        this.profileImage = profileImage;
     }
 }
