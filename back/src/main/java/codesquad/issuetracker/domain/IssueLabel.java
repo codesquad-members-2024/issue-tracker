@@ -10,6 +10,6 @@ public class IssueLabel {
 
     @Id
     private Long id;
-    private Label label;
-    private Issue issue;
+    private Long issueId;
+    private String labelName;
 }

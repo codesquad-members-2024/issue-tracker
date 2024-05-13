@@ -11,10 +11,6 @@ public class Label {
     private String description;
     private String color;
 
-//    Spring Data Jdbc의 연관관계 매핑을 위한 설정 예정
-//    @MappedCollection(idColumn = "label_name", keyColumn = "name")
-//    private List<IssueLabel> issues = new ArrayList<>();
-
     public Label(String name,
                  String description,
                  String color) {
