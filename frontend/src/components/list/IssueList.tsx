@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import IssueTab from "./IssueTab";
+import IssueHeadline from "./IssueHeadline";
 
 function IssueList() {
   return (
     <Wrapper>
       <IssueTab />
+      <IssueHeadline />
+      <IssueHeadline />
     </Wrapper>
   );
 }
