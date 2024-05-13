@@ -2,6 +2,7 @@ package com.issuetracker.domain.label;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issuetracker.domain.label.request.LabelCreateRequest;
+import com.issuetracker.domain.label.response.LabelListResponse;
 import com.issuetracker.domain.label.response.LabelResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -45,7 +45,9 @@ class ElementControllerTest {
 
         LabelCreateRequest request = new LabelCreateRequest("bug", "버그 라벨", "#FFFFFF", "#000000");
         String requestJson = objectMapper.writeValueAsString(request);
-        willDoNothing().given(labelService).create(any(LabelCreateRequest.class));
+        LabelResponse response = LabelResponse.of(request.toEntity());
+        String responseJson = objectMapper.writeValueAsString(response);
+        given(labelService.create(any(LabelCreateRequest.class))).willReturn(response);
 
         // when
         ResultActions result = mockMvc.perform(
@@ -54,7 +56,9 @@ class ElementControllerTest {
         );
 
         // then
-        result.andExpect(status().isOk());
+        result.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(responseJson));
     }
 
     @Test
@@ -69,8 +73,8 @@ class ElementControllerTest {
                 {"feat", "새로운 기능", "#020202", "#EFEFEF"},
                 {"fix", "버그 수정", "#757575", "#A0A0A0"}
         };
-        List<LabelResponse.Element> labels =
-                Arrays.stream(labelData).map(label -> LabelResponse.Element.of(
+        List<LabelResponse> labels =
+                Arrays.stream(labelData).map(label -> LabelResponse.of(
                         com.issuetracker.domain.label.Label.builder()
                                 .id(label[0])
                                 .description(label[1])
@@ -78,7 +82,7 @@ class ElementControllerTest {
                                 .colorCode(label[3])
                                 .build()
         )).toList();
-        LabelResponse.Labels labelListResponse = LabelResponse.Labels.of(labels);
+        LabelListResponse labelListResponse = LabelListResponse.of(labels);
 
         given(labelService.getLabels()).willReturn(labelListResponse);
 
