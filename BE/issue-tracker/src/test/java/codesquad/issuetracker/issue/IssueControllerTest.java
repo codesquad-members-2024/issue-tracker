@@ -60,7 +60,7 @@ class IssueControllerTest {
     @DisplayName("닫힌 이슈 목록을 가져올 수 있다.")
     void getClosedIssues() throws Exception {
 
-        mockMvc.perform(get("/api/issues"))
+        mockMvc.perform(get("/api/issues?isOpen=false"))
             .andExpect(jsonPath("$[0].open").value(false))
             .andExpect(jsonPath("$[1].open").value(false));
     }
