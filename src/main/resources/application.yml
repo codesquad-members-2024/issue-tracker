@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: issue-tracker
+  datasource:
+    url: jdbc:mysql://localhost:3306/tracker_db
+    username: team09
+    password: masters2024team09
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+
+  # cache settings (true at prod env)
+  thymeleaf:
+    cache: false
+
+  # check file exists at template directory
+    check-template-location: true
+
+    prefix : classpath:/templates/
+    suffix : .html
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# logging
+logging:
+  level:
+    org:
+      springframework:
+        data: INFO
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+    com:
+      issuetracker:
+        domain:
+          issue: TRACE
