@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { theme } from '../../styles/theme';
 import { Radio } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
-export function Dropdown({ title = 'Label', data = [], className }) {
+export function Dropdown({ title, data = [], className }) {
 	const [value, setValue] = useState(1);
 	const onChange = e => {
 		console.log('radio checked', e.target.value);

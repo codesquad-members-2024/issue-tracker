@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { IconPlus } from '~/common/icons';
-import { Dropdown } from '~/common/components/Dropdown';
+import { Dropdown, Label } from '~/common/components';
+import { Assignee, MilestonIndicator } from '~/features/issue/components';
 
 export function IssueSidebar() {
 	const [isOpen, setIsOpen] = useState({
@@ -9,6 +10,7 @@ export function IssueSidebar() {
 		label: false,
 		milestone: false,
 	});
+
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
 	return (
@@ -18,24 +20,31 @@ export function IssueSidebar() {
 					<StyledTitle>담당자</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.assignee && <StyledDropdown />}
-				<StyledSideContent></StyledSideContent>
+				{isOpen.assignee && <StyledDropdown title='담당자 설정' />}
+				<StyledSideContent>
+					<Assignee />
+					<Assignee />
+				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
-				<StyledTitleWrapper onClick={() => toggleOpen('lable')}>
+				<StyledTitleWrapper onClick={() => toggleOpen('label')}>
 					<StyledTitle>레이블</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.label && <StyledDropdown />}
-				<StyledSideContent></StyledSideContent>
+				{isOpen.label && <StyledDropdown title='레이블 설정' />}
+				<StyledSideContent>
+					<Label />
+				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
 				<StyledTitleWrapper onClick={() => toggleOpen('milestone')}>
 					<StyledTitle>마일스톤</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.milestone && <StyledDropdown />}
-				<StyledSideContent></StyledSideContent>
+				{isOpen.milestone && <StyledDropdown title='마일스톤 설정' />}
+				<StyledSideContent>
+					<MilestonIndicator title='그룹프로젝트 : 이슈트래커' width={40} />
+				</StyledSideContent>
 			</StyledSideItem>
 		</StyledWrapper>
 	);
@@ -49,7 +58,7 @@ const StyledWrapper = styled.div`
 const StyledSideItem = styled.div`
 	position: relative;
 	padding: 32px;
-	height: ${({ $isOpen }) => ($isOpen ? 'auto' : '88px')};
+	min-height: 88px;
 	align-items: flex-start;
 	border-bottom: 1px solid ${({ theme }) => theme.color.neutral.border.default};
 	&:last-child {
