@@ -3,6 +3,7 @@ package com.issuetracker.domain.label;
 import com.issuetracker.domain.label.request.LabelCreateRequest;
 import com.issuetracker.domain.label.response.LabelResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,14 @@ public class LabelService {
 
     private final LabelRepository labelRepository;
 
-    public void create(LabelCreateRequest labelCreateRequest) {
+    public String create(LabelCreateRequest labelCreateRequest) {
+        labelRepository.findById(labelCreateRequest.getLabelId())
+                .ifPresent(label -> {
+                    throw new DuplicateKeyException("이미 존재하는 레이블입니다.");
+                });
         Label label = labelCreateRequest.toEntity();
-        labelRepository.save(label);
+        Label savedLabel = labelRepository.save(label);
+        return savedLabel.getId();
     }
 
     public LabelResponse.Labels getLabels() {

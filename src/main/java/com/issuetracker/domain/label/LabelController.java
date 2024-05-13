@@ -15,9 +15,10 @@ public class LabelController {
     private final LabelService labelService;
 
     @PostMapping
-    public ResponseEntity<Void> create (@Valid @RequestBody LabelCreateRequest labelCreateRequest) {
-        labelService.create(labelCreateRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> create (@Valid @RequestBody LabelCreateRequest labelCreateRequest) {
+        return ResponseEntity.ok(
+                labelService.create(labelCreateRequest)
+        );
     }
 
     @GetMapping
