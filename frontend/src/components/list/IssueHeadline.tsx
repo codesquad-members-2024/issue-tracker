@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import userIcon from "../../img/userIcon.png";
-import blueOpenedIssueIcon from "../../img/blueOpenedIssueIcon.svg";
-import milestoneIcon from "../../img/milestoneIcon.svg";
+import userIcon from "../../img/icon/userIcon.png";
+import blueOpenedIssueIcon from "../../img/icon/blueOpenedIssueIcon.svg";
+import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 
 function IssueHeadline() {
   return (

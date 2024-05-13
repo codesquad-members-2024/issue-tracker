@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import pageLogo from "../../img/pageLogo.svg";
-import userIcon from "../../img/userIcon.png";
+import pageLogo from "../../img/icon/pageLogo.svg";
+import userIcon from "../../img/icon/userIcon.png";
 import { useNavigate } from "react-router-dom";
 
 function Header() {

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import filterClickIcon from "../../img/filterClickIcon.svg";
-import searchIcon from "../../img/searchIcon.svg";
-import labelIcon from "../../img/labelIcon.svg";
-import milestoneIcon from "../../img/milestoneIcon.svg";
-import plusIcon from "../../img/plusIcon.svg";
+import filterClickIcon from "../../img/icon/filterClickIcon.svg";
+import searchIcon from "../../img/icon/searchIcon.svg";
+import labelIcon from "../../img/icon/labelIcon.svg";
+import milestoneIcon from "../../img/icon/milestoneIcon.svg";
+import plusIcon from "../../img/icon/plusIcon.svg";
 
 function Filter() {
   return (
@@ -93,6 +93,7 @@ const SmallIcon = styled.img`
 `;
 
 const SearchTitle = styled.span`
+  height: 1em;
   color: #6e7191;
 `;
 

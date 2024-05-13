@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import pageLogo from "../../img/pageLogo.svg";
+import pageLogo from "../../img/icon/pageLogo.svg";
 import AuthorizationForm from "../authorization/AuthorizationForm";
 import { useNavigate } from "react-router-dom";
 import useLoginLogic from "../../hooks/useLoginLogic";

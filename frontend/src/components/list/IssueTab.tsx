@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import openedIssueIcon from "../../img/openedIssueIcon.svg";
-import closedIssueIcon from "../../img/closedIssueIcon.svg";
-import arrowBottom from "../../img/arrowBottom.svg";
+import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
+import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
+import arrowBottom from "../../img/icon/arrowBottom.svg";
 
 function IssueTab() {
   return (
