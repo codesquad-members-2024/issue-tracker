@@ -2,9 +2,9 @@ name: CD with Gradle
 
 on:
    push:
-     branches: [ "feature/deploy-automation" ]
+     branches: [ "dev-be" ]
    pull_request:
-     branches: [ "feature/deploy-automation" ]
+     branches: [ "dev-be" ]
 
 permissions:
   contents: read  # 이 설정은 워크플로우가 리포지토리의 콘텐츠를 읽을 수 있도록 허용합니다.
@@ -48,7 +48,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.KEY }}
         script: |
-          sudo docker rm -f $(docker ps -qa)
+          sudo docker rm -f $(sudo docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/issue-tracker
           sudo docker-compose up -d
           sudo docker image prune -f
