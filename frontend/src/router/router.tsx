@@ -3,6 +3,7 @@ import useUserStore from "../hooks/useUserStore";
 import Login from "../components/login/Login";
 import Registration from "../components/registration/Registration";
 import IssueList from "../components/list/IssueList";
+import Main from "../components/Main";
 
 interface AuthRouteProps {
   children: React.ReactNode;
@@ -21,7 +22,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <AuthRoute>
-        <IssueList />
+        <Main />
       </AuthRoute>
     ),
   },
