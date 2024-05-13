@@ -35,7 +35,6 @@ public class UserController {
         if (userService.isLoginRequestNotExists(loginRequest)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
         String userId = loginRequest.getUserId();
         String userPassword = loginRequest.getUserPassword();
 
@@ -46,7 +45,6 @@ public class UserController {
 
             return new ResponseEntity<>(HttpStatus.OK);
         }
-
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
