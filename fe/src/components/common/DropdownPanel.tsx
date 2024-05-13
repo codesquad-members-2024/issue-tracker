@@ -55,9 +55,10 @@ function DropdownPanel() {
 							<span className="ml-2 text-grayscale.700 dark:text-grayscale.400">{content}</span>
 						</label>
 						<label
-							className="mx-3 checkbox dark:border-grayscale.400 peer-checked:after:checkbox--checked dark:peer-checked:after:checkbox--checked--dark"
+							className="mx-3 checkbox dark:border-grayscale.400 "
 							htmlFor={content}
 						></label>
+						{/* peer-checked:after:checkbox--checked dark:peer-checked:after:checkbox--checked--dark */}
 					</li>
 				))}
 			</ul>

@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ["./src/**/*.{js,jsx,ts,tsx}"],
+	mode: "jit", //번들에 필요한 스타일만 빌드
 	darkMode: "selector",
 	theme: {
 		extend: {
