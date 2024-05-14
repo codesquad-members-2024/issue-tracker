@@ -6,7 +6,7 @@ function Login() {
 	const [validPw, setValidPw] = useState(false);
 	const idRef = useRef<HTMLInputElement>(null);
 	const pwRef = useRef<HTMLInputElement>(null);
-
+  
 	const onIdBlur = () => {
 		const { validity, value } = idRef.current as HTMLInputElement;
 		setValidId(validity.valid && !!value);

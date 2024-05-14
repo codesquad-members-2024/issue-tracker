@@ -14,7 +14,10 @@ function App() {
 				<Routes>
 					{/* <Login />  */}
 					<Route path="/" element={<Main darkMode={darkMode} setDarkMode={setDarkMode} />} />
-					<Route path="/issue" element={<NewIssue />} />
+					<Route
+						path="/issue"
+						element={<NewIssue darkMode={darkMode} setDarkMode={setDarkMode} />}
+					/>
 				</Routes>
 			</BrowserRouter>
 		</div>

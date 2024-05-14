@@ -28,7 +28,7 @@ function Filter() {
 						<span className={`ml-5 ${textColor} z-20`}>필터</span>
 						<FontAwesomeIcon icon={faAngleDown} className={`mr-5 ${textColor} z-20`} />
 					</summary>
-					<DropdownPanel />
+					<DropdownPanel top="top-12" title="이슈 필터" />
 				</details>
 				<div className="relative w-[80%] h-full ">
 					<input

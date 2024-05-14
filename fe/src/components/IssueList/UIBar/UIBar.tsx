@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "../../common/Button";
 import Filter from "./Filter";
 import TabButton from "../../common/TabButton";
@@ -8,7 +9,9 @@ function UIBar() {
 			<Filter />
 			<div className="flex justify-between h-full lg:w-[500px] w-full lg:mb-0 mb-4">
 				<TabButton position="UI_BAR" />
-				<Button size="S" type="CONTAINED" icon="PLUS" text="이슈 작성" state="DEFAULT" />
+				<Link to="/issue">
+					<Button size="S" type="CONTAINED" icon="PLUS" text="이슈 작성" state="DEFAULT" />
+				</Link>
 			</div>
 		</div>
 	);
