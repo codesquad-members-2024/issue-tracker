@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import userIcon from "../../img/icon/userIcon.png";
 import blueOpenedIssueIcon from "../../img/icon/blueOpenedIssueIcon.svg";
+import violetClosedIssueIcon from "../../img/icon/violetClosedIssueIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import dateUtils from "../../utils/DateUtils";
 
@@ -9,15 +10,16 @@ interface IssueHeadlineProps {
   title: string;
   author: string;
   publishedAt: string;
+  isClosed: boolean;
 }
 
-function IssueHeadline({ issueId, title, author, publishedAt }: IssueHeadlineProps) {
+function IssueHeadline({ issueId, title, author, publishedAt, isClosed }: IssueHeadlineProps) {
   return (
     <Wrapper>
       <IssueCheckBox type="checkbox" />
       <IssueDescriptions>
         <IssueTitleDescription>
-          <img src={blueOpenedIssueIcon} />
+          <img src={isClosed ? violetClosedIssueIcon : blueOpenedIssueIcon} />
           <TitleText>{title}</TitleText>
           <LabelBox>Label</LabelBox>
         </IssueTitleDescription>

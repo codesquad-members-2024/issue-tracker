@@ -31,8 +31,8 @@ function IssueList() {
       <IssueTab focusedTab={focusedTab} setFocusedTab={setFocusedTab} />
       {issues
         .filter(({ isClosed }) => (focusedTab === "open" ? !isClosed : isClosed)) // deprecated after the completion of api
-        .map(({ id, title, author, publishedAt }) => (
-          <IssueHeadline issueId={id} title={title} author={author} publishedAt={publishedAt} />
+        .map(({ id, title, author, publishedAt, isClosed }) => (
+          <IssueHeadline issueId={id} title={title} author={author} publishedAt={publishedAt} isClosed={isClosed} />
         ))}
     </Wrapper>
   );
