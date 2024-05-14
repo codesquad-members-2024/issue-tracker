@@ -2,20 +2,28 @@ import styled from "styled-components";
 import userIcon from "../../img/icon/userIcon.png";
 import blueOpenedIssueIcon from "../../img/icon/blueOpenedIssueIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
+import dateUtils from "../../utils/DateUtils";
 
-function IssueHeadline() {
+interface IssueHeadlineProps {
+  issueId: number;
+  title: string;
+  author: string;
+  publishedAt: string;
+}
+
+function IssueHeadline({ issueId, title, author, publishedAt }: IssueHeadlineProps) {
   return (
     <Wrapper>
       <IssueCheckBox type="checkbox" />
       <IssueDescriptions>
         <IssueTitleDescription>
           <img src={blueOpenedIssueIcon} />
-          <TitleText>이슈 제목</TitleText>
+          <TitleText>{title}</TitleText>
           <LabelBox>Label</LabelBox>
         </IssueTitleDescription>
         <IssueInfo>
-          <span>#이슈번호</span>
-          <span>작성자 및 타임스탬프 정보</span>
+          <span>#{issueId}</span>
+          <span>{`이 이슈가 ${dateUtils.parseTimeDifference(publishedAt)}, ${author}님에 의해 작성되었습니다.`}</span>
           <img src={milestoneIcon} />
           <span>마일스톤</span>
         </IssueInfo>
@@ -68,10 +76,10 @@ const LabelBox = styled.div`
   font-size: 0.75em;
   display: flex;
   align-items: center;
-  border: 1px solid #D9DBE9;
+  border: 1px solid #d9dbe9;
   border-radius: 1em;
-  background-color: #FEFEFE;
-  color: #6E7191;
+  background-color: #fefefe;
+  color: #6e7191;
 `;
 
 const IssueInfo = styled.div`

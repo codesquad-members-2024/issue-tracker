@@ -2,19 +2,31 @@ import styled from "styled-components";
 import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
 import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
 import arrowBottom from "../../img/icon/arrowBottom.svg";
+import useIssueStore from "../../hooks/useIssueStore";
+import { Dispatch, SetStateAction } from "react";
+import { IssueType } from "./IssueList";
 
-function IssueTab() {
+interface IssueTabProps {
+  focusedTab: string;
+  setFocusedTab: Dispatch<SetStateAction<IssueType>>;
+}
+
+function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
+  const { issues } = useIssueStore();
+  const openIssueCount = issues.filter(({ isClosed }) => !isClosed).length;
+  const closeIssueCount = issues.length - openIssueCount;
+
   return (
     <Wrapper>
       <LeftMenus>
         <input type="checkbox" />
         <LeftMenu>
           <img src={openedIssueIcon} />
-          <IssueMenuText isFocused={true}>열린 이슈(0)</IssueMenuText>
+          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>열린 이슈({openIssueCount})</IssueMenuText>
         </LeftMenu>
         <LeftMenu>
           <img src={closedIssueIcon} />
-          <IssueMenuText isFocused={false}>닫힌 이슈(0)</IssueMenuText>
+          <IssueMenuText isFocused={focusedTab === "closed"} onClick={() => setFocusedTab("closed")}>닫힌 이슈({closeIssueCount})</IssueMenuText>
         </LeftMenu>
       </LeftMenus>
       <RightMenus>
@@ -77,7 +89,7 @@ const RightMenus = styled.div`
 const RightMenu = styled.div`
   display: flex;
   gap: 1.5em;
-  color: #4E4B66;
-`
+  color: #4e4b66;
+`;
 
 export default IssueTab;
