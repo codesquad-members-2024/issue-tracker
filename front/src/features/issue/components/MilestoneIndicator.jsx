@@ -1,12 +1,15 @@
 import styled, { keyframes } from 'styled-components';
 
-export function MilestonIndicator({ title, width = 10 }) {
+export function MilestoneIndicator({ milestone, progess = 40 }) {
 	return (
 		<StyledWrapper>
 			<span className='total'>
-				<StyledProgress className='percentage' $width={width}></StyledProgress>
+				<StyledProgress
+					className='percentage'
+					$width={progess}
+				></StyledProgress>
 			</span>
-			<p>{title}</p>
+			<p>{milestone}</p>
 		</StyledWrapper>
 	);
 }
