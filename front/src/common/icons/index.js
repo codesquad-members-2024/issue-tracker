@@ -5,3 +5,6 @@ export * from './IconUser';
 export * from './IconLandmark';
 export * from './IconSmile';
 export * from './IconPlus';
+export * from './IconCheck';
+export * from './IconCheckActive';
+export * from './IconCheckDisabled';
