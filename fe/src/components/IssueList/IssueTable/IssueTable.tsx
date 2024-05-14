@@ -1,8 +1,59 @@
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 import TabButton from "../../common/TabButton";
 import TableCheckBox from "./TableCheckBox";
 import TotalCheckBox from "./TotalCheckBox";
 import Issue from "./Issue";
+
+//DELETE 차후 삭제
+const issues = [
+	{
+		id: 1,
+		title: "이슈 제목",
+		open: true,
+		content: "Grenadine",
+		timestamp: "2024/05/14 02:32:09",
+		writer: "Lurleen",
+		milestone_name: "Hombre Space",
+		labels: [
+			{
+				id: 1,
+				name: "bug",
+				background_color: "#0025E6",
+				text_bright: true,
+			},
+			{
+				id: 2,
+				name: "label",
+				background_color: "#FF3B30",
+				text_bright: true,
+			},
+		],
+	},
+	{
+		id: 2,
+		title: "Legal Assistant",
+		open: false,
+		content: "Grenadine",
+		timestamp: "2023-09-20 17:51:22",
+		writer: "Tiffanie",
+		milestone_name: "X5",
+		labels: [
+			{
+				id: 1,
+				name: "옹?",
+				background_color: "#dfdeff",
+				text_bright: false,
+			},
+			{
+				id: 2,
+				name: "documentaion",
+				background_color: "#feff79",
+				text_bright: false,
+			},
+		],
+	},
+];
+//
 
 interface CheckboxState {
 	activeTotal: boolean;
@@ -12,7 +63,7 @@ interface CheckboxState {
 
 const border = "component-border dark:component-border--dark";
 const initialState = { activeTotal: false, clickTotal: false, countCheckBox: 0 };
-const TOTAL_LENGTH = 3;
+const TOTAL_LENGTH = issues.length;
 
 function reducer(state: CheckboxState, action: string) {
 	switch (action) {
@@ -29,35 +80,8 @@ function reducer(state: CheckboxState, action: string) {
 	}
 }
 
-//데이터 확인
-const issues = [
-	{
-		id: 1,
-		title: "Financial Advisor",
-		content: "Grenadine",
-		timestamp: "2023-07-04 02:32:09",
-		writer: "Lurleen",
-		milestone_name: "Hombre Space",
-		label_name: ["Hombre Space", "Tiffanie"],
-	},
-	{
-		id: 2,
-		title: "Legal Assistant",
-		content: "Longos - Lasagna Beef",
-		timestamp: "2023-09-20 17:51:22",
-		writer: "Tiffanie",
-		milestone_name: "X5",
-		label_name: ["Hombre Space"],
-	},
-];
-//
-
 function IssueTable() {
 	const [state, dispatch] = useReducer(reducer, initialState);
-
-	useEffect(() => {
-		console.log(state);
-	}, [state]);
 
 	return (
 		<div className={`border-[1px] ${border} rounded-2xl lg:mt-0 mt-14`}>
@@ -74,23 +98,19 @@ function IssueTable() {
 				</div>
 			</header>
 			<ul>
-				<li
-					className={`flex items-center bg-grayscale.50 dark:bg-grayscale.800 border-b-[1px] ${border}`}
-				>
-					<TableCheckBox state={state} dispatch={dispatch} />
-					<Issue />
-				</li>
-				<li
-					className={`flex items-center bg-grayscale.50 dark:bg-grayscale.800 border-b-[1px] ${border}`}
-				>
-					<TableCheckBox state={state} dispatch={dispatch} /> 내용이야2
-				</li>
-				<li
-					className={`flex items-center bg-grayscale.50 dark:bg-grayscale.800 border-b-[1px] ${border}`}
-				>
-					<TableCheckBox state={state} dispatch={dispatch} />
-					내용이야3
-				</li>
+				{issues.map((issue, i) => (
+					<li
+						key={issue.id}
+						className={`flex items-center bg-grayscale.50 dark:bg-grayscale.800 ${
+							i === issues.length - 1 ? "rounded-b-2xl" : `border-b-[1px] ${border}`
+						}`}
+					>
+						<div className="h-[52px]">
+							<TableCheckBox state={state} dispatch={dispatch} />
+						</div>
+						<Issue issue={issue} />
+					</li>
+				))}
 			</ul>
 		</div>
 	);

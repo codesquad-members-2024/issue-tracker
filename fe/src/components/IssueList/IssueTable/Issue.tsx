@@ -1,22 +1,33 @@
-import { ReactComponent as AlertCircle } from "./AlertCircle.svg";
+import InformationTag from "../../common/InformationTag";
+import { ReactComponent as AlertCircle } from "../../../svg/AlertCircle.svg";
+import { ReactComponent as Milestone } from "../../../svg/Milestone.svg";
 
-//
-const issue = {
-	id: 1,
-	title: "이슈 제목",
-	content: "Grenadine",
-	timestamp: "2024/05/14 02:32:09",
-	writer: "Lurleen",
-	milestone_name: "Hombre Space",
-	label_name: ["Hombre Space", "Tiffanie"],
-};
-//
+interface PropsType {
+	issue: IssueType;
+}
+
+interface LabelType {
+	id: number;
+	name: string;
+	background_color: string;
+	text_bright: boolean;
+}
+
+interface IssueType {
+	id: number;
+	title: string;
+	content: string;
+	timestamp: string;
+	writer: string;
+	milestone_name: string;
+	labels: LabelType[];
+}
 
 const getTimeStamp = (timestamp: string) => {
 	const date = new Date(timestamp);
 	let time: number = Math.abs(date.getTime() - new Date().getTime()) / 1000;
 
-	const resulte = ["초", "분", "시간"].reduce((prev, curr, i) => {
+	const resulte = ["초", "분", "시간"].reduce((prev, curr) => {
 		if (time > 60) {
 			time /= 60;
 			return prev;
@@ -30,22 +41,41 @@ const getTimeStamp = (timestamp: string) => {
 	return new Intl.DateTimeFormat("ja-JP").format(date);
 };
 
-function Issue() {
+function Issue({ issue }: PropsType) {
 	return (
-		<li className="h-[96px]">
-			<div className="flex">
-				<AlertCircle className="text-accent.blue" />
-				<span>{issue.title}</span>
-				<div>라벨</div>
+		<div className="h-[96px] flex flex-col justify-evenly">
+			<div className="flex items-center">
+				<AlertCircle className="mr-2 stroke-accent.blue" />
+				{/* TODO link 상세페이지 */}
+				<span className="text-grayscale.900 dark:text-grayscale.50 text-xl font-medium mr-2 cursor-pointer hover:text-grayscale.900/80 dark:hover:text-grayscale.50/80">
+					{issue.title}
+				</span>
+				{issue.labels.length &&
+					issue.labels.map((label) => (
+						<span className="mr-2">
+							<InformationTag
+								key={label.id}
+								text={label.name}
+								icon={null}
+								fillColor={label.background_color}
+								textBright={label.text_bright}
+							/>
+						</span>
+					))}
 			</div>
-			<div className="text-grayscale.600 dark:text-grayscale.500">
+			<div className="flex text-grayscale.600 dark:text-grayscale.500">
 				<span className="mr-5">#{issue.id}</span>
 				<span className="mr-5">
 					이 이슈가 {getTimeStamp(issue.timestamp)}, {issue.writer}님에 의해 작성되었습니다.
 				</span>
-				<span></span>
+				{issue.milestone_name && (
+					<span className="flex items-center">
+						<Milestone className="mr-2 fill-grayscale.600 dark:fill-grayscale.500" />
+						{issue.milestone_name}
+					</span>
+				)}
 			</div>
-		</li>
+		</div>
 	);
 }
 
