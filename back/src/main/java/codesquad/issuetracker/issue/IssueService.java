@@ -34,4 +34,8 @@ public class IssueService {
                 .toList();
         return (List<User>) userRepository.findAllById(assigneeNames);
     }
+
+    public Issue getIssue(Long issueId) {
+        return issueRepository.findById(issueId).get();
+    }
 }
