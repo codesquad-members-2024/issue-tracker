@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +15,12 @@ public class IssueController {
 
     @GetMapping("/issues")
     public List<IssueShowDto> getAllIssues() {
-        return issueService.getAllIssues();
+        List<Issue> allIssues = issueService.getAllIssues();
+        return allIssues.stream()
+                .map(issue -> new IssueShowDto(
+                        issue,
+                        issueService.getLabelsForIssue(issue),
+                        issueService.getAssigneesForIssue(issue)))
+                .collect(Collectors.toList());
     }
 }
