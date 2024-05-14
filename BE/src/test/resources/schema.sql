@@ -31,13 +31,13 @@ CREATE TABLE member (
                         isDeleted bool DEFAULT false
 );
 
+
 CREATE TABLE label (
                        title varchar(10) PRIMARY KEY,
                        description varchar(50) NOT NULL,
                        create_Time timestamp NOT NULL,
                        color char(6) DEFAULT '000000',
-                            is_Deleted bool DEFAULT false,
-                       version BIGINT NOT NULL
+                       is_Deleted bool DEFAULT false
 
 );
 
