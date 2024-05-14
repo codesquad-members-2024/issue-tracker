@@ -22,14 +22,14 @@ public class IssueService {
     }
 
     public List<Label> getLabelsForIssue(Issue issue) {
-        List<String> labelNames = issue.getLabels().stream()
+        List<String> labelNames = issue.getIssueLabels().stream()
                 .map(IssueLabel::getLabelName)
                 .toList();
         return (List<Label>) labelRepository.findAllById(labelNames);
     }
 
     public List<User> getAssigneesForIssue(Issue issue) {
-        List<String> assigneeNames = issue.getAssignees().stream()
+        List<String> assigneeNames = issue.getIssueAssignees().stream()
                 .map(IssueAssignee::getUserLoginId)
                 .toList();
         return (List<User>) userRepository.findAllById(assigneeNames);
