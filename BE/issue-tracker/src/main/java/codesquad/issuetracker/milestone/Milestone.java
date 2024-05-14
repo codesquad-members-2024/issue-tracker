@@ -9,29 +9,32 @@ import org.springframework.data.annotation.PersistenceCreator;
 @Getter
 public class Milestone {
 
+    public enum State {
+        OPEN,
+        CLOSED
+    }
+
     @Id
     private Long id;
     private String title;
     private String description;
     private LocalDateTime dueDate;
-    private boolean isOpen;
+    private State state;
     private boolean isDeleted;
-    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 
     @Builder
     @PersistenceCreator
     public Milestone(Long id, String title, String description, LocalDateTime dueDate,
-        boolean isOpen,
-        boolean isDeleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        State state,
+        boolean isDeleted, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.isOpen = isOpen;
+        this.state = state;
         this.isDeleted = isDeleted;
-        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 }

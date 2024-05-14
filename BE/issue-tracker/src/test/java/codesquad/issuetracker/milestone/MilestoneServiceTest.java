@@ -27,8 +27,7 @@ class MilestoneServiceTest {
             .title("테스트 마일스톤")
             .description("테스트 내용")
             .dueDate(null)
-            .openAt(null)
-            .isOpen(true)
+            .state(Milestone.State.OPEN)
             .isDeleted(false)
             .updatedAt(null)
             .build();
@@ -36,8 +35,7 @@ class MilestoneServiceTest {
             .title("테스트 마일스톤2")
             .description("테스트 내용2")
             .dueDate(null)
-            .openAt(null)
-            .isOpen(true)
+            .state(Milestone.State.OPEN)
             .isDeleted(false)
             .updatedAt(null)
             .build();

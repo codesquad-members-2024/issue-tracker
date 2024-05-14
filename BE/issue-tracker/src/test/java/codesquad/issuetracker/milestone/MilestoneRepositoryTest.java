@@ -16,15 +16,14 @@
         private MilestoneRepository milestoneRepository;
 
         @Test
-        @DisplayName("테스트 마일스톤 객체를 만들고 저장하는 테스트")
+        @DisplayName("테스트 마일스톤 객체를 저장하는 테스트")
         void testMilestoneSave() {
 
             Milestone milestone = Milestone.builder()
                 .title("테스트 마일스톤")
                 .description("테스트 내용")
                 .dueDate(null)
-                .openAt(null)
-                .isOpen(true)
+                .state(Milestone.State.OPEN)
                 .isDeleted(false)
                 .updatedAt(null)
                 .build();
