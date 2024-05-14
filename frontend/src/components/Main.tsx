@@ -17,8 +17,4 @@ const Wrapper = styled.div`
   display: block;
 `;
 
-const List = styled.div`
-  width: 1280px;
-`;
-
 export default Main;
