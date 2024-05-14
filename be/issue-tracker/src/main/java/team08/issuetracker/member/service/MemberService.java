@@ -25,7 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public void registerMember(MemberCreationDto memberCreationDto) {
-        validateRegisterForm(memberCreationDto);
+        validateMemberForm(memberCreationDto.getMemberId(), memberCreationDto.getPassword());
 
         Member member = new Member(memberCreationDto.getMemberId(), memberCreationDto.getPassword());
 
@@ -35,6 +35,8 @@ public class MemberService {
     }
 
     public Member loginMember(MemberLoginDto memberLoginDto) {
+        validateMemberForm(memberLoginDto.getMemberId(), memberLoginDto.getPassword());
+
         Member member = memberRepository.findById(memberLoginDto.getMemberId())
                 .orElseThrow(MemberNotFoundException::new);
 
@@ -49,24 +51,38 @@ public class MemberService {
         }
     }
 
-    private void validateRegisterForm(MemberCreationDto memberCreationDto) {
-        String memberId = memberCreationDto.getMemberId();
-        String password = memberCreationDto.getPassword();
-
+    private void validateMemberForm(String memberId, String password) {
         // 1) id, pw에 대한 공백 검증
-        if (memberId.isEmpty() || password.isEmpty()) {
-            log.error("id, pw 중에 공백이 있습니다.");
+        checkEmptyValue(memberId, password);
+
+        // 2) id의 정규식 검사 + 길이 검사
+        checkMemberIdFormat(memberId);
+
+        // 3) pw의 정규식 검사 + 길이 검사
+        checkPasswordFormat(password);
+    }
+
+    private void checkEmptyValue(String memberId, String password) {
+        if (memberId.isEmpty()) {
+            log.error("id에 공백이 있습니다.");
             throw new InvalidRegisterFormException();
         }
 
-        // 2) id의 정규식 검사 + 길이 검사
+        if (password.isEmpty()) {
+            log.error("pw에 공백이 있습니다.");
+            throw new InvalidRegisterFormException();
+        }
+    }
+
+    private void checkMemberIdFormat(String memberId) {
         Matcher idMatcher = Pattern.compile(ID_REGEX).matcher(memberId);
         if (!idMatcher.matches()) {
             log.error("id가 형식에 맞지 않습니다.");
             throw new InvalidRegisterFormException();
         }
+    }
 
-        // 3) pw의 정규식 검사 + 길이 검사
+    private void checkPasswordFormat(String password) {
         Matcher passwordMatcher = Pattern.compile(PW_REGEX).matcher(password);
         if (!passwordMatcher.matches()) {
             log.error("pw가 형식에 맞지 않습니다.");
