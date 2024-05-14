@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.comment.CommentShowDto;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelShowDto;
 import codesquad.issuetracker.user.AssigneeShowDto;
@@ -21,6 +22,7 @@ public class IssueShowDto {
     private LocalDateTime createTime;
     private boolean isClosed; // 기본 값 false
     private List<LabelShowDto> labels;
+    private List<CommentShowDto> comments;
 
     public IssueShowDto(Issue issue, List<Label> labels, List<User> assignees) {
         this.id = issue.getId();
@@ -35,6 +37,9 @@ public class IssueShowDto {
         this.isClosed = issue.isClosed();
         this.labels = labels.stream()
                 .map(label -> new LabelShowDto(label))
+                .collect(Collectors.toList());
+        this.comments = issue.getComments().stream()
+                .map(comment -> new CommentShowDto(comment))
                 .collect(Collectors.toList());
     }
 }
