@@ -38,8 +38,4 @@ public class Issue {
         this.createTime = LocalDateTime.now();
         this.labels = new HashSet<>();
     }
-
-    public boolean getIsClosed() { // isClosed에 자동으로 getter가 생성되지 않아 추가
-        return isClosed;
-    }
 }

@@ -32,7 +32,7 @@ public class IssueShowDto {
                 .collect(Collectors.toList());
         this.writer = issue.getWriter();
         this.createTime = issue.getCreateTime();
-        this.isClosed = issue.getIsClosed();
+        this.isClosed = issue.isClosed();
         this.labels = labels.stream()
                 .map(label -> new LabelShowDto(label))
                 .collect(Collectors.toList());
