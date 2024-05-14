@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Dropdown } from "../../../../icons/dropdown";
 import { Search } from "../../../../icons/search";
-import { Popup } from "../Popup";
+import { Popup } from "../Dropdown/Popup";
 
 const issuePopupItems = [
   { id: "open", label: "열린 이슈" },
