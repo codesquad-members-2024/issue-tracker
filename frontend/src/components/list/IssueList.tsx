@@ -6,11 +6,11 @@ import { sendIssuesRequest } from "../../api/IssueAPI";
 import { useEffect, useState } from "react";
 import useIssueStore from "../../hooks/useIssueStore";
 
-export type IssueType = "open" | "closed";
+export type IssueType = "open" | "closed"; // deprecated after the completion of api
 
 function IssueList() {
   const { issues, setIssues } = useIssueStore();
-  const [focusedTab, setFocusedTab] = useState<IssueType>("open"); // deprecated after the completion of api
+  const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const { mutate: fetchIssues } = useMutation(sendIssuesRequest, {
     onSuccess: (data) => setIssues(data),
   });
@@ -21,7 +21,7 @@ function IssueList() {
     <Wrapper>
       <IssueTab focusedTab={focusedTab} setFocusedTab={setFocusedTab}/>
       {issues
-        .filter(({ isClosed }) => focusedTab === "open" ? !isClosed : isClosed)
+        .filter(({ isClosed }) => focusedTab === "open" ? !isClosed : isClosed) // deprecated after the completion of api
         .map(({ id, title, author, publishedAt }) => (
           <IssueHeadline issueId={id} title={title} author={author} publishedAt={publishedAt} />
         ))}
