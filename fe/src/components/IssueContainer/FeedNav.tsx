@@ -1,6 +1,6 @@
 import React from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
-import { IssueFeedProps } from "./IssueFeed";
+import { Issue } from "./IssueFeed";
 import FilterUI from "../../util/FilterUI";
 import { Filter } from "../../util/FilterUI";
 
@@ -30,23 +30,34 @@ const taskTable: TaskTable = {
     ],
 };
 
-const FeedNav: React.FC<IssueFeedProps> = ({
+interface FeedNavProps {
+    isOpen: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    issueInfo: Issue[];
+    resetFilterUI: boolean;
+    setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
+    isAllChecked: boolean;
+    allCheckHandler: () => void;
+}
+
+const FeedNav: React.FC<FeedNavProps> = ({
     isOpen,
     setOpen,
     issueInfo,
     resetFilterUI,
     setResetFilterUI,
+    isAllChecked,
+    allCheckHandler,
 }) => {
     const issuesLength = {
-        open: issueInfo.filter((curIssue) => curIssue.is_open === true).length,
-        closed: issueInfo.filter((curIssue) => curIssue.is_open === false)
-            .length,
+        open: issueInfo.filter((curIssue) => curIssue.is_open).length,
+        closed: issueInfo.filter((curIssue) => !curIssue.is_open).length,
     };
 
     return (
         <div className="h-45 bg-gray-200 transition-colors duration-500 dark:bg-darkModeBG flex text-sm rounded-t-lg">
             <div className="flex h-full w-70% items-center">
-                <input type="checkbox" className="w-7%" />
+                <input type="checkbox" checked={isAllChecked} onChange={allCheckHandler} className="w-7%" />
                 <button
                     className={`mr-6 ${isOpen ? "font-bold" : ""}`}
                     onClick={() => setOpen(true)}

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import FeedNav from "./FeedNav";
 import IssueCard from "./IssueCard";
 
@@ -20,7 +21,6 @@ export interface IssueFeedProps {
     issueInfo: Issue[];
     resetFilterUI: boolean;
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
-    handleResetFilterUI?: () => void;
 }
 
 const IssueFeed: React.FC<IssueFeedProps> = ({
@@ -29,8 +29,34 @@ const IssueFeed: React.FC<IssueFeedProps> = ({
     issueInfo,
     resetFilterUI,
     setResetFilterUI,
-    handleResetFilterUI,
 }) => {
+    const [checkedItem, setCheckItem] = useState<string[]>([]);
+    const [isAllChecked, setIsAllChecked] = useState(false);
+    const isOpenInfo = issueInfo.filter((curInfo) => curInfo.is_open === isOpen);
+
+    const checkItemHandler = (id: string, isChecked: boolean) => {
+        if (isChecked) {
+            setCheckItem((prev) => [...prev, id]);
+        } else {
+            setCheckItem((prev) => prev.filter((curItem) => id !== curItem));
+        }
+    };
+
+    const allCheckHandler = () => {
+        setIsAllChecked(prev => !prev);
+        
+        if(!isAllChecked) {
+            setCheckItem(isOpenInfo.map(curIssue => String(curIssue.id)));
+        } else {
+            setCheckItem([])
+        }
+    }
+    
+    useEffect(() => {
+        setIsAllChecked(false);
+        setCheckItem([])
+    }, [isOpen])
+
     return (
         <section className="w-full border-2 border-gray-300 rounded-xl mt-4">
             <FeedNav
@@ -39,9 +65,19 @@ const IssueFeed: React.FC<IssueFeedProps> = ({
                 issueInfo={issueInfo}
                 resetFilterUI={resetFilterUI}
                 setResetFilterUI={setResetFilterUI}
-                handleResetFilterUI={handleResetFilterUI}
+                isAllChecked={isAllChecked}
+                allCheckHandler={allCheckHandler}
             />
-            <IssueCard isOpen={isOpen} issueInfo={issueInfo} />
+            {isOpenInfo.map((curIssue, idx) => (
+                <IssueCard
+                    key={curIssue.id}
+                    curIssue={curIssue}
+                    id={curIssue.id}
+                    isLast={isOpenInfo.length - 1 === idx}
+                    checkItemHandler={checkItemHandler}
+                    isAllChecked={isAllChecked}
+                />
+            ))}
         </section>
     );
 };

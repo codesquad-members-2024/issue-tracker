@@ -1,8 +1,9 @@
-import { SearchOutlined, TagOutlined, PlusOutlined, FlagOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import FilterUI from "../../util/FilterUI";
 import { FilterContext } from "../../Providers/FilterProvider";
-import React, { ChangeEvent, useContext, useEffect } from "react";
+import React, { ChangeEvent, useContext } from "react";
+import LabelsAndMilestoneUI from "../../util/UtilUI";
 
 interface NavProps {
     resetFilterUI: boolean;
@@ -26,15 +27,6 @@ const Nav: React.FC<NavProps> = ({ resetFilterUI, setResetFilterUI, handleResetF
         FilterDispatch({type: "SEARCH", curFilter: event.target.value})
     };
 
-    useEffect(() => {
-        const getIssueList = async () => {
-            const issueList = await fetch("https://4eefaa4a-29f7-497b-bf78-85336db84286.mock.pstmn.io/api/issues?is_open=false");
-            const data = await issueList.json()
-            console.log(data)
-        };
-        getIssueList();
-    }, []);
-
     return (
         <div>
             <div className="flex items-center justify-between h-36">
@@ -53,20 +45,7 @@ const Nav: React.FC<NavProps> = ({ resetFilterUI, setResetFilterUI, handleResetF
                     </div>
                 </div>
                     <div className="flex gap-2">
-                        <div className="flex items-center">
-                            <Link
-                                to="/labels"
-                                className=" w-32 border-l-2 border-t-2 border-b-2 rounded-l-lg border-gray-300 px-6 py-1"
-                            >
-                                <TagOutlined /> 레이블
-                            </Link>
-                            <Link
-                                to="/milestones"
-                                className="w-32 border-2 rounded-r-lg border-gray-300 px-6 py-1"
-                            >
-                                <FlagOutlined /> 마일스톤
-                            </Link>
-                        </div>
+                        <LabelsAndMilestoneUI/>
                         <Link
                             to="/new"
                             className="flex items-center border-none bg-blue-500 px-6 rounded-xl text-white text-xs"

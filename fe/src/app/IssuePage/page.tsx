@@ -3,7 +3,7 @@ import IssueFeed from "../../components/IssueContainer/IssueFeed";
 import { useEffect, useState } from "react";
 import { APiUtil } from "../../util/APIUtils";
 import FilterProvider from "../../Providers/FilterProvider";
-
+import { Header } from "../../util/UtilUI";
 const IssuePage = () => {
     const [isOpen, setOpen] = useState<boolean>(true);
     const [issueInfo, setIssueInfo] = useState([]);
@@ -21,12 +21,7 @@ const IssuePage = () => {
 
     return (
         <main className="w-1280 mx-auto">
-            <header className="py-10 flex justify-between">
-                <h3 className="text-3xl font-style: italic font-normal">
-                    Issue Tracker
-                </h3>
-                <img src="/public/img/UserImage.png" alt="User Image" />
-            </header>
+            <Header/>
             <FilterProvider>
                 <Nav
                     resetFilterUI={resetFilterUI}
@@ -39,7 +34,6 @@ const IssuePage = () => {
                     issueInfo={issueInfo}
                     resetFilterUI={resetFilterUI}
                     setResetFilterUI={setResetFilterUI}
-                    handleResetFilterUI={handleResetFilterUI}
                 />
             </FilterProvider>
         </main>

@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./app/page";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./app/LoginPage/page";
 import IssuePage from "./app/IssuePage/page";
 import LabelsPage from "./app/LabelsPage/page";
 import MilestonesPage from "./app/MilestonesPage/page";
@@ -13,7 +13,8 @@ function App() {
             <BrowserRouter>
             <ThemeSwitch/>
                 <Routes>
-                    <Route path="/" element={<LoginPage />}></Route>
+                    <Route path="/" element={<Navigate to="/Login" />} />
+                    <Route path="/Login" element={<LoginPage />}></Route>
                     <Route path="/issue" element={<IssuePage />}></Route>
                     <Route path="/issue/:productId" element={<IssueProduct />}></Route>
                     <Route path="/labels" element={<LabelsPage />}></Route>
