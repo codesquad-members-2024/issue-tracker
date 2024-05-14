@@ -3,7 +3,27 @@ import { useState } from 'react';
 import { theme } from '../../styles/theme';
 import { Radio } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
-export function Dropdown({ title, data = [], className }) {
+
+//TODO: Dropdown 컴포넌트 타입별로 정리
+/**
+ *
+ * 담당자 필터
+ * - 담당자가 없는 이슈 [라디오]
+ * - (이미지) 유저 [라디오]
+ *
+ * 레이블 필터
+ * - 레이블이 없는 이슈 [라디오]
+ * - (레이블 색상) 레이블명 [라디오]
+ *
+ * 마일스톤 필터
+ * - 마일스톤이 없는 이슈 [라디오]
+ * - 그룹프로젝트: 이슈트래커 [라디오]
+ *
+ * 작성자 필터
+ * - (이미지) 유저 [라디오]
+ */
+
+export function Dropdown({ title, data, className }) {
 	const [value, setValue] = useState(1);
 	const onChange = e => {
 		console.log('radio checked', e.target.value);
@@ -14,14 +34,11 @@ export function Dropdown({ title, data = [], className }) {
 			<h5>{title}</h5>
 
 			<StyledRadioGroup onChange={onChange} value={value}>
-				{[1, 2, 3, 4].map(radioValue => (
-					<Radio key={radioValue} value={radioValue}>
-						<img
-							src='https://avatars.githubusercontent.com/u/58014235?v=4'
-							alt='양시미'
-						/>
+				{data?.map((item, index) => (
+					<Radio key={index} value={item.loginId}>
+						<img src={item.profileImage} alt='양시미' />
 						<b>user1</b>
-						{value === radioValue && <CheckCircleOutlined />}
+						{value === value && <CheckCircleOutlined />}
 					</Radio>
 				))}
 			</StyledRadioGroup>
