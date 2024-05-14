@@ -25,8 +25,7 @@ const StyledPopup = styled.div`
   div {
     color: #777777;
     padding: 0.5rem;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-radius: 10px 0 0 10px;
     background-color: #f7f7fc;
   }
   ${(props) => props.$isopen && `display: block;`}
