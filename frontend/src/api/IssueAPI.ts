@@ -1,13 +1,15 @@
 const SERVER = process.env.REACT_APP_SERVER;
 
+const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
+
 export const sendIssuesRequest = async () => {
   try {
     const response = await fetch(`${SERVER}/issues`);
 
-    if (!response.ok) throw new Error(); 
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE); 
 
     return response.json();
   } catch (error) {
-    throw new Error();
+    throw new Error(SERVER_ERROR_MESSAGE);
   }
 }
