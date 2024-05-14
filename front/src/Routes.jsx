@@ -10,11 +10,27 @@ export const Router = () => (
 		<Routes>
 			<Route path='/' element={<MainPage />} />
 			<Route path='/signIn' element={<SignInPage />} />
-			<Route path='/issue' element={<IssueListViewsPage />} />
-			<Route path='/issue/:id' element={<IssueDetailPage />} />
-
-			{/* <Route path='issue' element={<IssueListViewsPage />} />
-			<Route path='issue/:id' element={<IssueDetailViewPage />} /> */}
+			<Route path='/issues' element={<IssueListViewsPage />} />
+			<Route path='/issues/:id' element={<IssueDetailPage />} />
 		</Routes>
 	</BrowserRouter>
 );
+/**
+ * TODO: 이걸로 교체해보기
+ * const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <div>
+        <h1>Hello World</h1>
+        <Link to="about">About Us</Link>
+      </div>
+    ),
+  },
+  {
+    path: "about",
+    element: <div>About</div>,
+  },
+]);
+
+ */
