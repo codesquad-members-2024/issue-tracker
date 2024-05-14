@@ -1,9 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Dropdown } from "../../../../icons/dropdown";
 import { Closed } from "../../../../icons/closed";
 import { Open } from "../../../../icons/open";
-import { Popup } from "../Popup";
+import { DropdownContainer } from "../Dropdown/DropdownContainer";
 
 const assigneePopupItems = [{ id: "no_assignee", label: "담당자가 없는 이슈" }];
 const labelPopupItems = [{ id: "no_label", label: "레이블이 없는 이슈" }];
@@ -11,6 +10,10 @@ const milestonesPopupItems = [
   { id: "no_milestones", label: "마일스톤이 없는 이슈" },
 ];
 const authorPopupItems = [{ id: "no_author", label: "작성자가 없는 이슈" }];
+const selectPopupItems = [
+  { id: "is_open", label: "선택한 이슈 열기" },
+  { id: "is_closed", label: "선택한 이슈 닫기" },
+];
 
 const headerFilters = [
   { id: "assignee", label: "담당자", items: assigneePopupItems },
@@ -20,55 +23,49 @@ const headerFilters = [
 ];
 
 export function IssueTableHeader() {
-  const [popupStates, setPopupStates] = useState({
-    assignee: false,
-    label: false,
-    milestones: false,
-    author: false,
-  });
-
-  const handleOpenContent = (id) => {
-    setPopupStates((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const handleCloseContent = (id) => {
-    setPopupStates((prev) => ({ ...prev, [id]: false }));
-  };
+  const [isChecked, setIsChecked] = useState(false);
+  const handleChecked = () => setIsChecked(!isChecked);
 
   return (
     <Header>
-      <Left>
-        <input type="checkbox" /> {/* check 되면 이슈선택 Header로 변경 */}
-        <StyledIssueBtn>
-          <Open />
-          <div>열린 이슈( )</div>
-        </StyledIssueBtn>
-        <StyledIssueBtn>
-          <Closed />
-          <div>닫힌 이슈( )</div>
-        </StyledIssueBtn>
-      </Left>
-      <Right>
-        {headerFilters.map((popup) => (
-          <Container key={popup.id}>
-            <Input
-              id={popup.id}
-              type="checkbox"
-              onChange={() => handleOpenContent(popup.id)}
+      <HeaderInput
+        type="checkbox"
+        checked={isChecked}
+        onChange={handleChecked}
+      />
+      {/* check 되면 이슈선택 Header로 변경 */}
+      {isChecked ? (
+        <Wrap>
+          <Left>
+            <div>n개 이슈 선택</div>
+          </Left>
+          <Right>
+            <DropdownContainer
+              id="select"
+              label="상태변경"
+              items={selectPopupItems}
             />
-            <Filter htmlFor={popup.id}>
-              <div>{popup.label}</div>
-              <Dropdown />
-            </Filter>
-            <StyledPopup
-              id={popup.label}
-              isopen={popupStates[popup.id]}
-              popupItems={popup.items}
-              onChange={() => handleCloseContent(popup.id)}
-            />
-          </Container>
-        ))}
-      </Right>
+          </Right>
+        </Wrap>
+      ) : (
+        <Wrap>
+          <Left>
+            <StyledIssueBtn>
+              <Open />
+              <div>열린 이슈( )</div>
+            </StyledIssueBtn>
+            <StyledIssueBtn>
+              <Closed />
+              <div>닫힌 이슈( )</div>
+            </StyledIssueBtn>
+          </Left>
+          <Right>
+            {headerFilters.map((popup) => (
+              <DropdownContainer key={popup.id} {...popup} />
+            ))}
+          </Right>
+        </Wrap>
+      )}
     </Header>
   );
 }
@@ -76,54 +73,37 @@ export function IssueTableHeader() {
 const Header = styled.div`
   height: 60px;
   display: flex;
+`;
+
+const Wrap = styled.div`
+  display: flex;
+  width: 100%;
   justify-content: space-between;
+`;
+
+const HeaderInput = styled.input`
+  margin-left: 25px;
 `;
 
 const Left = styled.div`
   display: flex;
   align-items: center;
-  width: 300px;
+  width: 230px;
   justify-content: space-between;
-  margin-left: 20px;
+  margin-left: 35px;
 `;
 
 const StyledIssueBtn = styled.div`
   display: flex;
-  justify-content: space-around;
-  width: 110px;
+  div {
+    margin-left: 10px;
+  }
 `;
 
 const Right = styled.div`
   display: flex;
   align-items: center;
-  width: 450px;
   justify-content: space-between;
-  margin-right: 20px;
+  margin-right: 35px;
   position: relative;
-`;
-
-const Container = styled.div`
-  display: flex;
-  position: relative;
-`;
-
-const StyledPopup = styled(Popup)`
-  right: 0;
-`;
-
-const Input = styled.input`
-  left: 0;
-  visibility: hidden;
-  position: absolute;
-`;
-
-const Filter = styled.label`
-  display: flex;
-  justify-content: space-between;
-  border-radius: 10px;
-  padding: 10px;
-  align-items: center;
-  &:hover {
-    cursor: pointer;
-  }
 `;
