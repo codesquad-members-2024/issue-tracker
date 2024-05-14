@@ -42,9 +42,9 @@ public class JwtService {
                     .parseClaimsJws(token)
                     .getBody();
 
-            System.out.println("JWT Subject : " + claims.getSubject());
+            log.debug("JWT Subject : {}", claims.getSubject());
 
-            System.out.println("JWT Token MemberId : " + claims.get("member_id"));
+            log.debug("JWT Token MemberId : {}", claims.get("member_id"));
 
             return true;
 
