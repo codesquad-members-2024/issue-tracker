@@ -9,8 +9,6 @@ import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.MappedCollection;
-import team08.issuetracker.issue.Assignee;
-import team08.issuetracker.issue.IssueAttachedLabel;
 
 @Getter
 public class Issue {
