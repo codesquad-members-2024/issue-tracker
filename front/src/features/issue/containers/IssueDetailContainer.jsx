@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { theme } from '../../../styles/theme';
 import { Button } from '../../../common/components/Button';
 import { IconEdit } from '../../../common/icons/IconEdit';
@@ -9,8 +11,18 @@ import {
 	IssueSidebar,
 	IssueCommentEdit,
 } from '~/features/issue/components';
+import { getIssueDetail } from '~/features/issue/apis/';
 
 export function IssueDetailContainer() {
+	const { id } = useParams();
+
+	const [issueDetail, setIssueDetail] = useState({});
+	useEffect(() => {
+		getIssueDetail(id).then(issueDetail => {
+			setIssueDetail(issueDetail);
+		});
+	}, [id]);
+
 	return (
 		<StyledWrapper>
 			<StyledDetailHeader>
