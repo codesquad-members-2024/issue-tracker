@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { IconLandmark } from '../../../common/icons/IconLandmark';
 import { CheckBox, Label } from '~/common/components';
+import { timestamp } from '~/utils/util';
 
 export function IssueItem({ issue }) {
 	return (
@@ -21,7 +22,8 @@ export function IssueItem({ issue }) {
 			<StyledDetail>
 				<p>#{issue.id}</p>
 				<StyledAuthour>
-					{issue?.writer} {issue?.createTime}
+					이 이슈가 {timestamp(issue?.createTime)}, {issue?.writer}님에 의해
+					작성되었습니다.
 				</StyledAuthour>
 				<StyledMilestone>
 					<IconLandmark />
@@ -76,8 +78,8 @@ const StyledDetail = styled.div`
 	display: flex;
 	align-items: center;
 	p {
-		font-size: 16px;
-		color: #6e7191;
+		${({ theme }) => theme.typography.medium[16]}
+		color: ${({ theme }) => theme.color.neutral.text.weak};
 	}
 `;
 const StyledAuthour = styled.p`

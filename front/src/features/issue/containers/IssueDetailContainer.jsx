@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { theme } from '../../../styles/theme';
-import { Button } from '../../../common/components/Button';
-import { IconEdit } from '../../../common/icons/IconEdit';
-import { IconTrash } from '../../../common/icons/IconTrash';
-import { IconAlertCircle } from '../../../common/icons/IconAlertCircle';
+import { Button } from '~/common/components/Button';
+import { IconEdit, IconTrash, IconAlertCircle } from '~/common/icons';
+import { timestamp } from '~/utils/util';
+
 import {
 	IssueCommentItem,
 	IssueSidebar,
@@ -57,8 +57,10 @@ export function IssueDetailContainer() {
 						열린 이슈
 					</StyledBadge>
 					<p>
-						이 이슈가 <>3분</>전에 <>{issueDetail.writer}</>님에 의해 열렸습니다
+						이 이슈가 {timestamp(issueDetail.createTime)}에 {issueDetail.writer}
+						님에 의해 열렸습니다
 					</p>
+
 					<b>∙</b>
 					{issueDetail?.comments && (
 						<p>코멘트 {issueDetail?.comments.length}개</p>
