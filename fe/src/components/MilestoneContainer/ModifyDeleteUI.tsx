@@ -1,60 +1,71 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Milestone } from "./MilestoneFeed";
+import { ModifyDeleteContext } from "../../Providers/ModifyDeleteProvider";
 
 interface ModifyDeleteUIProps {
-    handelSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    formData: {
-        title: string;
-        dueDate: string;
-        description: string;
-    };
-    resetState: () => void;
-    modifyDeleteState: {
-        state: string;
-        title: string;
-    };
-    setFormData?: React.Dispatch<
-        React.SetStateAction<{
-            title: string;
-            dueDate: string;
-            description: string;
-        }>
-    >;
     curMilestone?: Milestone;
 }
 
-const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({
-    handelSubmit,
-    handleChange,
-    formData,
-    resetState,
-    modifyDeleteState,
-    setFormData,
-    curMilestone,
-}) => {
+interface FormState {
+    title: string;
+    dueDate: string;
+    description: string;
+}
+
+const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({ curMilestone }) => {
+    const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
+
+    const [formData, setFormData]: [
+        FormState,
+        React.Dispatch<React.SetStateAction<FormState>>
+    ] = useState({
+        title: "",
+        dueDate: "",
+        description: "",
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
     useEffect(() => {
-        if (modifyDeleteState.state === "modify" && setFormData) {
+        if (ModifyDeleteState.state === "modify" && setFormData) {
             setFormData((prevState) => ({
                 ...prevState,
                 title: curMilestone?.title ?? "",
                 dueDate: curMilestone?.dueDate ?? "",
                 description: curMilestone?.description ?? "",
             }));
+        } else {
+            setFormData((prevState) => ({
+                ...prevState,
+                title: "",
+                dueDate: "",
+                description: "",
+            }));
         }
-    }, [modifyDeleteState.state, setFormData, curMilestone]);
+    }, [ModifyDeleteState.state, curMilestone]);
 
     return (
         <div
-            className={`w-full h-72 border-2 border-gray-300 mt-4 rounded-xl bg-white dark:bg-darkModeBorderBG`}
+            className={`${
+                ModifyDeleteState.state === "delete" ||
+                ModifyDeleteState.title === curMilestone?.title
+                    ? ""
+                    : "hidden"
+            } w-full h-72 border-2 border-gray-300 mt-4 rounded-xl bg-white dark:bg-darkModeBorderBG`}
         >
             <div className="p-6 gap-2 flex flex-col h-full">
                 <h3 className="font-medium text-xl mb-4">
-                    {modifyDeleteState.state === "modify"
+                    {ModifyDeleteState.state === "modify"
                         ? "마일스톤 편집"
                         : "새로운 마일스톤 추가"}
                 </h3>
-                <form onSubmit={handelSubmit} className="flex flex-col gap-4">
+                <form className="flex flex-col gap-4">
                     <div className="flex flex-col gap-6">
                         <div className="flex justify-between">
                             <input
@@ -91,7 +102,12 @@ const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({
                             + 완료
                         </button>
                         <button
-                            onClick={resetState}
+                            onClick={() =>
+                                ModifyDeleteDispatch({
+                                    type: "SET_INIT",
+                                    Payload: "",
+                                })
+                            }
                             className="flex justify-center text-center items-center border-2 border-blue-500 px-6 rounded-xl text-blue-500 text-sm h-10 w-32"
                         >
                             X 취소

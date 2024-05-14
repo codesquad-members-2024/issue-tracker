@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./app/LoginPage/page";
-import IssuePage from "./app/IssuePage/page";
-import LabelsPage from "./app/LabelsPage/page";
-import MilestonesPage from "./app/MilestonesPage/page";
-import NewPage from "./app/NewPage/page";
-import IssueProduct from "./app/IssueProduct/page";
+import LoginPage from "./pages/LoginPage";
+import IssuePage from "./pages/IssuesPage";
+import LabelsPage from "./pages/LabelsPage";
+import MilestonesPage from "./pages/MilestonesPage";
+import NewPage from "./pages/NewPage";
+import IssueProduct from "./pages/IssueProduct";
 import ThemeSwitch from "./components/ThemeSwitch/ThemeSwitch";
 
 function App() {
