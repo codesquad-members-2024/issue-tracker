@@ -11,7 +11,9 @@ export function IssueItem({ issue, index }) {
 				<StyledCheckbox />
 				<StyledFlex>
 					<ExclamationCircleOutlined />
-					<StyledIssueTitle to='/'>{issue?.title}</StyledIssueTitle>
+					<StyledIssueTitle to={`/issue/${issue?.id}`}>
+						{issue?.title}
+					</StyledIssueTitle>
 
 					<strong>{issue?.labelId}</strong>
 				</StyledFlex>
