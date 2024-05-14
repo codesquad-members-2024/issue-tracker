@@ -15,8 +15,8 @@ public class IssueService {
     }
 
     public List<Issue> getAllIssues() {
-        List<Issue> issues = issueRepository.findAll();
+        List<Issue> issues = (List<Issue>) issueRepository.findAll();
         log.info("Retrieved issues: {}", issues);
-        return issueRepository.findAll();
+        return (List<Issue>) issueRepository.findAll();
     }
 }
