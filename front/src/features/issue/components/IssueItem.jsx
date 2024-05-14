@@ -2,34 +2,34 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { IconLandmark } from '../../../common/icons/IconLandmark';
-import { CheckBox } from '~/common/components';
+import { CheckBox, Label } from '~/common/components';
 
 export function IssueItem({ issue }) {
 	return (
-		<>
-			<StyledWrapper>
-				<StyledCheckbox />
-				<StyledFlex>
-					<ExclamationCircleOutlined />
-					<StyledIssueTitle to={`/issue/${issue?.id}`}>
-						{issue?.title}
-					</StyledIssueTitle>
+		<StyledWrapper>
+			<StyledCheckbox />
+			<StyledFlex>
+				<ExclamationCircleOutlined />
+				<StyledIssueTitle to={`/issues/${issue?.id}`}>
+					{issue?.title}
+				</StyledIssueTitle>
 
-					<strong>{issue?.labelId}</strong>
-				</StyledFlex>
-				<StyledDetail>
-					<p>{issue.id}</p>
-					<StyledAuthour>
-						{issue?.writer} {issue?.createTime}
-					</StyledAuthour>
-					<StyledMilestone>
-						<IconLandmark />
-						<p>{issue?.milestoneId}</p>
-					</StyledMilestone>
-				</StyledDetail>
-				<StyledIconUser src={issue?.profileImage} />
-			</StyledWrapper>
-		</>
+				{issue?.labels?.map((label, index) => (
+					<Label label={label} key={index} />
+				))}
+			</StyledFlex>
+			<StyledDetail>
+				<p>#{issue.id}</p>
+				<StyledAuthour>
+					{issue?.writer} {issue?.createTime}
+				</StyledAuthour>
+				<StyledMilestone>
+					<IconLandmark />
+					<p>{issue?.milestoneId}</p>
+				</StyledMilestone>
+			</StyledDetail>
+			<StyledUserImage src={issue?.profileImage} />
+		</StyledWrapper>
 	);
 }
 const StyledWrapper = styled.div`
@@ -83,13 +83,14 @@ const StyledDetail = styled.div`
 const StyledAuthour = styled.p`
 	margin: 0 16px;
 `;
-const StyledIconUser = styled.img`
+const StyledUserImage = styled.img`
 	width: 20px;
 	height: 20px;
 	position: absolute;
 	top: 50%;
 	right: 54px;
 	transform: translateY(-50%);
+	border: 1px solid ${({ theme }) => theme.color.neutral.border.active};
 	border-radius: 50%;
 `;
 const StyledMilestone = styled.div`

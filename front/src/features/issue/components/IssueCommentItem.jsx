@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import { Button } from '~/common/components/Button';
 import { IconEdit, IconSmile } from '~/common/icons';
 
-export function IssueCommentItem() {
-	const isAuthor = true;
+export function IssueCommentItem({ content, writer, isWriter }) {
 	return (
 		<StyledWrapper>
 			<StyledHeader>
@@ -12,11 +11,11 @@ export function IssueCommentItem() {
 						src='https://avatars.githubusercontent.com/u/58014235?v=4'
 						alt='양시미'
 					/>
-					<h3>yangsim</h3>
+					<h3>{writer}</h3>
 					<p>3분 전</p>
 				</span>
 				<span className='action'>
-					{isAuthor && <p className='badge'>작성자</p>}
+					{isWriter && <p className='badge'>작성자</p>}
 
 					<Button
 						type='button'
@@ -38,16 +37,7 @@ export function IssueCommentItem() {
 					</Button>
 				</span>
 			</StyledHeader>
-			<StyledContents>
-				이번 그룹 프로젝트에서 디자인 특징은 아래와 같습니다.
-				<br />
-				<br /> 타이포그래피
-				<br />
-				시스템에 display, selected, available같은 용법을 함께 표기함 컬러
-				시스템에 라이트/다크 모드가 있음 Components 페이지에 기획서에 없는 선택
-				미션 두 가지가 있음 Text Input의 지우기 기능 Comment Elements의 히스토리
-				기능
-			</StyledContents>
+			<StyledContents>{content}</StyledContents>
 		</StyledWrapper>
 	);
 }

@@ -18,8 +18,8 @@ export function IssueDetailContainer() {
 
 	const [issueDetail, setIssueDetail] = useState({});
 	useEffect(() => {
-		getIssueDetail(id).then(issueDetail => {
-			setIssueDetail(issueDetail);
+		getIssueDetail(id).then(res => {
+			setIssueDetail(res);
 		});
 	}, [id]);
 
@@ -28,7 +28,7 @@ export function IssueDetailContainer() {
 			<StyledDetailHeader>
 				<StyledTitle>
 					<h2>
-						FE 이슈트래커 디자인 시스템 구현 <strong>#2</strong>
+						{issueDetail.title} <strong> #{issueDetail.id}</strong>
 					</h2>
 					<StyledButtonWrap>
 						<Button
@@ -57,21 +57,38 @@ export function IssueDetailContainer() {
 						열린 이슈
 					</StyledBadge>
 					<p>
-						이 이슈가 <>3분</>전에 <>melroh629</>님에 의해 열렸습니다
+						이 이슈가 <>3분</>전에 <>{issueDetail.writer}</>님에 의해 열렸습니다
 					</p>
 					<b>∙</b>
-					<p>
-						코멘트 <>3</>개
-					</p>
+					{issueDetail?.comments && (
+						<p>코멘트 {issueDetail?.comments.length}개</p>
+					)}
 				</StyledSubHeader>
 			</StyledDetailHeader>
 			<StyledContents>
 				<section>
-					<IssueCommentItem />
-					<IssueCommentItem />
-					<IssueCommentEdit />
+					<IssueCommentItem
+						content={issueDetail.content}
+						writer={issueDetail.writer}
+						isWriter={true}
+					/>
+					{issueDetail?.comments &&
+						issueDetail.comments.map(item => (
+							<IssueCommentItem
+								key={item.id}
+								content={item.content}
+								writer={item.writer}
+								isWriter={issueDetail.writer === item.writer}
+							/>
+						))}
+
+					{/* <IssueCommentEdit /> */}
 				</section>
-				<IssueSidebar />
+				<IssueSidebar
+					assignees={issueDetail.assignees}
+					milestone={issueDetail.milestoneId}
+					labels={issueDetail.labels}
+				/>
 			</StyledContents>
 		</StyledWrapper>
 	);

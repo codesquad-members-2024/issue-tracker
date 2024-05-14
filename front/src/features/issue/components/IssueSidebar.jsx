@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { IconPlus } from '~/common/icons';
 import { Dropdown, Label } from '~/common/components';
-import { Assignee, MilestonIndicator } from '~/features/issue/components';
+import { Assignee, MilestoneIndicator } from '~/features/issue/components';
 
-export function IssueSidebar() {
+export function IssueSidebar({ assignees, milestone, labels }) {
 	const [isOpen, setIsOpen] = useState({
 		assignee: false,
 		label: false,
@@ -13,6 +13,7 @@ export function IssueSidebar() {
 
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
+
 	return (
 		<StyledWrapper>
 			<StyledSideItem>
@@ -20,10 +21,14 @@ export function IssueSidebar() {
 					<StyledTitle>담당자</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.assignee && <StyledDropdown title='담당자 설정' />}
+				{isOpen.assignee && (
+					<StyledDropdown title='담당자 설정' data={assignees} />
+				)}
 				<StyledSideContent>
-					<Assignee />
-					<Assignee />
+					{assignees &&
+						assignees?.map((assignee, index) => (
+							<Assignee key={index} assignee={assignee} />
+						))}
 				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
@@ -31,9 +36,10 @@ export function IssueSidebar() {
 					<StyledTitle>레이블</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.label && <StyledDropdown title='레이블 설정' />}
+				{isOpen.label && <StyledDropdown title='레이블 설정' data={labels} />}
 				<StyledSideContent>
-					<Label />
+					{labels &&
+						labels?.map(label => <Label key={label.name} label={label} />)}
 				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
@@ -41,9 +47,15 @@ export function IssueSidebar() {
 					<StyledTitle>마일스톤</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.milestone && <StyledDropdown title='마일스톤 설정' />}
+				{isOpen.milestone && (
+					<StyledDropdown title='마일스톤 설정' data={milestone} />
+				)}
 				<StyledSideContent>
-					<MilestonIndicator title='그룹프로젝트 : 이슈트래커' width={40} />
+					{/* {milestone &&
+						milestone?.map((mile, index) => (
+							<MilestoneIndicator milestone={mile} key={index} />
+						))} */}
+					<MilestoneIndicator milestone={milestone} />
 				</StyledSideContent>
 			</StyledSideItem>
 		</StyledWrapper>
@@ -81,4 +93,10 @@ const StyledTitle = styled.h4`
 `;
 const StyledSideContent = styled.div`
 	margin-top: 16px;
+	.label {
+		margin-right: 8px;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
 `;
