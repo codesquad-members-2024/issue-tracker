@@ -3,7 +3,7 @@ import { ContentNavStyles } from "../../../styles/commonStyles";
 import { Label } from "../../../icons/label";
 import { Milestones } from "../../../icons/milestones";
 import { FilterBar } from "./FilterBar";
-import { IssueTable } from "./IssueTable";
+import { IssueTable } from "./IssueTable/IssueTable";
 
 export function Content() {
   return (
