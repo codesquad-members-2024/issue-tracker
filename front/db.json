@@ -25,7 +25,37 @@
 			"deleted": true
 		}
 	],
-	"detail": {
-		"id": 1
-	}
+	"detail": [
+		{
+			"id": 1,
+			"title": "title1",
+			"content": "my name is daniel",
+			"milestoneId": "m1",
+			"assignees": [
+				{
+					"loginId": "mellisa",
+					"profileImage": "https://avatars.githubusercontent.com/u/140429591?s=40&v=4"
+				},
+				{
+					"loginId": "wade",
+					"profileImage": "https://avatars.githubusercontent.com/u/126778700?s=40&v=4"
+				}
+			],
+			"writer": "daniel",
+			"createTime": "2024-05-14T09:41:22.1253905",
+			"labels": [
+				{
+					"name": "bug",
+					"description": "bug",
+					"color": "#0075CA"
+				},
+				{
+					"name": "documentation",
+					"description": "documentation",
+					"color": "#008672"
+				}
+			],
+			"closed": false
+		}
+	]
 }
