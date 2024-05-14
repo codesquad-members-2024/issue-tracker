@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Checkbox } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-
 import { IconLandmark } from '../../../common/icons/IconLandmark';
-export function IssueItem({ issue, index }) {
+import { CheckBox } from '~/common/components';
+
+export function IssueItem({ issue }) {
 	return (
 		<>
 			<StyledWrapper>
@@ -18,7 +18,7 @@ export function IssueItem({ issue, index }) {
 					<strong>{issue?.labelId}</strong>
 				</StyledFlex>
 				<StyledDetail>
-					<p>{index}</p>
+					<p>{issue.id}</p>
 					<StyledAuthour>
 						{issue?.writer} {issue?.createTime}
 					</StyledAuthour>
@@ -43,7 +43,7 @@ const StyledWrapper = styled.div`
 	}
 `;
 
-const StyledCheckbox = styled(Checkbox)`
+const StyledCheckbox = styled(CheckBox)`
 	position: absolute;
 	top: 50%;
 	left: 32px;
