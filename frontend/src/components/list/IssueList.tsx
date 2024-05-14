@@ -39,13 +39,10 @@ function IssueList() {
 }
 
 const Wrapper = styled.div`
-  width: 1280px;
-  height: 55em;
+  width: 80em;
   margin-top: 1.5em;
   border: 1px solid #d9dbe9;
   border-radius: 0.725em;
-  overflow: hidden;
-  overflow-y: scroll;
 
   &::-webkit-scrollbar {
     display: none;
