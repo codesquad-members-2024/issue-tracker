@@ -25,9 +25,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public void registerMember(MemberCreationDto memberCreationDto) {
-        validateMemberForm(memberCreationDto.getMemberId(), memberCreationDto.getPassword());
+        validateMemberForm(memberCreationDto.memberId(), memberCreationDto.password());
 
-        Member member = new Member(memberCreationDto.getMemberId(), memberCreationDto.getPassword());
+        Member member = new Member(memberCreationDto.memberId(), memberCreationDto.password());
 
         memberRepository.insert(member);
 
@@ -35,12 +35,12 @@ public class MemberService {
     }
 
     public Member loginMember(MemberLoginDto memberLoginDto) {
-        validateMemberForm(memberLoginDto.getMemberId(), memberLoginDto.getPassword());
+        validateMemberForm(memberLoginDto.memberId(), memberLoginDto.password());
 
-        Member member = memberRepository.findById(memberLoginDto.getMemberId())
+        Member member = memberRepository.findById(memberLoginDto.memberId())
                 .orElseThrow(MemberNotFoundException::new);
 
-        validateLoginCredential(member, memberLoginDto.getPassword());
+        validateLoginCredential(member, memberLoginDto.password());
 
         return member;
     }
