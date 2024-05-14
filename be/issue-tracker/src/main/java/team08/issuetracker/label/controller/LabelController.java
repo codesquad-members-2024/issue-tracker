@@ -22,7 +22,9 @@ public class LabelController {
     public ResponseEntity<String> createLabel(@RequestBody LabelCreationDto labelCreationDto) {
         Label label = labelService.createLabel(labelCreationDto);
 
-        return ResponseEntity.ok("라벨생성 성공!");
+        log.info("라벨 생성 성공 : {}", label.toString());
+
+        return ResponseEntity.ok("라벨생성 성공! 라벨 #" + label.getId() + " 라벨 이름 : " + label.getName());
     }
 
     @GetMapping("/count")

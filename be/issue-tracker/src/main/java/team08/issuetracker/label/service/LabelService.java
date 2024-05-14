@@ -18,22 +18,20 @@ public class LabelService {
         // 1) DTO -> Entity 변환
         Label label = convertToEntity(labelCreationDto);
 
-        log.info("라벨 생성 성공 : {}", label.toString());
-
         // 2) 저장 및 반환
         return labelRepository.save(label);
     }
 
     private Label convertToEntity(LabelCreationDto labelCreationDto) {
         return new Label(
-                labelCreationDto.getName(),
-                labelCreationDto.getDescription(),
-                labelCreationDto.getBackgroundColor(),
-                labelCreationDto.getTextColor()
+                labelCreationDto.name(),
+                labelCreationDto.description(),
+                labelCreationDto.backgroundColor(),
+                labelCreationDto.textColor()
         );
     }
 
-    public LabelCountDto getLabelCount(){
+    public LabelCountDto getLabelCount() {
         long totalCount = labelRepository.count();
 
         return new LabelCountDto(totalCount);

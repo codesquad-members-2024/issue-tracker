@@ -1,7 +1,9 @@
 package team08.issuetracker.label.model;
 
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 
+@Getter
 public class Label {
 
     @Id
