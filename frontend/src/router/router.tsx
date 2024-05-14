@@ -2,8 +2,8 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import useUserStore from "../hooks/useUserStore";
 import Login from "../components/login/Login";
 import Registration from "../components/registration/Registration";
-import IssueList from "../components/list/IssueList";
 import Main from "../components/Main";
+import IssueCreator from "../components/creator/IssueCreator";
 
 interface AuthRouteProps {
   children: React.ReactNode;
@@ -34,4 +34,8 @@ export const router = createBrowserRouter([
     path: "/registration",
     element: <Registration />,
   },
+  {
+    path: "/new-issue",
+    element: <IssueCreator />,
+  }
 ]);

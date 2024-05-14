@@ -23,6 +23,7 @@ const Wrapper = styled.div`
 `;
 
 const HeaderLogo = styled.img`
+  width: 199px;
   height: 40px;
   cursor: pointer;
 `;

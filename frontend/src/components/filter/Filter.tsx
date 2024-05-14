@@ -4,8 +4,11 @@ import searchIcon from "../../img/icon/searchIcon.svg";
 import labelIcon from "../../img/icon/labelIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
+import { useNavigate } from "react-router-dom";
 
 function Filter() {
+  const navigate = useNavigate();
+
   return (
     <>
       <FilterTab>
@@ -30,7 +33,7 @@ function Filter() {
               <LargeTitle>마일스톤(0)</LargeTitle>
             </MilestoneBar>
           </FilterBox>
-          <NewIssueButton>
+          <NewIssueButton onClick={() => navigate("/new-issue")}>
             <img src={plusIcon} />
             <span>이슈 작성</span>
           </NewIssueButton>

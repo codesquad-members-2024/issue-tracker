@@ -54,7 +54,7 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
 const Wrapper = styled.div`
   height: 4em;
   padding: 0 2em;
-  background-color: #f7f7fc;
+  background-color: #eff0f6;
   display: flex;
   justify-content: space-between;
 `;
