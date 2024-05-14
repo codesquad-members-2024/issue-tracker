@@ -51,6 +51,7 @@ const Container = styled.div`
   position: relative;
   border: solid #dadbef;
   border-radius: 10px;
+  background-color: #eff0f6;
 `;
 
 const Input = styled.input`
@@ -63,9 +64,14 @@ const Filter = styled.label`
   width: 120px;
   display: flex;
   justify-content: space-between;
-  border-radius: 10px;
+  border-radius: 10px 0 0 10px;
   padding: 10px;
   align-items: center;
+  border-right: solid #dadbef;
+  background-color: #f7f7fc;
+  div {
+    padding-left: 10px;
+  }
   &:hover {
     cursor: pointer;
   }

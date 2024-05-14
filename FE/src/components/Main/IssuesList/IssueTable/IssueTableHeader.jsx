@@ -75,7 +75,6 @@ export function IssueTableHeader() {
 
 const Header = styled.div`
   height: 60px;
-  // border-bottom: solid #dadbef;
   display: flex;
   justify-content: space-between;
 `;
