@@ -1,13 +1,15 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Dropdown } from "../../../icons/dropdown";
-import { Closed } from "../../../icons/closed";
-import { Open } from "../../../icons/open";
-import { Popup } from "./Popup";
+import { Dropdown } from "../../../../icons/dropdown";
+import { Closed } from "../../../../icons/closed";
+import { Open } from "../../../../icons/open";
+import { Popup } from "../Popup";
 
 const assigneePopupItems = [{ id: "no_assignee", label: "담당자가 없는 이슈" }];
 const labelPopupItems = [{ id: "no_label", label: "레이블이 없는 이슈" }];
-const milestonesPopupItems = [{ id: "no_milestones", label: "마일스톤이 없는 이슈" }];
+const milestonesPopupItems = [
+  { id: "no_milestones", label: "마일스톤이 없는 이슈" },
+];
 const authorPopupItems = [{ id: "no_author", label: "작성자가 없는 이슈" }];
 
 const headerFilters = [
@@ -73,7 +75,7 @@ export function IssueTableHeader() {
 
 const Header = styled.div`
   height: 60px;
-  border-bottom: solid #dadbef;
+  // border-bottom: solid #dadbef;
   display: flex;
   justify-content: space-between;
 `;

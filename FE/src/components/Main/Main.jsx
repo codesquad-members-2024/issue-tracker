@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Logo } from "../../../icons/logo";
-import { Content } from "./Content";
+import { Logo } from "../../icons/logo";
+import { Content } from "./IssuesList/Content";
 
 export function Main() {
   return (
