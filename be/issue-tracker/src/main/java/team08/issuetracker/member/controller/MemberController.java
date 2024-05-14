@@ -24,6 +24,10 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtService jwtService;
 
+    private static final long TOKEN_DURATION_90DAYS = 90 * 24 * 60 * 60;
+    private static final String TOKEN_NAME = "jwt-token";
+    private static final String TOKEN_HEADER_VALUE = "Bearer ";
+
     @PostMapping
     public ResponseEntity<String> registerMember(@RequestBody MemberCreationDto memberCreationDto) {
         memberService.registerMember(memberCreationDto);
@@ -37,8 +41,8 @@ public class MemberController {
 
         MemberResponse response = new MemberResponse(member.getMemberId(), jwtService.createJwtToken(member));
 
-        HttpCookie httpCookie = ResponseCookie.from("jwt-token", response.getToken())
-                .maxAge(7776000)
+        HttpCookie httpCookie = ResponseCookie.from(TOKEN_NAME, response.getToken())
+                .maxAge(TOKEN_DURATION_90DAYS)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -46,12 +50,12 @@ public class MemberController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + response.getToken())
+                .header(HttpHeaders.AUTHORIZATION, TOKEN_HEADER_VALUE + response.getToken())
                 .build();
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<?> validateToken(@CookieValue(name = "jwt-token") String jwtToken) {
+    public ResponseEntity<?> validateToken(@CookieValue(name = TOKEN_NAME) String jwtToken) {
         if (!jwtService.parseJwtToken(jwtToken)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 토큰");
         }
@@ -62,7 +66,7 @@ public class MemberController {
     @PostMapping("/logout")
     public ResponseEntity<?> logoutMember() {
 
-        ResponseCookie responseCookie = ResponseCookie.from("jwt-token", "")
+        ResponseCookie responseCookie = ResponseCookie.from(TOKEN_NAME, "")
                 .maxAge(0)
                 .path("/")
                 .build();
