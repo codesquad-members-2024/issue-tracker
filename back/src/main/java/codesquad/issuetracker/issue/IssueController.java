@@ -1,9 +1,7 @@
 package codesquad.issuetracker.issue;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +11,11 @@ import java.util.stream.Collectors;
 public class IssueController {
 
     private final IssueService issueService;
+
+    @PostMapping("/issues")
+    public void createIssue(@RequestBody Issue issue) {
+        issueService.createIssue(issue);
+    }
 
     @GetMapping("/issues")
     public List<IssueShowDto> getAllIssues() {

@@ -27,12 +27,10 @@ public class Issue {
     @MappedCollection(idColumn = "issue_id")
     private Set<Comment> comments;
 
-    public Issue(Long id,
-                 String title,
+    public Issue(String title,
                  String content,
                  String milestoneId,
                  String writer) {
-        this.id = id;
         this.title = title;
         this.content = content;
         this.milestoneId = milestoneId;
