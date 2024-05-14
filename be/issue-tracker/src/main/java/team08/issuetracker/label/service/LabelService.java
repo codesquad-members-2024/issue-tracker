@@ -28,8 +28,8 @@ public class LabelService {
         return new Label(
                 labelCreationDto.getName(),
                 labelCreationDto.getDescription(),
-                labelCreationDto.getBackground_color(),
-                labelCreationDto.getText_color()
+                labelCreationDto.getBackgroundColor(),
+                labelCreationDto.getTextColor()
         );
     }
 

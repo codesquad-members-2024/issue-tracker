@@ -8,14 +8,14 @@ public class Label {
     private Long id;
     private String name ;
     private String description ; // 선택
-    private String background_color;
-    private String text_color;
+    private String backgroundColor;
+    private String textColor;
 
-    public Label(String name, String description, String background_color, String text_color) {
+    public Label(String name, String description, String backgroundColor, String textColor) {
         this.name = name;
         this.description = description;
-        this.background_color = background_color;
-        this.text_color = text_color;
+        this.backgroundColor = backgroundColor;
+        this.textColor = textColor;
     }
 
     @Override
@@ -24,8 +24,8 @@ public class Label {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", background_color='" + background_color + '\'' +
-                ", text_color='" + text_color + '\'' +
+                ", background_color='" + backgroundColor + '\'' +
+                ", text_color='" + textColor + '\'' +
                 '}';
     }
 }

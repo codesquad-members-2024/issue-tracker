@@ -11,6 +11,6 @@ import lombok.Setter;
 public class LabelCreationDto {
     private String name ;
     private String description;
-    private String background_color;
-    private String text_color;
+    private String backgroundColor;
+    private String textColor;
 }
