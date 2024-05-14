@@ -1,9 +1,9 @@
-import Nav from "../../components/IssueContainer/Nav";
-import IssueFeed from "../../components/IssueContainer/IssueFeed";
+import Nav from "../components/IssueContainer/Nav";
+import IssueFeed from "../components/IssueContainer/IssueFeed";
 import { useEffect, useState } from "react";
-import { APiUtil } from "../../util/APIUtils";
-import FilterProvider from "../../Providers/FilterProvider";
-import { Header } from "../../util/UtilUI";
+import { APiUtil } from "../util/APIUtils";
+import FilterProvider from "../Providers/FilterProvider";
+import { Header } from "../util/UtilUI";
 const IssuePage = () => {
     const [isOpen, setOpen] = useState<boolean>(true);
     const [issueInfo, setIssueInfo] = useState([]);

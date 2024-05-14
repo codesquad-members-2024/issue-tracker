@@ -1,4 +1,4 @@
-import { APiUtil } from "../../util/APIUtils";
+import { APiUtil } from "../util/APIUtils";
 
 const LabelsPage = () => {
     const params = ["is_open=false", "label=BE"];
