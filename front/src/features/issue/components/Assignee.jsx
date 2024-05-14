@@ -1,13 +1,10 @@
 import styled from 'styled-components';
 
-export function Assignee({ src, alt, user }) {
+export function Assignee({ assignee }) {
 	return (
 		<StyledWrapper>
-			<img
-				src='https://avatars.githubusercontent.com/u/26481862?v=4'
-				alt='assignee'
-			/>
-			<span>user 123442</span>
+			<img src={assignee.profileImage} alt='' />
+			<span>{assignee.loginId}</span>
 		</StyledWrapper>
 	);
 }
