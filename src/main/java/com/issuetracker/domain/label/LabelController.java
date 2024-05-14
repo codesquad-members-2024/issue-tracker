@@ -41,6 +41,6 @@ public class LabelController {
     @DeleteMapping("/{labelId}")
     public ResponseEntity<Void> delete(@PathVariable("labelId") String labelId) {
         labelService.delete(labelId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,6 @@
 package com.issuetracker.domain.label.response;
 
+import com.issuetracker.domain.label.Label;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,7 @@ public class LabelResponse {
     private String textColor;
     private String colorCode;
 
-    public static LabelResponse of(com.issuetracker.domain.label.Label label) {
+    public static LabelResponse of(Label label) {
         return LabelResponse.builder()
                 .labelId(label.getId())
                 .description(label.getDescription())
