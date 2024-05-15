@@ -1,6 +1,7 @@
 package codesquad.issuetracker.issue;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,4 +27,8 @@ public class IssueService {
         return issueRepository.findAllByLabelId(labelId);
     }
 
+    public Issue findIssueById(Long issueId) {
+        Optional<Issue> optionalIssue = issueRepository.findById(issueId);
+        return optionalIssue.orElseThrow(IllegalArgumentException::new);
+    }
 }
