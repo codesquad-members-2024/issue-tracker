@@ -84,7 +84,7 @@ export function IssueDetailContainer() {
 							/>
 						))}
 
-					{/* <IssueCommentEdit /> */}
+					<IssueCommentEdit />
 				</section>
 				<IssueSidebar
 					assignees={issueDetail.assignees}

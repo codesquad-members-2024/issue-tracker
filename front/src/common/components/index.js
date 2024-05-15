@@ -5,3 +5,4 @@ export * from './InnerLayout';
 export * from './Label';
 export * from './InputText';
 export * from './CheckBox';
+export * from './ImageUpload';
