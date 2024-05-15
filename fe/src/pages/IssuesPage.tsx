@@ -1,7 +1,6 @@
 import Nav from "../components/IssueContainer/Nav";
 import IssueFeed from "../components/IssueContainer/IssueFeed";
-import { useEffect, useState } from "react";
-import { APiUtil } from "../util/APIUtils";
+import { useState } from "react";
 import FilterProvider from "../Providers/FilterProvider";
 import { Header } from "../util/UtilUI";
 const IssuePage = () => {
@@ -11,13 +10,6 @@ const IssuePage = () => {
 
     const handleResetFilterUI = () => setResetFilterUI(true);
 
-    useEffect(() => {
-        const getIssueList = async () => {
-            const issueList = await APiUtil.getNewsData("issues");
-            setIssueInfo(issueList);
-        };
-        getIssueList();
-    }, []);
 
     return (
         <main className="w-1280 mx-auto">

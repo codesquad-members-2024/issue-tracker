@@ -8,10 +8,10 @@ const IssueProduct = () => {
     return (
         <>
             <h3>id: {productId}</h3>
-            <h3>author: {issueInfo.author}</h3>
-            <h3>contents: {issueInfo.contents}</h3>
-            <h3>created_at: {issueInfo.created_at}</h3>
-            <h3>updated_at: {issueInfo.updated_at}</h3>
+            <div>author: {issueInfo.author}</div>
+            <div>contents: {issueInfo.contents}</div>
+            <div>created_at: {issueInfo.created_at}</div>
+            <div>updated_at: {issueInfo.updated_at}</div>
         </>
     );
 }
