@@ -56,6 +56,7 @@ const FormInput = styled.textarea`
   background-color: transparent;
   color: #4E4B66;
   outline: none;
+  resize: none;
 
   &:focus + label span,
   &:valid + label span {
