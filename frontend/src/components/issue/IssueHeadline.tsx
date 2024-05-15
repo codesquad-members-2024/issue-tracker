@@ -6,7 +6,7 @@ import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import dateUtils from "../../utils/DateUtils";
 import { useNavigate } from "react-router-dom";
 
-interface IssueHeadlineProps {
+export interface IssueHeadlineProps {
   issueId: number;
   title: string;
   author: string;
