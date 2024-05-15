@@ -1,4 +1,4 @@
-import { Content } from "./IssuesList/Content";
+import { Content } from "./Content";
 import { Header } from "./Header";
 
 export function Main() {

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { Closed } from "../../../../icons/closed";
 import { Open } from "../../../../icons/open";
@@ -22,9 +21,8 @@ const headerFilters = [
   { id: "author", label: "작성자", items: authorPopupItems },
 ];
 
-export function IssueTableHeader() {
-  const [isChecked, setIsChecked] = useState(false);
-  const handleChecked = () => setIsChecked(!isChecked);
+export function IssueTableHeader({ checkedCount, isChecked, onCheckedChange }) {
+  const handleChecked = () => onCheckedChange(!isChecked);
 
   return (
     <Header>
@@ -37,7 +35,7 @@ export function IssueTableHeader() {
       {isChecked ? (
         <Wrap>
           <Left>
-            <div>n개 이슈 선택</div>
+            <div>{checkedCount}개 이슈 선택</div>
           </Left>
           <Right>
             <DropdownContainer
