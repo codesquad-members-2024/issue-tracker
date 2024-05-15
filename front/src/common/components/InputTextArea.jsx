@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Input } from 'antd';
 const { TextArea } = Input;
 
-export function InputText({ className }) {
+export function InputTextArea({ className }) {
 	return (
 		<StyledWrapper className={className}>
 			<StyledTextArea placeholder='코멘트를 입력하세요' showCount={true} />

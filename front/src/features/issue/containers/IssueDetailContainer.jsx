@@ -13,14 +13,51 @@ import {
 } from '~/features/issue/components';
 import { getIssueDetail } from '~/features/issue/apis/';
 
+const issues = [
+	{
+		id: 1,
+		title: 'title1',
+		content: 'my name is daniel',
+		milestoneId: 'm1',
+		assignees: [
+			{
+				loginId: 'mellisa',
+				profileImage:
+					'https://avatars.githubusercontent.com/u/140429591?s=40&v=4',
+			},
+			{
+				loginId: 'wade',
+				profileImage:
+					'https://avatars.githubusercontent.com/u/126778700?s=40&v=4',
+			},
+		],
+		writer: 'daniel',
+		createTime: '2024-05-14T04:41:45.318597316',
+		labels: [
+			{
+				name: 'bug',
+				description: 'bug',
+				color: '#0075ca',
+			},
+			{
+				name: 'documentation',
+				description: 'documentation',
+				color: '#008672',
+			},
+		],
+		closed: false,
+	},
+];
+
 export function IssueDetailContainer() {
-	const { id } = useParams();
+	const { id = 1 } = useParams();
 
 	const [issueDetail, setIssueDetail] = useState({});
 	useEffect(() => {
-		getIssueDetail(id).then(res => {
-			setIssueDetail(res);
-		});
+		// getIssueDetail(id).then(res => {
+		// 	setIssueDetail(res);
+		// });
+		setIssueDetail(issues[0]);
 	}, [id]);
 
 	return (
