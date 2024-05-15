@@ -1,8 +1,9 @@
-package com.CodeSquad.IssueTracker.user;
+package com.CodeSquad.IssueTracker.user.dto;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
+
 public class LoginRequest {
     private String userId;
     private String userPassword;
