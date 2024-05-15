@@ -26,11 +26,11 @@ function Filter() {
           <FilterBox>
             <LabelBar>
               <SmallIcon src={labelIcon} />
-              <LargeTitle>레이블(0)</LargeTitle>
+              <LargeTitle onClick={() => navigate("/labels")}>레이블(0)</LargeTitle>
             </LabelBar>
             <MilestoneBar>
               <SmallIcon src={milestoneIcon} />
-              <LargeTitle>마일스톤(0)</LargeTitle>
+              <LargeTitle onClick={() => navigate("/milestone")}>마일스톤(0)</LargeTitle>
             </MilestoneBar>
           </FilterBox>
           <NewIssueButton onClick={() => navigate("/new-issue")}>
@@ -126,7 +126,7 @@ const MilestoneBar = styled.div`
 `;
 
 const NewIssueButton = styled.button`
-  width: 9.5em; 
+  width: 9.5em;
   padding: 0 1em;
   display: flex;
   justify-content: center;
