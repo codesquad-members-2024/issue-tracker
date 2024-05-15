@@ -1,8 +1,6 @@
 package com.CodeSquad.IssueTracker.issues;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -10,8 +8,9 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 @Table("issues")
 public class Issue {
     @Id
