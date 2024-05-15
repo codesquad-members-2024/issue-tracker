@@ -6,3 +6,4 @@ export * from './Label';
 export * from './InputTextArea';
 export * from './CheckBox';
 export * from './ImageUpload';
+export * from './InputTitleEdit';

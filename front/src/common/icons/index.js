@@ -8,3 +8,4 @@ export * from './IconPlus';
 export * from './IconCheck';
 export * from './IconCheckActive';
 export * from './IconCheckDisabled';
+export * from './IconXsquare';
