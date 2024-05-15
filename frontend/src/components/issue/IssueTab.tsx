@@ -6,7 +6,7 @@ import useIssueStore from "../../hooks/useIssueStore";
 import { Dispatch, SetStateAction } from "react";
 import { IssueType } from "./IssueList";
 
-interface IssueTabProps {
+export interface IssueTabProps {
   focusedTab: string;
   setFocusedTab: Dispatch<SetStateAction<IssueType>>;
 }
