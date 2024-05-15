@@ -14,9 +14,11 @@ import java.util.List;
 @Service
 public class IssueService {
     private final IssueRepository issueRepository;
+    private final CommentRepository commentRepository;
 
-    public IssueService(IssueRepository issueRepository) {
+    public IssueService(IssueRepository issueRepository, CommentRepository commentRepository) {
         this.issueRepository = issueRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<Issue> getAllIssues() {
@@ -37,5 +39,14 @@ public class IssueService {
 
         issueRepository.save(issue);
 
+        // 이슈 작성 시 입력한 내용을 첫번째 코멘트로 저장하기 위함.
+        Comment comment = new Comment();
+        comment.setAuthor(issueRequest.author());
+        comment.setContent(issueRequest.content());
+        comment.setPublishedAt(LocalDateTime.now());
+        // save 메소드가 호출된 후, @ID 식별자로 지정된 필드에 자동생성된 ID가 설정되어 이용할 수 있다.
+        comment.setIssueId(issue.getIssueId());
+
+        commentRepository.save(comment);
     }
 }
