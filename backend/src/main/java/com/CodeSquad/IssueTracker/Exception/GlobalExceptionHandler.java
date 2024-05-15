@@ -1,6 +1,8 @@
 package com.CodeSquad.IssueTracker.Exception;
 
 import com.CodeSquad.IssueTracker.Exception.label.*;
+import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
+import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.Exception.user.UserAlreadyExistsException;
@@ -53,6 +55,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LabelUpdateException.class)
     public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
+      
+    @ExceptionHandler(AuthorNotFoundException.class)
+    public ResponseEntity<String> handleAuthorNotFoundException(AuthorNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidIssueDataException.class)
+    public ResponseEntity<String> handleInvalidIssueDataException(InvalidIssueDataException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
