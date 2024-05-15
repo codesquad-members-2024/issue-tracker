@@ -1,41 +1,35 @@
-import { Open } from "../../../../icons/open";
 import styled from "styled-components";
+import { useState } from "react";
 import { IssueTableHeader } from "./IssueTableHeader";
-import { issues } from "../../../../test.json"; // test data
+import { IssueTableContent } from "./IssueTableContent";
 
 export function IssueTable() {
+  const [checkedCount, setCheckedCount] = useState(0);
+  const [isChecked, setIsChecked] = useState(false);
+  const [checkedItems, setCheckedItems] = useState(new Set());
+
+  const handleCheckboxChange = () => setIsChecked(!isChecked);
+
+  const handleIssueCheckboxChange = (issueId) => {
+    setCheckedItems((prevItems) => {
+      const updatedItems = new Set(prevItems);
+      updatedItems.has(issueId) ? updatedItems.delete(issueId) : updatedItems.add(issueId);
+      setCheckedCount(updatedItems.size);
+      return updatedItems;
+    });
+  };
+
   return (
     <StyledDiv>
-      <IssueTableHeader />
-      {issues.length === 0 ? (
-        <Issues />
-      ) : (
-        <>
-          {issues
-            .slice()
-            .reverse()
-            .map((issue, index) => (
-              <Issues key={index}>
-                <Checkbox type="checkbox" />
-                <Content>
-                  <div className="top">
-                    <Open />
-                    <div className="title">{issue.title}</div>
-                    <div>{issue.labels}</div>
-                  </div>
-                  <div className="bottom">
-                    <div>#{issue.issue_id}</div>
-                    <div>
-                      이 이슈가 {issue.create_time}전, {issue.assginee}님에 의해
-                      작성되었습니다
-                    </div>
-                    <div>{issue.milestone}</div>
-                  </div>
-                </Content>
-              </Issues>
-            ))}
-        </>
-      )}
+      <IssueTableHeader
+        checkedCount={checkedCount}
+        isChecked={isChecked}
+        onCheckedChange={handleCheckboxChange}
+      />
+      <IssueTableContent
+        checkedItems={checkedItems}
+        onIssueCheckboxChange={handleIssueCheckboxChange}
+      />
     </StyledDiv>
   );
 }
@@ -47,36 +41,4 @@ const StyledDiv = styled.div`
   border: solid #dadbef;
   border-radius: 10px;
   overflow: hidden;
-`;
-
-const Issues = styled.div`
-  display: flex;
-  height: 90px;
-  background-color: white;
-  border-top: 1px solid #dadbef;
-`;
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  margin-left: 35px;
-  div {
-    margin-right: 20px;
-  }
-  .title {
-    margin-left: 10px;
-    font-size: 20px;
-  }
-  .top,
-  .bottom {
-    display: flex;
-    align-items: center;
-    height: 30px;
-`;
-
-const Checkbox = styled.input`
-  height: 50%;
-  padding: 20px;
-  margin-left: 25px;
 `;
