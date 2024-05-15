@@ -21,20 +21,18 @@ export function IssueCommentItem({ content, writer, isWriter }) {
 						type='button'
 						size='small'
 						buttonType='ghost'
+						buttonText='편집'
+						icon={<IconEdit />}
 						onClick={() => {}}
-					>
-						<IconEdit />
-						편집
-					</Button>
+					/>
 					<Button
 						type='button'
 						size='small'
 						buttonType='ghost'
+						buttonText='반응'
+						icon={<IconSmile />}
 						onClick={() => {}}
-					>
-						<IconSmile />
-						반응
-					</Button>
+					/>
 				</span>
 			</StyledHeader>
 			<StyledContents>{content}</StyledContents>

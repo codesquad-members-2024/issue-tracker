@@ -2,8 +2,13 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { theme } from '../../../styles/theme';
-import { Button } from '~/common/components/Button';
-import { IconEdit, IconTrash, IconAlertCircle } from '~/common/icons';
+import { Button, InputTitleEdit } from '~/common/components';
+import {
+	IconEdit,
+	IconTrash,
+	IconAlertCircle,
+	IconXsquare,
+} from '~/common/icons';
 import { timestamp } from '~/utils/util';
 
 import {
@@ -45,6 +50,18 @@ const issues = [
 				color: '#008672',
 			},
 		],
+		comments: [
+			{
+				id: 1,
+				content: 'comment1',
+				writer: 'daniel',
+			},
+			{
+				id: 2,
+				content: 'comment2',
+				writer: 'mellisa',
+			},
+		],
 		closed: false,
 	},
 ];
@@ -59,33 +76,78 @@ export function IssueDetailContainer() {
 		// });
 		setIssueDetail(issues[0]);
 	}, [id]);
+	const [title, setTitle] = useState(issueDetail.title);
+	const [hasChange, setHasChange] = useState(false);
+	const [isEdit, setIsEdit] = useState(false);
+
+	useEffect(() => {
+		setHasChange(title !== issueDetail.title);
+	}, [title, issueDetail.title]);
+	useEffect(() => {
+		setTitle(issueDetail.title);
+	}, [issueDetail.title]);
+	const handleEdit = () => {
+		setIsEdit(!isEdit);
+	};
 
 	return (
 		<StyledWrapper>
 			<StyledDetailHeader>
 				<StyledTitle>
-					<h2>
-						{issueDetail.title} <strong> #{issueDetail.id}</strong>
-					</h2>
+					{isEdit ? (
+						<InputTitleEdit
+							placeholder={issueDetail.title}
+							value={title}
+							onChange={e => setTitle(e.target.value)}
+						/>
+					) : (
+						<h2>
+							{issueDetail.title} <strong> #{issueDetail.id}</strong>
+						</h2>
+					)}
+
 					<StyledButtonWrap>
-						<Button
-							type='button'
-							size='small'
-							buttonType='outline'
-							onClick={() => {}}
-						>
-							<IconEdit />
-							제목 편집
-						</Button>
-						<Button
-							type='button'
-							size='small'
-							buttonType='outline'
-							onClick={() => {}}
-						>
-							<IconTrash />
-							이슈 닫기
-						</Button>
+						{isEdit ? (
+							<Button
+								type='button'
+								size='small'
+								buttonType='outline'
+								buttonText='편집 취소'
+								icon={<IconXsquare />}
+								onClick={() => {
+									handleEdit();
+								}}
+							/>
+						) : (
+							<Button
+								type='button'
+								size='small'
+								buttonType='outline'
+								buttonText='제목 편집'
+								icon={<IconEdit />}
+								onClick={() => {
+									handleEdit();
+								}}
+							/>
+						)}
+						{isEdit ? (
+							<Button
+								type='button'
+								size='small'
+								disabled={!hasChange}
+								buttonType='outline'
+								buttonText='편집 완료'
+								icon={<IconEdit />}
+							/>
+						) : (
+							<Button
+								type='button'
+								size='small'
+								buttonType='outline'
+								buttonText='이슈 삭제'
+								icon={<IconTrash />}
+							/>
+						)}
 					</StyledButtonWrap>
 				</StyledTitle>
 				<StyledSubHeader>
@@ -98,9 +160,11 @@ export function IssueDetailContainer() {
 						님에 의해 열렸습니다
 					</p>
 
-					<b>∙</b>
 					{issueDetail?.comments && (
-						<p>코멘트 {issueDetail?.comments.length}개</p>
+						<>
+							<b>∙</b>
+							<p>코멘트 {issueDetail?.comments.length}개</p>
+						</>
 					)}
 				</StyledSubHeader>
 			</StyledDetailHeader>
@@ -144,6 +208,9 @@ const StyledDetailHeader = styled.div`
 const StyledTitle = styled.div`
 	display: flex;
 	justify-content: space-between;
+	.title {
+		width: 100%;
+	}
 	h2 {
 		color: ${theme.color.neutral.text.strong};
 		${theme.typography.bold[32]};
@@ -155,6 +222,7 @@ const StyledTitle = styled.div`
 const StyledButtonWrap = styled.div`
 	display: flex;
 	column-gap: 16px;
+	margin-left: 16px;
 	button {
 		${theme.typography.medium[12]};
 		color: ${theme.color.brand.text.weak};
