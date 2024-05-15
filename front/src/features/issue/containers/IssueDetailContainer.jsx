@@ -1,7 +1,8 @@
-import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { theme } from '../../../styles/theme';
+import { useIssueDetail } from '../hooks/useIssueDetail';
 import { Button, InputTitleEdit } from '~/common/components';
 import {
 	IconEdit,
@@ -16,7 +17,6 @@ import {
 	IssueSidebar,
 	IssueCommentEdit,
 } from '~/features/issue/components';
-import { getIssueDetail } from '~/features/issue/apis/';
 
 const issues = [
 	{
@@ -69,13 +69,8 @@ const issues = [
 export function IssueDetailContainer() {
 	const { id = 1 } = useParams();
 
-	const [issueDetail, setIssueDetail] = useState({});
-	useEffect(() => {
-		// getIssueDetail(id).then(res => {
-		// 	setIssueDetail(res);
-		// });
-		setIssueDetail(issues[0]);
-	}, [id]);
+	const { issueDetail, loading, error } = useIssueDetail(id);
+
 	const [title, setTitle] = useState(issueDetail.title);
 	const [hasChange, setHasChange] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
@@ -144,7 +139,7 @@ export function IssueDetailContainer() {
 								type='button'
 								size='small'
 								buttonType='outline'
-								buttonText='이슈 삭제'
+								buttonText='이슈 닫기'
 								icon={<IconTrash />}
 							/>
 						)}
