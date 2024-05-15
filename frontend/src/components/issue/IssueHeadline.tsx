@@ -15,7 +15,7 @@ interface IssueHeadlineProps {
 }
 
 function IssueHeadline({ issueId, title, author, publishedAt, isClosed }: IssueHeadlineProps) {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   return (
     <Wrapper>
@@ -23,7 +23,7 @@ function IssueHeadline({ issueId, title, author, publishedAt, isClosed }: IssueH
       <IssueDescriptions>
         <IssueTitleDescription>
           <img src={isClosed ? violetClosedIssueIcon : blueOpenedIssueIcon} />
-          <TitleText onClick={() => navigate("/issue-detail")} >{title}</TitleText>
+          <TitleText onClick={() => navigate("/issue-detail")}>{title}</TitleText>
           {/* get /issues/{issueId} 구현 완료 시 수정 */}
           <LabelBox>Label</LabelBox>
         </IssueTitleDescription>

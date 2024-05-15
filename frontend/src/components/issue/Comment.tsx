@@ -13,7 +13,9 @@ function Comment() {
           <PublishedAt>3분 전</PublishedAt>
         </UserInfo>
         <ToggleWrapper>
-          <AuthorTag><span>작성자</span></AuthorTag>
+          <AuthorTag>
+            <span>작성자</span>
+          </AuthorTag>
           <ToggleButton>
             <img src={editIcon} />
             <span>편집</span>
@@ -49,22 +51,22 @@ const UserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5em;
-`
+`;
 
 const UserName = styled.span`
-  color: #4E4B66;
-`
+  color: #4e4b66;
+`;
 
 const PublishedAt = styled.span`
-  color: #6E7191;
-`
+  color: #6e7191;
+`;
 
 const ToggleWrapper = styled.div`
   height: 1.5em;
   display: flex;
   align-items: center;
   gap: 1em;
-`
+`;
 
 const AuthorTag = styled.div`
   height: 2em;
@@ -74,11 +76,11 @@ const AuthorTag = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1em;
-  color: #6E7191;
-  background-color: #EFF0F6;
-  border: 1px solid #D9DBE9;
+  color: #6e7191;
+  background-color: #eff0f6;
+  border: 1px solid #d9dbe9;
   border-radius: 1em;
-`
+`;
 
 const ToggleButton = styled.button`
   height: 2.66em;
@@ -89,7 +91,7 @@ const ToggleButton = styled.button`
   align-items: center;
   background-color: transparent;
   border: none;
-`
+`;
 
 const Content = styled.div`
   box-sizing: border-box;
@@ -97,6 +99,6 @@ const Content = styled.div`
   min-height: 4em;
   border-top: 1px solid #d9dbe9;
   background-color: #fff;
-`
+`;
 
 export default Comment;

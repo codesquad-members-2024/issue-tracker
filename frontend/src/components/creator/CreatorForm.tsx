@@ -18,7 +18,7 @@ function CreatorForm({ labelText, height }: CreatorFormProps) {
   );
 }
 
-const Wrapper = styled.div<{ isFocused: boolean, height: string }>`
+const Wrapper = styled.div<{ isFocused: boolean; height: string }>`
   box-sizing: border-box;
   width: 100%;
   ${({ height }) => `height: ${height};`}
@@ -54,7 +54,7 @@ const FormInput = styled.textarea`
   padding: 0;
   border: 0 none;
   background-color: transparent;
-  color: #4E4B66;
+  color: #4e4b66;
   outline: none;
   resize: none;
 

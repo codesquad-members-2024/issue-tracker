@@ -2,20 +2,22 @@ import styled from "styled-components";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 
 function Sidebar() {
-  return <Wrapper>
-          <Sector>
-            <span>담당자</span>
-            <img src={plusIcon} />
-          </Sector>
-          <Sector>
-            <span>레이블</span>
-            <img src={plusIcon} />
-          </Sector>
-          <Sector>
-            <span>마일스톤</span>
-            <img src={plusIcon} />
-          </Sector>
-        </Wrapper>
+  return (
+    <Wrapper>
+      <Sector>
+        <span>담당자</span>
+        <img src={plusIcon} />
+      </Sector>
+      <Sector>
+        <span>레이블</span>
+        <img src={plusIcon} />
+      </Sector>
+      <Sector>
+        <span>마일스톤</span>
+        <img src={plusIcon} />
+      </Sector>
+    </Wrapper>
+  );
 }
 
 const Wrapper = styled.div`

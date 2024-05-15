@@ -23,9 +23,7 @@ function IssueCreator() {
       </BodyWrapper>
       <BodyBoundary />
       <ButtonsWrapper>
-        <SubmitButton>
-          완료
-        </SubmitButton>
+        <SubmitButton>완료</SubmitButton>
         <CancelWrapper>
           <CancelIcon src={plusIcon} />
           <CancelText>작성 취소</CancelText>
@@ -78,7 +76,7 @@ const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row-reverse;
   gap: 2em;
-`
+`;
 
 const CancelWrapper = styled.div`
   width: 5em;
@@ -87,7 +85,7 @@ const CancelWrapper = styled.div`
   align-items: center;
   gap: 0.25em;
   cursor: pointer;
-`
+`;
 
 const CancelIcon = styled.img`
   transform: rotate(45deg);
@@ -95,12 +93,12 @@ const CancelIcon = styled.img`
 
 const CancelText = styled.span`
   width: 11em;
-  color: #4E4B66;
-`
+  color: #4e4b66;
+`;
 
 const SubmitButton = styled.button`
   width: 12em;
-  height: 2.8em; 
+  height: 2.8em;
   padding: 0 1.2em;
   font-size: 1.25em;
   display: flex;

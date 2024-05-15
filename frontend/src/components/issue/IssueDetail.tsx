@@ -17,12 +17,20 @@ function IssueDetail() {
           <IssueNumber>#2</IssueNumber>
         </TitleDescription>
         <ButtonWrapper>
-          <IssueToggleButton><img src={editIcon} />제목 편집</IssueToggleButton>
-          <IssueToggleButton><img src={archieveIcon} />이슈 닫기</IssueToggleButton>
+          <IssueToggleButton>
+            <img src={editIcon} />
+            제목 편집
+          </IssueToggleButton>
+          <IssueToggleButton>
+            <img src={archieveIcon} />
+            이슈 닫기
+          </IssueToggleButton>
         </ButtonWrapper>
       </TopWrapper>
       <IssueInfo>
-        <IssueStateText><span>열린 이슈</span></IssueStateText>
+        <IssueStateText>
+          <span>열린 이슈</span>
+        </IssueStateText>
         <LastChangedTime>이 이슈가 3분전에 schnee님에 의해 열렸습니다. - 코멘트 1개</LastChangedTime>
       </IssueInfo>
       <BodyBoundary />
@@ -31,7 +39,9 @@ function IssueDetail() {
           {/* 추후 Comment 리스트로 렌더링 */}
           <Comment />
           <CreatorForm labelText="코멘트를 입력하세요." height={"184px"} />
-          <SubmitButton><img src={plusIcon} /> 코멘트 작성</SubmitButton>
+          <SubmitButton>
+            <img src={plusIcon} /> 코멘트 작성
+          </SubmitButton>
         </CommentWrapper>
         <Sidebar />
       </ContentWrapper>
@@ -58,11 +68,11 @@ const TitleDescription = styled.div`
 `;
 
 const TitleText = styled.span`
-  color: #14142B;
+  color: #14142b;
 `;
 
 const IssueNumber = styled.span`
-  color: #6E7191;
+  color: #6e7191;
 `;
 
 const ButtonWrapper = styled.div`
@@ -104,7 +114,7 @@ const IssueStateText = styled.div`
 const LastChangedTime = styled.span`
   font-weight: 500;
   line-height: 1.5em;
-  color: #6E7191;
+  color: #6e7191;
 `;
 
 const ContentWrapper = styled.div`
