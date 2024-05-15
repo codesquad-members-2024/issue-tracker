@@ -1,8 +1,6 @@
 package com.CodeSquad.IssueTracker.Exception;
 
-import com.CodeSquad.IssueTracker.Exception.label.EmptyLabelNameException;
-import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelColorException;
-import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelIdException;
+import com.CodeSquad.IssueTracker.Exception.label.*;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.Exception.user.UserAlreadyExistsException;
@@ -46,6 +44,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidLabelColorException.class)
     public ResponseEntity<String> handleInvalidLabelColorException(InvalidLabelColorException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(LabelNotFoundException.class)
+    public ResponseEntity<String> handleLabelNotFoundException(LabelNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(LabelUpdateException.class)
+    public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

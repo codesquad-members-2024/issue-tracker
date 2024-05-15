@@ -1,6 +1,7 @@
 package com.CodeSquad.IssueTracker.labels;
 
 import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelIdException;
+import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,23 +37,21 @@ public class LabelService {
 
     public Label updateLabel(Long id, Label updatedLabel) {
         log.info("라벨 id: {} 업데이트 요청: {}", id, updatedLabel);
-        Optional<Label> existingLabel = labelRepository.findById(id);
-        if (existingLabel.isPresent()) {
-            Label label = existingLabel.get();
-            label.setLabelName(updatedLabel.getLabelName());
-            label.setDescription(updatedLabel.getDescription());
-            label.setTextColor(updatedLabel.getTextColor());
-            label.setBgColor(updatedLabel.getBgColor());
-            label.setNew(false);
-            return labelRepository.save(label);
-        }
-        log.warn("라벨 id: {} 업데이트 실패, 해당 라벨이 존재하지 않습니다.", id);
-        return null;
+        return labelRepository.findById(id).map(existingLabel -> {
+            existingLabel.setLabelName(updatedLabel.getLabelName());
+            existingLabel.setDescription(updatedLabel.getDescription());
+            existingLabel.setTextColor(updatedLabel.getTextColor());
+            existingLabel.setBgColor(updatedLabel.getBgColor());
+            existingLabel.setNew(false);
+            return labelRepository.save(existingLabel);
+        }).orElseThrow(() -> new LabelNotFoundException("라벨 id: " + id + " 업데이트 실패, 해당 라벨이 존재하지 않습니다."));
     }
 
     public void deleteLabel(Long id) {
         log.info("라벨 id: {} 삭제 요청", id);
+        if (!labelRepository.existsById(id)) {
+            throw new LabelNotFoundException("라벨 id: " + id + " 삭제 실패, 해당 라벨이 존재하지 않습니다.");
+        }
         labelRepository.deleteById(id);
     }
-
 }
