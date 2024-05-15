@@ -1,13 +1,18 @@
 package com.CodeSquad.IssueTracker.issues;
 
+import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
+import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
+import com.CodeSquad.IssueTracker.user.User;
+import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -15,10 +20,12 @@ import java.util.List;
 public class IssueService {
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
-    public IssueService(IssueRepository issueRepository, CommentRepository commentRepository) {
+    public IssueService(IssueRepository issueRepository, CommentRepository commentRepository, UserRepository userRepository) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Issue> getAllIssues() {
@@ -28,6 +35,8 @@ public class IssueService {
     }
 
     public Long createIssue(IssueRequest issueRequest) {
+        validateIssueRequest(issueRequest);
+
         log.info("Creating issue: {}", issueRequest);
 
         // 이슈 저장을 위한 객체 생성
@@ -50,5 +59,17 @@ public class IssueService {
         commentRepository.save(comment);
 
         return issue.getIssueId();
+    }
+
+    private void validateIssueRequest(IssueRequest issueRequest) {
+        Optional<User> user = userRepository.findById(issueRequest.author());
+        if (user.isEmpty()) {
+            throw new AuthorNotFoundException("작성자가 유효하지 않습니다. : " + issueRequest.author());
+        }
+
+        if (issueRequest.title() == null || issueRequest.title().isEmpty()
+                || issueRequest.content() == null || issueRequest.content().isEmpty()) {
+            throw new InvalidIssueDataException("제목과 내용이 모두 필요합니다.");
+        }
     }
 }
