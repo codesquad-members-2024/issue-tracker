@@ -1,4 +1,4 @@
-import useRegistrationState from "./useRegistrationStore";
+import useRegistrationStore from "./useRegistrationStore";
 import { sendIdValidationRequest, sendRegistrationRequest } from "../api/LoginAPI";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
@@ -15,14 +15,14 @@ const REGISTRATION_FAILURE_MESSAGE = "회원가입에 실패하였습니다.";
 const UNKNOWN_ERROR_MESSAGE = "알 수 없는 에러가 발생하였습니다.";
 
 const useRegistrationLogic = () => {
-  const registrationState = useRegistrationState();
+  const registrationStore = useRegistrationStore();
   const {
     state: { idValue, passwordValue, passwordValidationValue, nicknameValue, allFilled },
     setErrorMessage,
     setIsValidated,
     setValidationMessage,
     checkAllFilled,
-  } = registrationState;
+  } = registrationStore;
   const navigate = useNavigate();
 
   const { mutate: validateId } = useMutation(sendIdValidationRequest, {
@@ -76,7 +76,7 @@ const useRegistrationLogic = () => {
   useEffect(checkAllFilled, [idValue, passwordValue, passwordValidationValue, nicknameValue, allFilled]);
 
   return {
-    ...registrationState,
+    ...registrationStore,
     handleRegistrationClick,
     handleValidationClick,
   };

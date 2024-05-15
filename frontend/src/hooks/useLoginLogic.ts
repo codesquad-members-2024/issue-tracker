@@ -2,7 +2,7 @@ import { sendLoginRequest } from "../api/LoginAPI";
 import useUserStore from "./useUserStore";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
-import useLoginState from "./useLoginStore";
+import useLoginStore from "./useLoginStore";
 import { useEffect } from "react";
 
 const MIN_LENGTH = 6;
@@ -12,12 +12,12 @@ const INPUT_LENGTH_ERROR_MESSAGE = "ID와 비밀번호는 최소 6자이여야 �
 const UNKNOWN_ERROR_MESSAGE = "알 수 없는 에러가 발생하였습니다.";
 
 const useLoginLogic = () => {
-  const loginState = useLoginState();
+  const loginStore = useLoginStore();
   const {
     state: { idValue, passwordValue, allFilled },
     setErrorMessage,
     checkAllFilled,
-  } = loginState;
+  } = loginStore;
   const { setIsLoggedIn } = useUserStore();
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ const useLoginLogic = () => {
 
   useEffect(checkAllFilled, [idValue, passwordValue]);
 
-  return { ...loginState, isLoading, handleLoginClick };
+  return { ...loginStore, isLoading, handleLoginClick };
 };
 
 export default useLoginLogic;
