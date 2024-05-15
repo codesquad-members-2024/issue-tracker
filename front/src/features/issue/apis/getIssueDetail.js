@@ -11,12 +11,11 @@ const dev = `${devServer}/detail?id=1`;
 export async function getIssueDetail(id) {
 	try {
 		const response = await fetch(dev).then(res => res.json());
-
 		const data = response;
 		return data;
 	} catch (error) {
 		console.error(error);
-		return error;
+		throw new Error('이슈 상세 조회에 실패했습니다.');
 	}
 }
 
