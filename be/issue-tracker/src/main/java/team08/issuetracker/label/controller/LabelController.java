@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import team08.issuetracker.label.model.Label;
 import team08.issuetracker.label.model.dto.LabelCountDto;
 import team08.issuetracker.label.model.dto.LabelCreationDto;
+import team08.issuetracker.label.model.dto.LabelUpdateDto;
 import team08.issuetracker.label.service.LabelService;
 
 @RestController
@@ -32,5 +33,12 @@ public class LabelController {
         LabelCountDto labelCountDto = labelService.getLabelCount();
 
         return ResponseEntity.ok(labelCountDto);
+    }
+
+    @PostMapping("{id}")
+    public ResponseEntity<String> updateLabel(@PathVariable long id, @RequestBody LabelUpdateDto labelUpdateDto) {
+        Label label = labelService.updateLabel(id, labelUpdateDto);
+
+        return ResponseEntity.ok("라벨 수정 성공! 라벨 #" + label.getId() + " 이름 : " + label.getName());
     }
 }
