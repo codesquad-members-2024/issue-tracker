@@ -8,7 +8,6 @@ import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
-import com.CodeSquad.IssueTracker.Exception.user.UserAlreadyExistsException;
 import com.CodeSquad.IssueTracker.Exception.user.UserNotLoginException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(UserIdAlreadyExistException.class)
+    public ResponseEntity<String> handleUserIdExistException(UserIdAlreadyExistException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 
     @ExceptionHandler(InvalidUserFormatException.class)
     public ResponseEntity<String> handleInvalidCredentialsException(InvalidUserFormatException ex) {
@@ -67,9 +71,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-    @ExceptionHandler(LabelUpdateException.class)
-    public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
-      
+//    @ExceptionHandler(LabelUpdateException.class)
+//    public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
     @ExceptionHandler(AuthorNotFoundException.class)
     public ResponseEntity<String> handleAuthorNotFoundException(AuthorNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
