@@ -2,7 +2,7 @@ import { sendLoginRequest } from "../api/LoginAPI";
 import useUserStore from "./useUserStore";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
-import useLoginState from "./useLoginState";
+import useLoginState from "./useLoginStore";
 import { useEffect } from "react";
 
 const MIN_LENGTH = 6;

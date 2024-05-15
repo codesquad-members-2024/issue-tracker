@@ -1,4 +1,4 @@
-import useRegistrationState from "./useRegistrationState";
+import useRegistrationState from "./useRegistrationStore";
 import { sendIdValidationRequest, sendRegistrationRequest } from "../api/LoginAPI";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
