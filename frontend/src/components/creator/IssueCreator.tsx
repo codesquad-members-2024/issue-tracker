@@ -16,7 +16,7 @@ function IssueCreator() {
         <UserIcon src={userIcon} />
         <FormWrapper>
           <CreatorForm labelText="제목" isFullHeight={false} />
-          <CommentForm labelText="코멘트를 입력하세요." isFullHeight={true} />
+          <CreatorForm labelText="코멘트를 입력하세요." isFullHeight={true} />
         </FormWrapper>
         <SideBar>
           <Sector>
@@ -33,15 +33,22 @@ function IssueCreator() {
           </Sector>
         </SideBar>
       </BodyWrapper>
+      <BodyBoundary />
+      <ButtonsWrapper>
+        <SubmitButton>
+          완료
+        </SubmitButton>
+        <CancelWrapper>
+          <CancelIcon src={plusIcon} />
+          <CancelText>작성 취소</CancelText>
+        </CancelWrapper>
+      </ButtonsWrapper>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0%);
+  position: block;
 `;
 
 const TitleWrapper = styled.div`
@@ -56,7 +63,7 @@ const PageTitle = styled.span`
 const BodyBoundary = styled.hr`
   margin: 2em 0;
   height: 1px;
-  color: #d9dbe9;
+  color: #eceef5;
 `;
 
 const BodyWrapper = styled.div`
@@ -92,10 +99,50 @@ const Sector = styled.div`
   border-top: 1px solid #d9dbe9;
   display: flex;
   justify-content: space-between;
+
+  &:first-child {
+    border-top: none;
+  }
 `;
 
-const CommentForm = styled(CreatorForm)`
-  height: 100%;
+const ButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 2em;
+`
+
+const CancelWrapper = styled.div`
+  width: 5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25em;
+  cursor: pointer;
+`
+
+const CancelIcon = styled.img`
+  transform: rotate(45deg);
+`;
+
+const CancelText = styled.span`
+  width: 11em;
+  color: #4E4B66;
+`
+
+const SubmitButton = styled.button`
+  width: 12em;
+  height: 2.8em; 
+  padding: 0 1.2em;
+  font-size: 1.25em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  color: white;
+  background-color: #007aff;
+  border: 0;
+  border-radius: 0.725em;
+  cursor: pointer;
 `;
 
 export default IssueCreator;
