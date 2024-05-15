@@ -16,8 +16,8 @@ function IssueCreator() {
       <BodyWrapper>
         <UserIcon src={userIcon} />
         <FormWrapper>
-          <CreatorForm labelText="제목" isFullHeight={false} />
-          <CreatorForm labelText="코멘트를 입력하세요." isFullHeight={true} />
+          <CreatorForm labelText="제목" height="3.5em" />
+          <CreatorForm labelText="코멘트를 입력하세요." height="100%" />
         </FormWrapper>
         <Sidebar />
       </BodyWrapper>

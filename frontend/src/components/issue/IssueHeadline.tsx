@@ -4,6 +4,7 @@ import blueOpenedIssueIcon from "../../img/icon/blueOpenedIssueIcon.svg";
 import violetClosedIssueIcon from "../../img/icon/violetClosedIssueIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import dateUtils from "../../utils/DateUtils";
+import { useNavigate } from "react-router-dom";
 
 interface IssueHeadlineProps {
   issueId: number;
@@ -14,13 +15,16 @@ interface IssueHeadlineProps {
 }
 
 function IssueHeadline({ issueId, title, author, publishedAt, isClosed }: IssueHeadlineProps) {
+  const navigate = useNavigate(); 
+
   return (
     <Wrapper>
       <IssueCheckBox type="checkbox" />
       <IssueDescriptions>
         <IssueTitleDescription>
           <img src={isClosed ? violetClosedIssueIcon : blueOpenedIssueIcon} />
-          <TitleText>{title}</TitleText>
+          <TitleText onClick={() => navigate("/issue-detail")} >{title}</TitleText>
+          {/* get /issues/{issueId} 구현 완료 시 수정 */}
           <LabelBox>Label</LabelBox>
         </IssueTitleDescription>
         <IssueInfo>
@@ -66,10 +70,11 @@ const IssueTitleDescription = styled.div`
   gap: 0.5em;
 `;
 
-const TitleText = styled.span`
+const TitleText = styled.a`
   height: 1.125em;
   font-size: 1.25em;
   font-weight: 500;
+  cursor: pointer;
 `;
 
 const LabelBox = styled.div`

@@ -2,13 +2,13 @@ import styled, { css } from "styled-components";
 
 interface CreatorFormProps {
   labelText: string;
-  isFullHeight: boolean;
+  height: string;
 }
 
-function CreatorForm({ labelText, isFullHeight }: CreatorFormProps) {
+function CreatorForm({ labelText, height }: CreatorFormProps) {
   return (
-    <Wrapper isFocused={false} isFullHeight={isFullHeight}>
-      <FormParagraph isFullHeight={isFullHeight}>
+    <Wrapper isFocused={false} height={height}>
+      <FormParagraph height={height}>
         <FormInput required />
         <FormInputLabel>
           <span>{labelText}</span>
@@ -18,10 +18,10 @@ function CreatorForm({ labelText, isFullHeight }: CreatorFormProps) {
   );
 }
 
-const Wrapper = styled.div<{ isFocused: boolean, isFullHeight: boolean }>`
+const Wrapper = styled.div<{ isFocused: boolean, height: string }>`
   box-sizing: border-box;
   width: 100%;
-  ${(props) => props.isFullHeight && "height: 100%;" }
+  ${({ height }) => `height: ${height};`}
   display: flex;
   padding: 0 1em;
   flex-direction: column;
@@ -38,11 +38,11 @@ const Wrapper = styled.div<{ isFocused: boolean, isFullHeight: boolean }>`
     `}
 `;
 
-const FormParagraph = styled.p<{ isFullHeight: boolean }>`
+const FormParagraph = styled.p<{ height: string }>`
   position: relative;
   top: 0;
   width: 100%;
-  ${(props) => (props.isFullHeight ? "height: 100%;" : "height: 3.5em;") }
+  ${({ height }) => `height: ${height};`}
   margin: 0;
 `;
 
