@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 
-interface AuthorizationFormProps {
+export interface AuthorizationFormProps {
   type: "id" | "password" | "password-validation" | "nickname";
   onInputChange: (value: string) => void;
 }
