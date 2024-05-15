@@ -35,7 +35,8 @@ const FilterUI: React.FC<FilterProps> = ({
         if (resetFilterUI) setSelectItem(filterInfo[INITIAL_IDX]);
         setResetFilterUI(false);
         FilterDispatch({ type: "SET_INIT", prevFilter: "", curFilter: "" });
-    }, [resetFilterUI, filterInfo, FilterDispatch, setResetFilterUI]);
+        console.log(FilterState)
+    }, [resetFilterUI, filterInfo, FilterDispatch, setResetFilterUI, FilterState]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

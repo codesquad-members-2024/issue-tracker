@@ -1,9 +1,8 @@
-import { APiUtil } from "../util/APIUtils";
 
 const LabelsPage = () => {
-    const params = ["is_open=false", "label=BE"];
+    // const params = ["is_open=false", "label=BE"];
 
-    const query = params.map(k => encodeURIComponent(k)).join('=&');
+    // const query = params.map(k => encodeURIComponent(k)).join('=&');
     
     return (
         

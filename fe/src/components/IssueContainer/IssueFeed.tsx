@@ -40,6 +40,7 @@ const IssueFeed: React.FC<IssueFeedProps> = ({
         } else {
             setCheckItem((prev) => prev.filter((curItem) => id !== curItem));
         }
+        console.log(checkedItem)
     };
 
     const allCheckHandler = () => {

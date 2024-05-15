@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import LabelsAndMilestoneUI from "../../util/UtilUI";
 import { PlusOutlined } from "@ant-design/icons";
 import { ModifyDeleteContext } from "../../Providers/ModifyDeleteProvider";
@@ -6,7 +6,9 @@ import { ModifyDeleteContext } from "../../Providers/ModifyDeleteProvider";
 const Nav = () => {
 
     const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext)
-    
+    useEffect(() => {
+        console.log(ModifyDeleteState)
+    })
     return (
         <div className="flex justify-between">
             <LabelsAndMilestoneUI />

@@ -1,6 +1,6 @@
 import Nav from "../components/IssueContainer/Nav";
 import IssueFeed from "../components/IssueContainer/IssueFeed";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterProvider from "../Providers/FilterProvider";
 import { Header } from "../util/UtilUI";
 const IssuePage = () => {
@@ -9,7 +9,9 @@ const IssuePage = () => {
     const [resetFilterUI, setResetFilterUI] = useState(false);
 
     const handleResetFilterUI = () => setResetFilterUI(true);
-
+    useEffect(() => {
+        setIssueInfo([])
+    }, [])
 
     return (
         <main className="w-1280 mx-auto">
