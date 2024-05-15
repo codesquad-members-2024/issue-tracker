@@ -50,7 +50,7 @@ class IssueRepositoryTest {
     @Test
     @DisplayName("레이블 레퍼런스를 가져올 수 있다.")
     void findLabels() {
-        Set<LabelRef> labelRefs = Set.of(new LabelRef(1L), new LabelRef(2L), new LabelRef(3L));
+        Set<IssueAttachedLabel> labelRefs = Set.of(new IssueAttachedLabel(1L), new IssueAttachedLabel(2L), new IssueAttachedLabel(3L));
         Issue issue = Issue.from("cori1234", "제목", "내용", 1L, labelRefs);
         Issue savedIssued = issueRepository.save(issue);
 
@@ -61,9 +61,9 @@ class IssueRepositoryTest {
     @Test
     @DisplayName("해당 레이블을 가지고 있는 이슈를 가져올 수 있다.")
     void findIssuesByLabel() {
-        LabelRef labelRef1 = new LabelRef(1L);
-        LabelRef labelRef2 = new LabelRef(2L);
-        LabelRef labelRef3 = new LabelRef(3L);
+        IssueAttachedLabel labelRef1 = new IssueAttachedLabel(1L);
+        IssueAttachedLabel labelRef2 = new IssueAttachedLabel(2L);
+        IssueAttachedLabel labelRef3 = new IssueAttachedLabel(3L);
 
         Issue issue1 = Issue.from("cori1234", "제목1", "내용", 1L, Set.of(labelRef3));
         Issue issue2 = Issue.from("cori1234", "제목2", "내용", 1L, Set.of(labelRef2));

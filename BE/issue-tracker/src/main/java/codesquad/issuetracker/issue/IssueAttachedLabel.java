@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @RequiredArgsConstructor
 @Table("ISSUE_LABEL")
 @Value
-public class LabelRef {
+public class IssueAttachedLabel {
 
     Long labelId;
 

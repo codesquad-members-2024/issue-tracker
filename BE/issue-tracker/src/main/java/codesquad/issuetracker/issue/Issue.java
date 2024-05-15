@@ -26,14 +26,14 @@ public class Issue {
     private boolean isOpen;
     private boolean isDeleted;
     @MappedCollection(idColumn = "ISSUE_ID")
-    private Set<LabelRef> labelRefs = new HashSet<>();
+    private Set<IssueAttachedLabel> labelRefs = new HashSet<>();
 
     @Builder
     @PersistenceCreator
     public Issue(Long id, String authorId, String title, String description,
         LocalDateTime openAt,
         LocalDateTime updatedAt, LocalDateTime closedAt, Long milestoneId, boolean isOpen,
-        boolean isDeleted, Set<LabelRef> labelRefs) {
+        boolean isDeleted, Set<IssueAttachedLabel> labelRefs) {
         this.id = id;
         this.authorId = authorId;
         this.title = title;
@@ -48,7 +48,7 @@ public class Issue {
     }
 
     public static Issue from(String authorId, String title, String description,
-        Long milestoneId, Set<LabelRef> labelRefs) {
+        Long milestoneId, Set<IssueAttachedLabel> labelRefs) {
         Issue issue  = Issue.builder()
             .authorId(authorId)
             .title(title)
