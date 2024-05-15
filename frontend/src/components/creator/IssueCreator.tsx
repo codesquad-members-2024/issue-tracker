@@ -3,6 +3,7 @@ import Header from "../header/Header";
 import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
+import Sidebar from "../issue/Sidebar";
 
 function IssueCreator() {
   return (
@@ -15,29 +16,14 @@ function IssueCreator() {
       <BodyWrapper>
         <UserIcon src={userIcon} />
         <FormWrapper>
-          <CreatorForm labelText="제목" isFullHeight={false} />
-          <CreatorForm labelText="코멘트를 입력하세요." isFullHeight={true} />
+          <CreatorForm labelText="제목" height="3.5em" />
+          <CreatorForm labelText="코멘트를 입력하세요." height="100%" />
         </FormWrapper>
-        <SideBar>
-          <Sector>
-            <span>담당자</span>
-            <img src={plusIcon} />
-          </Sector>
-          <Sector>
-            <span>레이블</span>
-            <img src={plusIcon} />
-          </Sector>
-          <Sector>
-            <span>마일스톤</span>
-            <img src={plusIcon} />
-          </Sector>
-        </SideBar>
+        <Sidebar />
       </BodyWrapper>
       <BodyBoundary />
       <ButtonsWrapper>
-        <SubmitButton>
-          완료
-        </SubmitButton>
+        <SubmitButton>완료</SubmitButton>
         <CancelWrapper>
           <CancelIcon src={plusIcon} />
           <CancelText>작성 취소</CancelText>
@@ -86,30 +72,11 @@ const FormWrapper = styled.div`
   gap: 0.5em;
 `;
 
-const SideBar = styled.div`
-  width: 288px;
-  height: 16em;
-  border: 1px solid #d9dbe9;
-  border-radius: 16px;
-  overflow: hidden;
-`;
-
-const Sector = styled.div`
-  padding: 2em;
-  border-top: 1px solid #d9dbe9;
-  display: flex;
-  justify-content: space-between;
-
-  &:first-child {
-    border-top: none;
-  }
-`;
-
 const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row-reverse;
   gap: 2em;
-`
+`;
 
 const CancelWrapper = styled.div`
   width: 5em;
@@ -118,7 +85,7 @@ const CancelWrapper = styled.div`
   align-items: center;
   gap: 0.25em;
   cursor: pointer;
-`
+`;
 
 const CancelIcon = styled.img`
   transform: rotate(45deg);
@@ -126,12 +93,12 @@ const CancelIcon = styled.img`
 
 const CancelText = styled.span`
   width: 11em;
-  color: #4E4B66;
-`
+  color: #4e4b66;
+`;
 
 const SubmitButton = styled.button`
   width: 12em;
-  height: 2.8em; 
+  height: 2.8em;
   padding: 0 1.2em;
   font-size: 1.25em;
   display: flex;

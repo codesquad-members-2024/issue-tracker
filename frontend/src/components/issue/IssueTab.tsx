@@ -22,11 +22,15 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
         <input type="checkbox" />
         <LeftMenu>
           <img src={openedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>열린 이슈({openIssueCount})</IssueMenuText>
+          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>
+            열린 이슈({openIssueCount})
+          </IssueMenuText>
         </LeftMenu>
         <LeftMenu>
           <img src={closedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "closed"} onClick={() => setFocusedTab("closed")}>닫힌 이슈({closeIssueCount})</IssueMenuText>
+          <IssueMenuText isFocused={focusedTab === "closed"} onClick={() => setFocusedTab("closed")}>
+            닫힌 이슈({closeIssueCount})
+          </IssueMenuText>
         </LeftMenu>
       </LeftMenus>
       <RightMenus>
