@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.user;
 
+import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 public class UserRegistrationTest {
@@ -37,7 +37,11 @@ public class UserRegistrationTest {
     @DisplayName("유효하지 않은 사용자의 가입")
     public void testSaveInvalidUser() {
         User user = new User("invalidUser", "invalidPassword", "invalidNickname");
-        assertFalse(userService.save(user));
+        InvalidUserFormatException exception = assertThrows(InvalidUserFormatException.class, () -> {
+            userService.save(user);
+        });
+
+        assertEquals("비밀번호가 형식에 맞지 않습니다.", exception.getMessage());
     }
 
     @Test
@@ -45,7 +49,7 @@ public class UserRegistrationTest {
     public void testIsUserIdDuplicated() {
         String userId = "existingUserId";
         User user = new User(userId, "invalidPassword", "invalidNickname");
-        when(userRepository.findUserById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         assertTrue(userService.isUserIdDuplicated(userId));
     }
 
@@ -56,7 +60,7 @@ public class UserRegistrationTest {
         User user = new User(existId, "invalidPassword", "invalidNickname");
 
         String userId = "newUserId";
-        when(userRepository.findUserById(existId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(existId)).thenReturn(Optional.of(user));
         assertFalse(userService.isUserIdDuplicated(userId));
     }
 }

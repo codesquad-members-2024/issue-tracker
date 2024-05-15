@@ -1,5 +1,12 @@
 package com.CodeSquad.IssueTracker.user;
+import com.CodeSquad.IssueTracker.Exception.milestone.MilestoneNotFoundException;
+import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
+import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
+import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
+import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.user.utils.UserValidate;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,67 +25,60 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean save(User user) {
+    public void save(User user) {
         log.info("사용자 저장 시도: {}", user.getUserId());
-
-        if (verifyUserInfo(user)) {
-            userRepository.save(user);
-            log.info("사용자 저장 성공: {}", user.getUserId());
-            return true;
-        }
-        return false;
+        verifyUserInfo(user);
+        userRepository.save(user);
+        log.info("사용자 저장 성공: {}", user.getUserId());
     }
 
-    public boolean verifyUserInfo(User user) {
+    public void verifyUserInfo(User user) {
         if (!UserValidate.isUserIdValid(user.getUserId())) {
             log.error("사용자 ID 유효성 검증 실패: {}", user.getUserId());
-            return false;
+            throw new InvalidUserFormatException("ID가 형식에 맞지 않습니다.");
         }
         if (!UserValidate.isUserPasswordValid(user.getUserPassword())) {
             log.error("사용자 비밀번호 유효성 검증 실패: {}", user.getUserId());
-            return false;
+            throw new InvalidUserFormatException("비밀번호가 형식에 맞지 않습니다.");
         }
         if (!UserValidate.isUserNicknameValid(user.getUserNickname())) {
             log.error("사용자 닉네임 유효성 검증 실패: {}", user.getUserId());
-            return false;
+            throw new InvalidUserFormatException("닉네임이 형식에 맞지 않습니다.");
         }
-        return true;
     }
+
     public boolean isUserIdDuplicated(String userId) {
-        Optional<User> userOptional = userRepository.findUserById(userId);
-        System.out.println(userOptional);
+        Optional<User> userOptional = userRepository.findById(userId);
         return userOptional.isPresent();
     }
 
-    public boolean authenticate(String userId, String userPassword) {
-        Optional<User> userOptional = userRepository.findUserById(userId);
-        System.out.println(userOptional);
-        if (userOptional.isPresent()) {
-            if (Objects.equals(userOptional.get().getUserPassword(), userPassword)){
-                log.info("로그인 성공: {}", userId);
-                return true;
-            }
+    public void authenticate(LoginRequest loginRequest) {
+        String userId = loginRequest.getUserId();
+        String userPassword = loginRequest.getUserPassword();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.error("해당 유저가 존재하지 않습니다.: {}", userId);
+                    return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
+                });
+
+        if (!Objects.equals(user.getUserPassword(), userPassword)){
+            log.warn("로그인 실패: {}", userId);
+            throw new InvalidCredentialException("아이디나 비밀번호가 맞지 않습니다.");
         }
-        log.warn("로그인 실패: {}", userId);
-        return false;
     }
 
-    public boolean isUserNotExists(User user) {
-        if (user == null){
-            log.warn("유저를 받아오지 못하였습니다.");
-            return true;
-        }
-        log.info("새 유저가 회원가입하였습니다.: {}", user);
-        return false;
+    public void addLoginSession(LoginRequest loginRequest, HttpSession session) {
+        session.setMaxInactiveInterval(32400); //9시간
+        session.setAttribute("userId", loginRequest.getUserId());
     }
 
-    public boolean isLoginRequestNotExists(LoginRequest loginRequest) {
+    public void isLoginRequestNotExists(LoginRequest loginRequest) {
         if (loginRequest == null){
             log.warn("로그인 실패: 로그인 데이터가 없습니다.");
-            return true;
+            throw new InvalidCredentialException("로그인 데이터가 없습니다.");
         }
         log.info("로그인 시도");
-        return false;
     }
 
 
