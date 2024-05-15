@@ -27,7 +27,7 @@ public class IssueService {
         return (List<Issue>) issueRepository.findAll();
     }
 
-    public void createIssue(IssueRequest issueRequest) {
+    public Long createIssue(IssueRequest issueRequest) {
         log.info("Creating issue: {}", issueRequest);
 
         // 이슈 저장을 위한 객체 생성
@@ -48,5 +48,7 @@ public class IssueService {
         comment.setIssueId(issue.getIssueId());
 
         commentRepository.save(comment);
+
+        return issue.getIssueId();
     }
 }
