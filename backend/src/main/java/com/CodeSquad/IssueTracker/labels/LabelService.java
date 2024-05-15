@@ -24,5 +24,22 @@ public class LabelService {
         label.setNew(true);
         return labelRepository.save(label);
     }
+    public Label updateLabel(Long id, Label updatedLabel) {
+        Optional<Label> existingLabel = labelRepository.findById(id);
+        if (existingLabel.isPresent()) {
+            Label label = existingLabel.get();
+            label.setLabelName(updatedLabel.getLabelName());
+            label.setDescription(updatedLabel.getDescription());
+            label.setTextColor(updatedLabel.getTextColor());
+            label.setBgColor(updatedLabel.getBgColor());
+            label.setNew(false);
+            return labelRepository.save(label);
+        }
+        return null;
+    }
+
+    public void deleteLabel(Long id) {
+        labelRepository.deleteById(id);
+    }
 
 }
