@@ -15,22 +15,3 @@ export const Router = () => (
 		</Routes>
 	</BrowserRouter>
 );
-/**
- * TODO: 이걸로 교체해보기
- * const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <div>
-        <h1>Hello World</h1>
-        <Link to="about">About Us</Link>
-      </div>
-    ),
-  },
-  {
-    path: "about",
-    element: <div>About</div>,
-  },
-]);
-
- */
