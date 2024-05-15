@@ -35,4 +35,11 @@ public class IssueController {
         Issue issue = issueService.findIssueById(issueId);
         return DetailIssueResponse.of(issue);
     }
+
+    @PostMapping
+    public ResponseEntity<Issue> createIssue(@RequestBody IssueCreateRequest request) {
+        Issue issue = request.toEntity();
+        Issue savedIssue = issueService.create(issue);
+        return ResponseEntity.created(URI.create("/api/issues/" + savedIssue.getId())).build();
+    }
 }

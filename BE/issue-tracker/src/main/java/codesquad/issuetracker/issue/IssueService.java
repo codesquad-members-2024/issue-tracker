@@ -27,6 +27,10 @@ public class IssueService {
         return issueRepository.findAllByLabelId(labelId);
     }
 
+    public Issue create(Issue issue) {
+        return issueRepository.save(issue);
+    }
+
     public Issue findIssueById(Long issueId) {
         Optional<Issue> optionalIssue = issueRepository.findById(issueId);
         return optionalIssue.orElseThrow(IllegalArgumentException::new);
