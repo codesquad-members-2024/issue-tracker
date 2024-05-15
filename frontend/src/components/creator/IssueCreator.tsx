@@ -3,6 +3,7 @@ import Header from "../header/Header";
 import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
+import Sidebar from "../issue/Sidebar";
 
 function IssueCreator() {
   return (
@@ -18,20 +19,7 @@ function IssueCreator() {
           <CreatorForm labelText="제목" isFullHeight={false} />
           <CreatorForm labelText="코멘트를 입력하세요." isFullHeight={true} />
         </FormWrapper>
-        <SideBar>
-          <Sector>
-            <span>담당자</span>
-            <img src={plusIcon} />
-          </Sector>
-          <Sector>
-            <span>레이블</span>
-            <img src={plusIcon} />
-          </Sector>
-          <Sector>
-            <span>마일스톤</span>
-            <img src={plusIcon} />
-          </Sector>
-        </SideBar>
+        <Sidebar />
       </BodyWrapper>
       <BodyBoundary />
       <ButtonsWrapper>
@@ -84,25 +72,6 @@ const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-`;
-
-const SideBar = styled.div`
-  width: 288px;
-  height: 16em;
-  border: 1px solid #d9dbe9;
-  border-radius: 16px;
-  overflow: hidden;
-`;
-
-const Sector = styled.div`
-  padding: 2em;
-  border-top: 1px solid #d9dbe9;
-  display: flex;
-  justify-content: space-between;
-
-  &:first-child {
-    border-top: none;
-  }
 `;
 
 const ButtonsWrapper = styled.div`
