@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Storage } from '../../../node_modules/aws-amplify';
+
 import styled from 'styled-components';
 
 export function ImageUpload() {
