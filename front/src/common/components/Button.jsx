@@ -2,13 +2,14 @@ import styled from 'styled-components';
 import { theme } from '~/styles/theme';
 
 export function Button({
-	children,
 	className,
 	type, // button, submit, reset
 	size = 'small', // small, medium, large
 	buttonType = 'container', // container, outline, ghost
-	disabled = false,
+	disabled,
+	icon = null, //ReactNode
 	onClick,
+	buttonText,
 }) {
 	return (
 		<StyledAntdButton
@@ -19,7 +20,8 @@ export function Button({
 			disabled={disabled}
 			onClick={onClick}
 		>
-			{children}
+			{icon && icon}
+			{buttonText}
 		</StyledAntdButton>
 	);
 }
