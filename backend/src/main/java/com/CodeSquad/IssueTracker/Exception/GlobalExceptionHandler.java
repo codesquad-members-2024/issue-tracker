@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.Exception;
 
+import com.CodeSquad.IssueTracker.Exception.label.*;
 import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
@@ -33,7 +34,28 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUserNotLoginException(UserNotLoginException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
+    @ExceptionHandler(InvalidLabelIdException.class)
+    public ResponseEntity<String> handleInvalidLabelIdException(InvalidLabelIdException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 
+    @ExceptionHandler(EmptyLabelNameException.class)
+    public ResponseEntity<String> handleEmptyLabelNameException(EmptyLabelNameException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidLabelColorException.class)
+    public ResponseEntity<String> handleInvalidLabelColorException(InvalidLabelColorException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(LabelNotFoundException.class)
+    public ResponseEntity<String> handleLabelNotFoundException(LabelNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(LabelUpdateException.class)
+    public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
+      
     @ExceptionHandler(AuthorNotFoundException.class)
     public ResponseEntity<String> handleAuthorNotFoundException(AuthorNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
