@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { Logo } from "../../../icons/logo";
+import { Link } from "react-router-dom";
 
 export function Header() {
   return (
     <StyledHeader>
       <Logo />
-      <img src="/img/frog.png" />
+      <Link to={"/login"}>
+        <img src="/img/frog.png" />
+      </Link>
     </StyledHeader>
   );
 }

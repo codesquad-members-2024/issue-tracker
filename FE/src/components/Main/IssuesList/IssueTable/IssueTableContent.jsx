@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Open } from "../../../../icons/open";
 import { issues } from "../../../../test.json"; // test data
 
@@ -19,19 +20,21 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
                 onChange={() => onIssueCheckboxChange(issue.issue_id)}
               />
               <Content>
-                <div className="top">
+                <Top>
                   <Open />
-                  <div className="title">{issue.title}</div>
+                  <StyledLink to={`/issues/${issue.issue_id}`}>
+                    <div className="title">{issue.title}</div>
+                  </StyledLink>
                   <div>{issue.labels}</div>
-                </div>
-                <div className="bottom">
+                </Top>
+                <Bottom>
                   <div>#{issue.issue_id}</div>
                   <div>
                     이 이슈가 {issue.create_time} 전, {issue.assignee}님에 의해
                     작성되었습니다
                   </div>
                   <div>{issue.milestone}</div>
-                </div>
+                </Bottom>
               </Content>
             </Issues>
           ))
@@ -59,15 +62,28 @@ const Content = styled.div`
     margin-left: 10px;
     font-size: 20px;
   }
-  .top,
-  .bottom {
-    display: flex;
-    align-items: center;
-    height: 30px;
+`;
+
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  height: 30px;
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  height: 30px;
+  color: #6e7191;
 `;
 
 const Checkbox = styled.input`
   height: 50%;
   padding: 20px;
   margin-left: 25px;
+`;
+
+const StyledLink = styled(Link)`
+  color: black;
+  text-decoration: none;
 `;
