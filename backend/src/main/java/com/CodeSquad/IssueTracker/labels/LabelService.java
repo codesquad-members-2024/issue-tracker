@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.labels;
 
+import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelIdException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class LabelService {
     }
 
     public Optional<Label> getLabelById(Long id) {
+        if (id <= 0) {
+            throw new InvalidLabelIdException("유효하지 않은 라벨 ID: " + id);
+        }
         log.info("라벨 id: {} 조회 요청", id);
         return labelRepository.findById(id);
     }

@@ -1,5 +1,8 @@
 package com.CodeSquad.IssueTracker.Exception;
 
+import com.CodeSquad.IssueTracker.Exception.label.EmptyLabelNameException;
+import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelColorException;
+import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelIdException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.Exception.user.UserAlreadyExistsException;
@@ -30,5 +33,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotLoginException.class)
     public ResponseEntity<String> handleUserNotLoginException(UserNotLoginException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+    @ExceptionHandler(InvalidLabelIdException.class)
+    public ResponseEntity<String> handleInvalidLabelIdException(InvalidLabelIdException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EmptyLabelNameException.class)
+    public ResponseEntity<String> handleEmptyLabelNameException(EmptyLabelNameException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidLabelColorException.class)
+    public ResponseEntity<String> handleInvalidLabelColorException(InvalidLabelColorException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
