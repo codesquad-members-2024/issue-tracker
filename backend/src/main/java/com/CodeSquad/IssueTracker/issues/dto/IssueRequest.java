@@ -8,5 +8,6 @@ public record IssueRequest(
         String author,
         List<String> assignees,
         List<String> labels,
-        String milestone
+        String milestone,
+        Long milestoneId
 ) {}

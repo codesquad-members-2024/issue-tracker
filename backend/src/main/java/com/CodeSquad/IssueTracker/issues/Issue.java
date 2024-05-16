@@ -8,9 +8,6 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 @Table("issues")
 public class Issue {
     @Id
@@ -23,4 +20,6 @@ public class Issue {
     private LocalDateTime publishedAt;
 
     private Boolean isClosed;
+
+    private Long milestoneId;
 }
