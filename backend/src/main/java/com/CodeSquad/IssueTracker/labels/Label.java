@@ -22,27 +22,4 @@ public class Label implements Persistable<Long> {
     private String textColor;
 
     private String bgColor;
-
-    @Transient
-    private boolean isNew = true;
-
-    public Label() {}
-
-    @Override
-    public Long getId() {
-        return labelId;
-    }
-
-    @Override
-    public boolean isNew() {
-        return isNew;
-    }
-
-    public Label(Long labelId, String labelName, String description, String textColor, String bgColor) {
-        this.labelId = labelId;
-        this.labelName = labelName;
-        this.description = description;
-        this.textColor = textColor;
-        this.bgColor = bgColor;
-    }
 }
