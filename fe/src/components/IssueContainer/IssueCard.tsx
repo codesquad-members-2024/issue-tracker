@@ -10,7 +10,7 @@ interface IssueCardProps {
     isAllChecked: boolean;
 }
 
-const IssueCard: React.FC<IssueCardProps> = ({ curIssue, id, isLast, checkItemHandler, isAllChecked }) => {
+const IssueCard = ({ curIssue, id, isLast, checkItemHandler, isAllChecked }: IssueCardProps) => {
     const [isChecked, setChecked] = useState(false);
     
     const checkItemHandle = (e: React.ChangeEvent<HTMLInputElement>) => {

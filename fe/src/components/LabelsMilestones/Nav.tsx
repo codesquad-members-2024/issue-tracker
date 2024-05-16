@@ -3,7 +3,11 @@ import LabelsAndMilestoneUI from "../../util/UtilUI";
 import { PlusOutlined } from "@ant-design/icons";
 import { ModifyDeleteContext } from "../../Providers/ModifyDeleteProvider";
 
-const Nav = () => {
+interface NavProps {
+    location: string
+}
+
+const Nav = ({location}: NavProps) => {
 
     const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext)
     useEffect(() => {
@@ -13,10 +17,10 @@ const Nav = () => {
         <div className="flex justify-between">
             <LabelsAndMilestoneUI />
             <button
-                className="flex items-center border-none bg-blue-500 px-6 rounded-xl text-white text-xs"
-                onClick={() => ModifyDeleteDispatch({type: "SET_DELETE", Payload: "delete"})}
+                className="flex items-center border-none bg-blue-500 px-6 rounded-xl text-white text-xs w-[128px] justify-center"
+                onClick={() => ModifyDeleteDispatch({type: "SET_CREATE", Payload: "create"})}
             >
-                <PlusOutlined /> 마일스톤 추가
+                <PlusOutlined /> {location === "labels" ? "레이블 추가" : "마일스톤 추가"}
             </button>
         </div>
     );

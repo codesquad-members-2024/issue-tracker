@@ -3,31 +3,31 @@ import { ReactNode } from "react";
 
 export type ModifyDeleteState = {
     state: string;
-    title: string
+    id: string | number
 };
 
 export interface Action {
     type: string;
-    Payload: string
+    Payload: string | number
 }
 
 export type Dispatch = (action: Action) => void;
 
-const initialState: ModifyDeleteState = { state: "", title: "" };
+const initialState: ModifyDeleteState = { state: "", id: "" };
 
 export const ModifyDeleteContext = createContext<[ModifyDeleteState, Dispatch]>([initialState, () => {}]);
 
 function ModifyDeleteReducer( state: ModifyDeleteState, { type, Payload }: Action ): ModifyDeleteState {
     switch (type) {
 
-        case "SET_DELETE":
-            return { ...state, state: "delete", title: Payload};
+        case "SET_CREATE":
+            return { ...state, state: "create", id: Payload};
 
         case "SET_MODIFY":
-            return { ...state, state: "modify", title: Payload};
+            return { ...state, state: "modify", id: Payload};
 
         case "SET_INIT":
-            return { ...state, state: "", title: ""};
+            return { ...initialState };
 
         default:
             throw new Error();

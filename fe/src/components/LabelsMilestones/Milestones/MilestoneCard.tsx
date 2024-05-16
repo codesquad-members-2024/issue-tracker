@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Milestone } from "./MilestoneFeed";
 import {
     FlagOutlined,
@@ -7,19 +7,23 @@ import {
     DeleteOutlined,
     CreditCardOutlined,
 } from "@ant-design/icons";
-import { ModifyDeleteContext } from "../../Providers/ModifyDeleteProvider";
-import ModifyDeleteUI from "./ModifyDeleteUI";
+import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
+import MilestoneEditUI from "./MilestoneEditUI";
 interface MilestoneCardProps {
     curMilestone: Milestone;
 }
 
-const MilestoneCard: React.FC<MilestoneCardProps> = ({ curMilestone }) => {
+const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
+    
     const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
+    useEffect(() => {
 
+        console.log(ModifyDeleteState)
+    }, [ModifyDeleteState])
     return (
         <>
-            {ModifyDeleteState.title === curMilestone.title ? (
-                <ModifyDeleteUI curMilestone={curMilestone}/>
+            {ModifyDeleteState.id === curMilestone.id ? (
+                <MilestoneEditUI curMilestone={curMilestone}/>
             ) : (
                 <div className="h-90 flex border-t-2 border-gray-300 dark:bg-darkModeBorderBGx items-center">
                     <div className="w-4/5 h-4/5 ml-4">
@@ -46,7 +50,7 @@ const MilestoneCard: React.FC<MilestoneCardProps> = ({ curMilestone }) => {
                                 onClick={() =>
                                     ModifyDeleteDispatch({
                                         type: "SET_MODIFY",
-                                        Payload: curMilestone.title,
+                                        Payload: curMilestone.id,
                                     })
                                 }
                             >

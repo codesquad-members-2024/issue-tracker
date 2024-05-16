@@ -23,13 +23,13 @@ export interface IssueFeedProps {
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const IssueFeed: React.FC<IssueFeedProps> = ({
+const IssueFeed = ({
     isOpen,
     setOpen,
     issueInfo,
     resetFilterUI,
     setResetFilterUI,
-}) => {
+}: IssueFeedProps) => {
     const [checkedItem, setCheckItem] = useState<string[]>([]);
     const [isAllChecked, setIsAllChecked] = useState(false);
     const isOpenInfo = issueInfo.filter((curInfo) => curInfo.is_open === isOpen);
