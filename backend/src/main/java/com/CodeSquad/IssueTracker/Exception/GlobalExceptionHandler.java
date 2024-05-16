@@ -70,6 +70,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleLabelNotFoundException(LabelNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+    @ExceptionHandler(DuplicateLabelNameException.class)
+    public ResponseEntity<String> handleDupliclateLabelNameException(DuplicateLabelNameException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body((ex.getMessage()));
+    }
+    @ExceptionHandler(InvalidLabelNameException.class)
+    public  ResponseEntity<String> handleInvalidLabelNameException(InvalidLabelNameException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 
 //    @ExceptionHandler(LabelUpdateException.class)
 //    public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
