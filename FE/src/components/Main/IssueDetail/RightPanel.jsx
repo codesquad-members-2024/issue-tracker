@@ -26,8 +26,8 @@ export function RightPanel() {
 }
 
 const StyledRightPanel = styled.div`
-  width: 280px;
-  margin-left: 50px;
+  width: 20%;
+  margin-left: auto;
   border: solid #dadbe9;
   border-radius: 10px;
   background: white;

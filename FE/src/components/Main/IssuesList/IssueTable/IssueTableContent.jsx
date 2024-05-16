@@ -25,7 +25,13 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
                   <StyledLink to={`/issues/${issue.issue_id}`}>
                     <div className="title">{issue.title}</div>
                   </StyledLink>
-                  <div>{issue.labels}</div>
+                  <div>
+                    {issue.labels.map((label) => (
+                      <Label key={label.id} color={label.color}>
+                        {label.name}
+                      </Label>
+                    ))}
+                  </div>
                 </Top>
                 <Bottom>
                   <div>#{issue.issue_id}</div>
@@ -68,6 +74,14 @@ const Top = styled.div`
   display: flex;
   align-items: center;
   height: 30px;
+`;
+
+const Label = styled.span`
+  background-color: ${({ color }) => color};
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: white; 
 `;
 
 const Bottom = styled.div`

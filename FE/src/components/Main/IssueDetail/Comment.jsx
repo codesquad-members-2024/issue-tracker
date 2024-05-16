@@ -31,7 +31,7 @@ export function Comment({ selectedIssue }) {
 const StyledComment = styled.div`
   border: solid #dadbe9;
   border-radius: 10px;
-  width: 960px;
+  width: 75%;
   height: 300px;
   overflow: hidden;
 `;
@@ -61,6 +61,10 @@ const Buttons = styled.div`
   align-items: center;
   .writer {
     margin-right: 20px;
+    padding: 5px;
+    border: solid #dadbe9;
+    border-radius: 20px;
+    background-color: #eff0f6;
   }
 `;
 

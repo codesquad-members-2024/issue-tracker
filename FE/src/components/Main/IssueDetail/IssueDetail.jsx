@@ -29,7 +29,7 @@ export function IssueDetail() {
 }
 
 const Header = styled.header`
-  padding: 110px 0 25px;
+  padding: 50px 0 25px;
   border-bottom: solid #dadbe9;
   margin: 0 100px;
 `;

@@ -50,11 +50,11 @@ export function IssueTableHeader({ checkedCount, isChecked, onCheckedChange }) {
           <Left>
             <StyledIssueBtn>
               <Open />
-              <div>열린 이슈( )</div>
+              <div className="open">열린 이슈(3)</div>
             </StyledIssueBtn>
             <StyledIssueBtn>
               <Closed />
-              <div>닫힌 이슈( )</div>
+              <div className="closed">닫힌 이슈(0)</div>
             </StyledIssueBtn>
           </Left>
           <Right>
