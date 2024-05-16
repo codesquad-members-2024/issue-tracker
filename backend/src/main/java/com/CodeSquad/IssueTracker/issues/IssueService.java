@@ -3,8 +3,11 @@ package com.CodeSquad.IssueTracker.issues;
 import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
+import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
+import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
+import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
 import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
@@ -73,6 +76,22 @@ public class IssueService {
         validateIssueListPage(page);
         long offset = (page - 1) * limit;
         return issueRepository.findCloseIssues(limit, offset);
+    }
+
+    public IssueDetailResponse getIssueById(long issueId) {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
+
+        List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
+
+        return IssueDetailResponse.builder()
+                .title(issue.getTitle())
+                .author(issue.getAuthor())
+                .publishedAt(issue.getPublishedAt().toString())
+                .isClosed(issue.getIsClosed())
+                .comments(comments)
+                .build();
     }
 
     public void validateIssueListPage(long page) {
