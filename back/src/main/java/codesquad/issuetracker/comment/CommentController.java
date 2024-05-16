@@ -1,9 +1,7 @@
 package codesquad.issuetracker.comment;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,5 +12,10 @@ public class CommentController {
     @PostMapping("/comments")
     public void createComment(@RequestBody Comment comment) {
         commentService.createComment(comment);
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public void updateCommentById(@PathVariable Long commentId, @RequestBody CommentContentDto contentDto) {
+        commentService.updateCommentById(commentId, contentDto.getContent());
     }
 }

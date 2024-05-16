@@ -12,4 +12,8 @@ public class CommentService {
     public void createComment(Comment comment) {
         commentRepository.save(comment);
     }
+
+    public void updateCommentById(Long commentId, String newContent) {
+        commentRepository.updateById(commentId, newContent);
+    }
 }
