@@ -3,6 +3,7 @@ package com.CodeSquad.IssueTracker.Exception;
 import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
+import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +24,11 @@ public class IssueExceptionHandler {
 
     @ExceptionHandler(InvalidIssuePageException.class)
     public ResponseEntity<String> handleInvalidIssuePageException(InvalidIssuePageException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(IssueNotExistException.class)
+    public ResponseEntity<String> handleIssueNotExistException(IssueNotExistException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

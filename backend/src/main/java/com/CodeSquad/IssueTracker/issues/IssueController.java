@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.issues;
 
+import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueIdResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
 import org.springframework.http.HttpStatus;
@@ -41,5 +42,11 @@ public class IssueController {
         Long createdIssueId = issueService.createIssue(issueRequest);
         IssueIdResponse issueIdResponse = new IssueIdResponse(createdIssueId);
         return ResponseEntity.ok(issueIdResponse);
+    }
+
+    @GetMapping("/issue/{issueId}")
+    public ResponseEntity<IssueDetailResponse> getIssue(@PathVariable("issueId") long issueId) {
+        IssueDetailResponse issueDetailResponse = issueService.getIssueById(issueId);
+        return new ResponseEntity<>(issueDetailResponse, HttpStatus.OK);
     }
 }
