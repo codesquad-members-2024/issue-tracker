@@ -20,8 +20,8 @@ public class MilestoneQueryInfo {
     @Builder
     @PersistenceCreator
     public MilestoneQueryInfo(String direction, String sort, String state) {
-        this.direction = Objects.requireNonNullElse(Direction.fromString(direction), Direction.ASC);
+        this.direction =  Direction.fromString(Objects.requireNonNullElse(direction, Direction.ASC.name()));
         this.sort = Objects.requireNonNullElse(sort, DEFAULT_SORT);
-        this.state = Objects.requireNonNullElse(State.fromString(state), State.OPEN);
+        this.state = State.fromString(Objects.requireNonNullElse(state, State.OPEN.name()));
     }
 }
