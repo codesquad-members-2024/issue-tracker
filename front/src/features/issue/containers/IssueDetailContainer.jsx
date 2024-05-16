@@ -10,6 +10,7 @@ import {
 	IconTrash,
 	IconAlertCircle,
 	IconXsquare,
+	IconPlus,
 } from '~/common/icons';
 import { timestamp } from '~/utils/util';
 
@@ -28,6 +29,8 @@ export function IssueDetailContainer() {
 	const [hasChange, setHasChange] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
 
+	const [newComment, setNewComment] = useState('');
+
 	useEffect(() => {
 		setHasChange(title !== issueDetail?.title);
 	}, [title, issueDetail?.title]);
@@ -38,6 +41,7 @@ export function IssueDetailContainer() {
 		setIsEdit(!isEdit);
 	};
 
+	// TODO: error 재연
 	return (
 		<>
 			{loading && <div>Loading...</div>}
@@ -136,14 +140,40 @@ export function IssueDetailContainer() {
 									isWriter={issueDetail.writer === item.writer}
 								/>
 							))}
-
-						<IssueCommentEdit />
+						<>
+							<IssueCommentEdit
+								value={newComment}
+								placeholder='코멘트를 입력하세요.'
+								onChange={e => {
+									setNewComment(e.target.value);
+								}}
+								onClick={() => {}}
+							/>
+							<Button
+								type='button'
+								size='small'
+								disabled={!hasChange}
+								buttonType='container'
+								buttonText='코멘트 작성'
+								icon={<IconPlus />}
+							/>
+						</>
 					</section>
-					<IssueSidebar
-						assignees={issueDetail.assignees}
-						milestone={issueDetail.milestoneId}
-						labels={issueDetail.labels}
-					/>
+					<aside>
+						<IssueSidebar
+							assignees={issueDetail.assignees}
+							milestone={issueDetail.milestoneId}
+							labels={issueDetail.labels}
+						/>
+						<Button
+							type='button'
+							size='small'
+							buttonType='ghost'
+							onClick={() => {}}
+							buttonText='이슈 삭제'
+							icon={<IconTrash />}
+						/>
+					</aside>
 				</StyledContents>
 			</StyledWrapper>
 		</>
@@ -221,7 +251,12 @@ const StyledContents = styled.div`
 		width: 960px;
 	}
 	aside {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
 		width: 288px;
-		height: 100px;
+		button {
+			margin-top: 16px;
+		}
 	}
 `;
