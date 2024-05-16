@@ -7,3 +7,4 @@ export * from './InputTextArea';
 export * from './CheckBox';
 export * from './ImageUpload';
 export * from './InputTitleEdit';
+export * from './InputTextArea';

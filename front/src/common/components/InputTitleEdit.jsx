@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 import { Input } from 'antd';
 
-export function InputTitleEdit({ placeholder, value, onChange }) {
+export function InputTitleEdit({
+	type = 'text',
+	placeholder,
+	value,
+	onChange,
+}) {
 	return (
 		<StyledWrapper>
 			<Input
-				type='text'
+				type={type}
 				onChange={onChange}
 				placeholder={placeholder}
 				value={value}
