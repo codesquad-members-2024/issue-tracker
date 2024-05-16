@@ -1,82 +1,85 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
 import { Button } from '~/common/components/Button';
-export function ImageUpload() {
-	const [imageFile, setImageFile] = useState(null);
-	const [imgSrc, setImageSrc] = useState(null);
-	const inputRef = useRef([]);
+import { IconPaperClip } from '~/common/icons';
 
-	const handleFileChange = async e => {
-		const file = e.target.files[0];
-		const fileExt = file.name.split('.').pop();
+export function ImageUpload({ handleUploadSuccess }) {
+	const inputRef = useRef(null);
 
-		// 확장자 검사
-		if (!['jpeg', 'jpg', 'png', 'gif'].includes(fileExt)) {
-			// TODO: alert 대신 에러 메시지를 띄워주세요.
-			alert('이미지 파일만 업로드 가능합니다.');
-			return;
+	const handleFileChange = event => {
+		const file = event.target.files[0];
+		if (file) {
+			putFile(file);
 		}
-
-		// 파일 리더 객체 생성
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-
-		reader.onload = e => {
-			setImageFile(file);
-			setImageSrc(e.target.result);
-		};
-
-		reader.onerror = () => {
-			// TODO: alert 대신 에러 메시지를 띄워주세요.
-			alert('파일을 읽는 중 오류가 발생했습니다.');
-		};
 	};
 
-	const handleUpload = async () => {
-		if (!imageFile) return;
+	const putFile = file => {
+		const bucketName = import.meta.env.VITE_APP_S3_BUCKET_NAME;
+		const path = 'attached';
+		const region = import.meta.env.VITE_APP_S3_REGION;
+		const accessKeyId = import.meta.env.VITE_APP_S3_ACCESS_KEY_ID;
+		const secretAccessKey = import.meta.env.VITE_APP_S3_SECRET_ACCESS_KEY;
 
-		try {
-			const result = await Storage.put(imageFile.name, imageFile, {
-				contentType: imageFile.type,
-			});
-			console.log('File uploaded successfully:', result);
-			alert('File uploaded successfully');
-		} catch (error) {
-			console.error('Error uploading file:', error);
-			alert('Error uploading file');
-		}
+		window.AWS.config.update({
+			region,
+			accessKeyId,
+			secretAccessKey,
+		});
+
+		const upload = new window.AWS.S3.ManagedUpload({
+			params: {
+				Bucket: bucketName,
+				Key: `${path}/${file.name}`,
+				Body: file,
+			},
+		});
+
+		const promise = upload.promise();
+		promise.then(
+			function (data) {
+				console.log(data);
+				handleUploadSuccess(data.Location);
+				console.log('Successfully uploaded file.');
+			},
+			function (err) {
+				console.log('There was an error uploading your file: ', err.message);
+			}
+		);
+	};
+
+	const handleButtonClick = () => {
+		inputRef.current.click();
 	};
 
 	return (
 		<StyledWrapper>
 			<StyledInputFile
-				multiple
-				accept='image/*'
+				ref={inputRef}
 				type='file'
-				ref={el => (inputRef.current[0] = el)}
+				accept='image/*'
 				onChange={handleFileChange}
 			/>
-			{imgSrc && <StyledImage src={imgSrc} alt='Selected Image' />}
-
 			<Button
 				type='button'
 				size='small'
 				buttonType='ghost'
-				buttonText='업로드하기'
-				onClick={handleUpload}
+				buttonText='파일 첨부하기'
+				icon={<IconPaperClip />}
+				onClick={handleButtonClick}
 			/>
 		</StyledWrapper>
 	);
 }
 
 const StyledWrapper = styled.div`
-	padding: 0;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    border-top: 1px dashed ${({ theme }) =>
+			theme.color.neutral.border.default});
+    flex-direction: column;
 `;
 
-const StyledInputFile = styled.input``;
-
-const StyledImage = styled.img`
-	margin-top: 10px;
-	max-width: 100%;
-	height: auto;
+const StyledInputFile = styled.input`
+	display: none;
 `;

@@ -20,17 +20,37 @@ import {
 	IssueCommentEdit,
 } from '~/features/issue/components';
 
+const issueData = [
+	{
+		id: 1,
+		title: 'title1',
+		content: 'my name is daniel',
+		milestoneId: 'm1',
+		assignees: [
+			{
+				loginId: 'mellisa',
+				profileImage:
+					'https://avatars.githubusercontent.com/u/140429591?s=40&v=4',
+			},
+		],
+		writer: 'daniel',
+		createTime: '2024-05-14T04:41:45.318597316',
+		labels: [
+			{
+				name: 'bug',
+				description: 'bug',
+				color: '#0075ca',
+			},
+		],
+		closed: false,
+	},
+];
+
 export function IssueDetailContainer() {
 	const { id } = useParams();
 
-	const { issueDetail, loading, error } = useIssueDetail(id);
-
-	// const [title, setTitle] = useState(issueDetail?.title);
-	// const [hasChange, setHasChange] = useState(false);
-	// const [isEdit, setIsEdit] = useState(false);
-
-	// const [newComment, setNewComment] = useState('');
-	// const [hasNewComment, setHasNewComment] = useState(false);
+	// const { issueDetail, loading, error } = useIssueDetail(id);
+	const issueDetail = issueData[0];
 
 	const [detailState, setDateilState] = useState({
 		title: issueDetail?.title,
@@ -71,8 +91,8 @@ export function IssueDetailContainer() {
 	// TODO: error 재연
 	return (
 		<>
-			{loading && <div>Loading...</div>}
-			{error && <Alert message='Error Text' description={error} type='error' />}
+			{/* {loading && <div>Loading...</div>}
+			{error && <Alert message='Error Text' description={error} type='error' />} */}
 			<StyledWrapper>
 				<StyledDetailHeader>
 					<StyledTitle>
@@ -284,6 +304,6 @@ const StyledContents = styled.div`
 `;
 const StyledNewComment = styled.div`
 	button {
-		margin-top: 24px;
+		// margin-top: 24px;
 	}
 `;

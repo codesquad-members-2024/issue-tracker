@@ -9,3 +9,4 @@ export * from './IconCheck';
 export * from './IconCheckActive';
 export * from './IconCheckDisabled';
 export * from './IconXsquare';
+export * from './IconPaperClip';
