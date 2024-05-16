@@ -1,7 +1,10 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.comment.Comment;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,13 +32,16 @@ public class Issue {
     private Set<IssueAttachedLabel> labelRefs = new HashSet<>();
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<Assignee> assigneeIds = new HashSet<>();
+    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "CREATE_AT")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     @PersistenceCreator
     public Issue(Long id, String authorId, String title, String description,
         LocalDateTime openAt,
         LocalDateTime updatedAt, LocalDateTime closedAt, Long milestoneId, boolean isOpen,
-        boolean isDeleted, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assigneeIds) {
+        boolean isDeleted, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assigneeIds,
+        List<Comment> comments) {
         this.id = id;
         this.authorId = authorId;
         this.title = title;
@@ -48,6 +54,7 @@ public class Issue {
         this.isDeleted = isDeleted;
         this.labelRefs = labelRefs;
         this.assigneeIds = assigneeIds;
+        this.comments = comments;
     }
 
     public static Issue from(String authorId, String title, String description,
@@ -64,7 +71,11 @@ public class Issue {
             .isDeleted(false)
             .labelRefs(labelRefs)
             .assigneeIds(assignees)
+            .comments(new ArrayList<>())
             .build();
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }

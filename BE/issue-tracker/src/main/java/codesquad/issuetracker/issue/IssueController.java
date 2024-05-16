@@ -1,5 +1,8 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.comment.Comment;
+import codesquad.issuetracker.comment.CommentCreateRequest;
+import codesquad.issuetracker.comment.CommentService;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.issue.dto.IssueCreateRequest;
 import java.net.URI;
@@ -20,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class IssueController {
 
     IssueService issueService;
+    CommentService commentService;
 
-    public IssueController(IssueService issueService) {
+    public IssueController(IssueService issueService, CommentService commentService) {
         this.issueService = issueService;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -41,5 +46,11 @@ public class IssueController {
         Issue issue = request.toEntity();
         Issue savedIssue = issueService.create(issue);
         return ResponseEntity.created(URI.create("/api/issues/" + savedIssue.getId())).build();
+    }
+
+    @PostMapping("/{issueId}/comments")
+    public Comment addComment(@PathVariable Long issueId, @RequestBody
+    CommentCreateRequest commentCreateRequest) {
+        return commentService.addComment(issueId, commentCreateRequest);
     }
 }
