@@ -46,11 +46,7 @@ public class MilestoneService {
 
     public void deleteMilestone(Long milestoneId) {
         log.info("마일스톤 삭제 요청: {}", milestoneId);
-        Milestone milestone = milestoneRepository.findById(milestoneId)
-                .orElseThrow(() -> {
-                    log.error("해당 마일스톤이 존재하지 않습니다: {}", milestoneId);
-                    return new MilestoneNotFoundException("해당 마일스톤이 존재하지 않습니다: " + milestoneId);
-                });
+        Milestone milestone = getMilestoneById(milestoneId);
 
         milestoneRepository.delete(milestone);
         log.info("마일스톤 삭제 완료: {}", milestone);
@@ -65,9 +61,14 @@ public class MilestoneService {
                 });
     }
 
-    public List<Milestone> getAllMilestones() {
-        log.info("전체 마일스톤 조회 요청");
-        return (List<Milestone>) milestoneRepository.findAll();
+    public List<Milestone> getOpenMilestones() {
+        log.info("열린 마일스톤 조회 요청");
+        return milestoneRepository.findAllOpenMilestones();
+    }
+
+    public List<Milestone> getCloseMilestones() {
+        log.info("닫힌 마일스톤 조회 요청");
+        return milestoneRepository.findAllCloseMilestones();
     }
 
     private void validateMilestoneRequest(MilestoneRequest milestoneRequest) {
@@ -75,5 +76,27 @@ public class MilestoneService {
             log.error("제목이 비어있습니다: {}", milestoneRequest);
             throw new InvalidMilestoneRequestException("제목이 비어있습니다");
         }
+    }
+
+    public void editMilestone(Long milestoneId, MilestoneRequest milestoneRequest) {
+        validateMilestoneRequest(milestoneRequest);
+        Milestone milestone = getMilestoneById(milestoneId);
+
+        milestone.setTitle(milestoneRequest.getTitle());
+        milestone.setDescription(milestoneRequest.getDescription());
+        milestone.setDeadline(parseDeadline(milestoneRequest.getDeadline()));
+
+        milestoneRepository.save(milestone);
+    }
+    public void closeMilestone(Long milestoneId) {
+        Milestone milestone = getMilestoneById(milestoneId);
+        milestone.setIsClosed(true);
+        milestoneRepository.save(milestone);
+    }
+
+    public void openMilestone(Long milestoneId) {
+        Milestone milestone = getMilestoneById(milestoneId);
+        milestone.setIsClosed(false);
+        milestoneRepository.save(milestone);
     }
 }
