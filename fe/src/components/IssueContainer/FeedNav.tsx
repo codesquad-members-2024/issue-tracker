@@ -40,7 +40,7 @@ interface FeedNavProps {
     allCheckHandler: () => void;
 }
 
-const FeedNav: React.FC<FeedNavProps> = ({
+const FeedNav = ({
     isOpen,
     setOpen,
     issueInfo,
@@ -48,14 +48,14 @@ const FeedNav: React.FC<FeedNavProps> = ({
     setResetFilterUI,
     isAllChecked,
     allCheckHandler,
-}) => {
+}: FeedNavProps) => {
     const issuesLength = {
         open: issueInfo.filter((curIssue) => curIssue.is_open).length,
         closed: issueInfo.filter((curIssue) => !curIssue.is_open).length,
     };
 
     return (
-        <div className="h-45 bg-gray-200 transition-colors duration-500 dark:bg-darkModeBG flex text-sm rounded-t-lg">
+        <div className="h-45 bg-gray-200 dark:bg-darkModeBG flex text-sm rounded-t-lg">
             <div className="flex h-full w-70% items-center">
                 <input type="checkbox" checked={isAllChecked} onChange={allCheckHandler} className="w-7%" />
                 <button

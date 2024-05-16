@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Milestone } from "./MilestoneFeed";
-import { ModifyDeleteContext } from "../../Providers/ModifyDeleteProvider";
+import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
 
-interface ModifyDeleteUIProps {
+interface MilestoneEditUIProps {
     curMilestone?: Milestone;
 }
 
@@ -12,7 +12,7 @@ interface FormState {
     description: string;
 }
 
-const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({ curMilestone }) => {
+const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
     const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
 
     const [formData, setFormData]: [
@@ -50,11 +50,16 @@ const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({ curMilestone }) => {
         }
     }, [ModifyDeleteState.state, curMilestone]);
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(formData);
+    }
+
     return (
         <div
             className={`${
-                ModifyDeleteState.state === "delete" ||
-                ModifyDeleteState.title === curMilestone?.title
+                ModifyDeleteState.state === "create" ||
+                ModifyDeleteState.id === curMilestone?.id
                     ? ""
                     : "hidden"
             } w-full h-72 border-2 border-gray-300 mt-4 rounded-xl bg-white dark:bg-darkModeBorderBG`}
@@ -65,13 +70,13 @@ const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({ curMilestone }) => {
                         ? "마일스톤 편집"
                         : "새로운 마일스톤 추가"}
                 </h3>
-                <form className="flex flex-col gap-4">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-6">
                         <div className="flex justify-between">
                             <input
                                 type="text"
                                 name="title"
-                                className="w-full px-3 py-2 text-gray-500 border rounded-xl bg-gray-100"
+                                className="w-full h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100"
                                 placeholder="마일스톤 이름을 입력하세요."
                                 value={formData.title}
                                 onChange={handleChange}
@@ -79,7 +84,7 @@ const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({ curMilestone }) => {
                             <input
                                 type="text"
                                 name="dueDate"
-                                className="w-full px-3 py-2 ml-4 text-gray-500 border rounded-xl bg-gray-100"
+                                className="w-full px-3 h-[40px] py-2 ml-4 text-gray-500 border rounded-xl bg-gray-100"
                                 placeholder="완료일(선택) YYYY.MM.DD"
                                 value={formData.dueDate}
                                 onChange={handleChange}
@@ -88,7 +93,7 @@ const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({ curMilestone }) => {
                         <input
                             type="text"
                             name="description"
-                            className="w-full px-3 py-2 mr-4 text-gray-500 border rounded-xl bg-gray-100"
+                            className="w-full h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100"
                             placeholder="마일스톤에 대한 설명을 입력하세요."
                             value={formData.description}
                             onChange={handleChange}
@@ -119,4 +124,4 @@ const ModifyDeleteUI: React.FC<ModifyDeleteUIProps> = ({ curMilestone }) => {
     );
 };
 
-export default ModifyDeleteUI;
+export default MilestoneEditUI;
