@@ -1,11 +1,13 @@
 package com.codesquad.team3.issuetracker.global.entity;
 
-public class SoftDeleteEntity {
+import lombok.Getter;
 
-    protected boolean isDeleted = false;
+public interface SoftDeleteEntity {
 
-    public void delete(){
-        this.isDeleted = true;
-    }
+
+     void delete();
+
+     void recover();
+     boolean isDeleted();
 
 }

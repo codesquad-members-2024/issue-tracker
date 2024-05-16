@@ -1,15 +1,12 @@
 package com.codesquad.team3.issuetracker.global.entity;
 
-public class OpenCloseEntity {
+import lombok.Getter;
 
-    protected boolean isClosed = false;
+public interface OpenCloseEntity {
 
-    public void close() {
-        this.isClosed = true;
-    }
 
-    public void open() {
-        this.isClosed = false;
-    }
+    void close();
+    void open();
+    boolean isClosed();
 }
 
