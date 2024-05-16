@@ -4,15 +4,16 @@ import styled, { css } from "styled-components";
 interface CreatorFormProps {
   labelText: string;
   height: string;
+  onChange: () => void;
 }
 
 const CreatorForm = React.forwardRef<HTMLTextAreaElement, CreatorFormProps>((props, ref) => {
-  const { labelText, height } = props;
+  const { labelText, height, onChange } = props;
   
   return (
     <Wrapper isFocused={false} height={height}>
       <FormParagraph height={height}>
-        <FormInput ref={ref} required />
+        <FormInput ref={ref} onChange={onChange} required />
         <FormInputLabel>
           <span>{labelText}</span>
         </FormInputLabel>

@@ -4,7 +4,7 @@ import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import Sidebar from "../issue/Sidebar";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import useUserStore from "../../hooks/useUserStore";
 import { useNavigate } from "react-router-dom";
 import { postNewIssue } from "../../api/IssueAPI";
@@ -13,8 +13,16 @@ function IssueCreator() {
   const { userId } = useUserStore();
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [isSubmitable, setIsSubmitable] = useState(false);
   const navigate = useNavigate();
 
+  const handleOnChange = () => {
+    const title = titleRef.current?.value;
+    const content = commentRef.current?.value;
+    const currentIsSubmitable = !!(title && content);
+
+    if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
+  };
   const handleCancel = () => navigate("/");
   const handleSubmit = () => {
     const title = titleRef.current?.value;
@@ -34,14 +42,16 @@ function IssueCreator() {
       <BodyWrapper>
         <UserIcon src={userIcon} />
         <FormWrapper>
-          <CreatorForm ref={titleRef} labelText="제목" height="3.5em" />
-          <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" />
+          <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
+          <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" onChange={handleOnChange} />
         </FormWrapper>
         <Sidebar />
       </BodyWrapper>
       <BodyBoundary />
       <ButtonsWrapper>
-        <SubmitButton onClick={handleSubmit}>완료</SubmitButton>
+        <SubmitButton isSubmitable={isSubmitable} onClick={handleSubmit}>
+          완료
+        </SubmitButton>
         <CancelWrapper onClick={handleCancel}>
           <CancelIcon src={plusIcon} />
           <CancelText>작성 취소</CancelText>
@@ -114,7 +124,7 @@ const CancelText = styled.span`
   color: #4e4b66;
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled.button<{ isSubmitable: boolean }>`
   width: 12em;
   height: 2.8em;
   padding: 0 1.2em;
@@ -128,6 +138,8 @@ const SubmitButton = styled.button`
   border: 0;
   border-radius: 0.725em;
   cursor: pointer;
+  opacity: ${({ isSubmitable }) => (isSubmitable ? "1" : "0.5")};
+  transition: all 0.5s ease;
 `;
 
 export default IssueCreator;
