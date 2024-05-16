@@ -32,6 +32,7 @@ public class LoginController {
 
         if (loginService.authenticate(email, password, session)) {
             session.setAttribute("loginId", email); // 세션에 이메일 저장
+            session.setMaxInactiveInterval(3600); //세션 유효 시간 1시간
             response.put("message", "로그인 성공");
             response.put("loginId", email);
             return ResponseEntity.ok(response);
