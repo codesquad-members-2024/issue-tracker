@@ -17,12 +17,13 @@ const useLoginLogic = () => {
     state: { idValue, passwordValue, allFilled },
     setErrorMessage,
     checkAllFilled,
-  } = loginStore;
-  const { setIsLoggedIn } = useUserStore();
+  } = loginState;
+  const { setUserId, setIsLoggedIn } = useUserStore();
   const navigate = useNavigate();
 
   const { mutate: login, isLoading } = useMutation(sendLoginRequest, {
     onSuccess: () => {
+      setUserId(idValue);
       setIsLoggedIn(true);
       navigate("/");
     },

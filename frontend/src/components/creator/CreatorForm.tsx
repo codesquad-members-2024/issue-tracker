@@ -1,22 +1,26 @@
+import React from "react";
 import styled, { css } from "styled-components";
 
 interface CreatorFormProps {
   labelText: string;
   height: string;
+  onChange: () => void;
 }
 
-function CreatorForm({ labelText, height }: CreatorFormProps) {
+const CreatorForm = React.forwardRef<HTMLTextAreaElement, CreatorFormProps>((props, ref) => {
+  const { labelText, height, onChange } = props;
+  
   return (
     <Wrapper isFocused={false} height={height}>
       <FormParagraph height={height}>
-        <FormInput required />
+        <FormInput ref={ref} onChange={onChange} required />
         <FormInputLabel>
           <span>{labelText}</span>
         </FormInputLabel>
       </FormParagraph>
     </Wrapper>
   );
-}
+});
 
 const Wrapper = styled.div<{ isFocused: boolean; height: string }>`
   box-sizing: border-box;

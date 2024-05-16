@@ -6,8 +6,19 @@ import CreatorForm from "../creator/CreatorForm";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import editIcon from "../../img/icon/editIcon.svg";
 import archieveIcon from "../../img/icon/archieveIcon.svg";
+import { useRef, useState } from "react";
 
 function IssueDetail() {
+  const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [isSubmitable, setIsSubmitable] = useState(false);
+
+  const handleOnChange = () => {
+    const comment = commentRef.current?.value;
+    const currentIsSubmitable = !!(comment);
+    
+    if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
+  };
+
   return (
     <Wrapper>
       <Header />
@@ -38,8 +49,8 @@ function IssueDetail() {
         <CommentWrapper>
           {/* 추후 Comment 리스트로 렌더링 */}
           <Comment />
-          <CreatorForm labelText="코멘트를 입력하세요." height={"184px"} />
-          <SubmitButton>
+          <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height={"184px"} onChange={handleOnChange} />
+          <SubmitButton isSubmitable={isSubmitable}>
             <img src={plusIcon} /> 코멘트 작성
           </SubmitButton>
         </CommentWrapper>
@@ -130,7 +141,7 @@ const CommentWrapper = styled.div`
   gap: 1.5em;
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled.button<{ isSubmitable: boolean }>`
   width: 10.7em;
   height: 3.3em;
   font-size: 0.75em;
@@ -141,6 +152,8 @@ const SubmitButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: ${({ isSubmitable }) => (isSubmitable ? "1" : "0.5")};
+  transition: all 0.5s ease;
 `;
 
 const BodyBoundary = styled.hr`
