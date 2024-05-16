@@ -21,8 +21,8 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestParam LoginForm loginForm, HttpSession session) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<Map<String, String>> login(@RequestParam LoginForm loginForm, HttpSession session) {
+        Map<String, String> response = new HashMap<>();
         String email = loginForm.getEmail();
         String password = loginForm.getPassword();
 
@@ -52,15 +52,15 @@ public class LoginController {
     }
 
     @GetMapping("/issues")
-    public ResponseEntity<Map<String, Object>> issuesMain(HttpSession session) {
-        Map<String, Object> response = new HashMap<>();
-        User loggedInUser = (User) session.getAttribute("LOGGED_IN_USER");
+    public ResponseEntity<Map<String, String>> issuesMain(HttpSession session) {
+        Map<String, String> response = new HashMap<>();
+        User loggedInUser = (User) session.getAttribute("로그인 성공");
         if (loggedInUser == null) {
             response.put("message", "사용자가 로그인 되지 않았습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         response.put("message", "메인 페이지");
-        response.put("user", loggedInUser);
+        response.put("user", String.valueOf(loggedInUser));
         return ResponseEntity.ok(response);
     }
 
