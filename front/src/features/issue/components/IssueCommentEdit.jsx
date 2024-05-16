@@ -1,10 +1,16 @@
 import styled from 'styled-components';
-import { InputTextArea } from '~/common/components';
-import { ImageUpload } from '../../../common/components';
-export function IssueCommentEdit() {
+import { InputTextArea, ImageUpload } from '~/common/components';
+
+export function IssueCommentEdit({ value, placeholder, onChange, onClick }) {
 	return (
 		<StyledWrapper>
-			<InputTextArea />
+			<InputTextArea
+				value={value || ''}
+				placeholder={placeholder}
+				onChange={onChange}
+				onClick={onClick}
+				type='Input.TextArea'
+			/>
 			<ImageUpload />
 		</StyledWrapper>
 	);

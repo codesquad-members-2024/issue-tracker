@@ -1,42 +1,101 @@
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import { Alert } from 'antd';
 import { Button } from '~/common/components/Button';
-import { IconEdit, IconSmile } from '~/common/icons';
+import { IconEdit, IconSmile, IconXsquare } from '~/common/icons';
+import { IssueCommentEdit } from '~/features/issue/components';
 
 export function IssueCommentItem({ content, writer, isWriter }) {
-	return (
-		<StyledWrapper>
-			<StyledHeader>
-				<span className='info'>
-					<img
-						src='https://avatars.githubusercontent.com/u/58014235?v=4'
-						alt='양시미'
-					/>
-					<h3>{writer}</h3>
-					<p>3분 전</p>
-				</span>
-				<span className='action'>
-					{isWriter && <p className='badge'>작성자</p>}
+	const [comment, setComment] = useState(content);
+	const [isEdit, setIsEdit] = useState(false);
+	const [hasChange, setHasChange] = useState(false);
 
+	useEffect(() => {
+		setComment(content);
+	}, [content]);
+	const handleCommentEdit = () => {
+		//TODO: 계정정보와 작성자 정보가 일치해야 수정 가능하도록
+		setIsEdit(!isEdit);
+	};
+	useEffect(() => {
+		setHasChange(comment !== content);
+	}, [comment, content]);
+
+	const inputRef = useRef(null);
+
+	return (
+		<>
+			<StyledWrapper>
+				<StyledHeader>
+					<span className='info'>
+						<img
+							src='https://avatars.githubusercontent.com/u/58014235?v=4'
+							alt='양시미'
+						/>
+						<h3>{writer}</h3>
+						<p>3분 전</p>
+					</span>
+					<span className='action'>
+						{isWriter && <p className='badge'>작성자</p>}
+
+						<Button
+							type='button'
+							size='small'
+							buttonType='ghost'
+							buttonText='편집'
+							icon={<IconEdit />}
+							onClick={() => {
+								handleCommentEdit();
+							}}
+						/>
+						<Button
+							type='button'
+							size='small'
+							buttonType='ghost'
+							buttonText='반응'
+							icon={<IconSmile />}
+							onClick={() => {}}
+						/>
+					</span>
+				</StyledHeader>
+				{isEdit ? (
+					<IssueCommentEdit
+						value={comment}
+						placeholder={content}
+						onChange={e => {
+							setComment(e.target.value);
+						}}
+						onClick={() => {
+							inputRef.current.focus({
+								cursor: 'end',
+							});
+						}}
+					/>
+				) : (
+					<StyledContents>{content}</StyledContents>
+				)}
+			</StyledWrapper>
+			{isEdit && (
+				<StyledButtons>
 					<Button
 						type='button'
 						size='small'
-						buttonType='ghost'
-						buttonText='편집'
+						buttonType='outline'
+						buttonText='편집 취소'
+						icon={<IconXsquare />}
+						onClick={() => {}}
+					/>
+					<Button
+						type='button'
+						size='small'
+						disabled={!hasChange}
+						buttonText='편집 완료'
 						icon={<IconEdit />}
 						onClick={() => {}}
 					/>
-					<Button
-						type='button'
-						size='small'
-						buttonType='ghost'
-						buttonText='반응'
-						icon={<IconSmile />}
-						onClick={() => {}}
-					/>
-				</span>
-			</StyledHeader>
-			<StyledContents>{content}</StyledContents>
-		</StyledWrapper>
+				</StyledButtons>
+			)}
+		</>
 	);
 }
 const StyledWrapper = styled.div`
@@ -93,4 +152,10 @@ const StyledContents = styled.p`
 	color: ${({ theme }) => theme.color.neutral.text.default};
 	background: ${({ theme }) => theme.color.neutral.surface.strong};
 	border-top: 1px solid ${({ theme }) => theme.color.neutral.border.default};
+`;
+const StyledButtons = styled.div`
+	display: flex;
+	margin-bottom: 24px;
+	justify-content: flex-end;
+	column-gap: 16px;
 `;
