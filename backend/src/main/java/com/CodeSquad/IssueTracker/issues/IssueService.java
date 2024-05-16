@@ -2,6 +2,7 @@ package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
+import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
@@ -9,6 +10,7 @@ import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,12 +55,23 @@ public class IssueService {
         comment.setAuthor(issueRequest.author());
         comment.setContent(issueRequest.content());
         comment.setPublishedAt(LocalDateTime.now());
+
         // save 메소드가 호출된 후, @ID 식별자로 지정된 필드에 자동생성된 ID가 설정되어 이용할 수 있다.
         comment.setIssueId(issue.getIssueId());
 
         commentRepository.save(comment);
 
         return issue.getIssueId();
+    }
+
+    public List<Issue> findOpenIssues(long page, long limit) {
+        long offset = (page - 1) * limit;
+        return issueRepository.findOpenIssues(limit, offset);
+    }
+
+    public List<Issue> findCloseIssues(long page, long limit) {
+        long offset = (page - 1) * limit;
+        return issueRepository.findCloseIssues(limit, offset);
     }
 
     private void validateIssueRequest(IssueRequest issueRequest) {

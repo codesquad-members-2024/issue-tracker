@@ -12,6 +12,8 @@ import java.util.List;
 public class IssueController {
     private final IssueService issueService;
 
+    private final static long DEFAULT_OFFSET = 15;
+
     public IssueController(IssueService issueService) {
         this.issueService = issueService;
     }
@@ -20,6 +22,18 @@ public class IssueController {
     public ResponseEntity<List<Issue>> getAllIssues() {
         List<Issue> issues = issueService.getAllIssues();
         return new ResponseEntity<>(issues, HttpStatus.OK);
+    }
+
+    @GetMapping("/issues/open")
+    public ResponseEntity<List<Issue>> getOpenIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
+        List<Issue> openIssues = issueService.findOpenIssues(page, DEFAULT_OFFSET);
+        return ResponseEntity.ok(openIssues);
+    }
+
+    @GetMapping("/issues/close")
+    public ResponseEntity<List<Issue>> getCloseIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
+        List<Issue> openIssues = issueService.findCloseIssues(page, DEFAULT_OFFSET);
+        return ResponseEntity.ok(openIssues);
     }
 
     @PostMapping("/issue")
