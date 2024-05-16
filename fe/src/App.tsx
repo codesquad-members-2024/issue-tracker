@@ -3,6 +3,7 @@ import { useState } from "react";
 import Main from "./routes/Main";
 import Login from "./routes/Login";
 import NewIssue from "./routes/NewIssue";
+import Labels from "./routes/Labels";
 
 function App() {
 	const [darkMode, setDarkMode] = useState("");
@@ -17,6 +18,10 @@ function App() {
 					<Route
 						path="/issue"
 						element={<NewIssue darkMode={darkMode} setDarkMode={setDarkMode} />}
+					/>
+					<Route
+						path="/labels"
+						element={<Labels darkMode={darkMode} setDarkMode={setDarkMode} />}
 					/>
 				</Routes>
 			</BrowserRouter>

@@ -7,7 +7,7 @@ import Issue from "./Issue";
 //DELETE 차후 삭제
 const issues = [
 	{
-		id: 1,
+		id: 111,
 		title: "이슈 제목",
 		open: true,
 		content: "Grenadine",
@@ -16,21 +16,21 @@ const issues = [
 		milestone_name: "Hombre Space",
 		labels: [
 			{
-				id: 1,
+				id: 11,
 				name: "bug",
-				background_color: "#0025E6",
+				background_color: "#0025e6",
 				text_bright: true,
 			},
 			{
-				id: 2,
+				id: 12,
 				name: "label",
-				background_color: "#FF3B30",
+				background_color: "#ff3b30",
 				text_bright: true,
 			},
 		],
 	},
 	{
-		id: 2,
+		id: 222,
 		title: "Legal Assistant",
 		open: false,
 		content: "Grenadine",
@@ -39,13 +39,13 @@ const issues = [
 		milestone_name: "X5",
 		labels: [
 			{
-				id: 1,
+				id: 21,
 				name: "옹?",
 				background_color: "#dfdeff",
 				text_bright: false,
 			},
 			{
-				id: 2,
+				id: 22,
 				name: "documentaion",
 				background_color: "#feff79",
 				text_bright: false,

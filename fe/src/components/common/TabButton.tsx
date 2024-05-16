@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 
 interface PropsType {
 	position: string;
+	click?: string;
 }
-type PositionType = {
+interface PositionType {
 	[key: string]: {
 		border: boolean;
 		leftIcon: string;
@@ -13,7 +15,13 @@ type PositionType = {
 		rightTab: string;
 		size: string;
 	};
-};
+}
+interface LinkType {
+	[key: string]: {
+		left: string;
+		right: string;
+	};
+}
 
 const POSITION: PositionType = {
 	UI_BAR: {
@@ -34,12 +42,29 @@ const POSITION: PositionType = {
 	},
 };
 
+//TODO 라우팅
+const LINK: LinkType = {
+	UI_BAR: {
+		left: "/labels",
+		right: "/",
+	},
+	TABLE: {
+		left: "/",
+		right: "/",
+	},
+};
+
 const borderTotal = "component-border dark:component-border--dark border-[1px] rounded-xl";
 const borderRight = "component-border dark:component-border--dark border-r-[1px]";
 
-function TabButton({ position }: PropsType) {
+function TabButton({ position, click }: PropsType) {
 	const [left, setLeft] = useState("DEFAULT");
 	const [right, setRight] = useState("DEFAULT");
+
+	useEffect(() => {
+		if (click === "left") setLeft("SELECTED");
+		if (click === "right") setRight("SELECTED");
+	}, []);
 
 	const onLeftClick = () => {
 		setLeft("SELECTED");
@@ -57,23 +82,32 @@ function TabButton({ position }: PropsType) {
 				POSITION[position].size
 			} flex items-center`}
 		>
-			<Button
-				onClick={onLeftClick}
-				size="M"
-				type="GHOST"
-				icon={POSITION[position].leftIcon}
-				text={POSITION[position].leftTab}
-				state={left}
-			/>
+			<Link
+				to={`/labels`}
+				className={`flex items-center w-1/2 h-full bg-grayscale.100 dark:bg-grayscale.900 rounded-l-xl ${
+					left === "SELECTED" ? "bg-grayscale.200 dark:bg-grayscale.700" : ""
+				}`}
+			>
+				<Button
+					onClick={onLeftClick}
+					size="M"
+					type="GHOST"
+					icon={POSITION[position].leftIcon}
+					text={POSITION[position].leftTab}
+					state={left}
+				/>
+			</Link>
 			<div className={`${POSITION[position].border ? borderRight : ""} h-full`}></div>
-			<Button
-				onClick={onRightClick}
-				size="M"
-				type="GHOST"
-				icon={POSITION[position].rightIcon}
-				text={POSITION[position].rightTab}
-				state={right}
-			/>
+			<Link to="/" className="flex items-center w-1/2 h-full">
+				<Button
+					onClick={onRightClick}
+					size="M"
+					type="GHOST"
+					icon={POSITION[position].rightIcon}
+					text={POSITION[position].rightTab}
+					state={right}
+				/>
+			</Link>
 		</div>
 	);
 }

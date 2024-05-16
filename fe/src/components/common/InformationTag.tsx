@@ -24,12 +24,18 @@ function InformationTag({ text, icon, fillColor, textBright }: PropsType) {
 	const bg = `bg-[${fillColor}]`;
 	return (
 		<div
-			className={`${!textBright && border} ${bg} flex items-center rounded-2xl ${
+			className={`${
+				fillColor === "#FEFEFE" ? border : ""
+			} ${bg} w-fit flex items-center rounded-2xl ${
 				icon ? "h-[32px] px-4" : "h-[24px] px-2"
 			} text-xs`}
 		>
 			{icon && ICON[icon]}
-			<span className={`${textBright ? "text-grayscale.50" : "text-grayscale.600"} px-1`}>
+			<span 
+				className={`${
+					textBright ? "text-grayscale.50" : "text-grayscale.600"
+				} whitespace-nowrap px-1`}
+			>
 				{text}
 			</span>
 		</div>

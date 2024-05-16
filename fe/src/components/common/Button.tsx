@@ -12,7 +12,7 @@ import {
 import { faPenToSquare, faFaceSmile, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 interface PropsType {
-	onClick?: () => void;
+	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	size: string;
 	type: string;
 	icon: string | null;
@@ -54,6 +54,7 @@ const TYPE: DesignMap = {
 		"border-[1px] border-grayscale.700 text-grayscale.700 dark:text-grayscale.400 dark:border-grayscale.400",
 	GHOST: "text-grayscale.700 dark:text-grayscale.400",
 	GHOST_RED: "text-accent.red",
+	CONTAINED_RED: "bg-accent.red text-grayscale.50",
 };
 const STATE: DesignMap = {
 	SELECTED: "font-bold",

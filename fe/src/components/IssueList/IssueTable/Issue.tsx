@@ -52,9 +52,8 @@ function Issue({ issue }: PropsType) {
 				</span>
 				{issue.labels.length &&
 					issue.labels.map((label) => (
-						<span className="mr-2">
+						<span key={label.id} className="mr-2">
 							<InformationTag
-								key={label.id}
 								text={label.name}
 								icon={null}
 								fillColor={label.background_color}
