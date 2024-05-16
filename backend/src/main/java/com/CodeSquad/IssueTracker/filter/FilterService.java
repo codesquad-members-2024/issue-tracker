@@ -16,8 +16,8 @@ public class FilterService {
         long openIssueNum = issueRepository.countOpenIssues();
         long closeIssueNum = issueRepository.countCloseIssues();
         return IssueNumberResponse.builder()
-                .openedIssueNumber(openIssueNum)
-                .closedIssueNumber(closeIssueNum)
+                .openIssueCount(openIssueNum)
+                .closeIssueCount(closeIssueNum)
                 .build();
     }
 }
