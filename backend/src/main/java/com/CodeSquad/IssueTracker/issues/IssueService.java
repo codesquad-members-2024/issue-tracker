@@ -107,10 +107,16 @@ public class IssueService {
     }
 
     public void openIssue(long issueId) {
+        issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.openIssue(issueId);
     }
 
     public void closeIssue(long issueId) {
+        issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.closeIssue(issueId);
     }
 
