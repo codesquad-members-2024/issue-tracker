@@ -4,6 +4,9 @@ import Login from "../components/login/Login";
 import Registration from "../components/registration/Registration";
 import Main from "../components/Main";
 import IssueCreator from "../components/creator/IssueCreator";
+import IssueDetail from "../components/issue/IssueDetail";
+import LabelList from "../components/label/LabelList";
+import MilestoneList from "../components/milestone/MilestoneList";
 
 interface AuthRouteProps {
   children: React.ReactNode;
@@ -37,5 +40,17 @@ export const router = createBrowserRouter([
   {
     path: "/new-issue",
     element: <IssueCreator />,
-  }
+  },
+  {
+    path: "/issue-detail", // get /issues/{issueId} 구현 완료 시 수정
+    element: <IssueDetail />,
+  },
+  {
+    path: "/labels",
+    element: <LabelList />,
+  },
+  {
+    path: "/milestone",
+    element: <MilestoneList />,
+  },
 ]);

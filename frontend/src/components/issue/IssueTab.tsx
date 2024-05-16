@@ -6,7 +6,7 @@ import useIssueStore from "../../hooks/useIssueStore";
 import { Dispatch, SetStateAction } from "react";
 import { IssueType } from "./IssueList";
 
-interface IssueTabProps {
+export interface IssueTabProps {
   focusedTab: string;
   setFocusedTab: Dispatch<SetStateAction<IssueType>>;
 }
@@ -22,11 +22,15 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
         <input type="checkbox" />
         <LeftMenu>
           <img src={openedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>열린 이슈({openIssueCount})</IssueMenuText>
+          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>
+            열린 이슈({openIssueCount})
+          </IssueMenuText>
         </LeftMenu>
         <LeftMenu>
           <img src={closedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "closed"} onClick={() => setFocusedTab("closed")}>닫힌 이슈({closeIssueCount})</IssueMenuText>
+          <IssueMenuText isFocused={focusedTab === "close"} onClick={() => setFocusedTab("close")}>
+            닫힌 이슈({closeIssueCount})
+          </IssueMenuText>
         </LeftMenu>
       </LeftMenus>
       <RightMenus>
@@ -52,11 +56,14 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
 }
 
 const Wrapper = styled.div`
+  width: 100%;
   height: 4em;
   padding: 0 2em;
+  box-sizing: border-box;
   background-color: #eff0f6;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #d9dbe9;
 `;
 
 const LeftMenus = styled.div`

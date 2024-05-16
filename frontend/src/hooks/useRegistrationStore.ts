@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 
 interface RegistrationState {
   idValue: string;
@@ -50,7 +50,7 @@ function registrationReducer(state: RegistrationState, { type, payload }: Regist
   }
 }
 
-function useRegistrationState() {
+function useRegistrationStore() {
   const [state, dispatch] = useReducer(registrationReducer, initialState);
   const { idValue, passwordValue, passwordValidationValue, nicknameValue, isValidated } = state;
 
@@ -73,4 +73,4 @@ function useRegistrationState() {
   };
 }
 
-export default useRegistrationState;
+export default useRegistrationStore;

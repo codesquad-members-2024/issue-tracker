@@ -1,27 +1,31 @@
+import React from "react";
 import styled, { css } from "styled-components";
 
 interface CreatorFormProps {
   labelText: string;
-  isFullHeight: boolean;
+  height: string;
+  onChange: () => void;
 }
 
-function CreatorForm({ labelText, isFullHeight }: CreatorFormProps) {
+const CreatorForm = React.forwardRef<HTMLTextAreaElement, CreatorFormProps>((props, ref) => {
+  const { labelText, height, onChange } = props;
+  
   return (
-    <Wrapper isFocused={false} isFullHeight={isFullHeight}>
-      <FormParagraph isFullHeight={isFullHeight}>
-        <FormInput required />
+    <Wrapper isFocused={false} height={height}>
+      <FormParagraph height={height}>
+        <FormInput ref={ref} onChange={onChange} required />
         <FormInputLabel>
           <span>{labelText}</span>
         </FormInputLabel>
       </FormParagraph>
     </Wrapper>
   );
-}
+});
 
-const Wrapper = styled.div<{ isFocused: boolean, isFullHeight: boolean }>`
+const Wrapper = styled.div<{ isFocused: boolean; height: string }>`
   box-sizing: border-box;
   width: 100%;
-  ${(props) => props.isFullHeight && "height: 100%;" }
+  ${({ height }) => `height: ${height};`}
   display: flex;
   padding: 0 1em;
   flex-direction: column;
@@ -38,11 +42,11 @@ const Wrapper = styled.div<{ isFocused: boolean, isFullHeight: boolean }>`
     `}
 `;
 
-const FormParagraph = styled.p<{ isFullHeight: boolean }>`
+const FormParagraph = styled.p<{ height: string }>`
   position: relative;
   top: 0;
   width: 100%;
-  ${(props) => (props.isFullHeight ? "height: 100%;" : "height: 3.5em;") }
+  ${({ height }) => `height: ${height};`}
   margin: 0;
 `;
 
@@ -54,8 +58,9 @@ const FormInput = styled.textarea`
   padding: 0;
   border: 0 none;
   background-color: transparent;
-  color: #4E4B66;
+  color: #4e4b66;
   outline: none;
+  resize: none;
 
   &:focus + label span,
   &:valid + label span {

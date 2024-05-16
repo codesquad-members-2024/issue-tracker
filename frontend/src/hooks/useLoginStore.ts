@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 
 interface LoginState {
   idValue: string;
@@ -34,7 +34,7 @@ const loginReducer = (state: LoginState, { type, payload }: LoginAction) => {
   }
 };
 
-function useLoginState() {
+function useLoginStore() {
   const [state, dispatch] = useReducer(loginReducer, initialState);
   const { idValue, passwordValue } = state;
 
@@ -47,4 +47,4 @@ function useLoginState() {
   };
 }
 
-export default useLoginState;
+export default useLoginStore;
