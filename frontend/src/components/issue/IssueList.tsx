@@ -7,12 +7,15 @@ import { useEffect, useState } from "react";
 import useIssueStore from "../../hooks/useIssueStore";
 import RefreshRequest from "../error/RefreshRequest";
 
-export type IssueType = "open" | "closed"; // deprecated after the completion of api
+export type IssueType = "open" | "close";
+
+const FIRST_PAGE = 1;
 
 function IssueList() {
   const { issues, setIssues } = useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const [requestError, setRequestError] = useState(false);
+  const [page, setPage] = useState(FIRST_PAGE);
 
   const { mutate: fetchIssues } = useMutation(sendIssuesRequest, {
     onSuccess: (data) => {
@@ -22,31 +25,38 @@ function IssueList() {
     onError: () => setRequestError(true),
   });
 
-  useEffect(() => fetchIssues(), []);
+  useEffect(() => {
+    setPage(FIRST_PAGE);
+    fetchIssues({ issueType: focusedTab, page });
+  }, [focusedTab]);
 
   if (requestError) return <RefreshRequest />;
 
   return (
     <Wrapper>
       <IssueTab focusedTab={focusedTab} setFocusedTab={setFocusedTab} />
+      <ScrollableArea>
       {issues
-        .filter(({ isClosed }) => (focusedTab === "open" ? !isClosed : isClosed)) // deprecated after the completion of api
-        .map(({ id, title, author, publishedAt, isClosed }) => (
-          <IssueHeadline issueId={id} title={title} author={author} publishedAt={publishedAt} isClosed={isClosed} />
+        .map(({ issueId, title, author, publishedAt, isClosed }) => (
+          <IssueHeadline issueId={issueId} title={title} author={author} publishedAt={publishedAt} isClosed={isClosed} />
         ))}
+      </ScrollableArea>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   width: 1280px;
-  height: 55em;
   margin-top: 1.5em;
   border: 1px solid #d9dbe9;
   border-radius: 0.725em;
   overflow: hidden;
-  overflow-y: scroll;
+`;
 
+const ScrollableArea = styled.div`
+  max-height: 42.5em;
+  overflow-y: scroll;
+  height: calc(100% - 4em);
   &::-webkit-scrollbar {
     display: none;
   }

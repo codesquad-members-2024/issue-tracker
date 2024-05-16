@@ -28,7 +28,7 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
         </LeftMenu>
         <LeftMenu>
           <img src={closedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "closed"} onClick={() => setFocusedTab("closed")}>
+          <IssueMenuText isFocused={focusedTab === "close"} onClick={() => setFocusedTab("close")}>
             닫힌 이슈({closeIssueCount})
           </IssueMenuText>
         </LeftMenu>
@@ -56,11 +56,14 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
 }
 
 const Wrapper = styled.div`
+  width: 100%;
   height: 4em;
   padding: 0 2em;
+  box-sizing: border-box;
   background-color: #eff0f6;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #d9dbe9;
 `;
 
 const LeftMenus = styled.div`

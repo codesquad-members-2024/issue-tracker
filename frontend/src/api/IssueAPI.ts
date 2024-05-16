@@ -6,12 +6,17 @@ interface NewIssue {
   userId: string;
 }
 
+interface IssuesRequestProps {
+  issueType: string;
+  page: number;
+}
+
 const DATA_FORMAT_ERROR_MESSAGE = "데이터 형식에 오류가 생겼습니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
-export const sendIssuesRequest = async () => {
+export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps) => {
   try {
-    const response = await fetch(`${SERVER}/issues`);
+    const response = await fetch(`${SERVER}/issues/${issueType}?page=${page}`);
 
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE); 
 

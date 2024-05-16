@@ -17,7 +17,7 @@ const useLoginLogic = () => {
     state: { idValue, passwordValue, allFilled },
     setErrorMessage,
     checkAllFilled,
-  } = loginState;
+  } = loginStore;
   const { setUserId, setIsLoggedIn } = useUserStore();
   const navigate = useNavigate();
 
