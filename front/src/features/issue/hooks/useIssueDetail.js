@@ -10,8 +10,7 @@ export const useIssueDetail = id => {
 		const fetchIssueDetail = async () => {
 			try {
 				const data = await getIssueDetail(id);
-				// TODO: data[0] -> data
-				setIssueDetail(data[0]);
+				setIssueDetail(data);
 			} catch (error) {
 				setError(error);
 			} finally {
