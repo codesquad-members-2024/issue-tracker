@@ -1,12 +1,9 @@
 package com.CodeSquad.IssueTracker.issues;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +35,17 @@ public class IssuesController {
     public ResponseEntity<List<Issue>> getCloseIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
         List<Issue> openIssues = issueService.findCloseIssues(page, DEFAULT_OFFSET);
         return ResponseEntity.ok(openIssues);
+    }
+
+    @PatchMapping("/open")
+    public ResponseEntity<Void> openIssues(@RequestBody IssueIds issueIds) {
+        issueService.openIssues(issueIds);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/close")
+    public ResponseEntity<Void> closeIssues(@RequestBody IssueIds issueIds) {
+        issueService.closeIssues(issueIds);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
