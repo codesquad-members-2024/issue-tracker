@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export function Header() {
   return (
     <StyledHeader>
-      <Logo />
+      <StyledLogo />
       <Link to={"/login"}>
         <img src="/img/frog.png" />
       </Link>
@@ -22,4 +22,9 @@ const StyledHeader = styled.div`
     width: 32px;
     height: 32px;
   }
+`;
+
+const StyledLogo = styled(Logo)`
+  width: 200px;
+  height: auto;
 `;

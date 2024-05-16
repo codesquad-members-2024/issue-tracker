@@ -47,5 +47,3 @@ const Li = styled.li`
 const Checkbox = styled.input`
   margin-right: 0.5rem;
 `;
-
-export default Popup;
