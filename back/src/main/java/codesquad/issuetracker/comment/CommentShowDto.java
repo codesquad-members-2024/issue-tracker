@@ -11,7 +11,7 @@ public class CommentShowDto {
 
     public CommentShowDto(Comment comment) {
         this.id = comment.getId();
-        this.writer = comment.getWriter();
+        this.writer = comment.getLoginId();
         this.content = comment.getContent();
     }
 }
