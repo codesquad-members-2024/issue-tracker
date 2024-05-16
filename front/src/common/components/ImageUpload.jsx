@@ -72,12 +72,12 @@ export function ImageUpload({ handleUploadSuccess }) {
 }
 
 const StyledWrapper = styled.div`
-    height: 52px;
-    display: flex;
-    align-items: center;
-    border-top: 1px dashed ${({ theme }) =>
-			theme.color.neutral.border.default});
-    flex-direction: column;
+	height: 52px;
+	border-top: 1px dashed ${({ theme }) => theme.color.neutral.border.default};
+	flex-direction: column;
+	button {
+		margin-top: 6px;
+	}
 `;
 
 const StyledInputFile = styled.input`
