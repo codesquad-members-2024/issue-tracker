@@ -1,15 +1,14 @@
-package com.codesquad.team3.issuetracker.domain.member.dto;
+package com.codesquad.team3.issuetracker.domain.member.dto.request;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UpdateMember {
-    private final String id;
     private final String password;
-    private final String nickName;
+    private final String nickname;
     private final LocalDateTime birthday;
     private final String email;
 }
