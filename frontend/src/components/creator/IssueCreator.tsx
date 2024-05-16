@@ -4,8 +4,26 @@ import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import Sidebar from "../issue/Sidebar";
+import { useRef } from "react";
+import useUserStore from "../../hooks/useUserStore";
+import { useNavigate } from "react-router-dom";
+import { postNewIssue } from "../../api/IssueAPI";
 
 function IssueCreator() {
+  const { userId } = useUserStore();
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+  const commentRef = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
+
+  const handleCancel = () => navigate("/");
+  const handleSubmit = () => {
+    const title = titleRef.current?.value;
+    const content = commentRef.current?.value;
+
+    // 추후 /issue/{issueId} 로 라우팅 예정
+    if (title && content) postNewIssue({ title, content, userId }).then(() => navigate("/"));
+  };
+
   return (
     <Wrapper>
       <Header />
@@ -16,15 +34,15 @@ function IssueCreator() {
       <BodyWrapper>
         <UserIcon src={userIcon} />
         <FormWrapper>
-          <CreatorForm labelText="제목" height="3.5em" />
-          <CreatorForm labelText="코멘트를 입력하세요." height="100%" />
+          <CreatorForm ref={titleRef} labelText="제목" height="3.5em" />
+          <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" />
         </FormWrapper>
         <Sidebar />
       </BodyWrapper>
       <BodyBoundary />
       <ButtonsWrapper>
-        <SubmitButton>완료</SubmitButton>
-        <CancelWrapper>
+        <SubmitButton onClick={handleSubmit}>완료</SubmitButton>
+        <CancelWrapper onClick={handleCancel}>
           <CancelIcon src={plusIcon} />
           <CancelText>작성 취소</CancelText>
         </CancelWrapper>

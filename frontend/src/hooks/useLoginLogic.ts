@@ -18,11 +18,12 @@ const useLoginLogic = () => {
     setErrorMessage,
     checkAllFilled,
   } = loginState;
-  const { setIsLoggedIn } = useUserStore();
+  const { setUserId, setIsLoggedIn } = useUserStore();
   const navigate = useNavigate();
 
   const { mutate: login, isLoading } = useMutation(sendLoginRequest, {
     onSuccess: () => {
+      setUserId(idValue);
       setIsLoggedIn(true);
       navigate("/");
     },
