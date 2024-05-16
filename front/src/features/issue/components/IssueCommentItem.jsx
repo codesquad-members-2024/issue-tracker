@@ -21,8 +21,6 @@ export function IssueCommentItem({ content, writer, isWriter }) {
 		setHasChange(comment !== content);
 	}, [comment, content]);
 
-	const inputRef = useRef(null);
-
 	return (
 		<>
 			<StyledWrapper>
@@ -65,11 +63,6 @@ export function IssueCommentItem({ content, writer, isWriter }) {
 						onChange={e => {
 							setComment(e.target.value);
 						}}
-						onClick={() => {
-							inputRef.current.focus({
-								cursor: 'end',
-							});
-						}}
 					/>
 				) : (
 					<StyledContents>{content}</StyledContents>
@@ -83,7 +76,7 @@ export function IssueCommentItem({ content, writer, isWriter }) {
 						buttonType='outline'
 						buttonText='편집 취소'
 						icon={<IconXsquare />}
-						onClick={() => {}}
+						onClick={handleCommentEdit}
 					/>
 					<Button
 						type='button'

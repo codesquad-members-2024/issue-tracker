@@ -21,26 +21,53 @@ import {
 } from '~/features/issue/components';
 
 export function IssueDetailContainer() {
-	const { id = 1 } = useParams();
+	const { id } = useParams();
 
 	const { issueDetail, loading, error } = useIssueDetail(id);
 
-	const [title, setTitle] = useState(issueDetail?.title);
-	const [hasChange, setHasChange] = useState(false);
-	const [isEdit, setIsEdit] = useState(false);
+	// const [title, setTitle] = useState(issueDetail?.title);
+	// const [hasChange, setHasChange] = useState(false);
+	// const [isEdit, setIsEdit] = useState(false);
 
-	const [newComment, setNewComment] = useState('');
+	// const [newComment, setNewComment] = useState('');
+	// const [hasNewComment, setHasNewComment] = useState(false);
+
+	const [detailState, setDateilState] = useState({
+		title: issueDetail?.title,
+		newComment: '',
+		isEdit: false,
+	});
 
 	useEffect(() => {
-		setHasChange(title !== issueDetail?.title);
-	}, [title, issueDetail?.title]);
-	useEffect(() => {
-		setTitle(issueDetail?.title);
+		setDateilState(prevState => ({
+			...prevState,
+			title: issueDetail?.title,
+		}));
 	}, [issueDetail?.title]);
+
 	const handleEdit = () => {
-		setIsEdit(!isEdit);
+		setDateilState(prevState => ({
+			...prevState,
+			isEdit: !prevState.isEdit,
+		}));
 	};
 
+	const handleTitleChange = e => {
+		setDateilState(prevState => ({
+			...prevState,
+			title: e.target.value,
+		}));
+	};
+
+	const handleNewCommentChange = e => {
+		setDateilState(prevState => ({
+			...prevState,
+			newComment: e.target.value,
+		}));
+	};
+
+	const isNewComment = detailState.newComment.length !== '';
+	const hasChanged = detailState.title !== issueDetail?.title;
 	// TODO: error 재연
 	return (
 		<>
@@ -49,11 +76,11 @@ export function IssueDetailContainer() {
 			<StyledWrapper>
 				<StyledDetailHeader>
 					<StyledTitle>
-						{isEdit ? (
+						{detailState.isEdit ? (
 							<InputTitleEdit
 								placeholder={issueDetail.title}
-								value={title}
-								onChange={e => setTitle(e.target.value)}
+								value={detailState.title}
+								onChange={handleTitleChange}
 							/>
 						) : (
 							<h2>
@@ -62,16 +89,14 @@ export function IssueDetailContainer() {
 						)}
 
 						<StyledButtonWrap>
-							{isEdit ? (
+							{detailState.isEdit ? (
 								<Button
 									type='button'
 									size='small'
 									buttonType='outline'
 									buttonText='편집 취소'
 									icon={<IconXsquare />}
-									onClick={() => {
-										handleEdit();
-									}}
+									onClick={handleEdit}
 								/>
 							) : (
 								<Button
@@ -80,16 +105,14 @@ export function IssueDetailContainer() {
 									buttonType='outline'
 									buttonText='제목 편집'
 									icon={<IconEdit />}
-									onClick={() => {
-										handleEdit();
-									}}
+									onClick={handleEdit}
 								/>
 							)}
-							{isEdit ? (
+							{detailState.isEdit ? (
 								<Button
 									type='button'
 									size='small'
-									disabled={!hasChange}
+									disabled={!hasChanged}
 									buttonType='outline'
 									buttonText='편집 완료'
 									icon={<IconEdit />}
@@ -140,24 +163,24 @@ export function IssueDetailContainer() {
 									isWriter={issueDetail.writer === item.writer}
 								/>
 							))}
-						<>
+						<StyledNewComment>
 							<IssueCommentEdit
-								value={newComment}
+								value={detailState.newComment}
 								placeholder='코멘트를 입력하세요.'
-								onChange={e => {
-									setNewComment(e.target.value);
-								}}
+								onChange={handleNewCommentChange}
 								onClick={() => {}}
 							/>
-							<Button
-								type='button'
-								size='small'
-								disabled={!hasChange}
-								buttonType='container'
-								buttonText='코멘트 작성'
-								icon={<IconPlus />}
-							/>
-						</>
+							<div className='right-align'>
+								<Button
+									type='button'
+									size='small'
+									disabled={!isNewComment}
+									buttonType='container'
+									buttonText='코멘트 작성'
+									icon={<IconPlus />}
+								/>
+							</div>
+						</StyledNewComment>
 					</section>
 					<aside>
 						<IssueSidebar
@@ -165,14 +188,16 @@ export function IssueDetailContainer() {
 							milestone={issueDetail.milestoneId}
 							labels={issueDetail.labels}
 						/>
-						<Button
-							type='button'
-							size='small'
-							buttonType='ghost'
-							onClick={() => {}}
-							buttonText='이슈 삭제'
-							icon={<IconTrash />}
-						/>
+						<div className='right-align'>
+							<Button
+								type='button'
+								size='small'
+								buttonType='ghost'
+								onClick={() => {}}
+								buttonText='이슈 삭제'
+								icon={<IconTrash />}
+							/>
+						</div>
 					</aside>
 				</StyledContents>
 			</StyledWrapper>
@@ -251,12 +276,14 @@ const StyledContents = styled.div`
 		width: 960px;
 	}
 	aside {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-end;
 		width: 288px;
 		button {
 			margin-top: 16px;
 		}
+	}
+`;
+const StyledNewComment = styled.div`
+	button {
+		margin-top: 24px;
 	}
 `;
