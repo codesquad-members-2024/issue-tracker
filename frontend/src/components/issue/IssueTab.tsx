@@ -3,14 +3,14 @@ import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
 import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
 import arrowBottom from "../../img/icon/arrowBottom.svg";
 import useIssueStore from "../../hooks/useIssueStore";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import { IssueType } from "./IssueList";
 import { useMutation } from "react-query";
 import { sendFiltersRequest } from "../../api/FilterAPI";
 
 export interface IssueTabProps {
   focusedTab: string;
-  setFocusedTab: Dispatch<SetStateAction<IssueType>>;
+  setFocusedTab: (tabDescription: IssueType) => void;
 }
 
 function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {

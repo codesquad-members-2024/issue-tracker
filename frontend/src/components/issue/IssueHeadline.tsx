@@ -5,6 +5,7 @@ import violetClosedIssueIcon from "../../img/icon/violetClosedIssueIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import dateUtils from "../../utils/DateUtils";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 export interface IssueHeadlineProps {
   issueId: number;
@@ -14,11 +15,12 @@ export interface IssueHeadlineProps {
   isClosed: boolean;
 }
 
-function IssueHeadline({ issueId, title, author, publishedAt, isClosed }: IssueHeadlineProps) {
+const IssueHeadline = React.forwardRef<HTMLDivElement, IssueHeadlineProps>((props, ref) => {
+  const { issueId, title, author, publishedAt, isClosed } = props;
   const navigate = useNavigate();
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref}>
       <IssueCheckBox type="checkbox" />
       <IssueDescriptions>
         <IssueTitleDescription>
@@ -39,7 +41,7 @@ function IssueHeadline({ issueId, title, author, publishedAt, isClosed }: IssueH
       </UserIconContainer>
     </Wrapper>
   );
-}
+});
 
 const Wrapper = styled.div`
   width: 95%;
