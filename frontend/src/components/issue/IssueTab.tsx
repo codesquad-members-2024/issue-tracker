@@ -3,8 +3,10 @@ import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
 import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
 import arrowBottom from "../../img/icon/arrowBottom.svg";
 import useIssueStore from "../../hooks/useIssueStore";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { IssueType } from "./IssueList";
+import { useMutation } from "react-query";
+import { sendFiltersRequest } from "../../api/FilterAPI";
 
 export interface IssueTabProps {
   focusedTab: string;
@@ -12,9 +14,13 @@ export interface IssueTabProps {
 }
 
 function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
-  const { issues } = useIssueStore();
-  const openIssueCount = issues.filter(({ isClosed }) => !isClosed).length;
-  const closeIssueCount = issues.length - openIssueCount;
+  const { openIssueCount, closeIssueCount, setIssueCounts } = useIssueStore();
+
+  const { mutate: fetchFilters } = useMutation(sendFiltersRequest, {
+    onSuccess: (data) => setIssueCounts(data),
+  });
+
+  useEffect(fetchFilters, []);
 
   return (
     <Wrapper>

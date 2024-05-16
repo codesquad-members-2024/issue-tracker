@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import IssueTab from "./IssueTab";
-import IssueHeadline from "./IssueHeadline";
+import IssueHeadline, { IssueHeadlineProps } from "./IssueHeadline";
 import { useMutation } from "react-query";
 import { sendIssuesRequest } from "../../api/IssueAPI";
 import { useEffect, useState } from "react";
@@ -10,6 +10,10 @@ import RefreshRequest from "../error/RefreshRequest";
 export type IssueType = "open" | "close";
 
 const FIRST_PAGE = 1;
+
+const renderIssueHeadlines = ({ issueId, title, author, publishedAt, isClosed }: IssueHeadlineProps) => (
+  <IssueHeadline issueId={issueId} title={title} author={author} publishedAt={publishedAt} isClosed={isClosed} />
+);
 
 function IssueList() {
   const { issues, setIssues } = useIssueStore();
@@ -36,10 +40,7 @@ function IssueList() {
     <Wrapper>
       <IssueTab focusedTab={focusedTab} setFocusedTab={setFocusedTab} />
       <ScrollableArea>
-      {issues
-        .map(({ issueId, title, author, publishedAt, isClosed }) => (
-          <IssueHeadline issueId={issueId} title={title} author={author} publishedAt={publishedAt} isClosed={isClosed} />
-        ))}
+        {issues.map(renderIssueHeadlines)}
       </ScrollableArea>
     </Wrapper>
   );
