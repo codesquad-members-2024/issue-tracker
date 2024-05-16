@@ -41,4 +41,11 @@ public class LabelController {
 
         return ResponseEntity.ok("라벨 수정 성공! 라벨 #" + label.getId() + " 이름 : " + label.getName());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteLabel(@PathVariable long id) {
+        labelService.deleteLabel(id);
+
+        return ResponseEntity.ok("라벨 삭제 성공!");
+    }
 }

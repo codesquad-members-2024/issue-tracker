@@ -49,4 +49,10 @@ public class LabelService {
         // 3) 업데이트 내용 저장 및 반환
         return labelRepository.save(label);
     }
+
+    public void deleteLabel(Long id) {
+        Label label = labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
+
+        labelRepository.delete(label);
+    }
 }
