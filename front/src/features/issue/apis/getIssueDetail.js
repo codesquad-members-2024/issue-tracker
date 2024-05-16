@@ -6,11 +6,13 @@ import { server, devServer } from '~/apis/baseApi';
  * @param {number} id : 이슈 id
  * @returns {object} : 이슈 상세 정보
  */
-const prod = `${server}/detail?id=1`;
-const dev = `${devServer}/detail?id=1`;
+// const prod = `${server}/detail?id=1`;
+// const dev = `${devServer}/detail?id=1`;
 export async function getIssueDetail(id) {
 	try {
-		const response = await fetch(dev).then(res => res.json());
+		const response = await fetch(`${server}/issues/${id}`).then(res =>
+			res.json()
+		);
 		const data = response;
 		return data;
 	} catch (error) {
