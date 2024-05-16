@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.issuetracker.domain.milestone.MilestoneMapper">
+    
+    <update id="update" parameterType="map">
+        UPDATE MILESTONE
+        <set>
+            <if test="form.name != null">
+                NAME = #{form.name},
+            </if>
+            <if test="form.dueDate != null">
+                DUE_DATE = #{form.dueDate},
+            </if>
+            <if test="form.description != null">
+                DESCRIPTION = #{form.description},
+            </if>
+        </set>
+        WHERE MILESTONE_ID = #{milestoneId}
+    </update>
+</mapper>
