@@ -14,7 +14,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 public class Issue {
     @Id
     private Long id;
-    private final Boolean isOpen;// default : open 수정 할 때 만 클라이언트에서 값 받는다.
+    private final boolean isOpen;// default : open 수정 할 때 만 클라이언트에서 값 받는다.
     private final String title; //Non-Null
     private final String writer; //Non-Null
     private final String content;
