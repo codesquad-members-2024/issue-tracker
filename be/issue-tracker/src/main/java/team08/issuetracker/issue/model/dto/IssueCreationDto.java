@@ -11,9 +11,9 @@ import java.util.List;
  * @param content Nullable
  * @param mileStone Nullable
  * @param labels Nullable
- * @param assignees Nullable
+ * @param assigneeIds Nullable
  * @param file Nullable
  */
 public record IssueCreationDto(String title, String writer, String content, Object mileStone,
-                               List<Object> labels, List<String> assignees, String file) {
+                               List<Object> labels, List<String> assigneeIds, String file) {
 }
