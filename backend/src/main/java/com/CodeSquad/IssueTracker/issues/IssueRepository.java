@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.issues;
 
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -15,8 +16,17 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
     @Query("SELECT * FROM issues WHERE is_closed = true ORDER BY issue_id DESC LIMIT :limit OFFSET :offset")
     List<Issue> findCloseIssues(long limit, long offset);
 
+    @Modifying
+    @Query("UPDATE issues SET is_closed = false WHERE issue_id = :issueId")
+    void openIssue(long issueId);
+
+    @Modifying
+    @Query("UPDATE issues SET is_closed = true WHERE issue_id = :issueId")
+    void closeIssue(long issueId);
+
     @Query("SELECT COUNT(issue_id) FROM issues WHERE is_closed = false")
     long countOpenIssues();
+
 
     @Query("SELECT COUNT(issue_id) FROM issues WHERE is_closed = true")
     long countCloseIssues();

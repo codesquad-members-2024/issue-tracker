@@ -66,6 +66,12 @@ public class IssueService {
         return issue.getIssueId();
     }
 
+    public Issue findIssueById(long issueId) {
+        return issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
+    }
+
     public List<Issue> findOpenIssues(long page, long limit) {
         validateIssueListPage(page);
         long offset = (page - 1) * limit;
@@ -98,6 +104,14 @@ public class IssueService {
         if (page < 1) {
             throw new InvalidIssuePageException("page는 1 이상의 정수여야 합니다.");
         }
+    }
+
+    public void openIssue(long issueId) {
+        issueRepository.openIssue(issueId);
+    }
+
+    public void closeIssue(long issueId) {
+        issueRepository.closeIssue(issueId);
     }
 
     private void validateIssueRequest(IssueRequest issueRequest) {
