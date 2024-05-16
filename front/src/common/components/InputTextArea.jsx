@@ -9,6 +9,8 @@ export function InputTextArea({
 	value,
 	onChange,
 	onClick,
+	onFocus,
+	onBlur,
 }) {
 	const [showCount, setShowCount] = useState(false);
 	const [wordsCount, setWordsCount] = useState(0);
@@ -30,9 +32,11 @@ export function InputTextArea({
 				}}
 				onClick={onClick}
 				onBlur={() => {
+					onBlur();
 					setShowCount(false);
 				}}
 				onFocus={() => {
+					onFocus();
 					setShowCount(true);
 				}}
 			/>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from '../../../styles/theme';
-import { Alert } from 'antd';
+
 import { useIssueDetail } from '../hooks/useIssueDetail';
 import { Button, InputTitleEdit } from '~/common/components';
 import {
@@ -132,7 +132,7 @@ export function IssueDetailContainer() {
 								<Button
 									type='button'
 									size='small'
-									disabled={!hasChanged}
+									disabled={hasChanged}
 									buttonType='outline'
 									buttonText='편집 완료'
 									icon={<IconEdit />}
@@ -303,7 +303,9 @@ const StyledContents = styled.div`
 	}
 `;
 const StyledNewComment = styled.div`
-	button {
-		// margin-top: 24px;
+	.right-align {
+		button {
+			margin-top: 24px;
+		}
 	}
 `;

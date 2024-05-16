@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import { Alert } from 'antd';
 import { Button } from '~/common/components/Button';
 import { IconEdit, IconSmile, IconXsquare } from '~/common/icons';
 import { IssueCommentEdit } from '~/features/issue/components';
@@ -96,6 +95,7 @@ const StyledWrapper = styled.div`
 	border: 1px solid ${({ theme }) => theme.color.neutral.border.default};
 	border-radius: ${({ theme }) => theme.radius.large};
 	margin-bottom: 24px;
+	background: ${({ theme }) => theme.color.neutral.surface.bold};
 `;
 const StyledHeader = styled.div`
 	display: flex;
@@ -103,6 +103,9 @@ const StyledHeader = styled.div`
 	align-items: center;
 	height: 64px;
 	padding: 24px 16px;
+	border-bottom: 1px solid ${({ theme }) => theme.color.neutral.border.default};
+	background: ${({ theme }) => theme.color.neutral.surface.default};
+
 	span {
 		display: flex;
 		align-items: center;
@@ -118,6 +121,9 @@ const StyledHeader = styled.div`
 			color: ${({ theme }) => theme.color.neutral.text.strong};
 			${({ theme }) => theme.typography.bold[16]};
 		}
+	}
+	& + textarea {
+		border-radius-top: 0;
 	}
 	.action {
 		column-gap: 16px;
@@ -138,13 +144,13 @@ const StyledHeader = styled.div`
 		}
 	}
 `;
+
 const StyledContents = styled.p`
 	padding: 16px 24px 24px 24px;
 	word-break: break-all;
 	${({ theme }) => theme.typography.medium[16]};
 	color: ${({ theme }) => theme.color.neutral.text.default};
 	background: ${({ theme }) => theme.color.neutral.surface.strong};
-	border-top: 1px solid ${({ theme }) => theme.color.neutral.border.default};
 `;
 const StyledButtons = styled.div`
 	display: flex;

@@ -170,7 +170,12 @@ Remove the margin in all browsers.
     font-family: inherit; /* 1 */
     // line-height: 1.2; /* 1 */
   }
-
+  textarea:focus {
+    background-color: #fff;
+  }
+  textarea {
+    background-color: #EFF0F6;
+  }
   /**
   Remove the inheritance of text transform in Edge and Firefox.
   1. Remove the inheritance of text transform in Firefox.
