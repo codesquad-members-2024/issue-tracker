@@ -28,7 +28,6 @@ export function InputTextArea({
 				value={value}
 				onChange={e => {
 					onChange(e);
-					countWords(e.target.value);
 				}}
 				onClick={onClick}
 				onBlur={() => {

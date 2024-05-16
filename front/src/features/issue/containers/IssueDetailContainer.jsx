@@ -13,6 +13,7 @@ import {
 	IconPlus,
 } from '~/common/icons';
 import { timestamp } from '~/utils/util';
+import { postComment } from '../apis/postComment';
 
 import {
 	IssueCommentItem,
@@ -20,37 +21,36 @@ import {
 	IssueCommentEdit,
 } from '~/features/issue/components';
 
-const issueData = [
-	{
-		id: 1,
-		title: 'title1',
-		content: 'my name is daniel',
-		milestoneId: 'm1',
-		assignees: [
-			{
-				loginId: 'mellisa',
-				profileImage:
-					'https://avatars.githubusercontent.com/u/140429591?s=40&v=4',
-			},
-		],
-		writer: 'daniel',
-		createTime: '2024-05-14T04:41:45.318597316',
-		labels: [
-			{
-				name: 'bug',
-				description: 'bug',
-				color: '#0075ca',
-			},
-		],
-		closed: false,
-	},
-];
+// const issueData = [
+// 	{
+// 		id: 1,
+// 		title: 'title1',
+// 		content: 'my name is daniel',
+// 		milestoneId: 'm1',
+// 		assignees: [
+// 			{
+// 				loginId: 'mellisa',
+// 				profileImage:
+// 					'https://avatars.githubusercontent.com/u/140429591?s=40&v=4',
+// 			},
+// 		],
+// 		writer: 'daniel',
+// 		createTime: '2024-05-14T04:41:45.318597316',
+// 		labels: [
+// 			{
+// 				name: 'bug',
+// 				description: 'bug',
+// 				color: '#0075ca',
+// 			},
+// 		],
+// 		closed: false,
+// 	},
+// ];
 
 export function IssueDetailContainer() {
 	const { id } = useParams();
 
-	// const { issueDetail, loading, error } = useIssueDetail(id);
-	const issueDetail = issueData[0];
+	const { issueDetail, loading, error } = useIssueDetail(id);
 
 	const [detailState, setDateilState] = useState({
 		title: issueDetail?.title,
@@ -85,14 +85,20 @@ export function IssueDetailContainer() {
 			newComment: e.target.value,
 		}));
 	};
-
+	const onPostComment = async () => {
+		try {
+			await postComment(issueDetail.id, detailState.newComment);
+		} catch (error) {
+			console.error('Error posting comment:', error);
+		}
+	};
 	const isNewComment = detailState.newComment !== '';
 	const hasChanged = detailState.title !== issueDetail?.title;
 	// TODO: error 재연
 	return (
 		<>
-			{/* {loading && <div>Loading...</div>}
-			{error && <Alert message='Error Text' description={error} type='error' />} */}
+			{loading && <div>Loading...</div>}
+			{error && <div>Error...</div>}
 			<StyledWrapper>
 				<StyledDetailHeader>
 					<StyledTitle>
@@ -132,10 +138,11 @@ export function IssueDetailContainer() {
 								<Button
 									type='button'
 									size='small'
-									disabled={hasChanged}
+									// disabled={!hasChanged}
 									buttonType='outline'
-									buttonText='편집 완료'
+									buttonText='편집 완료 제목'
 									icon={<IconEdit />}
+									onClick={() => {}}
 								/>
 							) : (
 								<Button
@@ -170,6 +177,7 @@ export function IssueDetailContainer() {
 				<StyledContents>
 					<section>
 						<IssueCommentItem
+							// id={issueDetail.id}
 							content={issueDetail.content}
 							writer={issueDetail.writer}
 							isWriter={true}
@@ -177,7 +185,8 @@ export function IssueDetailContainer() {
 						{issueDetail?.comments &&
 							issueDetail.comments.map(item => (
 								<IssueCommentItem
-									key={item.id}
+									key={item.id + 1}
+									id={item.id}
 									content={item.content}
 									writer={item.writer}
 									isWriter={issueDetail.writer === item.writer}
@@ -198,6 +207,7 @@ export function IssueDetailContainer() {
 									buttonType='container'
 									buttonText='코멘트 작성'
 									icon={<IconPlus />}
+									onClick={onPostComment}
 								/>
 							</div>
 						</StyledNewComment>

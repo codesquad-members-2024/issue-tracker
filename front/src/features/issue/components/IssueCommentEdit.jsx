@@ -31,9 +31,9 @@ export function IssueCommentEdit({
 	return (
 		<StyledWrapper $bg={bg} className={className}>
 			<InputTextArea
-				value={localValue}
+				value={value}
 				placeholder={placeholder}
-				onChange={handleChange}
+				onChange={onChange}
 				onClick={onClick}
 				type='Input.TextArea'
 				onFocus={() => setBg(true)}

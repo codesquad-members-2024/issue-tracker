@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { Button } from '~/common/components/Button';
 import { IconEdit, IconSmile, IconXsquare } from '~/common/icons';
 import { IssueCommentEdit } from '~/features/issue/components';
+import { putComment } from '../apis/putComment';
 
-export function IssueCommentItem({ content, writer, isWriter }) {
+export function IssueCommentItem({ id, content, writer, isWriter }) {
 	const [comment, setComment] = useState(content);
 	const [isEdit, setIsEdit] = useState(false);
 	const [hasChange, setHasChange] = useState(false);
@@ -20,6 +21,14 @@ export function IssueCommentItem({ content, writer, isWriter }) {
 		setHasChange(comment !== content);
 	}, [comment, content]);
 
+	const putEditCmment = async () => {
+		try {
+			await putComment(id, comment);
+			setIsEdit(false);
+		} catch (error) {
+			console.error('Error putting comment:', error);
+		}
+	};
 	return (
 		<>
 			<StyledWrapper>
@@ -61,6 +70,7 @@ export function IssueCommentItem({ content, writer, isWriter }) {
 						placeholder={content}
 						onChange={e => {
 							setComment(e.target.value);
+							console.log(e.target.value);
 						}}
 					/>
 				) : (
@@ -80,10 +90,12 @@ export function IssueCommentItem({ content, writer, isWriter }) {
 					<Button
 						type='button'
 						size='small'
-						disabled={!hasChange}
-						buttonText='편집 완료'
+						// disabled={!hasChange}
+						buttonText='편집 완료 댓글'
 						icon={<IconEdit />}
-						onClick={() => {}}
+						onClick={() => {
+							putEditCmment(id);
+						}}
 					/>
 				</StyledButtons>
 			)}
