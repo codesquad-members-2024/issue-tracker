@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class IssueNumberResponse {
-    private Long openedIssueNumber;
-    private Long closedIssueNumber;
+    private Long openIssueCount;
+    private Long closeIssueCount;
 }

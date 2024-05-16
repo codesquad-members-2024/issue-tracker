@@ -11,7 +11,6 @@ public class FilterController {
 
     private final FilterService filterService;
 
-    @Autowired
     public FilterController(FilterService filterService) {
         this.filterService = filterService;
     }

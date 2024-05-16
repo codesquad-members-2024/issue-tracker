@@ -14,4 +14,10 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
 
     @Query("SELECT * FROM issues WHERE is_closed = true ORDER BY issue_id DESC LIMIT :limit OFFSET :offset")
     List<Issue> findCloseIssues(long limit, long offset);
+
+    @Query("SELECT COUNT(issue_id) FROM issues WHERE is_closed = false")
+    long countOpenIssues();
+
+    @Query("SELECT COUNT(issue_id) FROM issues WHERE is_closed = true")
+    long countCloseIssues();
 }
