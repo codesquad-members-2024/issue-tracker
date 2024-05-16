@@ -49,4 +49,18 @@ public class IssueController {
         IssueDetailResponse issueDetailResponse = issueService.getIssueById(issueId);
         return new ResponseEntity<>(issueDetailResponse, HttpStatus.OK);
     }
+
+    @PatchMapping("/issue/{issueId}/open")
+    public ResponseEntity<Issue> openIssue(@PathVariable("issueId") long issueId) {
+        issueService.openIssue(issueId);
+        Issue issue = issueService.findIssueById(issueId);
+        return new ResponseEntity<>(issue, HttpStatus.OK);
+    }
+
+    @PatchMapping("/issue/{issueId}/close")
+    public ResponseEntity<Issue> closeIssue(@PathVariable("issueId") long issueId) {
+        issueService.closeIssue(issueId);
+        Issue issue = issueService.findIssueById(issueId);
+        return new ResponseEntity<>(issue, HttpStatus.OK);
+    }
 }
