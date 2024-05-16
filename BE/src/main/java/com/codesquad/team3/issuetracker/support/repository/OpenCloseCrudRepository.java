@@ -2,10 +2,12 @@ package com.codesquad.team3.issuetracker.support.repository;
 
 import com.codesquad.team3.issuetracker.global.entity.OpenCloseEntity;
 import com.codesquad.team3.issuetracker.support.enums.OpenCloseSearchFlags;
-import com.codesquad.team3.issuetracker.support.iterator.OpenCloseTableIterator;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Iterator;
+import java.util.Optional;
+
+import static com.codesquad.team3.issuetracker.support.repository.RepositorySupport.*;
 
 @NoRepositoryBean
 public interface OpenCloseCrudRepository<T extends OpenCloseEntity, ID> extends SimpleCrudRepository<T, ID>{
@@ -24,10 +26,17 @@ public interface OpenCloseCrudRepository<T extends OpenCloseEntity, ID> extends 
         return entity;
     }
 
-    default Iterator<T> findAll(OpenCloseSearchFlags flags) {
-        if (flags.equals(OpenCloseSearchFlags.ALL)) return findAll().iterator();
-
-        return new OpenCloseTableIterator<>(findAll().iterator(), flags);
+    default Iterable<T> findAll(Class<T> entityClass, OpenCloseSearchFlags flags) {
+        return getJdbcAggregateTemplate().findAll(getQuery(flags), entityClass);
     }
+
+    default int countByCloseCondition(Class<T> entityClass, OpenCloseSearchFlags flags) {
+        return (int) getJdbcAggregateTemplate().count(getQuery(flags), entityClass);
+    }
+
+    default Optional<T> findByIdWithOpenCondition(ID id, Class<T> entityClass, OpenCloseSearchFlags flags) {
+        return getJdbcAggregateTemplate().findOne(getQuery(id, flags), entityClass);
+    }
+
 }
 

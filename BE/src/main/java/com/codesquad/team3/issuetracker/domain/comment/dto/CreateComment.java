@@ -2,7 +2,6 @@ package com.codesquad.team3.issuetracker.domain.comment.dto;
 
 import com.codesquad.team3.issuetracker.domain.file.dto.UploadFile;
 import com.codesquad.team3.issuetracker.domain.issue.dto.request.CreateIssue;
-import com.codesquad.team3.issuetracker.domain.issue.entity.Issue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +18,6 @@ public class CreateComment {
 
     /**
      * 이슈의 내용 커멘트
-     * @param createIssue
      */
     public CreateComment(Integer issue_id, CreateIssue createIssue) {
         writer_id = createIssue.getWriter();

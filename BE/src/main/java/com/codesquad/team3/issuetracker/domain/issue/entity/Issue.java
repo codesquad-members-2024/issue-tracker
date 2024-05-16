@@ -62,7 +62,7 @@ public class Issue implements SoftDeleteEntity, OpenCloseEntity {
     }
 
     @Override
-    public boolean isDelete() {
+    public boolean isDeleted() {
         return this.is_deleted;
     }
 }

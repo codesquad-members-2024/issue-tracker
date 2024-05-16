@@ -15,6 +15,7 @@ CREATE TABLE comment (
                          create_time timestamp NOT NULL,
                          issue_id int NOT NULL ,
                          is_deleted bool DEFAULT false,
+
                         is_primary bool DEFAULT false
 );
 

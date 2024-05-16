@@ -2,10 +2,13 @@ package com.codesquad.team3.issuetracker.support.repository;
 
 import com.codesquad.team3.issuetracker.global.entity.SoftDeleteEntity;
 import com.codesquad.team3.issuetracker.support.enums.SoftDeleteSearchFlags;
-import com.codesquad.team3.issuetracker.support.iterator.SoftDeleteTableIterator;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import java.util.Iterator;
+import java.util.Optional;
+
+import static com.codesquad.team3.issuetracker.support.repository.RepositorySupport.getJdbcAggregateTemplate;
+import static com.codesquad.team3.issuetracker.support.repository.RepositorySupport.getQuery;
+
 
 @NoRepositoryBean
 public interface SoftDeleteCrudRepository<T extends SoftDeleteEntity, ID> extends
@@ -29,10 +32,16 @@ public interface SoftDeleteCrudRepository<T extends SoftDeleteEntity, ID> extend
     @Deprecated
     Iterable<T> findAll();
 
-    default Iterator<T> findAll(SoftDeleteSearchFlags skipFlags) {
-        if (skipFlags.equals(SoftDeleteSearchFlags.ALL)) return findAll().iterator();
+    default Iterable<? extends SoftDeleteEntity> findAll(Class<T> entityClass, SoftDeleteSearchFlags flags) {
+        return getJdbcAggregateTemplate().findAll(getQuery(flags), entityClass);
+    }
 
-        return new SoftDeleteTableIterator<>(findAll().iterator(), skipFlags);
+    default int countByDeleteCondition(Class<T> entityClass, SoftDeleteSearchFlags flags) {
+        return (int) getJdbcAggregateTemplate().count(getQuery(flags), entityClass);
+    }
+
+    default Optional<T> findByIdWithDeleteCondition(ID id, Class<T> entityClass, SoftDeleteSearchFlags flags) {
+        return getJdbcAggregateTemplate().findOne(getQuery(id, flags), entityClass);
     }
 }
 
