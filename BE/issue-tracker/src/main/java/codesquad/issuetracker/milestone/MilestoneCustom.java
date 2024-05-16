@@ -1,5 +1,6 @@
 package codesquad.issuetracker.milestone;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
 import java.util.List;
 import org.slf4j.Logger;
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Repository;
 public class MilestoneCustom implements MilestoneCustomRepository {
 
     private static final Logger log = LoggerFactory.getLogger(MilestoneCustom.class);
-    private NamedParameterJdbcTemplate jdbcTemplate;
-    private static final String SQL_QUERY = "SELECT * FROM MILESTONE WHERE 1 = 1";
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private static final String SQL_QUERY = "SELECT * FROM MILESTONE WHERE IS_DELETED = FALSE";
 
     @Autowired
     public MilestoneCustom(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -25,6 +26,10 @@ public class MilestoneCustom implements MilestoneCustomRepository {
         StringBuilder sql = new StringBuilder(SQL_QUERY);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+        log.info("state: {}", milestoneQueryInfo.getState());
+        log.info("sort: {}", milestoneQueryInfo.getSort());
+        log.info("direction: {}", milestoneQueryInfo.getDirection());
 
         String state = milestoneQueryInfo.getState().name();
         String sort = milestoneQueryInfo.getSort();
@@ -40,18 +45,17 @@ public class MilestoneCustom implements MilestoneCustomRepository {
         // Direction
         sql.append(" ").append(direction);
 
-        log.info("sql : {}", sql.toString());
+        log.info("sql : {}", sql);
 
         return jdbcTemplate.query(sql.toString(), parameters, (rs, rowNum) -> new Milestone(
             rs.getLong("id"),
             rs.getString("title"),
             rs.getString("description"),
             rs.getDate("due_date").toLocalDate().atTime(0, 0),
-            Milestone.State.valueOf(rs.getString("state")),
+            State.valueOf(rs.getString("state")),
             rs.getBoolean("is_deleted"),
             rs.getDate("updated_at").toLocalDate().atTime(0, 0)
         ));
     }
-
 
 }

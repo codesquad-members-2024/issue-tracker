@@ -1,5 +1,6 @@
 package codesquad.issuetracker.milestone;
 
+import codesquad.issuetracker.base.State;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,11 +9,6 @@ import org.springframework.data.annotation.PersistenceCreator;
 
 @Getter
 public class Milestone {
-
-    public enum State {
-        OPEN,
-        CLOSED
-    }
 
     @Id
     private Long id;
