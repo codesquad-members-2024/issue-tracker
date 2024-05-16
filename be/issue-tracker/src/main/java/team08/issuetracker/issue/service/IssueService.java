@@ -38,8 +38,8 @@ public class IssueService {
     private Issue buildIssueWithoutAssignee(IssueCreationDto dto) {
         return new Issue(
                 dto.title(),
-                dto.content(),
                 dto.writer(),
+                dto.content(),
                 dto.file()
         );
     }
