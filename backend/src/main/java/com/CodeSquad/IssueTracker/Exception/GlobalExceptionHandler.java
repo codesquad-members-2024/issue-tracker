@@ -73,13 +73,4 @@ public class GlobalExceptionHandler {
 
 //    @ExceptionHandler(LabelUpdateException.class)
 //    public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
-    @ExceptionHandler(AuthorNotFoundException.class)
-    public ResponseEntity<String> handleAuthorNotFoundException(AuthorNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidIssueDataException.class)
-    public ResponseEntity<String> handleInvalidIssueDataException(InvalidIssueDataException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
 }
