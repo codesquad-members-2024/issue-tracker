@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
-
 import styled from 'styled-components';
-
+import { Button } from '~/common/components/Button';
 export function ImageUpload() {
 	const [imageFile, setImageFile] = useState(null);
 	const [imgSrc, setImageSrc] = useState(null);
@@ -58,9 +57,14 @@ export function ImageUpload() {
 				onChange={handleFileChange}
 			/>
 			{imgSrc && <StyledImage src={imgSrc} alt='Selected Image' />}
-			<button type='button' onClick={handleUpload}>
-				업로드하기
-			</button>
+
+			<Button
+				type='button'
+				size='small'
+				buttonType='ghost'
+				buttonText='업로드하기'
+				onClick={handleUpload}
+			/>
 		</StyledWrapper>
 	);
 }
