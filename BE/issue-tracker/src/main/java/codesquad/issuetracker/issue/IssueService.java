@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class IssueService {
 
-    IssueRepository issueRepository;
+    private final IssueRepository issueRepository;
 
     @Autowired
     public IssueService(IssueRepository issueRepository) {
