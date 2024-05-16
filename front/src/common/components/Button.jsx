@@ -32,6 +32,9 @@ const StyledAntdButton = styled.button`
 	justify-content: center;
 	${props => theme.buttonSizes[props.$size]}
 	${props => theme.buttonStyles[props.$buttonType]}
+	&:disabled {
+		cursor: not-allowed;
+	}
 `;
 
 {

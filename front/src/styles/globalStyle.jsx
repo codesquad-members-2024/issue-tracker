@@ -492,4 +492,8 @@ Remove the margin in all browsers.
     background-color: transparent;
     border: 0px;
   }
+  .right-align {
+    display: flex;
+    justify-content: flex-end;
+  }
   `;
