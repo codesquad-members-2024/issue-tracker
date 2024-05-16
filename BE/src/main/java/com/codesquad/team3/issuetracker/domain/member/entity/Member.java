@@ -1,5 +1,7 @@
 package com.codesquad.team3.issuetracker.domain.member.entity;
 
+import com.codesquad.team3.issuetracker.domain.member.dto.request.CreateMember;
+import com.codesquad.team3.issuetracker.domain.member.dto.request.UpdateMember;
 import com.codesquad.team3.issuetracker.domain.member.dto.response.ResponseMember;
 import com.codesquad.team3.issuetracker.global.entity.SoftDeleteEntity;
 import java.time.LocalDateTime;
@@ -28,6 +30,27 @@ public class Member extends SoftDeleteEntity {
     private LocalDateTime joinTime;
     private String email;
     private boolean isDeleted;
+
+    public Member(CreateMember createMember) {
+        this.memberId = createMember.getMemberId();
+        this.password = createMember.getPassword();
+        this.nickname = createMember.getNickname();
+        this.birthday = createMember.getBirthday();
+        this.joinTime = LocalDateTime.now();
+        this.email = createMember.getEmail();
+    }
+
+    public Member update(UpdateMember updateMember) {
+        return new Member(id,
+            memberId,
+            updateMember.getPassword(),
+            updateMember.getNickname(),
+            updateMember.getBirthday(),
+            joinTime,
+            updateMember.getEmail(),
+            isDeleted
+        );
+    }
 
     public ResponseMember toResponse() {
         return new ResponseMember(memberId, nickname, birthday, joinTime, email);
