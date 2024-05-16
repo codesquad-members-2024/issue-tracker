@@ -32,8 +32,11 @@ export function InputTextArea({
 				onBlur={() => {
 					setShowCount(false);
 				}}
+				onFocus={() => {
+					setShowCount(true);
+				}}
 			/>
-			{showCount && <i>띄어쓰기 포함{wordsCount}자</i>}
+			{showCount && <i>띄어쓰기 포함 {wordsCount}자</i>}
 		</StyledWrapper>
 	);
 }
