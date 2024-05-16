@@ -1,35 +1,36 @@
 package codesquad.issuetracker.milestone;
 
+import codesquad.issuetracker.issue.IssueService;
 import codesquad.issuetracker.milestone.dto.CreateMilestoneRequest;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
+import codesquad.issuetracker.milestone.dto.MilestoneResponse;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MilestoneService {
 
-    private final MilestoneRepository milestoneRepository;
     private final MilestoneCustomRepository milestoneCustomRepository;
+    private final MilestoneRepository milestoneRepository;
+    private final IssueService issueService;
 
-    @Autowired
-    public MilestoneService(MilestoneRepository milestoneRepository,
-        MilestoneCustomRepository milestoneCustomRepository) {
-        this.milestoneRepository = milestoneRepository;
+    public MilestoneService(MilestoneCustomRepository milestoneCustomRepository,
+        MilestoneRepository milestoneRepository, IssueService issueService) {
         this.milestoneCustomRepository = milestoneCustomRepository;
-    }
-
-
-    public List<Milestone> fetchAllMilestones() {
-       return (List<Milestone>) milestoneRepository.findAll();
+        this.milestoneRepository = milestoneRepository;
+        this.issueService = issueService;
     }
 
     public Milestone createNewMilestone(CreateMilestoneRequest createMilestoneRequest) {
         return milestoneRepository.save(createMilestoneRequest.toEntity());
     }
 
-    public List<Milestone> fetchFilteredMilestones(MilestoneQueryInfo milestoneQueryInfo) {
-        return milestoneCustomRepository.findFilteredMilestones(milestoneQueryInfo);
+    public List<MilestoneResponse> fetchFilteredMilestones(MilestoneQueryInfo milestoneQueryInfo) {
+        List<Milestone> milestones = milestoneCustomRepository.findFilteredMilestones(
+            milestoneQueryInfo);
+        return milestones.stream()
+            .map(milestone -> MilestoneResponse.of(milestone,
+                issueService.findByMilestoneId(milestone.getId())))
+            .toList();
     }
-
 }
