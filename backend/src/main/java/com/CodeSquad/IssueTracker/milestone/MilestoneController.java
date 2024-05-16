@@ -21,9 +21,15 @@ public class MilestoneController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/milestones")
-    public ResponseEntity<List<Milestone>> getAllMilestones(){
-        List<Milestone> milestones = milestoneService.getAllMilestones();
+    @GetMapping("/milestones/open")
+    public ResponseEntity<List<Milestone>> getAllOpenMilestones(){
+        List<Milestone> milestones = milestoneService.getOpenMilestones();
+        return new ResponseEntity<>(milestones, HttpStatus.OK);
+    }
+
+    @GetMapping("/milestones/close")
+    public ResponseEntity<List<Milestone>> getAllCloseMilestones(){
+        List<Milestone> milestones = milestoneService.getCloseMilestones();
         return new ResponseEntity<>(milestones, HttpStatus.OK);
     }
 
@@ -36,6 +42,24 @@ public class MilestoneController {
     @DeleteMapping("/milestone/{milestoneId}")
     public ResponseEntity<?> deleteMilestone(@PathVariable Long milestoneId) {
         milestoneService.deleteMilestone(milestoneId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/milestone/{milestoneId}")
+    public ResponseEntity<?> updateMilestone(@PathVariable Long milestoneId, @RequestBody MilestoneRequest milestoneRequest) {
+        milestoneService.editMilestone(milestoneId, milestoneRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping ("/milestone/{milestoneId}/open")
+    public ResponseEntity<?> openMilestone(@PathVariable Long milestoneId ) {
+        milestoneService.openMilestone(milestoneId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping ("/milestone/{milestoneId}/close")
+    public ResponseEntity<?> closeMilestone(@PathVariable Long milestoneId ) {
+        milestoneService.closeMilestone(milestoneId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
