@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestParam LoginForm loginForm, HttpSession session) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginForm loginForm, HttpSession session) {
         Map<String, String> response = new HashMap<>();
         String email = loginForm.getEmail();
         String password = loginForm.getPassword();
