@@ -51,19 +51,6 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/issues")
-    public ResponseEntity<Map<String, String>> issuesMain(HttpSession session) {
-        Map<String, String> response = new HashMap<>();
-        User loggedInUser = (User) session.getAttribute("로그인 성공");
-        if (loggedInUser == null) {
-            response.put("message", "사용자가 로그인 되지 않았습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
-        response.put("message", "메인 페이지");
-        response.put("user", String.valueOf(loggedInUser));
-        return ResponseEntity.ok(response);
-    }
-
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         Pattern pattern = Pattern.compile(emailRegex);
