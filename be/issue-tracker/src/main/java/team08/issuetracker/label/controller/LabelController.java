@@ -35,7 +35,7 @@ public class LabelController {
         return ResponseEntity.ok(labelCountDto);
     }
 
-    @PostMapping("{id}")
+    @PatchMapping("{id}") // PatchMapping, PostMapping . . .
     public ResponseEntity<String> updateLabel(@PathVariable long id, @RequestBody LabelUpdateDto labelUpdateDto) {
         Label label = labelService.updateLabel(id, labelUpdateDto);
 
