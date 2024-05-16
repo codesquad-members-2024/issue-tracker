@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import loading from "../../img/loading.gif";
+import loading from "../../img/indicator/loading.gif";
 
 function Loading() {
   return (

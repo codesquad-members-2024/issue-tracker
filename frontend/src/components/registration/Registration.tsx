@@ -1,21 +1,18 @@
 import styled from "styled-components";
-import pageLogo from "../../img/pageLogo.svg";
+import pageLogo from "../../img/icon/pageLogo.svg";
 import AuthorizationForm from "../authorization/AuthorizationForm";
 import { useNavigate } from "react-router-dom";
 import useRegistrationLogic from "../../hooks/useRegistrationLogic";
 
 function Registration() {
   const {
+    state: { isValidated, validationMessage, allFilled, errorMessage },
     setIdValue,
     setPasswordValue,
     setPasswordValidationValue,
     setNicknameValue,
-    allFilled,
-    errorMessage,
     handleRegistrationClick,
     handleValidationClick,
-    isValidated,
-    validationMessage,
   } = useRegistrationLogic();
   const navigate = useNavigate();
 
