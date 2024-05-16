@@ -2,6 +2,7 @@ package codesquad.issuetracker.milestone.dto;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import codesquad.issuetracker.base.State;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class MilestoneQueryInfoTest {
     @Test
     @DisplayName("state에 아무런 값이 없는 경우 open을 반환하는 테스트")
     void testOpenStateWhenStateParamIsEmpty() {
-        assertThat(milestoneQueryInfo.getState()).isEqualTo(MilestoneQueryInfo.State.OPEN);
+        assertThat(milestoneQueryInfo.getState()).isEqualTo(State.OPEN);
     }
 
     @Test
@@ -31,7 +32,7 @@ class MilestoneQueryInfoTest {
     @Test
     @DisplayName("Sort의 기본값이 updatedAt 필드인지 확인하는 테스트")
     void testDefaultSortValue() {
-        assertThat(milestoneQueryInfo.getSort()).isEqualTo("updatedAt");
+        assertThat(milestoneQueryInfo.getSort()).isEqualTo("updated_at");
     }
 
 
