@@ -15,15 +15,18 @@ public class MilestoneCustom implements MilestoneCustomRepository {
 
     private static final Logger log = LoggerFactory.getLogger(MilestoneCustom.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final String SQL_QUERY = "SELECT * FROM MILESTONE WHERE IS_DELETED = FALSE";
+    private static final String FILTER_SQL_QUERY = "SELECT * FROM MILESTONE WHERE IS_DELETED = FALSE";
+    private static final String DELETE_SQL_QUERY = "UPDATE MILESTONE SET IS_DELETED = TRUE WHERE id = :milestoneId";
+    private static final String CHECK_IS_DELETED_QUERY = "SELECT IS_DELETED FROM MILESTONE WHERE id = :milestoneId";
 
     @Autowired
     public MilestoneCustom(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public List<Milestone> findFilteredMilestones(MilestoneQueryInfo milestoneQueryInfo) {
-        StringBuilder sql = new StringBuilder(SQL_QUERY);
+        StringBuilder sql = new StringBuilder(FILTER_SQL_QUERY);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
 
@@ -58,4 +61,11 @@ public class MilestoneCustom implements MilestoneCustomRepository {
         ));
     }
 
+    @Override
+    public void softDeleteByMilestoneId(Long milestoneId) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("milestoneId", milestoneId);
+        jdbcTemplate.update(DELETE_SQL_QUERY, parameters);
+
+    }
 }

@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
+@Table("MILESTONE")
 public class Milestone {
 
     @Id
