@@ -1,25 +1,62 @@
 import styled from "styled-components";
 import IssueTab from "./IssueTab";
-import IssueHeadline from "./IssueHeadline";
+import IssueHeadline, { IssueHeadlineProps } from "./IssueHeadline";
 import { useMutation } from "react-query";
 import { sendIssuesRequest } from "../../api/IssueAPI";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useIssueStore from "../../hooks/useIssueStore";
 import RefreshRequest from "../error/RefreshRequest";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 export type IssueType = "open" | "close";
 
+interface LastHeadlineProps extends IssueHeadlineProps {
+  ref: React.MutableRefObject<null>;
+}
+
 const FIRST_PAGE = 1;
 
+const renderIssueHeadline = ({ issueId, title, author, publishedAt, isClosed }: IssueHeadlineProps) => (
+  <IssueHeadline
+    key={`issue-headline-${issueId}`}
+    issueId={issueId}
+    title={title}
+    author={author}
+    publishedAt={publishedAt}
+    isClosed={isClosed}
+  />
+);
+
+const renderLastIssueHeadline = ({ ref, issueId, title, author, publishedAt, isClosed }: LastHeadlineProps) => (
+  <IssueHeadline
+    ref={ref}
+    key={`issue-headline-${issueId}`}
+    issueId={issueId}
+    title={title}
+    author={author}
+    publishedAt={publishedAt}
+    isClosed={isClosed}
+  />
+);
+
 function IssueList() {
-  const { issues, setIssues } = useIssueStore();
+  const { openIssueCount, closeIssueCount, issues, setIssues } = useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const [requestError, setRequestError] = useState(false);
   const [page, setPage] = useState(FIRST_PAGE);
+  const lastIssueRef = useRef(null);
+  const { observer } = useIntersectionObserver(() => {
+    const maxIssueCount = focusedTab === "open" ? openIssueCount : closeIssueCount;
+    if (maxIssueCount > issues.length) {
+      const nextPage = page + 1;
+      fetchIssues({ issueType: focusedTab, page: nextPage });
+      setPage(nextPage);
+    }
+  });
 
   const { mutate: fetchIssues } = useMutation(sendIssuesRequest, {
     onSuccess: (data) => {
-      setIssues(data);
+      setIssues([...issues, ...data]);
       setRequestError(false);
     },
     onError: () => setRequestError(true),
@@ -27,19 +64,34 @@ function IssueList() {
 
   useEffect(() => {
     setPage(FIRST_PAGE);
-    fetchIssues({ issueType: focusedTab, page });
+    fetchIssues({ issueType: focusedTab, page: FIRST_PAGE });
   }, [focusedTab]);
+
+  useEffect(() => {
+    if (lastIssueRef.current) observer.observe(lastIssueRef.current);
+
+    return () => {
+      if (lastIssueRef.current) observer.unobserve(lastIssueRef.current);
+    };
+  }, [issues]);
 
   if (requestError) return <RefreshRequest />;
 
   return (
     <Wrapper>
-      <IssueTab focusedTab={focusedTab} setFocusedTab={setFocusedTab} />
+      <IssueTab
+        focusedTab={focusedTab}
+        setFocusedTab={(tabDescription: IssueType) => {
+          setFocusedTab(tabDescription);
+          setIssues([]);
+        }}
+      />
       <ScrollableArea>
-      {issues
-        .map(({ issueId, title, author, publishedAt, isClosed }) => (
-          <IssueHeadline issueId={issueId} title={title} author={author} publishedAt={publishedAt} isClosed={isClosed} />
-        ))}
+        {issues.map((issue, index) =>
+          index === issues.length - 1
+            ? renderLastIssueHeadline({ ref: lastIssueRef, ...issue })
+            : renderIssueHeadline(issue)
+        )}
       </ScrollableArea>
     </Wrapper>
   );
