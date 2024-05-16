@@ -1,14 +1,12 @@
 package com.CodeSquad.IssueTracker.issues;
 
+import com.CodeSquad.IssueTracker.issues.dto.IssueIdResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class IssueController {
@@ -25,9 +23,9 @@ public class IssueController {
     }
 
     @PostMapping("/issue")
-    public ResponseEntity<Map<String, Long>> createIssue(@RequestBody IssueRequest issueRequest) {
+    public ResponseEntity<IssueIdResponse> createIssue(@RequestBody IssueRequest issueRequest) {
         Long createdIssueId = issueService.createIssue(issueRequest);
-        Map<String, Long> response = Map.of("issueId", createdIssueId);
-        return ResponseEntity.ok(response);
+        IssueIdResponse issueIdResponse = new IssueIdResponse(createdIssueId);
+        return ResponseEntity.ok(issueIdResponse);
     }
 }
