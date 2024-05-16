@@ -6,6 +6,7 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+
 @NoRepositoryBean
 public interface GlobalCrudRepository<T, ID> extends CrudRepository<T, ID> {
 
