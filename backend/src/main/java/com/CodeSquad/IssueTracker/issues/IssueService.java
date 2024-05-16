@@ -10,7 +10,6 @@ import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,13 +64,21 @@ public class IssueService {
     }
 
     public List<Issue> findOpenIssues(long page, long limit) {
+        validateIssueListPage(page);
         long offset = (page - 1) * limit;
         return issueRepository.findOpenIssues(limit, offset);
     }
 
     public List<Issue> findCloseIssues(long page, long limit) {
+        validateIssueListPage(page);
         long offset = (page - 1) * limit;
         return issueRepository.findCloseIssues(limit, offset);
+    }
+
+    public void validateIssueListPage(long page) {
+        if (page < 1) {
+            throw new InvalidIssuePageException("page는 1 이상의 정수여야 합니다.");
+        }
     }
 
     private void validateIssueRequest(IssueRequest issueRequest) {
