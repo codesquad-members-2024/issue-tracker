@@ -66,7 +66,7 @@ export function IssueDetailContainer() {
 		}));
 	};
 
-	const isNewComment = detailState.newComment.length !== '';
+	const isNewComment = detailState.newComment !== '';
 	const hasChanged = detailState.title !== issueDetail?.title;
 	// TODO: error 재연
 	return (
