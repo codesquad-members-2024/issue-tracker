@@ -18,6 +18,7 @@ public class MilestoneForm {
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotBlank(message = "마감기한은 필수 입력값입니다.")
     private LocalDate deadLine;
 
 }
