@@ -66,4 +66,8 @@ public class IssueService {
 
         return DetailIssueResponse.from(issue, labels, assignees, comments);
     }
+
+    public List<Issue> findByMilestoneId(Long milestoneId) {
+        return issueRepository.findByMilestoneId(milestoneId);
+    }
 }

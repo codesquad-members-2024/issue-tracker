@@ -2,6 +2,8 @@ package codesquad.issuetracker.issue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import codesquad.issuetracker.milestone.Milestone;
+import codesquad.issuetracker.milestone.MilestoneRepository;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -9,15 +11,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJdbcTest
 @Slf4j
-@Sql({"/sql/label-data.sql", "/sql/user-data.sql"})
+@Sql({"/sql/label-data.sql", "/sql/user-data.sql", "/sql/milestone-data.sql"})
 class IssueRepositoryTest {
 
     @Autowired
     IssueRepository issueRepository;
+    @Autowired
+    MilestoneRepository milestoneRepository;
 
     @Test
     @DisplayName("열린 이슈 목록 가져오기")
@@ -64,7 +69,8 @@ class IssueRepositoryTest {
     @Test
     @DisplayName("레이블 레퍼런스를 가져올 수 있다.")
     void findLabels() {
-        Set<IssueAttachedLabel> labelRefs = Set.of(new IssueAttachedLabel(1L), new IssueAttachedLabel(2L), new IssueAttachedLabel(3L));
+        Set<IssueAttachedLabel> labelRefs = Set.of(new IssueAttachedLabel(1L),
+            new IssueAttachedLabel(2L), new IssueAttachedLabel(3L));
         Issue issue = Issue.builder()
             .authorId("cori1234")
             .title("제목")
@@ -104,5 +110,22 @@ class IssueRepositoryTest {
 
         List<Issue> issues = issueRepository.findAllByLabelId(1L);
         assertThat(issues).allMatch(issue -> issue.getLabelRefs().contains(labelRef1));
+    }
+
+    @Test
+    @DisplayName("연관된 마일스톤을 가져올 수 있다.")
+    void getRelatedMilestone() {
+        Issue issue = Issue.builder()
+            .authorId("cori1234")
+            .title("제목1")
+            .milestoneId(AggregateReference.to(1L))
+            .build();
+
+        Issue savedIssue = issueRepository.save(issue);
+        AggregateReference<Milestone, Long> milestoneRef = savedIssue.getMilestoneId();
+        Milestone milestone = milestoneRepository.findById(milestoneRef.getId()).get();
+
+        log.debug("milestone = {}", milestone);
+        assertThat(milestone.getId()).isEqualTo(1L);
     }
 }

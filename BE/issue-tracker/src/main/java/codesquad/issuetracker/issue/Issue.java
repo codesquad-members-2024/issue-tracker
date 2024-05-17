@@ -1,6 +1,7 @@
 package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.comment.Comment;
+import codesquad.issuetracker.milestone.Milestone;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -27,7 +29,7 @@ public class Issue {
     private LocalDateTime openAt;
     private LocalDateTime updatedAt;
     private LocalDateTime closedAt;
-    private Long milestoneId;
+    private AggregateReference<Milestone, Long> milestoneId;
     private boolean isOpen;
     private boolean isDeleted;
     @MappedCollection(idColumn = "ISSUE_ID")
@@ -41,7 +43,7 @@ public class Issue {
     @PersistenceCreator
     public Issue(Long id, String authorId, String title, String description,
         LocalDateTime openAt,
-        LocalDateTime updatedAt, LocalDateTime closedAt, Long milestoneId, boolean isOpen,
+        LocalDateTime updatedAt, LocalDateTime closedAt, AggregateReference<Milestone, Long> milestoneId, boolean isOpen,
         boolean isDeleted, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assigneeIds,
         List<Comment> comments) {
         this.id = id;
@@ -68,7 +70,7 @@ public class Issue {
             .openAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .closedAt(LocalDateTime.now())
-            .milestoneId(milestoneId)
+            .milestoneId(AggregateReference.to(milestoneId))
             .isOpen(true)
             .isDeleted(false)
             .labelRefs(labelRefs)

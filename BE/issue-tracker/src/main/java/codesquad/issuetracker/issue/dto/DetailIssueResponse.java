@@ -3,7 +3,6 @@ package codesquad.issuetracker.issue.dto;
 import codesquad.issuetracker.comment.CommentResponse;
 import codesquad.issuetracker.issue.Issue;
 import codesquad.issuetracker.label.Label;
-import codesquad.issuetracker.milestone.Milestone;
 import codesquad.issuetracker.user.dto.UserResponse;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,7 +39,7 @@ public class DetailIssueResponse {
             .openAt(issue.getOpenAt())
             .updatedAt(issue.getUpdatedAt())
             .closedAt(issue.getClosedAt())
-            .milestoneId(issue.getMilestoneId())
+            .milestoneId(issue.getMilestoneId().getId())
             .isOpen(issue.isOpen())
             .isDeleted(issue.isDeleted())
             .labels(labels)
