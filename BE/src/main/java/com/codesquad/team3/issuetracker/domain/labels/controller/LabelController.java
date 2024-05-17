@@ -51,7 +51,7 @@ public class LabelController {
     @PutMapping("/{id}")
     public ResponseEntity<Label> updateById(@PathVariable("id") Integer id, @RequestBody @Validated LabelForm form) {
         Label newLabel = new Label(form.getTitle(), form.getDescription(), form.getColor());
-        labelService.update(id, newLabel);
+        labelService.update(newLabel);
 
         return ResponseEntity.ok(newLabel);
 

@@ -23,11 +23,9 @@ public class LabelServiceImpl implements LabelService {
         labelRepository.save(label);
     }
     @Override
-    public void update(Integer id, Label updateLabel){
-        labelRepository.updateById(id,
-                updateLabel.getTitle(),
-                updateLabel.getDescription(),
-                updateLabel.getColor());
+    public void update(Label updateLabel){
+        labelRepository.update(updateLabel);
+
     }
     @Override
     public void delete(Integer id){

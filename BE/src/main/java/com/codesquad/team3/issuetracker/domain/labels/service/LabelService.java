@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface LabelService {
 
-    public void save(Label label);
+    void save(Label label);
 
-    public void update(Integer id, Label updateLabel);
+    void update(Label updateLabel);
 
-    public void delete(Integer id);
+    void delete(Integer id);
 
-    public Label findById(Integer id);
+    Label findById(Integer id);
 
-    public List<Label> findAll();
+    List<Label> findAll();
 }
