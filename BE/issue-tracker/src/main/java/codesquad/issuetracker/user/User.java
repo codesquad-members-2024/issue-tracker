@@ -1,15 +1,13 @@
 package codesquad.issuetracker.user;
 
-import codesquad.issuetracker.issue.Issue;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
-import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("USERS")
@@ -24,11 +22,11 @@ public class User implements Persistable<String> {
     private Role role;
     private LocalDateTime createdAt;
     private boolean isDeleted;
-    @MappedCollection(idColumn = "id")
-    private final Set<Issue> issues = new HashSet<>();
     @Transient
-    private boolean isNew = false;
+    private boolean isNew = true;
 
+    @Builder
+    @PersistenceCreator
     User(String id, String username, String password, Role role, LocalDateTime createdAt,
         boolean isDeleted) {
         this.id = id;
@@ -41,7 +39,6 @@ public class User implements Persistable<String> {
 
     public static User from(String id, String username, String password, Role role) {
         User user = new User(id, username, password, role, LocalDateTime.now(), false);
-        user.isNew = true;
         return user;
     }
 
@@ -51,7 +48,7 @@ public class User implements Persistable<String> {
     }
 
     public enum Role {
-        User, Admin,
+        USER, ADMIN,
     }
 
 }

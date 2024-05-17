@@ -1,20 +1,25 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.comment.Comment;
+import codesquad.issuetracker.milestone.Milestone;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Persistable;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.MappedCollection;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @ToString
-public class Issue implements Persistable<Long> {
+@Table("ISSUE")
+public class Issue {
 
     @Id
     private Long id;
@@ -24,25 +29,23 @@ public class Issue implements Persistable<Long> {
     private LocalDateTime openAt;
     private LocalDateTime updatedAt;
     private LocalDateTime closedAt;
-    private Long milestoneId;
+    private AggregateReference<Milestone, Long> milestoneId;
     private boolean isOpen;
     private boolean isDeleted;
     @MappedCollection(idColumn = "ISSUE_ID")
-    private Set<LabelRef> labelRefs = new HashSet<>();
-    @Transient
-    private boolean isNew;
-
-    @Override
-    public boolean isNew() {
-        return isNew;
-    }
+    private Set<IssueAttachedLabel> labelRefs = new HashSet<>();
+    @MappedCollection(idColumn = "ISSUE_ID")
+    private Set<Assignee> assigneeIds = new HashSet<>();
+    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "CREATED_AT")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     @PersistenceCreator
     public Issue(Long id, String authorId, String title, String description,
         LocalDateTime openAt,
-        LocalDateTime updatedAt, LocalDateTime closedAt, Long milestoneId, boolean isOpen,
-        boolean isDeleted, Set<LabelRef> labelRefs) {
+        LocalDateTime updatedAt, LocalDateTime closedAt, AggregateReference<Milestone, Long> milestoneId, boolean isOpen,
+        boolean isDeleted, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assigneeIds,
+        List<Comment> comments) {
         this.id = id;
         this.authorId = authorId;
         this.title = title;
@@ -54,15 +57,38 @@ public class Issue implements Persistable<Long> {
         this.isOpen = isOpen;
         this.isDeleted = isDeleted;
         this.labelRefs = labelRefs;
-        this.isNew = false;
+        this.assigneeIds = assigneeIds;
+        this.comments = comments;
     }
 
-    public static Issue from(Long id, String authorId, String title, String description,
-        Long milestoneId, Set<LabelRef> labelRefs) {
-        Issue issue = new Issue(id, authorId, title, description, LocalDateTime.now(),
-            LocalDateTime.now(), LocalDateTime.now(), milestoneId, true, false, labelRefs);
-        issue.isNew = true;
-        return issue;
+    public static Issue from(String authorId, String title, String description,
+        Long milestoneId, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assignees) {
+        return Issue.builder()
+            .authorId(authorId)
+            .title(title)
+            .description(description)
+            .openAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
+            .closedAt(LocalDateTime.now())
+            .milestoneId(AggregateReference.to(milestoneId))
+            .isOpen(true)
+            .isDeleted(false)
+            .labelRefs(labelRefs)
+            .assigneeIds(assignees)
+            .comments(new ArrayList<>())
+            .build();
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+        comments.forEach(Comment::delete);
+    }
 }

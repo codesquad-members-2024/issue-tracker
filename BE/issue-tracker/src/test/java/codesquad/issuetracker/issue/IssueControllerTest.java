@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import codesquad.issuetracker.comment.CommentService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,8 @@ class IssueControllerTest {
     MockMvc mockMvc;
     @MockBean
     IssueService issueService;
+    @MockBean
+    CommentService commentService;
 
     @BeforeEach
     void init() {
@@ -60,7 +63,7 @@ class IssueControllerTest {
     @DisplayName("닫힌 이슈 목록을 가져올 수 있다.")
     void getClosedIssues() throws Exception {
 
-        mockMvc.perform(get("/api/issues"))
+        mockMvc.perform(get("/api/issues?isOpen=false"))
             .andExpect(jsonPath("$[0].open").value(false))
             .andExpect(jsonPath("$[1].open").value(false));
     }
