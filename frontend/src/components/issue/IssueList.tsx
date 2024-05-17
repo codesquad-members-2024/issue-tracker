@@ -83,7 +83,7 @@ function IssueList() {
         focusedTab={focusedTab}
         setFocusedTab={(tabDescription: IssueType) => {
           setFocusedTab(tabDescription);
-          setIssues([]);
+          if (tabDescription !== focusedTab) setIssues([]);
         }}
       />
       <ScrollableArea>
