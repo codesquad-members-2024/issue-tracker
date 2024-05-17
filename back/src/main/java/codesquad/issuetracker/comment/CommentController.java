@@ -15,7 +15,7 @@ public class CommentController {
     }
 
     @PutMapping("/comments/{commentId}")
-    public void updateCommentById(@PathVariable Long commentId, @RequestBody CommentContentDto contentDto) {
-        commentService.updateCommentById(commentId, contentDto.getContent());
+    public void updateCommentById(@PathVariable Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
+        commentService.updateCommentById(commentId, commentUpdateDto.getContent());
     }
 }

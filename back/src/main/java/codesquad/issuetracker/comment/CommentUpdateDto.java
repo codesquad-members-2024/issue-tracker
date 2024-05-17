@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommentContentDto {
+public class CommentUpdateDto {
 
     private String content;
 }
