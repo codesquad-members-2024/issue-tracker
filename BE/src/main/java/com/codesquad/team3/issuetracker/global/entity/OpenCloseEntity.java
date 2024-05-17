@@ -11,5 +11,9 @@ public class OpenCloseEntity {
     public void open() {
         this.isClosed = false;
     }
+
+    public boolean isClosed() {
+        return isClosed;
+    }
 }
 
