@@ -8,9 +8,10 @@ export const routes = [
 		path: '/',
 		element: <Layout />,
 		children: [
+			{ path: '/', element: <IssueListViewsPage /> },
 			{ path: 'signIn', element: <SignInPage /> },
 			{ path: 'issues', element: <IssueListViewsPage /> },
-			{ path: 'issues/create', element: <IssueCreatePage /> },
+			{ path: 'issues/new', element: <IssueCreatePage /> },
 			{ path: 'issues/:id', element: <IssueDetailPage /> },
 		],
 	},
