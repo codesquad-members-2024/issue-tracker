@@ -1,5 +1,7 @@
 package team08.issuetracker.issue.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,15 @@ public class IssueService {
 
     private final IssueRepository issueRepository;
     private final AssigneeRepository assigneeRepository;
+
+    public List<Issue> issues() {
+        List<Issue> issues = new ArrayList<>();
+        for (Issue issue : issueRepository.findAll()) {
+            issues.add(issue);
+        }
+
+        return issues;
+    }
 
     @Transactional
     public void createIssue(IssueCreationDto issueCreationDto) {
