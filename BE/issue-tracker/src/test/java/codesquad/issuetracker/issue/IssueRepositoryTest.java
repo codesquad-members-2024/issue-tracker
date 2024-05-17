@@ -26,14 +26,17 @@ class IssueRepositoryTest {
         Issue issue1 = Issue.builder()
             .authorId("cori1234")
             .title("제목1")
+            .isOpen(true)
             .build();
         Issue issue2 = Issue.builder()
             .authorId("cori1234")
             .title("제목2")
+            .isOpen(true)
             .build();
         Issue issue3 = Issue.builder()
             .authorId("cori1234")
             .title("제목3")
+            .isOpen(true)
             .build();
 
         issueRepository.save(issue1);
