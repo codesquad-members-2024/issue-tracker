@@ -24,8 +24,4 @@ public class Label {
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
