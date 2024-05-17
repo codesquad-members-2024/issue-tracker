@@ -15,4 +15,8 @@ public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
     int updateMilestone(@Param("id") Long id, @Param("title") String title,
         @Param("description") String description, @Param("dueDate") LocalDateTime dueDate);
 
+    @Modifying
+    @Query("UPDATE MILESTONE m SET m.state = :state WHERE m.id = :id")
+    int updateMilestoneState(@Param("id") Long id, @Param("state") String state);
+
 }

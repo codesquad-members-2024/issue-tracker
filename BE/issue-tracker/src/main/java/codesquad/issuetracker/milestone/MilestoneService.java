@@ -1,5 +1,6 @@
 package codesquad.issuetracker.milestone;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.issue.IssueService;
 import codesquad.issuetracker.milestone.dto.MilestoneCreateRequest;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
@@ -51,6 +52,11 @@ public class MilestoneService {
         if (affectedRow == 0) {
             throw new IllegalArgumentException("Milestone not found");
         }
+        return findById(milestoneId);
+    }
+
+    public Milestone closeMilestone(Long milestoneId) {
+        milestoneRepository.updateMilestoneState(milestoneId, State.CLOSED.name());
         return findById(milestoneId);
     }
 
