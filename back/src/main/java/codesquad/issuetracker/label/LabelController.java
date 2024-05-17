@@ -40,7 +40,7 @@ public class LabelController {
 
     @PutMapping("/labels/{labelId}")
     public ResponseEntity<Void> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
-        labelService.updateLabelById(labelId, labelUpdateDto.getName(), labelUpdateDto.getDescription(), labelUpdateDto.getBackgroundColor(), labelUpdateDto.getTextColor());
+        labelService.updateLabelById(labelUpdateDto.toEntity(labelId));
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
