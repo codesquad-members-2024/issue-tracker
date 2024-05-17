@@ -3,10 +3,7 @@ package team08.issuetracker.milestone.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
-import team08.issuetracker.exception.milestone.MilestoneAlreadyClosedException;
-import team08.issuetracker.exception.milestone.MilestoneAlreadyOpenedException;
-import team08.issuetracker.exception.milestone.MilestoneNotFoundException;
+import team08.issuetracker.exception.milestone.*;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.model.dto.*;
 import team08.issuetracker.milestone.repository.MilestoneRepository;
@@ -20,10 +17,15 @@ import java.util.stream.Collectors;
 public class MilestoneService {
     private final MilestoneRepository milestoneRepository;
 
-    public MilestoneOverviewDto getAllOpenedMilestonesWithCounts() {
-        MilestoneCountDto milestoneCounts = getMilestoneCountDto();
+    private static final boolean OPEN_STATE = true;
+    private static final boolean CLOSE_STATE = false;
+    private static final String OPEN_STATE_QUERY = "opened";
+    private static final String CLOSE_STATE_QUERY = "closed";
 
-        List<MilestoneDetailDto> milestones = milestoneRepository.getAllOpenedMilestone().stream() // 열린 마일스톤 목록
+    public MilestoneOverviewDto getAllMilestonesWithCounts(String state) {
+        boolean openState = convertStateQueryToOpenState(state);
+
+        List<MilestoneDetailDto> milestones = milestoneRepository.getAllMilestonesByOpenState(openState).stream()
                 .map(milestone -> new MilestoneDetailDto(
                         milestone.getId(),
                         milestone.getName(),
@@ -36,26 +38,7 @@ public class MilestoneService {
                  */
                 .collect(Collectors.toList());
 
-        return new MilestoneOverviewDto(milestoneCounts, milestones);
-    }
-
-    public MilestoneOverviewDto getAllClosedMilestonesWithCounts() {
-        MilestoneCountDto milestoneCounts = getMilestoneCountDto();
-
-        List<MilestoneDetailDto> milestones = milestoneRepository.getAllClosedMilestone().stream() // 닫힌 마일스톤 목록
-                .map(milestone -> new MilestoneDetailDto(
-                        milestone.getId(),
-                        milestone.getName(),
-                        milestone.getCompleteDate(),
-                        milestone.getDescription()))
-                /* TODO : 마일스톤과 이슈간의 연관된 정보 추가하기
-                1) openedIssueCount : 마일스톤에 해당하는 열린 이슈 개수 [long]
-                2) closedIssueCount : 마일스톤에 해당하는 닫힌 이슈 개수 [long]
-                3) milestoneProgress : 마일스톤 진행도 [double]
-                 */
-                .collect(Collectors.toList());
-
-        return new MilestoneOverviewDto(milestoneCounts, milestones);
+        return new MilestoneOverviewDto(getMilestoneCountDto(), milestones);
     }
 
     public Milestone saveMilestone(MilestoneCreationDto milestoneCreationDto) {
@@ -76,22 +59,45 @@ public class MilestoneService {
         return milestoneRepository.save(milestone);
     }
 
-    public Milestone updateMilestoneState(Long id, boolean inputOpenState) {
+    public Milestone updateMilestoneStateToOpen(Long id) {
         Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
 
-        boolean milestoneOpenState = milestone.isOpen();    // 마일스톤의 Opened 상태 저장
+        if (milestone.isOpen()) {
+            throw new MilestoneAlreadyOpenedException();
+        }
 
-        validateMilestoneState(milestoneOpenState, inputOpenState);   // 현재 마일스톤 상태와, 바꾸고자 하는 상태 비교. 같다면 Exception 발생
-
-        milestone.updateOpenState(inputOpenState);
+        milestone.updateOpenState(OPEN_STATE);
 
         return milestoneRepository.save(milestone);
     }
+
+    public Milestone updateMilestoneStateToClose(Long id) {
+        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
+
+        if (!milestone.isOpen()) {
+            throw new MilestoneAlreadyClosedException();
+        }
+
+        milestone.updateOpenState(CLOSE_STATE);
+
+        return milestoneRepository.save(milestone);
+    }
+
 
     public void deleteMilestone(Long id) {
         Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
 
         milestoneRepository.delete(milestone);
+    }
+
+    private boolean convertStateQueryToOpenState(String state) {
+        if (state == null || state.equals(OPEN_STATE_QUERY)) {
+            return true;
+        }
+        if (state.equals(CLOSE_STATE_QUERY)) {
+            return false;
+        }
+        throw new MilestoneQueryStateException();
     }
 
     private MilestoneCountDto getMilestoneCountDto() {
@@ -102,17 +108,9 @@ public class MilestoneService {
         );
     }
 
-    private void validateMilestoneState(boolean milestoneOpenState, boolean inputOpenState) {
-        if (milestoneOpenState == inputOpenState) {
-            throw (milestoneOpenState) ? new MilestoneAlreadyOpenedException() : new MilestoneAlreadyClosedException();
-        }
-    }
-
     private void validateMilestoneForm(String milestoneName) {
         if (milestoneName == null || milestoneName.isEmpty()) {
             throw new InvalidMilestoneFormException();
         }
     }
-
-
 }
