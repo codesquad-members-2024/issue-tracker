@@ -1,11 +1,11 @@
 package com.codesquad.team3.issuetracker.domain.labels.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class LabelForm {
 
