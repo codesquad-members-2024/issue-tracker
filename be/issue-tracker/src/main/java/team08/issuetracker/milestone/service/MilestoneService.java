@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class MilestoneService {
     private final MilestoneRepository milestoneRepository;
 
-    public MilestoneResponse getAllOpenedMilestonesWithCounts() {
+    public MilestoneOverviewDto getAllOpenedMilestonesWithCounts() {
         MilestoneCountDto milestoneCounts = getMilestoneCountDto();
 
-        List<MilestoneDto> milestones = milestoneRepository.getAllOpenedMilestone().stream() // 열린 마일스톤 목록
-                .map(milestone -> new MilestoneDto(
+        List<MilestoneDetailDto> milestones = milestoneRepository.getAllOpenedMilestone().stream() // 열린 마일스톤 목록
+                .map(milestone -> new MilestoneDetailDto(
                         milestone.getId(),
                         milestone.getName(),
                         milestone.getCompleteDate(),
@@ -36,14 +36,14 @@ public class MilestoneService {
                  */
                 .collect(Collectors.toList());
 
-        return new MilestoneResponse(milestoneCounts, milestones);
+        return new MilestoneOverviewDto(milestoneCounts, milestones);
     }
 
-    public MilestoneResponse getAllClosedMilestonesWithCounts() {
+    public MilestoneOverviewDto getAllClosedMilestonesWithCounts() {
         MilestoneCountDto milestoneCounts = getMilestoneCountDto();
 
-        List<MilestoneDto> milestones = milestoneRepository.getAllClosedMilestone().stream() // 닫힌 마일스톤 목록
-                .map(milestone -> new MilestoneDto(
+        List<MilestoneDetailDto> milestones = milestoneRepository.getAllClosedMilestone().stream() // 닫힌 마일스톤 목록
+                .map(milestone -> new MilestoneDetailDto(
                         milestone.getId(),
                         milestone.getName(),
                         milestone.getCompleteDate(),
@@ -55,7 +55,7 @@ public class MilestoneService {
                  */
                 .collect(Collectors.toList());
 
-        return new MilestoneResponse(milestoneCounts, milestones);
+        return new MilestoneOverviewDto(milestoneCounts, milestones);
     }
 
     public Milestone saveMilestone(MilestoneCreationDto milestoneCreationDto) {

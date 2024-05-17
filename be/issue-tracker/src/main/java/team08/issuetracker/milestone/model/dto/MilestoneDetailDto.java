@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class MilestoneDto {
+public class MilestoneDetailDto {
     private long id;
     private String name;
     private LocalDate completeDate;
@@ -14,7 +14,7 @@ public class MilestoneDto {
     private long closedIssueCount;
     private double milestoneProgress;
 
-    public MilestoneDto(Long id, String name, LocalDate completeDate, String description) {
+    public MilestoneDetailDto(Long id, String name, LocalDate completeDate, String description) {
         this.id = id;
         this.name = name;
         this.completeDate = completeDate;
