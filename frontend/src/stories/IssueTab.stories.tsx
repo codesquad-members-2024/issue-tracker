@@ -1,5 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import IssueTab, { IssueTabProps } from '../components/issue/IssueTab';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 export default {
   title: 'Issue/IssueTab',
@@ -8,9 +11,16 @@ export default {
     focusedTab: { control: 'text' },
     setFocusedTab: { action: 'clicked' },
   },
+  decorators: [
+    (Story: StoryFn) => (
+      <QueryClientProvider client={queryClient}>
+        <Story />
+      </QueryClientProvider>
+    )
+  ]
 } as Meta;
 
-const Template: StoryFn<IssueTabProps> = (args) => <IssueTab {...args} />;
+const Template: StoryFn<IssueTabProps> = (args) =>  <IssueTab {...args} />;
 
 export const DefaultTab = Template.bind({});
 DefaultTab.args = {
