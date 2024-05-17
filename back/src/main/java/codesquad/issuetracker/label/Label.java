@@ -7,15 +7,21 @@ import org.springframework.data.annotation.Id;
 public class Label {
 
     @Id
+    private Long id;
     private String name;
     private String description;
-    private String color;
+    private String backgroundColor;
+    private String textColor;
 
-    public Label(String name,
+    public Label(Long id,
+                 String name,
                  String description,
-                 String color) {
+                 String backgroundColor,
+                 String textColor) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.color = color;
+        this.backgroundColor = backgroundColor;
+        this.textColor = textColor;
     }
 }

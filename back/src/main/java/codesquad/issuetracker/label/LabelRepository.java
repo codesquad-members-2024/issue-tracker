@@ -4,9 +4,9 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface LabelRepository extends CrudRepository<Label, String> {
+public interface LabelRepository extends CrudRepository<Label, Long> {
 
     @Modifying
-    @Query("insert into label (name, description, color) values (:name, :description, :color)")
-    public void insert(String name, String description, String color);
+    @Query("update label set name = :newName, description = :newDescription, background_color = :newBackgroundColor, text_color = :newTextColor where id = :labelId")
+    void updateById(Long labelId, String newName, String newDescription, String newBackgroundColor, String newTextColor);
 }

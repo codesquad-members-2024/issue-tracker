@@ -26,10 +26,10 @@ public class IssueService {
     }
 
     public List<Label> getLabelsForIssue(Issue issue) {
-        List<String> labelNames = issue.getIssueLabels().stream()
-                .map(IssueLabel::getLabelName)
+        List<Long> labelIds = issue.getIssueLabels().stream()
+                .map(IssueLabel::getLabelId)
                 .toList();
-        return (List<Label>) labelRepository.findAllById(labelNames);
+        return (List<Label>) labelRepository.findAllById(labelIds);
     }
 
     public List<User> getAssigneesForIssue(Issue issue) {
