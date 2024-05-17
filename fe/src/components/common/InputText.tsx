@@ -8,7 +8,7 @@ interface PropsType {
 	handleBgColor?: (color: string) => void;
 	handler?: React.ChangeEventHandler<HTMLInputElement>;
 	value?: string;
-}
+} 
 
 const getRandomColor = () => {
 	const colors = [
@@ -25,7 +25,7 @@ const getRandomColor = () => {
 	return colors[~~(Math.random() * colors.length)];
 };
 
-function LabelInput({ lable, placeholder, w, icon, handler, handleBgColor, value }: PropsType) {
+function InputText({ lable, placeholder, w, icon, handler, handleBgColor, value }: PropsType) {
 	return (
 		<div
 			className={`${w} relative flex items-center h-[40px] bg-grayscale.200 dark:bg-grayscale.700 rounded-xl text-grayscale.700 dark:text-grayscale.400`}
@@ -37,7 +37,7 @@ function LabelInput({ lable, placeholder, w, icon, handler, handleBgColor, value
 				type="text"
 				className={`${
 					icon && "cursor-default outline-none"
-				} px-20 bg-inherit w-full h-full placeholder:text-grayscale.600 placeholder:dark:text-grayscale.500 rounded-xl`}
+				} px-24 bg-inherit w-full h-full placeholder:text-grayscale.600 placeholder:dark:text-grayscale.500 rounded-xl`}
 				placeholder={placeholder}
 				readOnly={icon}
 				value={value && value}
@@ -54,4 +54,4 @@ function LabelInput({ lable, placeholder, w, icon, handler, handleBgColor, value
 	);
 }
 
-export default LabelInput;
+export default InputText;

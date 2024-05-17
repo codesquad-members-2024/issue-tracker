@@ -21,8 +21,8 @@ function Label({ label, i, length, setShowAlert }: PropsType) {
 		<li
 			className={`transition-[height] ${
 				showEditor ? "lg:h-[360px] h-[520px]" : "h-[96px]"
-			} bg-grayscale.50 dark:bg-grayscale.800 ${
-				i === length - 1 ? "rounded-b-2xl" : `border-b-[1px] ${border}`
+			} bg-grayscale.50 dark:bg-grayscale.800 border-t-[1px] ${border} ${
+				i === length - 1 && "rounded-b-2xl"
 			}`}
 		>
 			<div className={`${showEditor && "hidden"} w-full h-full flex items-center justify-between`}>

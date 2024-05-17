@@ -36,7 +36,7 @@ function LabelsTable() {
 	return (
 		<>
 			<div className={`mt-5 w-full border-[1px] rounded-2xl ${border} min-w-[425px]`}>
-				<header className={`h-[64px] border-b-[1px] ${border} flex items-center`}>
+				<header className={`h-[64px] flex items-center`}>
 					<span className="mx-8 font-bold text-grayscale.700 dark:text-grayscale.400">
 						{length}개의 레이블
 					</span>

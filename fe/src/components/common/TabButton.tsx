@@ -32,7 +32,7 @@ const POSITION: PositionType = {
 		rightTab: "마일스톤(3)",
 		size: "w-[320px] h-[40px]",
 	},
-	TABLE: {
+	ISSUE: {
 		border: false,
 		leftIcon: "!",
 		leftTab: "열린 이슈(3)",
@@ -40,13 +40,21 @@ const POSITION: PositionType = {
 		rightTab: "닫힌 이슈(3)",
 		size: "w-[250px] h-[32px]",
 	},
+	MILESTONE: {
+		border: false,
+		leftIcon: "!",
+		leftTab: "열린 마일스톤(3)",
+		rightIcon: "ARCHIVE",
+		rightTab: "닫힌 마일스톤(3)",
+		size: "w-[320px] h-[32px]",
+	},
 };
 
 //TODO 라우팅
 const LINK: LinkType = {
 	UI_BAR: {
 		left: "/labels",
-		right: "/",
+		right: "/milestones",
 	},
 	TABLE: {
 		left: "/",
@@ -98,7 +106,12 @@ function TabButton({ position, click }: PropsType) {
 				/>
 			</Link>
 			<div className={`${POSITION[position].border ? borderRight : ""} h-full`}></div>
-			<Link to="/" className="flex items-center w-1/2 h-full">
+			<Link
+				to={"/milestones"}
+				className={`flex items-center w-[49.8%] h-full bg-grayscale.100 dark:bg-grayscale.900 rounded-r-xl ${
+					right === "SELECTED" ? "bg-grayscale.200 dark:bg-grayscale.700" : ""
+				}`}
+			>
 				<Button
 					onClick={onRightClick}
 					size="M"

@@ -85,7 +85,7 @@ function IssueTable() {
 
 	return (
 		<div className={`border-[1px] ${border} rounded-2xl lg:mt-0 mt-14`}>
-			<header className={`h-[64px] border-b-[1px] ${border} flex items-center`}>
+			<header className={`h-[64px] flex items-center`}>
 				<div className="flex items-center justify-between mx-8 w-[290px]">
 					<TotalCheckBox state={state} dispatch={dispatch} TOTAL_LENGTH={TOTAL_LENGTH} />
 					{state.countCheckBox > 0 ? (
@@ -93,7 +93,7 @@ function IssueTable() {
 							{state.countCheckBox}개 이슈 선택
 						</div>
 					) : (
-						<TabButton position="TABLE" />
+						<TabButton position="ISSUE" />
 					)}
 				</div>
 			</header>
@@ -102,8 +102,8 @@ function IssueTable() {
 					<li
 						key={issue.id}
 						className={`flex items-center bg-grayscale.50 dark:bg-grayscale.800 ${
-							i === issues.length - 1 ? "rounded-b-2xl" : `border-b-[1px] ${border}`
-						}`}
+							i === issues.length - 1 && "rounded-b-2xl"
+						} border-t-[1px] ${border}`}
 					>
 						<div className="h-[52px]">
 							<TableCheckBox state={state} dispatch={dispatch} />

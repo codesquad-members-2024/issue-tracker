@@ -1,4 +1,4 @@
-import LabelInput from "../../common/LabelInput";
+import LabelInput from "../../common/InputText";
 
 interface PropsType {
 	handleName: React.ChangeEventHandler<HTMLInputElement>;

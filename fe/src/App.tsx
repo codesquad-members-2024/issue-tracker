@@ -4,8 +4,10 @@ import Main from "./routes/Main";
 import Login from "./routes/Login";
 import NewIssue from "./routes/NewIssue";
 import Labels from "./routes/Labels";
+import Milestones from "./routes/Milestones";
 
 function App() {
+	//TODO 차후 context로 리펙토링
 	const [darkMode, setDarkMode] = useState("");
 	return (
 		<div
@@ -13,8 +15,13 @@ function App() {
 		>
 			<BrowserRouter>
 				<Routes>
-					{/* <Login />  */}
-					<Route path="/" element={<Main darkMode={darkMode} setDarkMode={setDarkMode} />} />
+					<Route
+						path="/"
+						element={
+							// <Login />
+							<Main darkMode={darkMode} setDarkMode={setDarkMode} />
+						}
+					/>
 					<Route
 						path="/issue"
 						element={<NewIssue darkMode={darkMode} setDarkMode={setDarkMode} />}
@@ -22,6 +29,10 @@ function App() {
 					<Route
 						path="/labels"
 						element={<Labels darkMode={darkMode} setDarkMode={setDarkMode} />}
+					/>
+					<Route
+						path="/milestones"
+						element={<Milestones darkMode={darkMode} setDarkMode={setDarkMode} />}
 					/>
 				</Routes>
 			</BrowserRouter>
