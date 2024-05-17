@@ -1,8 +1,8 @@
 package codesquad.loginTest;
 
-import codesquad.issuetracker.login.LoginRepository;
 import codesquad.issuetracker.login.LoginService;
 import codesquad.issuetracker.user.User;
+import codesquad.issuetracker.user.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class LoginServiceTest {
 
     @Mock
-    private LoginRepository loginRepository;
+    private UserRepository userRepository;
 
     @Mock
     private HttpSession session;
@@ -37,7 +37,7 @@ public class LoginServiceTest {
         String password = "password123";
         User user = new User(email, password, "profile.jpg");
 
-        when(loginRepository.findByLoginId(email)).thenReturn(user);
+        when(userRepository.findByLoginId(email)).thenReturn(user);
 
         // when
         boolean result = loginService.authenticate(email, password, session);
@@ -52,7 +52,7 @@ public class LoginServiceTest {
         String email = "test@example.com";
         String password = "wrongpassword";
 
-        when(loginRepository.findByLoginId(email)).thenReturn(null);
+        when(userRepository.findByLoginId(email)).thenReturn(null);
 
         // when
         boolean result = loginService.authenticate(email, password, session);
