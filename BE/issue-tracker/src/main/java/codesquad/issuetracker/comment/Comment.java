@@ -8,8 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
+@Table("COMMENT")
 public class Comment {
 
     @Id
