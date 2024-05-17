@@ -50,8 +50,10 @@ public class IssueService {
         issue.setAuthor(issueRequest.author());
         issue.setPublishedAt(LocalDateTime.now());
         issue.setIsClosed(false);
+        issue.setMilestoneId(issueRequest.milestoneId());
 
         issueRepository.save(issue);
+        issueRepository.incrementIssueCountForMilestone(issue.getMilestoneId());
 
         // 이슈 작성 시 입력한 내용을 첫번째 코멘트로 저장하기 위함.
         Comment comment = new Comment();

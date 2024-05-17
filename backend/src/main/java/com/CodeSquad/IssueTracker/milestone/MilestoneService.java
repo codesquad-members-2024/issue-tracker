@@ -82,6 +82,7 @@ public class MilestoneService {
         validateMilestoneRequest(milestoneRequest);
         Milestone milestone = getMilestoneById(milestoneId);
 
+        log.info("마일스톤 편집 milestone: {}", milestoneId);
         milestone.setTitle(milestoneRequest.getTitle());
         milestone.setDescription(milestoneRequest.getDescription());
         milestone.setDeadline(parseDeadline(milestoneRequest.getDeadline()));
@@ -91,12 +92,14 @@ public class MilestoneService {
     public void closeMilestone(Long milestoneId) {
         Milestone milestone = getMilestoneById(milestoneId);
         milestone.setIsClosed(true);
+        log.info("마일스톤 상태 변경 close milestone: {}", milestoneId);
         milestoneRepository.save(milestone);
     }
 
     public void openMilestone(Long milestoneId) {
         Milestone milestone = getMilestoneById(milestoneId);
         milestone.setIsClosed(false);
+        log.info("마일스톤 상태 변경 open milestone: {}", milestoneId);
         milestoneRepository.save(milestone);
     }
 }
