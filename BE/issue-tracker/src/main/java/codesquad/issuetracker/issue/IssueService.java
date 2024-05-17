@@ -20,15 +20,13 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final LabelService labelService;
     private final UserService userService;
-    private final MilestoneService milestoneService;
 
     @Autowired
     public IssueService(IssueRepository issueRepository, LabelService labelService,
-        UserService userService, MilestoneService milestoneService) {
+        UserService userService) {
         this.issueRepository = issueRepository;
         this.labelService = labelService;
         this.userService = userService;
-        this.milestoneService = milestoneService;
     }
 
     public List<Issue> findIssuesByIsOpen(boolean isOpen) {
