@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Open } from "../../../../icons/open";
 import { issues } from "../../../../test.json"; // test data
+import { calculateTime } from "../../../../Utils/calculateTime";
 
 export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
   return (
@@ -21,7 +22,7 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
               />
               <Content>
                 <Top>
-                  <Open />
+                  <StyledOpen />
                   <StyledLink to={`/issues/${issue.issue_id}`}>
                     <div className="title">{issue.title}</div>
                   </StyledLink>
@@ -36,8 +37,7 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
                 <Bottom>
                   <div>#{issue.issue_id}</div>
                   <div>
-                    이 이슈가 {issue.create_time} 전, {issue.assignee}님에 의해
-                    작성되었습니다
+                    이 이슈가 {calculateTime(issue.create_time)}, {issue.writer}님에 의해 작성되었습니다
                   </div>
                   <div>{issue.milestone}</div>
                 </Bottom>
@@ -81,7 +81,7 @@ const Label = styled.span`
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 14px;
-  color: white; 
+  color: white;
 `;
 
 const Bottom = styled.div`
@@ -100,4 +100,8 @@ const Checkbox = styled.input`
 const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
+`;
+
+const StyledOpen = styled(Open)`
+  stroke: #007aff;
 `;
