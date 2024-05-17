@@ -45,7 +45,7 @@ public class MilestoneController {
     public ResponseEntity<Milestone> update(@PathVariable("id") Integer id,
                                         @RequestBody @Validated MilestoneForm form) {
         Milestone newMilestone = new Milestone(form.getTitle(), form.getDescription(), form.getDeadLine());
-        milestoneServiceImpl.update(id, newMilestone);
+        milestoneServiceImpl.update(newMilestone);
 
         return ResponseEntity.ok(newMilestone);
 

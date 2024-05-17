@@ -23,11 +23,8 @@ public class MilestoneServiceImpl implements MilestoneService {
     }
 
     @Override
-    public void update(Integer id, Milestone updatemilestone) {
-        milestoneRepository.updateById(id,
-                updatemilestone.getTitle(),
-                updatemilestone.getDescription(),
-                updatemilestone.getDeadline());
+    public void update(Milestone updatemilestone) {
+        milestoneRepository.update(updatemilestone);
     }
     @Override
     public Milestone getMilestone(Integer id) {
@@ -36,12 +33,12 @@ public class MilestoneServiceImpl implements MilestoneService {
 
     @Override
     public List<Milestone> getOpenMilestones() {
-        return milestoneRepository.getMilestoneByClosed(false);
+        return milestoneRepository.getAllClosed();
     }
 
     @Override
     public List<Milestone> getClosedMilestones() {
-        return milestoneRepository.getMilestoneByClosed(true);
+        return milestoneRepository.getAllClosed();
     }
 
 

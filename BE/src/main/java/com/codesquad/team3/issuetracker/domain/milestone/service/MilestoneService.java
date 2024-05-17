@@ -10,7 +10,7 @@ public interface MilestoneService {
 
     void delete(Integer id);
 
-    void update(Integer id, Milestone updatemilestone);
+    void update(Milestone updatemilestone);
 
     Milestone getMilestone(Integer id);
 
