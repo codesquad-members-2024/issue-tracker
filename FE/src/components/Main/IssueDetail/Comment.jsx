@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { Edit } from "../../../icons/edit";
 import { Smile } from "../../../icons/smile";
+import { calculateTime } from "../../../Utils/calculateTime";
 
-export function Comment({ selectedIssue }) {
+export function Comment({ selectedIssue, elapsedTime }) {
   return (
     <StyledComment>
       <Header>
         <Info>
           <img src="/img/frog.png" />
           <div>{selectedIssue.writer}</div>
-          <div>{selectedIssue.create_time}</div>
+          <div>{elapsedTime}</div>
         </Info>
         <Buttons>
           <div className="writer">작성자</div>
