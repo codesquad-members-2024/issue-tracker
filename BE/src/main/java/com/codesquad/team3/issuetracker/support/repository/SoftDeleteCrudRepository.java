@@ -1,10 +1,14 @@
 package com.codesquad.team3.issuetracker.support.repository;
 
 import com.codesquad.team3.issuetracker.global.entity.SoftDeleteEntity;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import com.codesquad.team3.issuetracker.support.enums.SoftDeleteSearchFlags;
 import org.springframework.data.repository.NoRepositoryBean;
+
+import java.util.Optional;
+
+import static com.codesquad.team3.issuetracker.support.repository.RepositorySupport.getJdbcAggregateTemplate;
+import static com.codesquad.team3.issuetracker.support.repository.RepositorySupport.getQuery;
+
 
 @NoRepositoryBean
 public interface SoftDeleteCrudRepository<T extends SoftDeleteEntity, ID> extends
@@ -17,17 +21,28 @@ public interface SoftDeleteCrudRepository<T extends SoftDeleteEntity, ID> extend
         return entity;
     }
 
-    default Iterable<T> getAll() {
-        return StreamSupport.stream(findAll().spliterator(), false)
-            .filter(entity -> !entity.isDeleted())
-            .collect(Collectors.toList());
+    default T recover(T entity) {
+        entity.recover();
+        update(entity);
+
+        return entity;
     }
 
-    default Optional<T> getById(ID id) {
-        Optional<T> optionalEntity = findById(id);
-        if (optionalEntity.isPresent() && optionalEntity.get().isDeleted()) {
-            return Optional.empty();
-        }
-        return optionalEntity;
+    @Override
+    @Deprecated
+    Iterable<T> findAll();
+
+    default Iterable<? extends SoftDeleteEntity> findAll(Class<T> entityClass, SoftDeleteSearchFlags flags) {
+        return getJdbcAggregateTemplate().findAll(getQuery(flags), entityClass);
+    }
+
+    default int countByDeleteCondition(Class<T> entityClass, SoftDeleteSearchFlags flags) {
+        return (int) getJdbcAggregateTemplate().count(getQuery(flags), entityClass);
+    }
+
+    default Optional<T> findByIdWithDeleteCondition(ID id, Class<T> entityClass, SoftDeleteSearchFlags flags) {
+        return getJdbcAggregateTemplate().findOne(getQuery(id, flags), entityClass);
     }
 }
+
+

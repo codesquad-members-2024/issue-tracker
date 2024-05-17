@@ -2,7 +2,6 @@ CREATE TABLE issue (
                        id int PRIMARY KEY AUTO_INCREMENT,
                        writer_id int NOT NULL ,
                        title varchar(60) NOT NULL,
-                       first_comment_id int NOT NULL UNIQUE ,
                        create_time timestamp NOT NULL,
                        is_closed bool DEFAULT false,
                        milestone_id int,
@@ -15,7 +14,9 @@ CREATE TABLE comment (
                          contents varchar(500) NOT NULL,
                          create_time timestamp NOT NULL,
                          issue_id int NOT NULL ,
-                         is_deleted bool DEFAULT false
+                         is_deleted bool DEFAULT false,
+
+                        is_primary bool DEFAULT false
 );
 
 CREATE TABLE member (
@@ -82,7 +83,6 @@ ALTER TABLE comment ADD FOREIGN KEY (issue_id) REFERENCES issue (id);
 ALTER TABLE issue ADD FOREIGN KEY (writer_id) REFERENCES member (id);
 
 ALTER TABLE issue ADD FOREIGN KEY (milestone_id) REFERENCES milestone (id);
-ALTER TABLE issue ADD FOREIGN KEY (first_comment_id) REFERENCES comment(id);
 
 ALTER TABLE comment ADD FOREIGN KEY (writer_id) REFERENCES member (id);
 
