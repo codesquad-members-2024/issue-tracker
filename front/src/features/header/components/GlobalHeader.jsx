@@ -6,9 +6,9 @@ import { IconUser } from '../../../common/icons/IconUser';
 
 export function GlobalHeader({ ...props }) {
 	return (
-		<StyledHeader>
+		<StyledHeader {...props}>
 			<StyledInnerLayout>
-				<StyledLink>
+				<StyledLink to='/'>
 					<Logo />
 				</StyledLink>
 				<StyledUser></StyledUser>

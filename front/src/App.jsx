@@ -1,18 +1,49 @@
-import styled from 'styled-components';
+import { Suspense } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, theme } from './styles';
-import { Router } from './Routes';
+import { Spin } from 'antd';
+import {
+	createBrowserRouter,
+	createRoutesFromElements,
+	Route,
+	RouterProvider,
+} from 'react-router-dom';
+import { routes } from './Routes';
 
+const router = createBrowserRouter(
+	createRoutesFromElements(
+		routes.map((route, index) => (
+			<Route key={index} path={route.path} element={route.element}>
+				{route.children &&
+					route.children.map((child, childIndex) => (
+						<Route key={childIndex} path={child.path} element={child.element} />
+					))}
+			</Route>
+		))
+	)
+);
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<GlobalStyle />
-			<StyledWrapper>
-				<Router />
-			</StyledWrapper>
+			<Suspense
+				fallback={
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: '100vh',
+						}}
+					>
+						<Spin size='large' />
+					</div>
+				}
+			>
+				<RouterProvider router={router} />
+			</Suspense>
 		</ThemeProvider>
 	);
 }
 
-const StyledWrapper = styled.div``;
 export default App;
