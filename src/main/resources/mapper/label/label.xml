@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.issuetracker.domain.label.LabelMapper">
+
+    <update id="update" parameterType="map">
+        UPDATE LABEL
+        <set>
+            <if test="request.labelId != null">
+                LABEL_ID = #{request.labelId},
+            </if>
+            <if test="request.description != null">
+                DESCRIPTION = #{request.description},
+            </if>
+            <if test="request.textColor != null">
+                TEXT_COLOR = #{request.textColor},
+            </if>
+            <if test="request.colorCode != null">
+                COLOR_CODE = #{request.colorCode}
+            </if>
+        </set>
+        WHERE LABEL_ID = #{labelId}
+    </update>
+
+</mapper>
