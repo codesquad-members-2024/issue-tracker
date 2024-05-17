@@ -40,11 +40,7 @@ public class MilestoneService {
     public Milestone saveMilestone(MilestoneCreationDto milestoneCreationDto) {
         validateMilestoneForm(milestoneCreationDto.name());
 
-        Milestone milestone = new Milestone(
-                milestoneCreationDto.name(),
-                milestoneCreationDto.description(),
-                milestoneCreationDto.completeDate()
-        );
+        Milestone milestone = milestoneCreationDto.toEntity();
 
         return milestoneRepository.save(milestone);
     }
