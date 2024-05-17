@@ -3,15 +3,21 @@ import IssueFeed from "../components/IssueContainer/IssueFeed";
 import { useEffect, useState } from "react";
 import FilterProvider from "../Providers/FilterProvider";
 import { Header } from "../util/UtilUI";
+import { APiUtil } from "../util/APIUtils";
 const IssuePage = () => {
     const [isOpen, setOpen] = useState<boolean>(true);
     const [issueInfo, setIssueInfo] = useState([]);
     const [resetFilterUI, setResetFilterUI] = useState(false);
 
     const handleResetFilterUI = () => setResetFilterUI(true);
+
     useEffect(() => {
-        setIssueInfo([])
-    }, [])
+        const getLabelList = async () => {
+            const milestoneList = await APiUtil.getData("issues");
+            setIssueInfo(milestoneList);
+        };
+        getLabelList();
+    }, []);
 
     return (
         <main className="w-1280 mx-auto">

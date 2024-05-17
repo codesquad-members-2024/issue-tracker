@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
 import NotFound from "../../../util/NotFound";
 import MilestoneCard from "./MilestoneCard";

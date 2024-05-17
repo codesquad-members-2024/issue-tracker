@@ -9,7 +9,7 @@ type TaskTable = Record<string, Filter[]>;
 const taskTable: TaskTable = {
     담당자: [
         { value: "담당자가 없는 이슈", query: "" },
-        { value: "george", query: "author:96limshyun"},
+        { value: "george", query: "author:96limshyun" },
         { value: "cory", query: "author:cory" },
         { value: "jayden", query: "author:jayden" },
     ],
@@ -38,6 +38,7 @@ interface FeedNavProps {
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
     isAllChecked: boolean;
     allCheckHandler: () => void;
+    checkedItem: string[];
 }
 
 const FeedNav = ({
@@ -48,6 +49,7 @@ const FeedNav = ({
     setResetFilterUI,
     isAllChecked,
     allCheckHandler,
+    checkedItem,
 }: FeedNavProps) => {
     const issuesLength = {
         open: issueInfo.filter((curIssue) => curIssue.is_open).length,
@@ -57,22 +59,35 @@ const FeedNav = ({
     return (
         <div className="h-45 bg-gray-200 dark:bg-darkModeBG flex text-sm rounded-t-lg">
             <div className="flex h-full w-70% items-center">
-                <input type="checkbox" checked={isAllChecked} onChange={allCheckHandler} className="w-7%" />
-                <button
-                    className={`mr-6 ${isOpen ? "font-bold" : ""}`}
-                    onClick={() => setOpen(true)}
-                >
-                    <InfoCircleOutlined /> 열린 이슈({issuesLength.open})
-                </button>
-                <button
-                    className={isOpen ? "" : "font-bold"}
-                    onClick={() => setOpen(false)}
-                >
-                    <CreditCardOutlined /> 닫힌 이슈({issuesLength.closed})
-                </button>
+                <input
+                    type="checkbox"
+                    checked={isAllChecked}
+                    onChange={allCheckHandler}
+                    className="w-7%"
+                />
+                {checkedItem.length ? (
+                    <div>{checkedItem.length}개 이슈 선택</div>
+                ) : (
+                    <div>
+                        <button
+                            className={`mr-6 ${isOpen ? "font-bold" : ""}`}
+                            onClick={() => setOpen(true)}
+                        >
+                            <InfoCircleOutlined /> 열린 이슈({issuesLength.open}
+                            )
+                        </button>
+                        <button
+                            className={isOpen ? "" : "font-bold"}
+                            onClick={() => setOpen(false)}
+                        >
+                            <CreditCardOutlined /> 닫힌 이슈(
+                            {issuesLength.closed})
+                        </button>
+                    </div>
+                )}
             </div>
             <div className="flex h-full w-30% items-center z-10">
-                {Object.keys(taskTable).map((key) => (
+                {checkedItem.length ? "" : Object.keys(taskTable).map((key) => (
                     <FilterUI
                         key={key}
                         filterInfo={taskTable[key]}
@@ -81,6 +96,7 @@ const FeedNav = ({
                         setResetFilterUI={setResetFilterUI}
                     />
                 ))}
+                
             </div>
         </div>
     );

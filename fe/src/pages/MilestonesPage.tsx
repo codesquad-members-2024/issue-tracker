@@ -11,7 +11,7 @@ const MilestonesPage = () => {
 
     useEffect(() => {
         const getMilestoneList = async () => {
-            const milestoneList = await APiUtil.getNewsData("milestones");
+            const milestoneList = await APiUtil.getData("milestones");
             setMilestoneInfo(milestoneList);
         };
         getMilestoneList();

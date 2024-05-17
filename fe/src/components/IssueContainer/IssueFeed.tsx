@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import FeedNav from "./FeedNav";
 import IssueCard from "./IssueCard";
+import NotFound from "../../util/NotFound";
 
 export interface Issue {
     id: number;
@@ -68,8 +69,9 @@ const IssueFeed = ({
                 setResetFilterUI={setResetFilterUI}
                 isAllChecked={isAllChecked}
                 allCheckHandler={allCheckHandler}
+                checkedItem={checkedItem}
             />
-            {isOpenInfo.map((curIssue, idx) => (
+            {!isOpenInfo.length ? <NotFound/> : isOpenInfo.map((curIssue, idx) => (
                 <IssueCard
                     key={curIssue.id}
                     curIssue={curIssue}
@@ -79,6 +81,7 @@ const IssueFeed = ({
                     isAllChecked={isAllChecked}
                 />
             ))}
+            
         </section>
     );
 };

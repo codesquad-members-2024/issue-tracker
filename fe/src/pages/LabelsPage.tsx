@@ -11,7 +11,7 @@ const LabelsPage = () => {
     
     useEffect(() => {
         const getLabelList = async () => {
-            const milestoneList = await APiUtil.getNewsData("labels");
+            const milestoneList = await APiUtil.getData("labels");
             setLabelsInfo(milestoneList);
         };
         getLabelList();

@@ -1,8 +1,10 @@
+import FileUploader from "../util/Uploader";
 
 const NewPage = () => {
+
     return (
         <>
-            <h3>이슈 생성 페이지</h3>
+        <FileUploader/>
         </>
     );
 };
