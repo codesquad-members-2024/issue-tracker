@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class FilterController {
 
@@ -16,8 +18,8 @@ public class FilterController {
     }
 
     @GetMapping("/filters")
-    public ResponseEntity<IssueNumberResponse> getIssueNumber() {
-        IssueNumberResponse issueNumberResponse = filterService.getIssueNumber();
-        return new ResponseEntity<>(issueNumberResponse, HttpStatus.OK);
+    public ResponseEntity<FilterResponse> getIssueNumber() {
+        FilterResponse filterResponse = filterService.getFilterResponse();
+        return new ResponseEntity<>(filterResponse, HttpStatus.OK);
     }
 }

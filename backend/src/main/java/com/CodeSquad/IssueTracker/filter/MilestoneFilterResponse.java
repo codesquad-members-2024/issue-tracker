@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class IssueNumberResponse {
-    private Long openIssueCount;
-    private Long closeIssueCount;
+public class MilestoneFilterResponse {
+    private Long milestoneId;
+    private String title;
 }
