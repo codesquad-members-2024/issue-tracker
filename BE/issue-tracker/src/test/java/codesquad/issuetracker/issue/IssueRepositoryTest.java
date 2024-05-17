@@ -2,9 +2,15 @@ package codesquad.issuetracker.issue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import codesquad.issuetracker.comment.Comment;
+import codesquad.issuetracker.comment.CommentRepository;
+import codesquad.issuetracker.comment.CommentResponse;
+import codesquad.issuetracker.exception.ResourceNotFoundException;
 import codesquad.issuetracker.milestone.Milestone;
 import codesquad.issuetracker.milestone.MilestoneRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +29,8 @@ class IssueRepositoryTest {
     IssueRepository issueRepository;
     @Autowired
     MilestoneRepository milestoneRepository;
+    @Autowired
+    CommentRepository commentRepository;
 
     @Test
     @DisplayName("열린 이슈 목록 가져오기")
@@ -145,4 +153,35 @@ class IssueRepositoryTest {
         assertThat(updatedIssue.getTitle()).isEqualTo(newTitle);
     }
 
+    @Test
+    @DisplayName("이슈를 삭제하면 연관된 댓글도 삭제 한다.")
+    void deleteIssue() {
+        Comment comment1 = Comment.builder()
+            .contents("댓글 1")
+            .isDeleted(false)
+            .issueId(AggregateReference.to(1L))
+            .build();
+        Comment comment2 = Comment.builder()
+            .contents("댓글 1")
+            .isDeleted(false)
+            .issueId(AggregateReference.to(1L))
+            .build();
+
+        Issue issue = Issue.builder()
+            .authorId("cori1234")
+            .title("old title")
+            .isDeleted(false)
+            .comments(List.of(comment1, comment2))
+            .build();
+
+        Issue savedIssue = issueRepository.save(issue);
+
+        Issue findIssue = issueRepository.findById(savedIssue.getId()).get();
+        findIssue.delete();
+        Issue deletedIssue = issueRepository.save(findIssue);
+
+        List<Comment> all = (List<Comment>) commentRepository.findAll();
+        assertThat(all).allMatch(Comment::isDeleted);
+        assertThat(deletedIssue.isDeleted()).isEqualTo(true);
+    }
 }

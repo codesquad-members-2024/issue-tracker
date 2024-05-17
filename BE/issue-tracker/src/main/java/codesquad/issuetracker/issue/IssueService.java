@@ -81,4 +81,11 @@ public class IssueService {
         return issue;
     }
 
+    public void delete(Long issueId) {
+        Issue issue = issueRepository.findById(issueId).orElseThrow(ResourceNotFoundException::new);
+        issue.delete();
+        issueRepository.save(issue);
+    }
+
+
 }

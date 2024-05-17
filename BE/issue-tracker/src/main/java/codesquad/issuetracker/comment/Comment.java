@@ -21,17 +21,19 @@ public class Comment {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean isDeleted;
 
     @Builder
     public Comment(Long id, AggregateReference<Issue, Long> issueId,
         AggregateReference<User, String> authorId, String contents, LocalDateTime createdAt,
-        LocalDateTime updatedAt) {
+        LocalDateTime updatedAt, boolean isDeleted) {
         this.id = id;
         this.issueId = issueId;
         this.authorId = authorId;
         this.contents = contents;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.isDeleted = isDeleted;
     }
 
     public static Comment of(Long issueId, CommentCreateRequest commentCreateRequest) {
@@ -41,6 +43,11 @@ public class Comment {
             .authorId(AggregateReference.to(commentCreateRequest.authorId()))
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
+            .isDeleted(false)
             .build();
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }

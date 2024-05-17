@@ -86,4 +86,9 @@ public class Issue {
     public void updateTitle(String title) {
         this.title = title;
     }
+
+    public void delete() {
+        this.isDeleted = true;
+        comments.forEach(Comment::delete);
+    }
 }

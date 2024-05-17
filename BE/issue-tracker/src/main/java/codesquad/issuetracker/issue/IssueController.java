@@ -61,4 +61,8 @@ public class IssueController {
 
     }
 
+    @DeleteMapping("/{issueId}")
+    public void deleteIssue(@PathVariable Long issueId) {
+        issueService.delete(issueId);
+    }
 }
