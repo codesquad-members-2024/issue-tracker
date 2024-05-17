@@ -26,11 +26,7 @@ public class MilestoneService {
         boolean openState = convertStateQueryToOpenState(state);
 
         List<MilestoneDetailDto> milestones = milestoneRepository.getAllMilestonesByOpenState(openState).stream()
-                .map(milestone -> new MilestoneDetailDto(
-                        milestone.getId(),
-                        milestone.getName(),
-                        milestone.getCompleteDate(),
-                        milestone.getDescription()))
+                .map(MilestoneDetailDto::from)
                 /* TODO : 마일스톤과 이슈간의 연관된 정보 추가하기
                 1) openedIssueCount : 마일스톤에 해당하는 열린 이슈 개수 [long]
                 2) closedIssueCount : 마일스톤에 해당하는 닫힌 이슈 개수 [long]

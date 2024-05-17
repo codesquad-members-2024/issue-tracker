@@ -1,6 +1,7 @@
 package team08.issuetracker.milestone.model.dto;
 
 import lombok.Getter;
+import team08.issuetracker.milestone.model.Milestone;
 
 import java.time.LocalDate;
 
@@ -20,4 +21,14 @@ public class MilestoneDetailDto {
         this.completeDate = completeDate;
         this.description = description;
     }
+
+    public static MilestoneDetailDto from(Milestone milestone) {
+        return new MilestoneDetailDto(
+                milestone.getId(),
+                milestone.getName(),
+                milestone.getCompleteDate(),
+                milestone.getDescription()
+        );
+    }
+
 }
