@@ -4,6 +4,7 @@ import { Main } from "./components/Main/IssuesList/Main";
 import { Milestones } from "./components/Main/Milestones/Milestones";
 import { Labels } from "./components/Main/Labels/Labels";
 import { NewIssue } from "./components/Main/NewIssue/NewIssue";
+import { IssueDetail } from "./components/Main/IssueDetail/IssueDetail";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/issues" element={<Main />} />
         <Route path="/issues/create" element={<NewIssue />} />
+        <Route path="/issues/:idx" element={<IssueDetail />} />
         <Route path="/labels" element={<Labels />} />
         <Route path="/milestones" element={<Milestones />} />
       </Routes>

@@ -6,13 +6,8 @@ import { Popup } from "./Popup";
 export const DropdownContainer = ({ id, label, items }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpenContent = () => {
-    setIsOpen(true);
-  };
-
-  const handleCloseContent = () => {
-    setIsOpen(false);
-  };
+  const handleOpenContent = () => setIsOpen(true);
+  const handleCloseContent = () => setIsOpen(false);
 
   return (
     <Container>
