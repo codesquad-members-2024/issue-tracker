@@ -5,11 +5,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class MilestoneResponse {
+public class MilestoneOverviewDto {
     private MilestoneCountDto milestoneCounts;
-    private List<MilestoneDto> milestones;
+    private List<MilestoneDetailDto> milestones;
 
-    public MilestoneResponse(MilestoneCountDto milestoneCounts, List<MilestoneDto> milestones) {
+    public MilestoneOverviewDto(MilestoneCountDto milestoneCounts, List<MilestoneDetailDto> milestones) {
         this.milestoneCounts = milestoneCounts;
         this.milestones = milestones;
     }
