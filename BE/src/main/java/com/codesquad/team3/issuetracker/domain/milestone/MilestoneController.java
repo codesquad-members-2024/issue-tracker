@@ -57,12 +57,23 @@ public class MilestoneController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<MilestoneList> LabelList(){
-        List<Milestone> milestoneList = milestoneServiceImpl.getAllMilestones();
+    @GetMapping("/openMilestones")
+    public ResponseEntity<MilestoneList> getOpenMilestoneList(){
+        List<Milestone> milestoneList = milestoneServiceImpl.getOpenMilestones();
 
         return ResponseEntity.ok(new MilestoneList(milestoneList));
     }
 
 
-}
+    @GetMapping("/ClosedMilestones")
+    public ResponseEntity<MilestoneList> getClosedMilestoneList(){
+        List<Milestone> milestoneList = milestoneServiceImpl.getClosedMilestones();
+
+        return ResponseEntity.ok(new MilestoneList(milestoneList));
+    }
+
+    }
+
+
+
+

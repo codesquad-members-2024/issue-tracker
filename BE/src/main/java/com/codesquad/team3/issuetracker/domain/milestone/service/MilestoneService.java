@@ -14,5 +14,8 @@ public interface MilestoneService {
 
     Milestone getMilestone(Integer id);
 
-    List<Milestone> getAllMilestones();
+    List<Milestone> getOpenMilestones();
+
+    public List<Milestone> getClosedMilestones();
+
 }

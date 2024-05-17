@@ -7,6 +7,7 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface MilestoneRepository extends GlobalCrudRepository<Milestone, Integer> {
@@ -15,4 +16,5 @@ public interface MilestoneRepository extends GlobalCrudRepository<Milestone, Int
     @Query("UPDATE milestone SET title = :title, description = :description, deadline =:deadline WHERE id = :id")
     void updateById(Integer id, String title, String description, LocalDate deadline);
 
+    List<Milestone> getMilestoneByClosed(Boolean isClosed);
 }
