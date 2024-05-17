@@ -1,6 +1,7 @@
 package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.comment.CommentResponse;
+import codesquad.issuetracker.exception.ResourceNotFoundException;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
@@ -8,7 +9,6 @@ import codesquad.issuetracker.milestone.MilestoneService;
 import codesquad.issuetracker.user.UserService;
 import codesquad.issuetracker.user.dto.UserResponse;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +48,7 @@ public class IssueService {
     }
 
     public DetailIssueResponse findDetailIssueById(Long issueId) {
-        Optional<Issue> optionalIssue = issueRepository.findById(issueId);
-        Issue issue = optionalIssue.orElseThrow(IllegalArgumentException::new);
+        Issue issue = findById(issueId);
 
         Set<Label> labels = issue.getLabelRefs().stream()
             .map(labelRef -> labelService.findById(labelRef.getLabelId()))
@@ -67,7 +66,19 @@ public class IssueService {
         return DetailIssueResponse.from(issue, labels, assignees, comments);
     }
 
+    public Issue findById(Long issueId) {
+        return issueRepository.findById(issueId).orElseThrow(ResourceNotFoundException::new);
+    }
+
     public List<Issue> findByMilestoneId(Long milestoneId) {
         return issueRepository.findByMilestoneId(milestoneId);
     }
+
+    public Issue updateTitle(Long issueId, String title) {
+        Issue issue = findById(issueId);
+        issue.updateTitle(title);
+        issueRepository.save(issue);
+        return issue;
+    }
+
 }

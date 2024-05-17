@@ -9,7 +9,9 @@ import java.net.URI;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,4 +54,11 @@ public class IssueController {
     CommentCreateRequest commentCreateRequest) {
         return commentService.addComment(issueId, commentCreateRequest);
     }
+
+    @PatchMapping("/{issueId}")
+    public Issue updateIssue(@PathVariable Long issueId, @RequestBody String title) {
+        return issueService.updateTitle(issueId, title);
+
+    }
+
 }

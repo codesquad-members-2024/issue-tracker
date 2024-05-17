@@ -82,4 +82,8 @@ public class Issue {
     public void addComment(Comment comment) {
         comments.add(comment);
     }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
 }

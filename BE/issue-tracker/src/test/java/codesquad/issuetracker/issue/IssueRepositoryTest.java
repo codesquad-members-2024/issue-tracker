@@ -128,4 +128,21 @@ class IssueRepositoryTest {
         log.debug("milestone = {}", milestone);
         assertThat(milestone.getId()).isEqualTo(1L);
     }
+
+    @Test
+    @DisplayName("이슈 제목을 업데이트할 수 있다.")
+    void updateTitle() {
+        Issue issue = Issue.builder()
+            .authorId("cori1234")
+            .title("old title")
+            .build();
+
+        String newTitle = "New Title";
+        Issue savedIssue = issueRepository.save(issue);
+        savedIssue.updateTitle(newTitle);
+        Issue updatedIssue = issueRepository.save(savedIssue);
+
+        assertThat(updatedIssue.getTitle()).isEqualTo(newTitle);
+    }
+
 }
