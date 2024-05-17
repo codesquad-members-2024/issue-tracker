@@ -44,7 +44,11 @@ public class MilestoneService {
     public Milestone saveMilestone(MilestoneCreationDto milestoneCreationDto) {
         validateMilestoneForm(milestoneCreationDto.name());
 
-        Milestone milestone = new Milestone(milestoneCreationDto.name(), milestoneCreationDto.description(), milestoneCreationDto.completeDate());
+        Milestone milestone = new Milestone(
+                milestoneCreationDto.name(),
+                milestoneCreationDto.description(),
+                milestoneCreationDto.completeDate()
+        );
 
         return milestoneRepository.save(milestone);
     }
@@ -52,7 +56,9 @@ public class MilestoneService {
     public Milestone updateMilestone(Long id, MilestoneUpdateDto milestoneUpdateDto) {
         validateMilestoneForm(milestoneUpdateDto.name());
 
-        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
+        Milestone milestone = milestoneRepository
+                .findById(id)
+                .orElseThrow(MilestoneNotFoundException::new);
 
         milestone.update(milestoneUpdateDto);
 
@@ -60,7 +66,9 @@ public class MilestoneService {
     }
 
     public Milestone updateMilestoneStateToOpen(Long id) {
-        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
+        Milestone milestone = milestoneRepository
+                .findById(id)
+                .orElseThrow(MilestoneNotFoundException::new);
 
         if (milestone.isOpen()) {
             throw new MilestoneAlreadyOpenedException();
@@ -72,7 +80,9 @@ public class MilestoneService {
     }
 
     public Milestone updateMilestoneStateToClose(Long id) {
-        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
+        Milestone milestone = milestoneRepository
+                .findById(id)
+                .orElseThrow(MilestoneNotFoundException::new);
 
         if (!milestone.isOpen()) {
             throw new MilestoneAlreadyClosedException();
