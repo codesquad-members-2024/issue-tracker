@@ -46,7 +46,9 @@ export function InputTextArea({
 const StyledWrapper = styled.div`
 	position: relative;
 
-	height: 132px;
+	min-height: 132px;
+	height: 100%;
+	max-height: 500px;
 
 	// border: 1px solid ${({ $border }) => ($border ? '#003f66' : '#0075ca')};
 	.ant-input-outlined:focus-within {
@@ -66,7 +68,7 @@ const StyledWrapper = styled.div`
 	}
 `;
 const StyledTextArea = styled(TextArea)`
-	max-height: 500px;
+	// max-height: 500px;
 	height: 132px;
 	border: none;
 	&&& {

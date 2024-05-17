@@ -31,7 +31,7 @@ export function IssueCommentEdit({
 	return (
 		<StyledWrapper $bg={bg} className={className}>
 			<InputTextArea
-				value={value}
+				value={localValue}
 				placeholder={placeholder}
 				onChange={onChange}
 				onClick={onClick}
