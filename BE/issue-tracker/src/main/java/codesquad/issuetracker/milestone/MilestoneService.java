@@ -1,7 +1,7 @@
 package codesquad.issuetracker.milestone;
 
 import codesquad.issuetracker.issue.IssueService;
-import codesquad.issuetracker.milestone.dto.CreateMilestoneRequest;
+import codesquad.issuetracker.milestone.dto.MilestoneCreateRequest;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
 import codesquad.issuetracker.milestone.dto.MilestoneResponse;
 import java.util.List;
@@ -24,8 +24,8 @@ public class MilestoneService {
         this.issueService = issueService;
     }
 
-    public Milestone createNewMilestone(CreateMilestoneRequest createMilestoneRequest) {
-        return milestoneRepository.save(createMilestoneRequest.toEntity());
+    public Milestone createNewMilestone(MilestoneCreateRequest milestoneCreateRequest) {
+        return milestoneRepository.save(milestoneCreateRequest.toEntity());
     }
 
     public List<MilestoneResponse> fetchFilteredMilestones(MilestoneQueryInfo milestoneQueryInfo) {
@@ -41,6 +41,17 @@ public class MilestoneService {
         Optional<Milestone> optionalMilestone = milestoneRepository.findById(id);
         return optionalMilestone.orElseThrow(IllegalAccessError::new);
 
+    }
+
+    public Milestone updateMilestone(Long milestoneId,
+        MilestoneCreateRequest milestoneCreateRequest) {
+        int affectedRow = milestoneRepository.updateMilestone(milestoneId,
+            milestoneCreateRequest.getTitle(),
+            milestoneCreateRequest.getDescription(), milestoneCreateRequest.getDueDate());
+        if (affectedRow == 0) {
+            throw new IllegalArgumentException("Milestone not found");
+        }
+        return findById(milestoneId);
     }
 
     public ResponseEntity<String> softDeleteByMilestoneId(Long milestoneId) {

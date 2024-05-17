@@ -1,6 +1,6 @@
 package codesquad.issuetracker.milestone;
 
-import codesquad.issuetracker.milestone.dto.CreateMilestoneRequest;
+import codesquad.issuetracker.milestone.dto.MilestoneCreateRequest;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
 import codesquad.issuetracker.milestone.dto.MilestoneResponse;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +28,8 @@ public class MilestoneController {
 
     @PostMapping
     public ResponseEntity<Milestone> createNewMilestone(
-        @RequestBody CreateMilestoneRequest createMilestoneRequest) {
-        Milestone newMilestone = milestoneService.createNewMilestone(createMilestoneRequest);
+        @RequestBody MilestoneCreateRequest milestoneCreateRequest) {
+        Milestone newMilestone = milestoneService.createNewMilestone(milestoneCreateRequest);
         return ResponseEntity.ok().body(newMilestone);
     }
 
@@ -39,6 +40,14 @@ public class MilestoneController {
             milestoneQueryInfo);
         return ResponseEntity.ok().body(milestones);
 
+    }
+
+    @PutMapping("/{milestoneId}")
+    public ResponseEntity<Milestone> updateMilestone(@PathVariable Long milestoneId,
+        @RequestBody MilestoneCreateRequest milestoneCreateRequest) {
+        Milestone updatedMilestone = milestoneService.updateMilestone(milestoneId,
+            milestoneCreateRequest);
+        return ResponseEntity.ok().body(updatedMilestone);
     }
 
     @DeleteMapping("/{milestoneId}")
