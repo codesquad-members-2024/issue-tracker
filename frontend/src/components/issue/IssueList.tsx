@@ -87,11 +87,13 @@ function IssueList() {
         }}
       />
       <ScrollableArea>
-        {issues.map((issue, index) =>
-          index === issues.length - 1
-            ? renderLastIssueHeadline({ ref: lastIssueRef, ...issue })
-            : renderIssueHeadline(issue)
-        )}
+        {issues
+          .filter(({ isClosed }) => (focusedTab === "open" ? !isClosed : isClosed))
+          .map((issue, index) =>
+            index === issues.length - 1
+              ? renderLastIssueHeadline({ ref: lastIssueRef, ...issue })
+              : renderIssueHeadline(issue)
+          )}
       </ScrollableArea>
     </Wrapper>
   );

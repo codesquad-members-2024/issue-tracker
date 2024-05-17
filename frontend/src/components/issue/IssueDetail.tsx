@@ -134,7 +134,7 @@ const ContentWrapper = styled.div`
 `;
 
 const CommentWrapper = styled.div`
-  width: 100%;
+  width: calc(100% - 288px);
   display: flex;
   flex-direction: column;
   align-items: end;

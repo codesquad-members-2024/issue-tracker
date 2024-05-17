@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Header from "../header/Header";
 import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import Sidebar from "../issue/Sidebar";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useUserStore from "../../hooks/useUserStore";
 import { useNavigate } from "react-router-dom";
 import { postNewIssue } from "../../api/IssueAPI";
@@ -13,6 +13,7 @@ function IssueCreator() {
   const { userId } = useUserStore();
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [commentLength, setCommentLength] = useState(0);
   const [isSubmitable, setIsSubmitable] = useState(false);
   const navigate = useNavigate();
 
@@ -32,6 +33,20 @@ function IssueCreator() {
     if (title && content) postNewIssue({ title, content, userId }).then(() => navigate("/"));
   };
 
+  useEffect(() => {
+    const handleCommentChange = () => {
+      const length = commentRef.current?.value.length || 0;
+      setCommentLength(length);
+      handleOnChange();
+    };
+    const commentElement = commentRef.current;
+    commentElement?.addEventListener("input", handleCommentChange);
+
+    return () => {
+      commentElement?.removeEventListener("input", handleCommentChange);
+    };
+  }, []);
+
   return (
     <Wrapper>
       <Header />
@@ -44,6 +59,11 @@ function IssueCreator() {
         <FormWrapper>
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
           <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" onChange={handleOnChange} />
+          <ExtensionWrapper>
+          <ContentWordCount key={`word-count-${commentLength}`}>띄어쓰기 포함 {commentLength}자</ContentWordCount>
+          <DashedLine />
+          <FileImageButton><img /> 파일 첨부하기</FileImageButton>
+          </ExtensionWrapper>
         </FormWrapper>
         <Sidebar />
       </BodyWrapper>
@@ -60,6 +80,14 @@ function IssueCreator() {
     </Wrapper>
   );
 }
+
+const FadeOut = keyframes`
+  from {
+    opacity: 1;
+  } to {
+    opacity: 0;
+  }
+`
 
 const Wrapper = styled.div`
   position: block;
@@ -141,5 +169,33 @@ const SubmitButton = styled.button<{ isSubmitable: boolean }>`
   opacity: ${({ isSubmitable }) => (isSubmitable ? "1" : "0.5")};
   transition: all 0.5s ease;
 `;
+
+const ExtensionWrapper = styled.div`
+  position: fixed;
+  width: 910px;
+  top: 46em;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ContentWordCount = styled.span`
+  padding: 0 2em;
+  text-align: right;
+  animation: ${FadeOut} 2s ease-out;
+  animation-fill-mode: forwards;
+`;
+
+const DashedLine = styled.hr`
+  border-top: 1px dashed #D9DBE9;
+  border-bottom: none;
+  margin: 1.5em;
+`;
+
+const FileImageButton = styled.button`
+  padding: 0 2em;
+  background-color: transparent;
+  border: none;
+  text-align: left;
+`
 
 export default IssueCreator;
