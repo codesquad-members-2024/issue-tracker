@@ -18,28 +18,28 @@ public class LabelServiceImpl implements LabelService {
     public LabelServiceImpl(LabelRepository labelRepository) {
         this.labelRepository = labelRepository;
     }
-
-    public void create(Label label){
+    @Override
+    public void save(Label label){
         labelRepository.save(label);
     }
-
+    @Override
     public void update(Integer id, Label updateLabel){
         labelRepository.updateById(id,
                 updateLabel.getTitle(),
                 updateLabel.getDescription(),
                 updateLabel.getColor());
     }
-
+    @Override
     public void delete(Integer id){
         labelRepository.deleteById(id);
     }
 
-
-    public Label getLabel(Integer id) {
+    @Override
+    public Label findById(Integer id) {
         return labelRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
-
-    public List<Label> getAllLabels(){
+    @Override
+    public List<Label> findAll(){
         return StreamSupport.stream(labelRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
