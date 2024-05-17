@@ -39,9 +39,8 @@ public class LabelController {
     }
 
     @PutMapping("/labels/{labelId}")
-    public ResponseEntity<Void> updateLabelById(@PathVariable Long labelId, @RequestBody Label updatedLabel) {
-        updatedLabel.setId(labelId); // update 위해 label 엔티티에 id 추가
-        labelService.updateLabelById(updatedLabel);
+    public ResponseEntity<Void> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
+        labelService.updateLabelById(labelId, labelUpdateDto.getName(), labelUpdateDto.getDescription(), labelUpdateDto.getBackgroundColor(), labelUpdateDto.getTextColor());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
