@@ -10,3 +10,4 @@ export * from './IconCheckActive';
 export * from './IconCheckDisabled';
 export * from './IconXsquare';
 export * from './IconPaperClip';
+export * from './IconLabel';

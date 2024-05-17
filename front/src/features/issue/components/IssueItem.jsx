@@ -43,6 +43,7 @@ const StyledWrapper = styled.div`
 	&:last-child {
 		border-bottom: 0;
 	}
+	background: ${({ theme }) => theme.color.neutral.surface.strong};
 `;
 
 const StyledCheckbox = styled(CheckBox)`
