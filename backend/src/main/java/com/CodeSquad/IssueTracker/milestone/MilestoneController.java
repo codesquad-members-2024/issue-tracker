@@ -51,13 +51,13 @@ public class MilestoneController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping ("/milestone/{milestoneId}/open")
+    @PatchMapping ("/milestone/{milestoneId}/open")
     public ResponseEntity<?> openMilestone(@PathVariable Long milestoneId ) {
         milestoneService.openMilestone(milestoneId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping ("/milestone/{milestoneId}/close")
+    @PatchMapping ("/milestone/{milestoneId}/close")
     public ResponseEntity<?> closeMilestone(@PathVariable Long milestoneId ) {
         milestoneService.closeMilestone(milestoneId);
         return new ResponseEntity<>(HttpStatus.OK);
