@@ -1,66 +1,60 @@
-CREATE TABLE IF NOT EXISTS users
+DROP DATABASE IF EXISTS Issue;
+
+CREATE DATABASE IF NOT EXISTS Issue;
+USE Issue;
+
+CREATE TABLE IF NOT EXISTS USERS
 (
-                       id varchar(255) PRIMARY KEY,
-                       username varchar(255),
-                       password varchar(255),
-                       created_at timestamp,
-                       is_deleted bool
+    ID         VARCHAR(255) PRIMARY KEY,
+    USERNAME   VARCHAR(255),
+    PASSWORD   VARCHAR(255),
+    ROLE       VARCHAR(255),
+    CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    IS_DELETED BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS milestone
+CREATE TABLE IF NOT EXISTS ISSUE
 (
-                           id bigint PRIMARY KEY,
-                           title varchar(255),
-                           description varchar(255),
-                           due_date timestamp,
-                           is_open bool,
-                           is_deleted bool,
-                           created_at timestamp,
-                           updated_at timestamp
+    ID           BIGINT PRIMARY KEY AUTO_INCREMENT,
+    AUTHOR_ID    VARCHAR(255),
+    TITLE        VARCHAR(255),
+    DESCRIPTION  VARCHAR(255),
+    OPEN_AT      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CLOSED_AT    TIMESTAMP,
+    MILESTONE_ID BIGINT,
+    IS_OPEN      BOOLEAN,
+    IS_DELETED   BOOLEAN,
+    FOREIGN KEY (AUTHOR_ID) REFERENCES USERS (ID) ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS issue
+CREATE TABLE IF NOT EXISTS LABEL
 (
-                       id bigint PRIMARY KEY,
-                       author_id varchar(255),
-                       title varchar(255),
-                       description varchar(255),
-                       open_at timestamp,
-                       updated_at timestamp,
-                       closed_at timestamp,
-                       milestone_id bigint,
-                       is_open bool,
-                       is_deleted bool,
-                       FOREIGN KEY (milestone_id) REFERENCES milestone (id)
+    ID          BIGINT PRIMARY KEY AUTO_INCREMENT,
+    NAME        VARCHAR(255),
+    DESCRIPTION VARCHAR(255),
+    COLOR       VARCHAR(8),
+    IS_DELETED  BOOLEAN,
+    CREATED_AT  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS comment
+CREATE TABLE IF NOT EXISTS ISSUE_LABEL
 (
-                         id bigint PRIMARY KEY,
-                         author_id varchar(255),
-                         contents varchar(255),
-                         created_at timestamp,
-                         updated_at timestamp,
-                         FOREIGN KEY (author_id) REFERENCES users (id)
+    ISSUE_ID BIGINT NOT NULL,
+    LABEL_ID BIGINT NOT NULL,
+    PRIMARY KEY (ISSUE_ID, LABEL_ID),
+    FOREIGN KEY (ISSUE_ID) REFERENCES ISSUE (ID) ON UPDATE CASCADE,
+    FOREIGN KEY (LABEL_ID) REFERENCES LABEL (ID) ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS label
+CREATE TABLE IF NOT EXISTS MILESTONE
 (
-                       id bigint,
-                       name varchar(255),
-                       description varchar(255),
-                       color varchar(255),
-                       is_deleted bool,
-                       created_at timestamp,
-                       updated_at timestamp
+    ID          BIGINT PRIMARY KEY AUTO_INCREMENT,
+    TITLE       VARCHAR(255),
+    DESCRIPTION VARCHAR(255),
+    DUE_DATE    DATETIME,
+    STATE       VARCHAR(10),
+    IS_DELETED  BOOLEAN,
+    UPDATED_AT  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
-CREATE TABLE IF NOT EXISTS issue_label
-(
-                             issue_id bigint,
-                             label_id bigint,
-                             PRIMARY KEY (issue_id, label_id),
---                              FOREIGN KEY (issue_id) REFERENCES issue (id),
---                              FOREIGN KEY (label_id) REFERENCES label (id)
-);
-
