@@ -8,7 +8,7 @@ export const routes = [
 		path: '/',
 		element: <Layout />,
 		children: [
-			{ path: '/', element: <IssueListViewsPage /> },
+			{ path: '/', element: <SignInPage /> },
 			{ path: 'signIn', element: <SignInPage /> },
 			{ path: 'issues', element: <IssueListViewsPage /> },
 			{ path: 'issues/new', element: <IssueCreatePage /> },

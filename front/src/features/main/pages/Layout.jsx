@@ -1,15 +1,19 @@
 import { styled } from 'styled-components';
-import { Outlet } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 import { IssueContext } from '~/context/IssueContext';
-import { IssueListViewsPage } from '~/features/issue/pages';
+
 import { GlobalHeader } from '~/features/header/components/GlobalHeader';
 
 export function Layout() {
+	const location = useLocation();
 	return (
 		<>
 			<StyledWrapper>
 				<IssueContext.Provider value=''>
-					<GlobalHeader />
+					{location.pathname !== '/' && location.pathname !== '/signIn' && (
+						<GlobalHeader />
+					)}
+
 					<Outlet />
 				</IssueContext.Provider>
 			</StyledWrapper>
