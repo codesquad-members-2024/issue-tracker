@@ -1,6 +1,8 @@
 package com.codesquad.team3.issuetracker.support.repository;
 
 import com.codesquad.team3.issuetracker.global.entity.OpenCloseEntity;
+
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -22,13 +24,13 @@ public interface OpenCloseCrudRepository<T extends OpenCloseEntity, ID> extends 
         return entity;
     }
 
-    default Iterable<T> getAllOpened() {
+    default List<T> getAllOpened() {
         return StreamSupport.stream(findAll().spliterator(), false)
             .filter(entity -> !entity.isClosed())
             .collect(Collectors.toList());
     }
 
-    default Iterable<T> getAllClosed() {
+    default List<T> getAllClosed() {
         return StreamSupport.stream(findAll().spliterator(), false)
             .filter(OpenCloseEntity::isClosed)
             .collect(Collectors.toList());
