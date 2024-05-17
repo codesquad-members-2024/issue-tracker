@@ -19,24 +19,12 @@ import team08.issuetracker.milestone.service.MilestoneService;
 public class MilestoneController {
     private final MilestoneService milestoneService;
 
-    private final boolean OPEN = true;
-    private final boolean CLOSE = false;
-    private final String OPEN_STATE = "opened";
-    private final String CLOSE_STATE = "closed";
 
     @GetMapping()
     public ResponseEntity<?> getAllMilestonesWithCounts(@RequestParam(required = false, value = "state") String state) {
-        if (state == null || state.equals(OPEN_STATE)) {
-            MilestoneOverviewDto milestoneOverviewDto = milestoneService.getAllOpenedMilestonesWithCounts();
-            return ResponseEntity.ok(milestoneOverviewDto);
-        }
+        MilestoneOverviewDto milestoneOverviewDto = milestoneService.getAllMilestonesWithCounts(state);
 
-        if (state.equals(CLOSE_STATE)) {
-            MilestoneOverviewDto milestoneOverviewDto = milestoneService.getAllClosedMilestonesWithCounts();
-            return ResponseEntity.ok(milestoneOverviewDto);
-        }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("올바르지 않은 URL 쿼리입니다.");
+        return ResponseEntity.ok(milestoneOverviewDto);
     }
 
     @PostMapping()
@@ -59,7 +47,7 @@ public class MilestoneController {
 
     @PatchMapping("/{id}/open")
     public ResponseEntity<String> openMilestone(@PathVariable long id) {
-        Milestone milestone = milestoneService.updateMilestoneState(id, OPEN);
+        Milestone milestone = milestoneService.updateMilestoneStateToOpen(id);
 
         log.debug("Milestone Opened. ID : {}, Name : {}, Is_Open : {}", milestone.getId(), milestone.getName(), milestone.isOpen());
 
@@ -68,7 +56,7 @@ public class MilestoneController {
 
     @PatchMapping("/{id}/close")
     public ResponseEntity<String> closeMilestone(@PathVariable long id) {
-        Milestone milestone = milestoneService.updateMilestoneState(id, CLOSE);
+        Milestone milestone = milestoneService.updateMilestoneStateToClose(id);
 
         log.debug("Milestone Closed. ID : {}, Name : {}, Is_Open : {}", milestone.getId(), milestone.getName(), milestone.isOpen());
 
