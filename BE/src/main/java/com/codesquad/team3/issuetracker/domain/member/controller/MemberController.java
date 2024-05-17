@@ -6,7 +6,6 @@ import com.codesquad.team3.issuetracker.domain.member.dto.response.ResponseMembe
 import com.codesquad.team3.issuetracker.domain.member.service.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
