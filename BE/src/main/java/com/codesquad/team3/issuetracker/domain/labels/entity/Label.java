@@ -2,12 +2,11 @@ package com.codesquad.team3.issuetracker.domain.labels.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import java.time.LocalDateTime;
+import org.springframework.data.relational.core.mapping.Table;
 
+@Table(name ="label")
 @Getter
-@Setter
 @RequiredArgsConstructor
 public class Label {
 
