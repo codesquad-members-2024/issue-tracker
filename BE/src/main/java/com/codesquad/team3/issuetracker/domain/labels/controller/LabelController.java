@@ -1,4 +1,4 @@
-package com.codesquad.team3.issuetracker.domain.labels;
+package com.codesquad.team3.issuetracker.domain.labels.controller;
 
 
 import com.codesquad.team3.issuetracker.domain.labels.dto.response.LabelList;
@@ -26,7 +26,7 @@ public class LabelController {
 
     private final LabelService labelService;
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Label> create(@RequestBody @Validated LabelForm form,
                                         BindingResult bindingResult) {
 
@@ -37,19 +37,19 @@ public class LabelController {
         Label label =
                 new Label(form.getTitle(), form.getDescription(), form.getColor());
 
-        labelService.create(label);
+        labelService.save(label);
         return ResponseEntity.ok(label);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Label> get(@PathVariable("id") Integer id) {
+    public ResponseEntity<Label> getById(@PathVariable("id") Integer id) {
 
-        Label label = labelService.getLabel(id);
+        Label label = labelService.findById(id);
         return ResponseEntity.ok(label);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Label> update(@PathVariable("id") Integer id, @RequestBody @Validated LabelForm form) {
+    public ResponseEntity<Label> updateById(@PathVariable("id") Integer id, @RequestBody @Validated LabelForm form) {
         Label newLabel = new Label(form.getTitle(), form.getDescription(), form.getColor());
         labelService.update(id, newLabel);
 
@@ -58,16 +58,14 @@ public class LabelController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Integer id) {
+    public void deleteById(@PathVariable("id") Integer id) {
         labelService.delete(id);
+
     }
 
-
     @GetMapping
-    public ResponseEntity<LabelList> LabelList(){
-        List<Label> labels = labelService.getAllLabels();
-
-        log.info("labelList={}", labels);
+    public ResponseEntity<LabelList> findAll(){
+        List<Label> labels = labelService.findAll();
 
         return ResponseEntity.ok(new LabelList(labels));
     }
