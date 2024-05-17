@@ -1,16 +1,19 @@
 package codesquad.issuetracker.login;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,16 +24,20 @@ public class LoginController {
     private final int SESSION_EXPIRATION_TIME = 60 * 60;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginForm loginForm, HttpSession session) {
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginForm loginForm, BindingResult bindingResult, HttpSession session) {
         Map<String, String> response = new HashMap<>();
-        String email = loginForm.getEmail();
-        String password = loginForm.getPassword();
 
-        //이메일 유효성 검사
-        if (!isValidEmail(email)) {
-            response.put("message", "유효하지 않은 이메일");
+        // 유효성 검사 오류 처리
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(", "));
+            response.put("message", errorMessage);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+
+        String email = loginForm.getEmail();
+        String password = loginForm.getPassword();
 
         if (loginService.authenticate(email, password, session)) {
             session.setAttribute("loginId", email); // 세션에 이메일 저장
@@ -46,15 +53,19 @@ public class LoginController {
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpSession session) {
-        session.invalidate();
         Map<String, String> response = new HashMap<>();
+
+        // 세션이 존재하는지 확인
+        if (session == null || session.getAttribute("LOGIN USER") == null) {
+            response.put("message", "세션이 존재하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        //세션 만료
+        session.invalidate();
+
         response.put("message", "로그아웃 성공");
         return ResponseEntity.ok(response);
     }
 
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
-    }
 }
