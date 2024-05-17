@@ -12,21 +12,18 @@ export function InputTextArea({
 	onFocus,
 	onBlur,
 }) {
+	const [localValue, setLocalValue] = useState(value);
 	const [showCount, setShowCount] = useState(false);
-	const [wordsCount, setWordsCount] = useState(0);
-
-	const countWords = value => {
-		setWordsCount(value.length);
-	};
 	useEffect(() => {
-		countWords(value);
-	}, [value]);
+		setLocalValue(localValue);
+	}, [localValue]);
 	return (
 		<StyledWrapper className={className}>
 			<StyledTextArea
 				placeholder={placeholder}
-				value={value}
+				value={localValue}
 				onChange={e => {
+					setLocalValue(e.target.value);
 					onChange(e);
 				}}
 				onClick={onClick}
@@ -39,7 +36,7 @@ export function InputTextArea({
 					setShowCount(true);
 				}}
 			/>
-			{showCount && <i>띄어쓰기 포함 {wordsCount}자</i>}
+			{/* {showCount && <i>띄어쓰기 포함 자</i>} */}
 		</StyledWrapper>
 	);
 }
