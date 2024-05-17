@@ -24,7 +24,7 @@ public class IssueServiceImpl implements IssueService{
     private final CommentService commentService;
 
     @Override
-    public void createIssue(CreateIssue createIssue) {
+    public Issue createIssue(CreateIssue createIssue) {
         Issue newIssue = Issue.builder()
                 .writer_id(createIssue.getWriter())
                 .create_time(LocalDateTime.now())
@@ -34,6 +34,8 @@ public class IssueServiceImpl implements IssueService{
 
         Issue insertdIssue = issueRepository.insert(newIssue);
         commentService.createComment(new CreateComment(insertdIssue.getId(), createIssue));
+
+        return insertdIssue;
     }
 
     @Override

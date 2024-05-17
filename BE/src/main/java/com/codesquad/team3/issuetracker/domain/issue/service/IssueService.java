@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IssueService {
 
-    void createIssue(CreateIssue createIssue);
+    Issue createIssue(CreateIssue createIssue);
 
     List<Issue> getAllIssues(int loadCount);
 
