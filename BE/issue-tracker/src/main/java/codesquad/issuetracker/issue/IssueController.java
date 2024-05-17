@@ -37,8 +37,7 @@ public class IssueController {
 
     @GetMapping("/{issueId}")
     public DetailIssueResponse getDetailIssue(@PathVariable Long issueId) {
-        Issue issue = issueService.findIssueById(issueId);
-        return DetailIssueResponse.of(issue);
+        return issueService.findDetailIssueById(issueId);
     }
 
     @PostMapping

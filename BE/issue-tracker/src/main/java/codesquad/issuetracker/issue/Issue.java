@@ -32,7 +32,7 @@ public class Issue {
     private Set<IssueAttachedLabel> labelRefs = new HashSet<>();
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<Assignee> assigneeIds = new HashSet<>();
-    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "CREATE_AT")
+    @MappedCollection(idColumn = "ISSUE_ID", keyColumn = "CREATED_AT")
     private List<Comment> comments = new ArrayList<>();
 
     @Builder

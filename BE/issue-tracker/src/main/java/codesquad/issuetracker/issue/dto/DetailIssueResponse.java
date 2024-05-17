@@ -1,9 +1,10 @@
 package codesquad.issuetracker.issue.dto;
 
-import codesquad.issuetracker.comment.Comment;
-import codesquad.issuetracker.issue.Assignee;
+import codesquad.issuetracker.comment.CommentResponse;
 import codesquad.issuetracker.issue.Issue;
-import codesquad.issuetracker.issue.IssueAttachedLabel;
+import codesquad.issuetracker.label.Label;
+import codesquad.issuetracker.milestone.Milestone;
+import codesquad.issuetracker.user.dto.UserResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -26,11 +27,11 @@ public class DetailIssueResponse {
     Long milestoneId;
     boolean isOpen;
     boolean isDeleted;
-    Set<IssueAttachedLabel> labels;
-    Set<Assignee> assignees;
-    List<Comment> comments;
+    Set<Label> labels;
+    Set<UserResponse> assignees;
+    List<CommentResponse> comments;
 
-    public static DetailIssueResponse of(Issue issue) {
+    public static DetailIssueResponse from(Issue issue, Set<Label> labels, Set<UserResponse> assignees, List<CommentResponse> comments) {
         return DetailIssueResponse.builder()
             .id(issue.getId())
             .authorId(issue.getAuthorId())
@@ -42,9 +43,9 @@ public class DetailIssueResponse {
             .milestoneId(issue.getMilestoneId())
             .isOpen(issue.isOpen())
             .isDeleted(issue.isDeleted())
-            .labels(issue.getLabelRefs())
-            .assignees(issue.getAssigneeIds())
-            .comments(issue.getComments())
+            .labels(labels)
+            .assignees(assignees)
+            .comments(comments)
             .build();
     }
 
