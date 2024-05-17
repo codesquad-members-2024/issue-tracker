@@ -5,11 +5,13 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import team08.issuetracker.issue.ref.Assignee;
 
+@ToString
 @Setter
 @Getter
 public class Issue {
@@ -42,19 +44,5 @@ public class Issue {
     // 다대다 관계는 setter를 통해 저장
     public void setAssignees(Set<Assignee> assignees) {
         this.assignees = assignees;
-    }
-
-    @Override
-    public String toString() {
-        return "Issue{" +
-                "id=" + id +
-                ", isOpen=" + isOpen +
-                ", title='" + title + '\'' +
-                ", writer='" + writer + '\'' +
-                ", content='" + content + '\'' +
-                ", uploadedFile='" + uploadedFile + '\'' +
-                ", assignee=" + assignees +
-                ", createdTime=" + createdTime +
-                '}';
     }
 }
