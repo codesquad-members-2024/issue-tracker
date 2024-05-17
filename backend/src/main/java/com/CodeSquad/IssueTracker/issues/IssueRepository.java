@@ -25,4 +25,12 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
     @Modifying
     @Query("UPDATE milestone SET total_issue = total_issue + 1 WHERE milestone_id = :milestoneId")
     void incrementIssueCountForMilestone(Long milestoneId);
+
+    @Modifying
+    @Query("UPDATE milestone SET closed_issue = closed_issue + 1 WHERE milestone_id = :milestoneId")
+    void incrementClosedIssueCountForMilestone(Long milestoneId);
+
+    @Modifying
+    @Query("UPDATE milestone SET closed_issue = closed_issue - 1 WHERE milestone_id = :milestoneId")
+    void decrementClosedIssueCountForMilestone(Long milestoneId);
 }
