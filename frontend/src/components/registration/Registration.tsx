@@ -2,7 +2,7 @@ import styled from "styled-components";
 import pageLogo from "../../img/icon/pageLogo.svg";
 import AuthorizationForm from "../authorization/AuthorizationForm";
 import { useNavigate } from "react-router-dom";
-import useRegistrationLogic from "../../hooks/useRegistrationLogic";
+import useRegistrationLogic from "../../hooks/logics/useRegistrationLogic";
 
 function Registration() {
   const {

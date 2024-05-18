@@ -1,5 +1,5 @@
-import useRegistrationStore from "./useRegistrationStore";
-import { sendIdValidationRequest, sendRegistrationRequest } from "../api/LoginAPI";
+import useRegistrationStore from "../stores/useRegistrationStore";
+import { sendIdValidationRequest, sendRegistrationRequest } from "../../api/LoginAPI";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { useEffect } from "react";
