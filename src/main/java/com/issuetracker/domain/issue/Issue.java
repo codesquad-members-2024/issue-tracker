@@ -47,6 +47,7 @@ public class Issue extends BaseDateTime {
 
 
     public void addComment(Comment comment) {
+        comment.initBaseDateTime();
         this.comments.add(comment);
     }
 
