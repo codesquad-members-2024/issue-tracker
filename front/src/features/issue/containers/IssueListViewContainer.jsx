@@ -4,8 +4,19 @@ import styled from 'styled-components';
 import { getIssues } from '../apis/getIssues';
 import { IssueItem } from '../components/IssueItem';
 
-import { Loading, CheckBox, Button, Dropdowns } from '~/common/components';
-import { IconPlus, IconLandmark, IconLabel } from '~/common/icons';
+import {
+	Loading,
+	CheckBox,
+	Button,
+	Dropdowns,
+	InputRadio,
+} from '~/common/components';
+import {
+	IconPlus,
+	IconLandmark,
+	IconLabel,
+	IconChevronDown,
+} from '~/common/icons';
 
 export function IssueListViewContainer() {
 	const [issueData, setIssueData] = useState([]);
@@ -46,7 +57,37 @@ export function IssueListViewContainer() {
 					<span>열린이슈</span>
 					<span>닫힌이슈</span>
 				</StyledCheckAll>
-				<Dropdowns />
+				<StyledDropList>
+					<details>
+						<summary>
+							담당자
+							<IconChevronDown />
+						</summary>
+						<StyledDropdowns dropdownTitle='담당자 필터'>
+							<InputRadio />
+						</StyledDropdowns>
+					</details>
+					<details>
+						<summary>
+							레이블
+							<IconChevronDown />
+						</summary>
+						<StyledDropdowns />
+					</details>
+					<details>
+						<summary>
+							마일스톤
+							<IconChevronDown />
+						</summary>
+						<StyledDropdowns />
+					</details>
+					<details>
+						<summary>
+							작성자 <IconChevronDown />
+						</summary>
+						<StyledDropdowns />
+					</details>
+				</StyledDropList>
 			</StyledFilter>
 			<StyledList>
 				{isLoading && <Loading size='large' />}
@@ -122,6 +163,33 @@ const StyledFilter = styled.div`
 const StyledCheckAll = styled.div`
 	display: flex;
 	column-gap: 8px;
+`;
+const StyledDropList = styled.div`
+	display: flex;
+	column-gap: 32px;
+	details {
+		position: relative;
+		summary {
+			display: flex;
+			align-items: center;
+			column-gap: 4px;
+			padding: 4px 0;
+			color: ${({ theme }) => theme.color.neutral.text.default};
+			${({ theme }) => theme.typography.medium[14]};
+			cursor: pointer;
+			&::after {
+				content: '';
+			}
+			svg {
+				width: 12px;
+				height: 12px;
+			}
+		}
+	}
+`;
+const StyledDropdowns = styled(Dropdowns)`
+	top: calc(100% + 8px);
+	right: 0;
 `;
 const StyledList = styled.div`
 	border: 1px solid ${({ theme }) => theme.color.neutral.border.default};
