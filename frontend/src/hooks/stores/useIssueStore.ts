@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface Headline {
+export interface Headline {
   issueId: number;
   title: string;
   author: string;

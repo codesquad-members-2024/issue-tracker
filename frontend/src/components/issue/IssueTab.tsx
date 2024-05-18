@@ -2,18 +2,18 @@ import styled from "styled-components";
 import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
 import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
 import arrowBottom from "../../img/icon/arrowBottom.svg";
-import useIssueStore from "../../hooks/useIssueStore";
+import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useEffect } from "react";
-import { IssueType } from "./IssueList";
 import { useMutation } from "react-query";
 import { sendFiltersRequest } from "../../api/FilterAPI";
+import { IssueType } from '../../hooks/logics/useIssueListLogic';
 
 export interface IssueTabProps {
   focusedTab: string;
-  setFocusedTab: (tabDescription: IssueType) => void;
+  handleFocusedTabClick: (tabDescription: IssueType) => void;
 }
 
-function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
+function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
   const { openIssueCount, closeIssueCount, setIssueCounts } = useIssueStore();
 
   const { mutate: fetchFilters } = useMutation(sendFiltersRequest, {
@@ -28,13 +28,13 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
         <input type="checkbox" />
         <LeftMenu>
           <img src={openedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>
+          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => handleFocusedTabClick("open")}>
             열린 이슈({openIssueCount})
           </IssueMenuText>
         </LeftMenu>
         <LeftMenu>
           <img src={closedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "close"} onClick={() => setFocusedTab("close")}>
+          <IssueMenuText isFocused={focusedTab === "close"} onClick={() => handleFocusedTabClick("close")}>
             닫힌 이슈({closeIssueCount})
           </IssueMenuText>
         </LeftMenu>
