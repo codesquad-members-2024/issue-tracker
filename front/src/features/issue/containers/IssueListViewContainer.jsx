@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { getIssues } from '../apis/getIssues';
 import { IssueItem } from '../components/IssueItem';
 
-import { Loading, CheckBox, Button } from '~/common/components';
+import { Loading, CheckBox, Button, Dropdowns } from '~/common/components';
 import { IconPlus, IconLandmark, IconLabel } from '~/common/icons';
 
 export function IssueListViewContainer() {
@@ -46,6 +46,7 @@ export function IssueListViewContainer() {
 					<span>열린이슈</span>
 					<span>닫힌이슈</span>
 				</StyledCheckAll>
+				<Dropdowns />
 			</StyledFilter>
 			<StyledList>
 				{isLoading && <Loading size='large' />}
@@ -106,6 +107,7 @@ const StyledSearch = styled.div`
 	}
 `;
 const StyledFilter = styled.div`
+	position: relative;
 	margin-top: 24px;
 	display: flex;
 	align-items: center;

@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { theme } from '../../styles/theme';
-import { Radio } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { InputRadio, InputCheck } from '~/common/components';
+import { theme } from '~/styles/theme';
 
 //TODO: Dropdown 컴포넌트 타입별로 정리
 /**
@@ -23,35 +22,30 @@ import { CheckCircleOutlined } from '@ant-design/icons';
  * - (이미지) 유저 [라디오]
  */
 
-export function Dropdown({ title, data, className }) {
-	const [value, setValue] = useState(1);
-	const onChange = e => {
-		console.log('radio checked', e.target.value);
-		setValue(e.target.value);
-	};
+export function Dropdowns({
+	dropdownTitle = '',
+	listName = '',
+	value,
+	src,
+	children,
+	className,
+}) {
 	return (
 		<StyledWrapper className={className}>
-			<h5>{title}</h5>
-
-			<StyledRadioGroup onChange={onChange} value={value}>
-				{data?.map((item, index) => (
-					<Radio key={index} value={item.loginId}>
-						<img src={item.profileImage} alt='양시미' />
-						<b>user1</b>
-						{value === value && <CheckCircleOutlined />}
-					</Radio>
-				))}
-			</StyledRadioGroup>
+			<h5>{dropdownTitle}</h5>
+			<StyledList>{children}</StyledList>
 		</StyledWrapper>
 	);
 }
 const StyledWrapper = styled.div`
-	position: absolute;
+	// position: absolute;
 	z-index: 10;
-	top: auto;
-	left: auto;
+	top: 50%;
+	left: 50%;
+
 	min-width: 240px;
-	transform: translate(-50%, -50%);
+	// TODO: 지울 코드
+
 	border: 1px solid ${theme.color.neutral.border.default};
 	border-radius: ${theme.radius.large};
 	overflow: hidden;
@@ -64,7 +58,10 @@ const StyledWrapper = styled.div`
 		background-color: ${theme.color.neutral.surface.default};
 	}
 `;
-const StyledRadioGroup = styled(Radio.Group)`
+const StyledList = styled.div`
+	height: 100%;
+`;
+const StyledRadioGroup = styled.div`
 	width: 100%;
 	label {
 		padding: 8px 16px;

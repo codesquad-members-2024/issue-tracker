@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { IconPlus } from '~/common/icons';
-import { Dropdown, Label } from '~/common/components';
+import { Dropdowns, Label, InputRadio, InputCheck } from '~/common/components';
 import { Assignee, MilestoneIndicator } from '~/features/issue/components';
 
 export function IssueSidebar({ assignees, milestone, labels }) {
@@ -13,7 +13,7 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
-
+	console.log(assignees);
 	return (
 		<StyledWrapper>
 			<StyledSideItem>
@@ -22,7 +22,16 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 					<IconPlus />
 				</StyledTitleWrapper>
 				{isOpen.assignee && (
-					<StyledDropdown title='담당자 설정' data={assignees} />
+					<StyledDropdown dropdownTitle='담당자 설정'>
+						{assignees.map((assignee, index) => (
+							<InputCheck
+								key={index}
+								listName={'assignees'}
+								value={assignee.loginId}
+								src={assignee.profileImage}
+							/>
+						))}
+					</StyledDropdown>
 				)}
 				<StyledSideContent>
 					{assignees &&
@@ -36,7 +45,19 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 					<StyledTitle>레이블</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.label && <StyledDropdown title='레이블 설정' data={labels} />}
+				{isOpen.label && (
+					<StyledDropdown dropdownTitle='레이블 설정'>
+						{labels.map((label, index) => (
+							<InputRadio
+								key={index}
+								listName={'label'}
+								value={label.name}
+								bgColor={label.backgroundColor}
+								fontColor={label.textColor}
+							/>
+						))}
+					</StyledDropdown>
+				)}
 				<StyledSideContent>
 					{labels &&
 						labels?.map(label => <Label key={label.name} label={label} />)}
@@ -47,9 +68,19 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 					<StyledTitle>마일스톤</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{isOpen.milestone && (
-					<StyledDropdown title='마일스톤 설정' data={milestone} />
-				)}
+				{/* {isOpen.milestone && (
+					<StyledDropdown dropdownTitle='마일스톤 설정'>
+					{milestone.map((mile, index) => (
+						<InputRadio
+							key={index}
+							listName={'label'}
+							value={label.name}
+							bgColor={label.backgroundColor}
+							fontColor={label.textColor}
+						/>
+					))}
+				</StyledDropdown>
+				)} */}
 				<StyledSideContent>
 					{/* {milestone &&
 						milestone?.map((mile, index) => (
@@ -77,7 +108,7 @@ const StyledSideItem = styled.div`
 		border-bottom: none;
 	}
 `;
-const StyledDropdown = styled(Dropdown)`
+const StyledDropdown = styled(Dropdowns)`
 	top: 160px;
 	left: 150px;
 `;

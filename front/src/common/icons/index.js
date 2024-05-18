@@ -11,3 +11,6 @@ export * from './IconCheckDisabled';
 export * from './IconXsquare';
 export * from './IconPaperClip';
 export * from './IconLabel';
+export * from './IconChecks';
+export * from './IconCheckCircle';
+export * from './IconCheckOff';

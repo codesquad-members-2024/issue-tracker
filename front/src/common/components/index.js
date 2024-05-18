@@ -1,6 +1,5 @@
 export * from './Loading';
 export * from './Button';
-export * from './Dropdown';
 export * from './InnerLayout';
 export * from './Label';
 export * from './InputTextArea';
@@ -8,3 +7,6 @@ export * from './CheckBox';
 export * from './ImageUpload';
 export * from './InputTitleEdit';
 export * from './InputTextArea';
+export * from './Dropdowns';
+export * from './InputRadio';
+export * from './InputCheck';
