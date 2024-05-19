@@ -21,9 +21,8 @@ const useIssueListLogic = () => {
       const nextPage = page + 1;
       fetchIssues({ issueType: focusedTab, page: nextPage });
       setPage(nextPage);
-      lastIssueRef.current && observer.unobserve(lastIssueRef.current);
     }
-  }
+  };
 
   const { mutate: fetchIssues } = useMutation(sendIssuesRequest, {
     onSuccess: (data) => {
