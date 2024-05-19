@@ -24,15 +24,12 @@ public class Milestone {
     public Milestone(Long id,
                      String name,
                      String description,
-                     LocalDateTime createTime,
-                     LocalDateTime dueDate,
-                     boolean isClosed) {
+                     LocalDateTime dueDate) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.createTime = createTime;
+        this.createTime = LocalDateTime.now();
         this.dueDate = dueDate;
-        this.isClosed = isClosed;
     }
 
     public Long countOpenIssue() {
