@@ -11,5 +11,5 @@ public class IssueLabel {
     @Id
     private Long id;
     private Long issueId;
-    private String labelName;
+    private Long labelId;
 }
