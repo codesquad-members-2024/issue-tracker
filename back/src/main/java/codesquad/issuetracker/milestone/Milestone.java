@@ -34,4 +34,23 @@ public class Milestone {
         this.dueDate = dueDate;
         this.isClosed = isClosed;
     }
+
+    public Long countOpenIssue() {
+        return issues.stream()
+                .filter(issue -> !issue.isClosed())
+                .count();
+    }
+
+    public Long countCloseIssue() {
+        return issues.stream()
+                .filter(issue -> issue.isClosed())
+                .count();
+    }
+
+    public int calculateProgress() {
+        if (issues.isEmpty()) {
+            return 0;
+        }
+        return (int) ((double) countCloseIssue() / issues.size() * 100);
+    }
 }
