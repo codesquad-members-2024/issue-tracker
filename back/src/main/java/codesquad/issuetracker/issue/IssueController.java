@@ -44,4 +44,12 @@ public class IssueController {
                 .noContent()
                 .build();
     }
+
+    @PutMapping("/issues/{issueId}/content")
+    public ResponseEntity<Void> updateIssueContentById(@PathVariable Long issueId, @RequestBody IssueContentUpdateDto issueContentUpdateDto) {
+        issueService.updateIssueContentById(issueId, issueContentUpdateDto.getContent());
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }

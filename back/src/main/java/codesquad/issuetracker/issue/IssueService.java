@@ -46,4 +46,8 @@ public class IssueService {
     public void updateIssueTitleById(Long issueId, String newTitle) {
         issueRepository.updateTitleById(issueId, newTitle);
     }
+
+    public void updateIssueContentById(Long issueId, String newContent) {
+        issueRepository.updateContentById(issueId, newContent);
+    }
 }
