@@ -31,12 +31,14 @@ CREATE TABLE member (
                         isDeleted bool DEFAULT false
 );
 
+
 CREATE TABLE label (
                        title varchar(10) PRIMARY KEY,
                        description varchar(50) NOT NULL,
-                       createTime timestamp NOT NULL,
+                       create_Time timestamp NOT NULL,
                        color char(6) DEFAULT '000000',
-                       isDeleted bool DEFAULT false
+                       is_Deleted bool DEFAULT false
+
 );
 
 CREATE TABLE milestone (
@@ -66,9 +68,9 @@ CREATE TABLE uploaded_file_in_comment (
 );
 
 CREATE TABLE assigner(
-    issue_id int,
-    assigner_id varchar(16),
-    PRIMARY KEY (issue_id, assigner_id)
+                         issue_id int,
+                         assigner_id varchar(16),
+                         PRIMARY KEY (issue_id, assigner_id)
 
 );
 

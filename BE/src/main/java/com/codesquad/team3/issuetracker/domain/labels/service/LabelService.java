@@ -1,37 +1,18 @@
 package com.codesquad.team3.issuetracker.domain.labels.service;
 
-import com.codesquad.team3.issuetracker.domain.labels.dto.Label;
-import com.codesquad.team3.issuetracker.domain.labels.repository.LabelRepository;
-import org.springframework.stereotype.Service;
+import com.codesquad.team3.issuetracker.domain.labels.entity.Label;
 
+import java.util.List;
 
-@Service
-public class LabelService {
+public interface LabelService {
 
-    private final LabelRepository labelRepository;
+    void save(Label label);
 
+    void update(Label updateLabel);
 
-    public LabelService(LabelRepository labelRepository) {
-        this.labelRepository = labelRepository;
-    }
+    void delete(Integer id);
 
-    public void create(Label label){
-        labelRepository.save(label);
+    Label findById(Integer id);
 
-    }
-
-    public void update(Long id, Label label){
-        labelRepository.update(id, label);
-    }
-
-    public void delete(Long id){
-        labelRepository.delete(id);
-    }
-
-
-    public Label getLabel(Long id) {
-        return labelRepository.get(id);
-
-
-    }
+    List<Label> findAll();
 }
