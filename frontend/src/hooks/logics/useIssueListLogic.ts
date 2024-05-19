@@ -46,8 +46,10 @@ const useIssueListLogic = () => {
     const lastIssue = lastIssueRef.current;
 
     if (lastIssue) observer.observe(lastIssue);
-    return () => observer.disconnect();
-  }, [issues]);
+    return () => {
+      if (lastIssue) observer.unobserve(lastIssue);
+    };
+  }, [lastIssueRef.current]);
 
   return {
     focusedTab,
