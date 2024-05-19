@@ -28,7 +28,7 @@ public class UserRegistrationTest {
     @Test
     @DisplayName("유효한 사용자의 회원가입")
     public void testSaveValidUser() {
-        User user = new User("validU", "vidPas", "valame");
+        User user = new User("validU", "vidPas");
         assertTrue(userService.save(user));
     }
 
@@ -36,7 +36,7 @@ public class UserRegistrationTest {
     @Test
     @DisplayName("유효하지 않은 사용자의 가입")
     public void testSaveInvalidUser() {
-        User user = new User("invalidUser", "invalidPassword", "invalidNickname");
+        User user = new User("invalidUser", "invalidPassword");
         InvalidUserFormatException exception = assertThrows(InvalidUserFormatException.class, () -> {
             userService.save(user);
         });
@@ -48,7 +48,7 @@ public class UserRegistrationTest {
     @DisplayName("중복된 ID가 있을 때")
     public void testIsUserIdDuplicated() {
         String userId = "existingUserId";
-        User user = new User(userId, "invalidPassword", "invalidNickname");
+        User user = new User(userId, "invalidPassword");
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         assertTrue(userService.isUserIdDuplicated(userId));
     }
@@ -57,7 +57,7 @@ public class UserRegistrationTest {
     @DisplayName("중복된 ID가 없을 때")
     public void testIsUserIdNotDuplicated() {
         String existId = "existingUserId";
-        User user = new User(existId, "invalidPassword", "invalidNickname");
+        User user = new User(existId, "invalidPassword");
 
         String userId = "newUserId";
         when(userRepository.findById(existId)).thenReturn(Optional.of(user));

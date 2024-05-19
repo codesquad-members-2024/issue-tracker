@@ -1,13 +1,15 @@
 package com.CodeSquad.IssueTracker.labels;
 
-import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelIdException;
-import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
+import com.CodeSquad.IssueTracker.Exception.label.*;
+import com.CodeSquad.IssueTracker.labels.utils.ColorValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.CodeSquad.IssueTracker.labels.utils.ColorValidator.isValidColor;
 
 @Slf4j
 @Service
@@ -29,11 +31,25 @@ public class LabelService {
         return labelRepository.findById(id);
     }
 
+
     public Label createLabel(Label label) {
         log.info("새 라벨 생성 요청: {}", label);
-        label.setNew(true);
+
+        if (label.getLabelName() == null || label.getLabelName().isBlank()) {
+            throw new InvalidLabelNameException("라벨 이름이 없습니다.");
+        }
+
+        if (labelRepository.findByLabelName(label.getLabelName()).isPresent()) {
+            throw new DuplicateLabelNameException("이미 존재하는 라벨 이름입니다: " + label.getLabelName());
+        }
+
+        if (!ColorValidator.isValidColor(label.getTextColor()) || !ColorValidator.isValidColor(label.getBgColor())) {
+            throw new InvalidLabelColorException("유효하지 않은 색상 코드입니다.");
+        }
+
         return labelRepository.save(label);
     }
+
 
     public Label updateLabel(Long id, Label updatedLabel) {
         log.info("라벨 id: {} 업데이트 요청: {}", id, updatedLabel);
@@ -42,7 +58,6 @@ public class LabelService {
             existingLabel.setDescription(updatedLabel.getDescription());
             existingLabel.setTextColor(updatedLabel.getTextColor());
             existingLabel.setBgColor(updatedLabel.getBgColor());
-            existingLabel.setNew(false);
             return labelRepository.save(existingLabel);
         }).orElseThrow(() -> new LabelNotFoundException("라벨 id: " + id + " 업데이트 실패, 해당 라벨이 존재하지 않습니다."));
     }

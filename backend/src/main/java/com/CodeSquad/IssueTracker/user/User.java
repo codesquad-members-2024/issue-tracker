@@ -17,8 +17,6 @@ public class User implements Persistable<String> {
 
     private String userPassword;
 
-    private String userNickname;
-
     @Transient
     private boolean isNew = true;
 
@@ -32,9 +30,8 @@ public class User implements Persistable<String> {
         return isNew;
     }
 
-    public User(String userId, String userPassword, String userNickname) {
+    public User(String userId, String userPassword) {
         this.userId = userId;
         this.userPassword = userPassword;
-        this.userNickname = userNickname;
     }
 }

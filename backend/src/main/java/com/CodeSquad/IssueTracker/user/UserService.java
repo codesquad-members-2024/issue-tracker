@@ -1,11 +1,10 @@
 package com.CodeSquad.IssueTracker.user;
-import com.CodeSquad.IssueTracker.Exception.milestone.MilestoneNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
+import com.CodeSquad.IssueTracker.Exception.user.UserIdAlreadyExistException;
 import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.user.utils.UserValidate;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +40,9 @@ public class UserService {
             log.error("사용자 비밀번호 유효성 검증 실패: {}", user.getUserId());
             throw new InvalidUserFormatException("비밀번호가 형식에 맞지 않습니다.");
         }
-        if (!UserValidate.isUserNicknameValid(user.getUserNickname())) {
-            log.error("사용자 닉네임 유효성 검증 실패: {}", user.getUserId());
-            throw new InvalidUserFormatException("닉네임이 형식에 맞지 않습니다.");
+        if (isUserIdDuplicated(user.getUserId())) {
+            log.error("사용자 ID 중복 : {}", user.getUserId());
+            throw new UserIdAlreadyExistException("이미 존재하는 ID입니다.");
         }
     }
 

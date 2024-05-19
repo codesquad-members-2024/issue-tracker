@@ -1,5 +1,8 @@
 package com.CodeSquad.IssueTracker.labels;
 
+import com.CodeSquad.IssueTracker.Exception.label.DuplicateLabelNameException;
+import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelColorException;
+import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +25,14 @@ public class LabelController {
 
     @PostMapping("/label")
     public ResponseEntity<Label> createLabel(@RequestBody Label label) {
-        Label createdLabel = labelService.createLabel(label);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdLabel);
+        try {
+            Label createdLabel = labelService.createLabel(label);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdLabel);
+        } catch (InvalidLabelNameException | InvalidLabelColorException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (DuplicateLabelNameException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
     }
 
     @GetMapping("/label/{id}")
