@@ -38,14 +38,16 @@ const useIssueListLogic = () => {
   useEffect(() => () => setIssues([]), []);
 
   useEffect(() => {
-    setPage(FIRST_PAGE);
     fetchIssues({ issueType: focusedTab, page: FIRST_PAGE });
+
+    return () => setPage(FIRST_PAGE);
   }, [focusedTab]);
 
   useEffect(() => {
     const lastIssue = lastIssueRef.current;
 
     if (lastIssue) observer.observe(lastIssue);
+    return () => observer.disconnect();
   }, [issues]);
 
   return {

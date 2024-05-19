@@ -18,6 +18,11 @@ const useIssueCreatorLogic = () => {
 
     if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
   };
+  const handleCommentChange = () => {
+    const length = commentRef.current?.value.length || 0;
+    setCommentLength(length);
+    handleOnChange();
+  };
   const handleCancel = () => navigate("/");
   const handleSubmit = () => {
     const title = titleRef.current?.value;
@@ -28,11 +33,6 @@ const useIssueCreatorLogic = () => {
   };
 
   useEffect(() => {
-    const handleCommentChange = () => {
-      const length = commentRef.current?.value.length || 0;
-      setCommentLength(length);
-      handleOnChange();
-    };
     const commentElement = commentRef.current;
     commentElement?.addEventListener("input", handleCommentChange);
 
