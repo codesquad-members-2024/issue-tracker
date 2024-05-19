@@ -1,46 +1,19 @@
 import styled from "styled-components";
 import IssueTab from "./IssueTab";
-import IssueHeadline, { IssueHeadlineProps } from "./IssueHeadline";
+import IssueHeadline from "./IssueHeadline";
 import { MutableRefObject } from "react";
 import { Headline } from "../../hooks/stores/useIssueStore";
 import RefreshRequest from "../error/RefreshRequest";
 import useIssueListLogic, { IssueType } from "../../hooks/logics/useIssueListLogic";
 
-interface LastHeadlineProps extends IssueHeadlineProps {
-  ref: MutableRefObject<null>;
-}
-
-const renderIssueHeadline = ({ issueId, title, author, publishedAt, isClosed }: IssueHeadlineProps) => (
-  <IssueHeadline
-    key={`issue-headline-${issueId}`}
-    issueId={issueId}
-    title={title}
-    author={author}
-    publishedAt={publishedAt}
-    isClosed={isClosed}
-  />
-);
-
-const renderLastIssueHeadline = ({ ref, issueId, title, author, publishedAt, isClosed }: LastHeadlineProps) => (
-  <IssueHeadline
-    ref={ref}
-    key={`issue-headline-${issueId}`}
-    issueId={issueId}
-    title={title}
-    author={author}
-    publishedAt={publishedAt}
-    isClosed={isClosed}
-  />
-);
-
-const renderHeadlines = (issues: Headline[], focusedTab: IssueType, lastIssueRef: MutableRefObject<null>) =>
-  issues
-    .filter(({ isClosed }) => (focusedTab === "open" ? !isClosed : isClosed))
-    .map((issue, index) =>
-      index === issues.length - 1
-        ? renderLastIssueHeadline({ ref: lastIssueRef, ...issue })
-        : renderIssueHeadline(issue)
-    );
+const renderHeadlines = (issues: Headline[], lastIssueRef: MutableRefObject<null>) =>
+  issues.map((issue, index) =>
+    index === issues.length - 1 ? (
+      <IssueHeadline ref={lastIssueRef} key={`issue-headline-${issue.issueId}`} {...issue} />
+    ) : (
+      <IssueHeadline key={`issue-headline-${issue.issueId}`} {...issue} />
+    )
+  );
 
 function IssueList() {
   const { focusedTab, setFocusedTab, issues, setIssues, lastIssueRef, requestError } = useIssueListLogic();
@@ -56,7 +29,7 @@ function IssueList() {
           if (tabDescription !== focusedTab) setIssues([]);
         }}
       />
-      <ScrollableArea>{renderHeadlines(issues, focusedTab, lastIssueRef)}</ScrollableArea>
+      <ScrollableArea>{renderHeadlines(issues, lastIssueRef)}</ScrollableArea>
     </Wrapper>
   );
 }

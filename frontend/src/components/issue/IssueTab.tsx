@@ -14,13 +14,7 @@ export interface IssueTabProps {
 }
 
 function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
-  const { openIssueCount, closeIssueCount, setIssueCounts } = useIssueStore();
-
-  const { mutate: fetchFilters } = useMutation(sendFiltersRequest, {
-    onSuccess: (data) => setIssueCounts(data),
-  });
-
-  useEffect(fetchFilters, []);
+  const { openIssueCount, closeIssueCount } = useIssueStore();
 
   return (
     <Wrapper>
