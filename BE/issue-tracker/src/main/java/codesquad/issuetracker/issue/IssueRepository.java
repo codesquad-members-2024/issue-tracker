@@ -2,19 +2,25 @@ package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.base.State;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IssueRepository extends CrudRepository<Issue, Long> {
 
+    @Query("SELECT * FROM ISSUE WHERE IS_DELETED = FALSE ")
     List<Issue> findAllByState(State state);
 
-    @Query("SELECT * FROM ISSUE JOIN ISSUE_LABEL ON ISSUE.ID = ISSUE_LABEL.ISSUE_ID WHERE ISSUE_LABEL.LABEL_ID = :labelId")
-    List<Issue> findAllByLabelId(@Param("labelId") Long labelId);
+    @Query("SELECT * FROM ISSUE JOIN ISSUE_LABEL ON ISSUE.ID = ISSUE_LABEL.ISSUE_ID WHERE ISSUE_LABEL.LABEL_ID = :labelId AND IS_DELETED = FALSE")
+    List<Issue> findAllByLabelId(Long labelId);
 
+    @Query("SELECT * FROM ISSUE WHERE ISSUE.MILESTONE_ID = :milestoneId AND ISSUE.IS_DELETED = FALSE")
     List<Issue> findByMilestoneId(Long milestoneId);
+
+    @Override
+    @Query("SELECT * FROM ISSUE WHERE ISSUE.ID = :id AND ISSUE.IS_DELETED = FALSE")
+    Optional<Issue> findById(Long id);
 
 }
