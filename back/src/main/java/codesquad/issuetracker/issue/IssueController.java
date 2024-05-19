@@ -1,6 +1,7 @@
 package codesquad.issuetracker.issue;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,5 +35,13 @@ public class IssueController {
         return new IssueShowDto(issue,
                 issueService.getLabelsForIssue(issue),
                 issueService.getAssigneesForIssue(issue));
+    }
+
+    @PutMapping("/issues/{issueId}/title")
+    public ResponseEntity<Void> updateIssueTitleById(@PathVariable Long issueId, @RequestBody IssueTitleUpdateDto issueTitleUpdateDto) {
+        issueService.updateIssueTitleById(issueId, issueTitleUpdateDto.getTitle());
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
