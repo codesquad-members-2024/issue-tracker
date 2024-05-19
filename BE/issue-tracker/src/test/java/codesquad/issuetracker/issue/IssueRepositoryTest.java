@@ -2,6 +2,7 @@ package codesquad.issuetracker.issue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.comment.CommentRepository;
 import codesquad.issuetracker.milestone.Milestone;
@@ -35,24 +36,24 @@ class IssueRepositoryTest {
         Issue issue1 = Issue.builder()
             .authorId("cori1234")
             .title("제목1")
-            .isOpen(true)
+            .state(State.OPEN)
             .build();
         Issue issue2 = Issue.builder()
             .authorId("cori1234")
             .title("제목2")
-            .isOpen(true)
+            .state(State.OPEN)
             .build();
         Issue issue3 = Issue.builder()
             .authorId("cori1234")
             .title("제목3")
-            .isOpen(true)
+            .state(State.OPEN)
             .build();
 
         issueRepository.save(issue1);
         issueRepository.save(issue2);
         issueRepository.save(issue3);
 
-        List<Issue> openIssues = issueRepository.findAllByIsOpen(true);
+        List<Issue> openIssues = issueRepository.findAllByState(State.OPEN);
 
         assertThat(openIssues).hasSize(3);
     }

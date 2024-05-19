@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.CommentService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,44 +29,44 @@ class IssueControllerTest {
     void init() {
         Issue issue1 = Issue.builder()
             .id(1L)
-            .isOpen(true)
+            .state(State.OPEN)
             .build();
         Issue issue2 = Issue.builder()
             .id(2L)
-            .isOpen(true)
+            .state(State.OPEN)
             .build();
         Issue issue3 = Issue.builder()
             .id(3L)
-            .isOpen(false)
+            .state(State.CLOSED)
             .build();
         Issue issue4 = Issue.builder()
             .id(4L)
-            .isOpen(false)
+            .state(State.CLOSED)
             .build();
 
         List<Issue> openIssues = List.of(issue1, issue2);
         List<Issue> closedIssues = List.of(issue3, issue4);
 
-        when(issueService.findIssuesByIsOpen(true)).thenReturn(openIssues);
-        when(issueService.findIssuesByIsOpen(false)).thenReturn(closedIssues);
+        when(issueService.findIssuesByState(State.OPEN)).thenReturn(openIssues);
+        when(issueService.findIssuesByState(State.CLOSED)).thenReturn(closedIssues);
     }
 
     @Test
     @DisplayName("열린 이슈 목록을 가져올 수 있다.")
     void getOpenIssues() throws Exception {
 
-        mockMvc.perform(get("/api/issues?isOpen=true"))
-            .andExpect(jsonPath("$[0].open").value(true))
-            .andExpect(jsonPath("$[1].open").value(true));
+        mockMvc.perform(get("/api/issues?state=OPEN"))
+            .andExpect(jsonPath("$[0].state").value("OPEN"))
+            .andExpect(jsonPath("$[1].state").value("OPEN"));
     }
 
     @Test
     @DisplayName("닫힌 이슈 목록을 가져올 수 있다.")
     void getClosedIssues() throws Exception {
 
-        mockMvc.perform(get("/api/issues?isOpen=false"))
-            .andExpect(jsonPath("$[0].open").value(false))
-            .andExpect(jsonPath("$[1].open").value(false));
+        mockMvc.perform(get("/api/issues?state=CLOSED"))
+            .andExpect(jsonPath("$[0].state").value("CLOSED"))
+            .andExpect(jsonPath("$[1].state").value("CLOSED"));
     }
 
 }
