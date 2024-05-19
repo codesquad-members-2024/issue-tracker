@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Edit } from "../../../icons/edit";
 import { Smile } from "../../../icons/smile";
-import { calculateTime } from "../../../Utils/calculateTime";
 
 export function Comment({ selectedIssue, elapsedTime }) {
   return (

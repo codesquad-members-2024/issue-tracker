@@ -25,7 +25,7 @@ export function IssueDetail() {
         </Info>
       </Header>
       <MainContent>
-        <Comment selectedIssue={selectedIssue} elapsedTime={elapsedTime}/>
+        <Comment selectedIssue={selectedIssue} elapsedTime={elapsedTime} />
         <RightPanel />
       </MainContent>
     </>
@@ -61,4 +61,5 @@ const Info = styled.div`
 const MainContent = styled.div`
   display: flex;
   margin: 20px 100px;
+  justify-content: space-between;
 `;
