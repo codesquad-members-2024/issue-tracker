@@ -26,11 +26,11 @@ export function RightPanel() {
 }
 
 const StyledRightPanel = styled.div`
-  width: 20%;
-  margin-left: auto;
+  width: 22%;
   border: solid #dadbe9;
   border-radius: 10px;
   background: white;
+  height: fit-content;
 `;
 
 const SideBar = styled.div`

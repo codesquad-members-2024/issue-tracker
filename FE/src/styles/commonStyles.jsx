@@ -9,8 +9,19 @@ export const LoginButtonStyles = `
 `;
 
 export const ContentNavStyles = `
-display: flex;
+  display: flex;
   align-items: center;
   width: 50%;
   justify-content: center;
-  cursor: pointer;`;
+  cursor: pointer;
+`;
+
+export const CommonBtnStyles = `
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: inherit;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 20px;
+`;

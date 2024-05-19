@@ -31,7 +31,6 @@ export function IssueTableHeader({ checkedCount, isChecked, onCheckedChange }) {
         checked={isChecked}
         onChange={handleChecked}
       />
-      {/* check 되면 이슈선택 Header로 변경 */}
       {isChecked ? (
         <Wrap>
           <Left>
