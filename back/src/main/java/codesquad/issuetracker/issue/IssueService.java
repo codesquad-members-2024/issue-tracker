@@ -17,8 +17,8 @@ public class IssueService {
     private final LabelRepository labelRepository;
     private final UserRepository userRepository;
 
-    public void createIssue(Issue issue) {
-        issueRepository.save(issue);
+    public Issue createIssue(Issue issue) {
+        return issueRepository.save(issue);
     }
 
     public List<Issue> getAllIssues() {
