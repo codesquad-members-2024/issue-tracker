@@ -1,8 +1,8 @@
-import { Header } from "../util/UtilUI";
+import { Header } from "../common/UtilUI";
 import ModifyDeleteProvider from "../Providers/ModifyDeleteProvider";
 import Nav from "../components/LabelsMilestones/Nav";
 import { useEffect, useState } from "react";
-import { APiUtil } from "../util/APIUtils";
+import { APiUtil } from "../common/APIUtils";
 import { LabelFeed } from "../components/LabelsMilestones/Labels/LabelFeed";
 import LabelEditUI from "../components/LabelsMilestones/Labels/LabelEditUI";
 const LabelsPage = () => {

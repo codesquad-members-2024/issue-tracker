@@ -4,9 +4,9 @@ import { TagOutlined, FlagOutlined } from "@ant-design/icons";
 export const Header = () => {
     return (
         <header className="pb-10 flex justify-between">
-            <h3 className="text-3xl font-style: italic font-normal">
+            <Link to="/issue" className="text-3xl font-style: italic font-normal">
                 Issue Tracker
-            </h3>
+            </Link>
             <img src="/public/img/UserImage.png" alt="User Image" />
         </header>
     );

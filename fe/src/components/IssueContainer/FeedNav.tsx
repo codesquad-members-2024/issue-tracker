@@ -1,8 +1,8 @@
 import React from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
 import { Issue } from "./IssueFeed";
-import FilterUI from "../../util/FilterUI";
-import { Filter } from "../../util/FilterUI";
+import FilterUI from "../../common/FilterUI";
+import { Filter } from "../../common/FilterUI";
 
 type TaskTable = Record<string, Filter[]>;
 

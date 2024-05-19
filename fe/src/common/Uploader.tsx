@@ -1,8 +1,10 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import AWS from "aws-sdk";
+import { PaperClipOutlined } from "@ant-design/icons";
 
 const FileUploader = () => {
     const [selectFile, setSelectFile] = useState<File | null | undefined>(null);
+    const upLoadNode = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
@@ -53,11 +55,19 @@ const FileUploader = () => {
         }
     };
 
+    const uploadFile = () => {
+        if (upLoadNode.current) {
+            upLoadNode.current.click();
+        }
+    };
+
     return (
-        <>
-            <input type="file" onChange={handleFileChange}></input>
-            <button onClick={putFile}>올리기</button>
-        </>
+        <div className="flex py-2 border-gray-300 border-t-2 border-dotted mt-2">
+            <input className="hidden" ref={upLoadNode} type="file" onChange={handleFileChange}></input>
+            {/* 완료 눌렀을때 처리 */}
+            {/* <button onClick={putFile}>올리기</button> */}
+            <button onClick={uploadFile} className="text-sm"><PaperClipOutlined/> 파일 첨부하기</button>
+        </div>
     );
 };
 

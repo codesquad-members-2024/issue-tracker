@@ -1,9 +1,9 @@
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import FilterUI from "../../util/FilterUI";
+import FilterUI from "../../common/FilterUI";
 import { FilterContext } from "../../Providers/FilterProvider";
 import React, { ChangeEvent, useContext } from "react";
-import LabelsAndMilestoneUI from "../../util/UtilUI";
+import LabelsAndMilestoneUI from "../../common/UtilUI";
 
 interface NavProps {
     resetFilterUI: boolean;
