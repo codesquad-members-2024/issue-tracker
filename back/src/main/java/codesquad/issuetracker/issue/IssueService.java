@@ -50,4 +50,8 @@ public class IssueService {
     public void updateIssueContentById(Long issueId, String newContent) {
         issueRepository.updateContentById(issueId, newContent);
     }
+
+    public void deleteIssueById(Long issueId) {
+        issueRepository.deleteById(issueId);
+    }
 }

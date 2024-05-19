@@ -52,4 +52,12 @@ public class IssueController {
                 .noContent()
                 .build();
     }
+
+    @DeleteMapping("/issues/{issueId}")
+    public ResponseEntity<Void> deleteIssueById(@PathVariable Long issueId) {
+        issueService.deleteIssueById(issueId);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }
