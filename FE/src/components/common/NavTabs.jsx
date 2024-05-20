@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { ContentNavStyles } from "../../styles/commonStyles";
-import { LabelIcon } from "../..//icons/LabelIcon";
-import { MilestonesIcon } from "../../icons/MilestonesIcon";
+import { ContentNavStyles } from "@/styles/commonStyles";
+import { LabelIcon } from "@/icons/LabelIcon";
+import { MilestonesIcon } from "@/icons/MilestonesIcon";
 
 export function NavTabs() {
   const navigate = useNavigate();

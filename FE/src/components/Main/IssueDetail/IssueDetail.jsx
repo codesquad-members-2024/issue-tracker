@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { issues } from "../../../test.json";
 import { Comment } from "./Comment";
 import { RightPanel } from "./RightPanel";
-import { calculateTime } from "../../../Utils/calculateTime";
+import { calculateTime } from "@/Utils/calculateTime";
+import { issues } from "@/test.json";
 
 export function IssueDetail() {
   const { idx } = useParams();

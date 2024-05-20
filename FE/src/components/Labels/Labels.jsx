@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Header } from "../Main/IssuesList/Header";
-import { ContentNavStyles } from "../../styles/commonStyles";
+import { ContentNavStyles } from "@/styles/commonStyles";
 import { LabelsContent } from "./LabelsContent";
 import { NavTabs } from "../common/NavTabs";
 

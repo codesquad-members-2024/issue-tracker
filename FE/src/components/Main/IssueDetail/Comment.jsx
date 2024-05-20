@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { EditIcon } from "../../../icons/EditIcon";
-import { SmileIcon } from "../../../icons/SmileIcon";
+import { EditIcon } from "@/icons/EditIcon";
+import { SmileIcon } from "@/icons/SmileIcon";
 
 export function Comment({ selectedIssue, elapsedTime }) {
   return (

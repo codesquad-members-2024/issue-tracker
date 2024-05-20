@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { OpenIcon } from "../../../../icons/OpenIcon";
-import { issues } from "../../../../test.json"; // test data
-import { calculateTime } from "../../../../Utils/calculateTime";
+import { OpenIcon } from "@/icons/OpenIcon";
+import { calculateTime } from "@/Utils/calculateTime";
+import { issues } from "@/test.json"; // test data
 
 export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
   return (

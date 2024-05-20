@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { ClosedIcon } from "../../../../icons/ClosedIcon";
-import { OpenIcon } from "../../../../icons/OpenIcon";
-import { DropdownContainer } from "../../../common/Dropdown/DropdownContainer";
+import { ClosedIcon } from "@/icons/ClosedIcon";
+import { OpenIcon } from "@/icons/OpenIcon";
+import { DropdownContainer } from "@/components/common/Dropdown/DropdownContainer";
 
 const assigneePopupItems = [{ id: "no_assignee", label: "담당자가 없는 이슈" }];
 const labelPopupItems = [{ id: "no_label", label: "레이블이 없는 이슈" }];

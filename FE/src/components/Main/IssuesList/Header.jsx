@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { LogoIcon } from "../../../icons/LogoIcon";
 import { Link } from "react-router-dom";
+import { LogoIcon } from "@/icons/LogoIcon";
 
 export function Header() {
   return (

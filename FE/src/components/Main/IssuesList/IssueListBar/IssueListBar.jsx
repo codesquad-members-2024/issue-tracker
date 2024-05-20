@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { ContentNavStyles } from "../../../../styles/commonStyles";
+import { ContentNavStyles } from "@/styles/commonStyles";
 import { FilterBar } from "./FilterBar";
-import { NavTabs } from "../../../common/NavTabs";
+import { NavTabs } from "@/components/common/NavTabs";
 
 export function IssueListBar() {
   const navigate = useNavigate();

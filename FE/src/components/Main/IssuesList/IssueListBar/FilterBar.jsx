@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { DropdownIcon } from "../../../../icons/DropdownIcon";
-import { SearchIcon } from "../../../../icons/SearchIcon";
-import { Popup } from "../../../common/Dropdown/Popup";
+import { DropdownIcon } from "@/icons/DropdownIcon";
+import { SearchIcon } from "@/icons/SearchIcon";
+import { Popup } from "@/components/common/Dropdown/Popup";
 
 
 const issuePopupItems = [

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { EditIcon } from "../../icons/EditIcon";
-import { TrashIcon } from "../../icons/TrashIcon";
-import { labelsList } from "../../test.json";
+import { EditIcon } from "@/icons/EditIcon";
+import { TrashIcon } from "@/icons/TrashIcon";
+import { labelsList } from "@/test.json";
 
 export function LabelsContent() {
   return (

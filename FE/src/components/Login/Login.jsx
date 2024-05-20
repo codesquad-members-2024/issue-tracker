@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { LogoIcon } from "../../icons/LogoIcon";
-import { LoginButtonStyles } from "../../styles/commonStyles";
+import { LogoIcon } from "@/icons/LogoIcon";
+import { LoginButtonStyles } from "@/styles/commonStyles";
 
 export function Login() {
   const [id, setId] = useState("");
