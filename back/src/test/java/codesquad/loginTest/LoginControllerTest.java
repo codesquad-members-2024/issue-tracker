@@ -40,14 +40,14 @@ public class LoginControllerTest {
     @Test
     public void testLoginSuccess() {
         // given
-        String email = "test@example.com";
+        String loginId = "test@example.com";
         String password = "password123";
         LoginForm loginForm = new LoginForm();
-        loginForm.setEmail(email);
+        loginForm.setLoginId(loginId);
         loginForm.setPassword(password);
 
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(loginService.authenticate(email, password, session)).thenReturn(true);
+        when(loginService.authenticate(loginId, password, session)).thenReturn(true);
 
         // when
         ResponseEntity<Map<String, String>> response = loginController.login(loginForm, bindingResult, session);
@@ -60,14 +60,14 @@ public class LoginControllerTest {
     @Test
     public void testLoginFailure() {
         // given
-        String email = "test@example.com";
+        String loginId = "test@example.com";
         String password = "wrongpassword";
         LoginForm loginForm = new LoginForm();
-        loginForm.setEmail(email);
+        loginForm.setLoginId(loginId);
         loginForm.setPassword(password);
 
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(loginService.authenticate(email, password, session)).thenReturn(false);
+        when(loginService.authenticate(loginId, password, session)).thenReturn(false);
 
         // when
         ResponseEntity<Map<String, String>> response = loginController.login(loginForm, bindingResult, session);
