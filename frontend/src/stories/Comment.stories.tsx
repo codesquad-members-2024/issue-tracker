@@ -13,6 +13,6 @@ DefaultComment.args = {
   commentId: 1,
   author: "schnee",
   isAuthor: true,
-  content: "hi",
+  content: "안녕하세요 슈니입니다\n안녕하십니까 슈니입니다\n안녕하세요\n안녕하세요",
   publishedAt: "2024-05-17 11:23:31.0"
 }
