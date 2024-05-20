@@ -25,4 +25,8 @@ public class CommentService {
                 .build();
         commentRepository.save(comment);
     }
+
+    public void updateComment(CommentCreateRequest request, Long commentId) {
+        commentRepository.updateComment(commentId, request.content());
+    }
 }
