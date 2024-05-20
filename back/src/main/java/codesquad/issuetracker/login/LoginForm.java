@@ -9,7 +9,7 @@ public class LoginForm {
 
     @NotEmpty
     @Email(message = "유효하지 않은 이메일")
-    private String email;
+    private String loginId;
     @NotEmpty
     private String password;
 

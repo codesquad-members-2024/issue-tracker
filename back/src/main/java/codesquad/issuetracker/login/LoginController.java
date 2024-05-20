@@ -36,7 +36,7 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        String email = loginForm.getEmail();
+        String email = loginForm.getLoginId();
         String password = loginForm.getPassword();
 
         if (loginService.authenticate(email, password, session)) {

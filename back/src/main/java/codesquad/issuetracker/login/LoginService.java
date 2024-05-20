@@ -12,8 +12,8 @@ public class LoginService {
 
     private final UserRepository userRepository;
 
-    public boolean authenticate(String email, String password, HttpSession session) {
-        User user = userRepository.findByLoginId(email);
+    public boolean authenticate(String loginId, String password, HttpSession session) {
+        User user = userRepository.findByLoginId(loginId);
         if (user != null && user.getPassword().equals(password)) {
             session.setAttribute("LOGIN USER", user);
             return true;
