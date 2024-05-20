@@ -2,19 +2,19 @@ import styled from "styled-components";
 import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
 import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
 import arrowBottom from "../../img/icon/arrowBottom.svg";
-import useIssueStore from "../../hooks/useIssueStore";
-import { Dispatch, SetStateAction } from "react";
-import { IssueType } from "./IssueList";
+import useIssueStore from "../../hooks/stores/useIssueStore";
+import { useEffect } from "react";
+import { useMutation } from "react-query";
+import { sendFiltersRequest } from "../../api/FilterAPI";
+import { IssueType } from '../../hooks/logics/useIssueListLogic';
 
 export interface IssueTabProps {
   focusedTab: string;
-  setFocusedTab: Dispatch<SetStateAction<IssueType>>;
+  handleFocusedTabClick: (tabDescription: IssueType) => void;
 }
 
-function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
-  const { issues } = useIssueStore();
-  const openIssueCount = issues.filter(({ isClosed }) => !isClosed).length;
-  const closeIssueCount = issues.length - openIssueCount;
+function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
+  const { openIssueCount, closeIssueCount } = useIssueStore();
 
   return (
     <Wrapper>
@@ -22,13 +22,13 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
         <input type="checkbox" />
         <LeftMenu>
           <img src={openedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>
+          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => handleFocusedTabClick("open")}>
             열린 이슈({openIssueCount})
           </IssueMenuText>
         </LeftMenu>
         <LeftMenu>
           <img src={closedIssueIcon} />
-          <IssueMenuText isFocused={focusedTab === "closed"} onClick={() => setFocusedTab("closed")}>
+          <IssueMenuText isFocused={focusedTab === "close"} onClick={() => handleFocusedTabClick("close")}>
             닫힌 이슈({closeIssueCount})
           </IssueMenuText>
         </LeftMenu>
@@ -56,11 +56,14 @@ function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
 }
 
 const Wrapper = styled.div`
+  width: 100%;
   height: 4em;
   padding: 0 2em;
+  box-sizing: border-box;
   background-color: #eff0f6;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #d9dbe9;
 `;
 
 const LeftMenus = styled.div`

@@ -1,36 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Header from "../header/Header";
 import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import Sidebar from "../issue/Sidebar";
-import { useRef, useState } from "react";
-import useUserStore from "../../hooks/useUserStore";
-import { useNavigate } from "react-router-dom";
-import { postNewIssue } from "../../api/IssueAPI";
+import useIssueCreatorLogic from "../../hooks/logics/useIssueCreatorLogic";
 
 function IssueCreator() {
-  const { userId } = useUserStore();
-  const titleRef = useRef<HTMLTextAreaElement>(null);
-  const commentRef = useRef<HTMLTextAreaElement>(null);
-  const [isSubmitable, setIsSubmitable] = useState(false);
-  const navigate = useNavigate();
-
-  const handleOnChange = () => {
-    const title = titleRef.current?.value;
-    const content = commentRef.current?.value;
-    const currentIsSubmitable = !!(title && content);
-
-    if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
-  };
-  const handleCancel = () => navigate("/");
-  const handleSubmit = () => {
-    const title = titleRef.current?.value;
-    const content = commentRef.current?.value;
-
-    // 추후 /issue/{issueId} 로 라우팅 예정
-    if (title && content) postNewIssue({ title, content, userId }).then(() => navigate("/"));
-  };
+  const { titleRef, commentRef, commentCount, isSubmitable, handleOnChange, handleCancel, handleSubmit } =
+    useIssueCreatorLogic();
 
   return (
     <Wrapper>
@@ -44,6 +22,13 @@ function IssueCreator() {
         <FormWrapper>
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
           <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" onChange={handleOnChange} />
+          <ExtensionWrapper>
+            <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
+            <DashedLine />
+            <FileImageButton>
+              <img /> 파일 첨부하기
+            </FileImageButton>
+          </ExtensionWrapper>
         </FormWrapper>
         <Sidebar />
       </BodyWrapper>
@@ -60,6 +45,14 @@ function IssueCreator() {
     </Wrapper>
   );
 }
+
+const FadeOut = keyframes`
+  from {
+    opacity: 1;
+  } to {
+    opacity: 0;
+  }
+`;
 
 const Wrapper = styled.div`
   position: block;
@@ -140,6 +133,34 @@ const SubmitButton = styled.button<{ isSubmitable: boolean }>`
   cursor: pointer;
   opacity: ${({ isSubmitable }) => (isSubmitable ? "1" : "0.5")};
   transition: all 0.5s ease;
+`;
+
+const ExtensionWrapper = styled.div`
+  position: fixed;
+  width: 910px;
+  top: 46em;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ContentWordCount = styled.span`
+  padding: 0 2em;
+  text-align: right;
+  animation: ${FadeOut} 2s ease-out;
+  animation-fill-mode: forwards;
+`;
+
+const DashedLine = styled.hr`
+  border-top: 1px dashed #d9dbe9;
+  border-bottom: none;
+  margin: 1.5em;
+`;
+
+const FileImageButton = styled.button`
+  padding: 0 2em;
+  background-color: transparent;
+  border: none;
+  text-align: left;
 `;
 
 export default IssueCreator;

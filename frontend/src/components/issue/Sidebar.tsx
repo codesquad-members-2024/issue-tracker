@@ -21,6 +21,7 @@ function Sidebar() {
 }
 
 const Wrapper = styled.div`
+  box-sizing: border-box;
   width: 288px;
   height: 16em;
   border: 1px solid #d9dbe9;

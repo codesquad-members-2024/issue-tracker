@@ -1,52 +1,51 @@
 import styled from "styled-components";
 import IssueTab from "./IssueTab";
 import IssueHeadline from "./IssueHeadline";
-import { useMutation } from "react-query";
-import { sendIssuesRequest } from "../../api/IssueAPI";
-import { useEffect, useState } from "react";
-import useIssueStore from "../../hooks/useIssueStore";
+import { MutableRefObject } from "react";
+import { Headline } from "../../hooks/stores/useIssueStore";
 import RefreshRequest from "../error/RefreshRequest";
+import useIssueListLogic, { IssueType } from "../../hooks/logics/useIssueListLogic";
 
-export type IssueType = "open" | "closed"; // deprecated after the completion of api
+const renderHeadlines = (issues: Headline[], lastIssueRef: MutableRefObject<null>) =>
+  issues.map((issue, index) =>
+    index === issues.length - 1 ? (
+      <IssueHeadline ref={lastIssueRef} key={`issue-headline-${issue.issueId}`} {...issue} />
+    ) : (
+      <IssueHeadline key={`issue-headline-${issue.issueId}`} {...issue} />
+    )
+  );
 
 function IssueList() {
-  const { issues, setIssues } = useIssueStore();
-  const [focusedTab, setFocusedTab] = useState<IssueType>("open");
-  const [requestError, setRequestError] = useState(false);
+  const { focusedTab, setFocusedTab, issues, setIssues, lastIssueRef, requestError } = useIssueListLogic();
 
-  const { mutate: fetchIssues } = useMutation(sendIssuesRequest, {
-    onSuccess: (data) => {
-      setIssues(data);
-      setRequestError(false);
-    },
-    onError: () => setRequestError(true),
-  });
-
-  useEffect(() => fetchIssues(), []);
-
-  if (requestError) return <RefreshRequest />;
+  if (requestError) <RefreshRequest />;
 
   return (
     <Wrapper>
-      <IssueTab focusedTab={focusedTab} setFocusedTab={setFocusedTab} />
-      {issues
-        .filter(({ isClosed }) => (focusedTab === "open" ? !isClosed : isClosed)) // deprecated after the completion of api
-        .map(({ id, title, author, publishedAt, isClosed }) => (
-          <IssueHeadline issueId={id} title={title} author={author} publishedAt={publishedAt} isClosed={isClosed} />
-        ))}
+      <IssueTab
+        focusedTab={focusedTab}
+        handleFocusedTabClick={(tabDescription: IssueType) => {
+          setFocusedTab(tabDescription);
+          if (tabDescription !== focusedTab) setIssues([]);
+        }}
+      />
+      <ScrollableArea>{renderHeadlines(issues, lastIssueRef)}</ScrollableArea>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   width: 1280px;
-  height: 55em;
   margin-top: 1.5em;
   border: 1px solid #d9dbe9;
   border-radius: 0.725em;
   overflow: hidden;
-  overflow-y: scroll;
+`;
 
+const ScrollableArea = styled.div`
+  max-height: 42.5em;
+  overflow-y: scroll;
+  height: calc(100% - 4em);
   &::-webkit-scrollbar {
     display: none;
   }
