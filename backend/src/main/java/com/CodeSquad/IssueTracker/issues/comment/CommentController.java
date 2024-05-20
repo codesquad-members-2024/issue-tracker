@@ -20,4 +20,12 @@ public class CommentController {
         commentService.addComment(request, issueId);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/issue/{issueId}/comment/{commentId}")
+    public ResponseEntity<Void> updateCommnet(@RequestBody CommentCreateRequest request,
+                                              @PathVariable("issueId") Long issueId,
+                                              @PathVariable("commentId") Long commentId) {
+        commentService.updateComment(request, issueId, commentId);
+        return ResponseEntity.ok().build();
+    }
 }
