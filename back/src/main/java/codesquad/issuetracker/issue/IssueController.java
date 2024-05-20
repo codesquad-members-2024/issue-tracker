@@ -3,7 +3,9 @@ package codesquad.issuetracker.issue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,27 +16,35 @@ public class IssueController {
     private final IssueService issueService;
 
     @PostMapping("/issues")
-    public void createIssue(@RequestBody Issue issue) {
-        issueService.createIssue(issue);
+    public ResponseEntity<Issue> createIssue(@RequestBody Issue issue, UriComponentsBuilder uriComponentsBuilder) {
+        Issue createdIssue = issueService.createIssue(issue);
+        URI location = uriComponentsBuilder.path("/issues/{id}")
+                .buildAndExpand(createdIssue.getId())
+                .toUri();
+        return ResponseEntity
+                .created(location)
+                .body(createdIssue);
     }
 
     @GetMapping("/issues")
-    public List<IssueShowDto> getAllIssues() {
+    public ResponseEntity<List<IssueShowDto>> getAllIssues() {
         List<Issue> allIssues = issueService.getAllIssues();
-        return allIssues.stream()
-                .map(issue -> new IssueShowDto(
-                        issue,
-                        issueService.getLabelsForIssue(issue),
-                        issueService.getAssigneesForIssue(issue)))
-                .collect(Collectors.toList());
+        return ResponseEntity
+                .ok(allIssues.stream()
+                        .map(issue -> new IssueShowDto(
+                                issue,
+                                issueService.getLabelsForIssue(issue),
+                                issueService.getAssigneesForIssue(issue)))
+                        .collect(Collectors.toList()));
     }
 
     @GetMapping("/issues/{issueId}")
-    public IssueShowDto issueDetail(@PathVariable Long issueId) {
+    public ResponseEntity<IssueShowDto> issueDetail(@PathVariable Long issueId) {
         Issue issue = issueService.getIssue(issueId);
-        return new IssueShowDto(issue,
-                issueService.getLabelsForIssue(issue),
-                issueService.getAssigneesForIssue(issue));
+        return ResponseEntity
+                .ok(new IssueShowDto(issue,
+                        issueService.getLabelsForIssue(issue),
+                        issueService.getAssigneesForIssue(issue)));
     }
 
     @PutMapping("/issues/{issueId}/title")
