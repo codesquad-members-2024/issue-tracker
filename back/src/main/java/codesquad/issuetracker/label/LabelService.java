@@ -11,8 +11,8 @@ public class LabelService {
 
     private final LabelRepository labelRepository;
 
-    public void createLabel(Label label) {
-        labelRepository.save(label);
+    public Label createLabel(Label label) {
+        return labelRepository.save(label);
     }
 
     public List<Label> getAllLabels() {
