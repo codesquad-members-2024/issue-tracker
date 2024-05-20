@@ -12,6 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/issue")
 public class IssueController {
+
+    private final static long DEFAULT_OFFSET = 15;
     private final IssueService issueService;
 
     public IssueController(IssueService issueService) {
