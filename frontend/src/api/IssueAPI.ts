@@ -22,9 +22,12 @@ interface TitleEditProps {
   title: string;
 }
 
+const ISSUE_ERROR_MESSAGE: { [key: number]: string } = {
+  400: "데이터 형식에 오류가 생겼습니다.",
+  404: "존재하지 않는 이슈에 접근하였습니다.",
+}
+
 const PAGE_FORMAT_ERROR_MESSAGE = "페이지의 형식이 맞지 않습니다.";
-const DATA_FORMAT_ERROR_MESSAGE = "데이터 형식에 오류가 생겼습니다.";
-const ISSUE_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 이슈에 접근하였습니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
 export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps) => {
@@ -45,8 +48,10 @@ export const sendIssueRequestById = async (issueId: number) => {
   try {
     const response = await fetch(`${SERVER}/issue/${issueId}`);
 
-    if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
-    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
 
     return response.json();
   } catch (error) {
@@ -66,9 +71,10 @@ export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) =
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/title`, request);
 
-    if (response.status === 400) throw new Error(DATA_FORMAT_ERROR_MESSAGE);
-    if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
-    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
 
     return response;
   } catch (error) {
@@ -92,8 +98,10 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
     };
     const response = await fetch(`${SERVER}/issue`, request);
 
-    if (response.status === 400) throw new Error(DATA_FORMAT_ERROR_MESSAGE);
-    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
 
     return response.json();
   } catch (error) {
@@ -113,8 +121,10 @@ export const postNewComment = async ({ issueId, author, content }: CommentReques
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/comment`, request);
 
-    if (response.status === 400) throw new Error(DATA_FORMAT_ERROR_MESSAGE);
-    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
 
     return response;
   } catch (error) {
@@ -130,8 +140,10 @@ export const openIssue = async (issueId: number) => {
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/open`, request);
 
-    if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
-    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
 
     return response;
   } catch (error) {
@@ -147,8 +159,10 @@ export const closeIssue = async (issueId: number) => {
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/close`, request);
 
-    if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
-    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
 
     return response;
   } catch (error) {
