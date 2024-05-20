@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +61,19 @@ public class IssueService {
 
     public void deleteIssueById(Long issueId) {
         issueRepository.deleteById(issueId);
+    }
+
+    public void openIssuesById(List<Long> ids) {
+        List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
+        issueRepository.saveAll(issues.stream()
+                .peek(Issue::open)
+                .collect(Collectors.toList()));
+    }
+
+    public void closeIssuesById(List<Long> ids) {
+        List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
+        issueRepository.saveAll(issues.stream()
+                .peek(Issue::close)
+                .collect(Collectors.toList()));
     }
 }

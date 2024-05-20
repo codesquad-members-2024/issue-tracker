@@ -72,4 +72,20 @@ public class IssueController {
                 .noContent()
                 .build();
     }
+
+    @PutMapping("/issues/open")
+    public ResponseEntity<Void> openIssuesById(@RequestBody List<Long> issueIds) {
+        issueService.openIssuesById(issueIds);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @PutMapping("/issues/close")
+    public ResponseEntity<Void> closeIssuesById(@RequestBody List<Long> issueIds) {
+        issueService.closeIssuesById(issueIds);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }
