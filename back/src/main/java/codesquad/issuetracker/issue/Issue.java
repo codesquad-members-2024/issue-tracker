@@ -16,7 +16,7 @@ public class Issue {
     private Long id;
     private String title;
     private String content;
-    private String milestoneId;
+    private Long milestoneId;
     @MappedCollection(idColumn = "issue_id")
     private Set<IssueAssignee> issueAssignees;
     private String writer;
@@ -29,7 +29,7 @@ public class Issue {
 
     public Issue(String title,
                  String content,
-                 String milestoneId,
+                 Long milestoneId,
                  String writer) {
         this.title = title;
         this.content = content;
