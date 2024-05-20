@@ -1,4 +1,4 @@
-import NotFound from "../../../util/NotFound";
+import NotFound from "../../../common/NotFound";
 import LabelCard from "./LabelCard";
 
 

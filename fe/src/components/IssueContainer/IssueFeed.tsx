@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import FeedNav from "./FeedNav";
 import IssueCard from "./IssueCard";
-import NotFound from "../../util/NotFound";
+import NotFound from "../../common/NotFound";
 
 export interface Issue {
     id: number;

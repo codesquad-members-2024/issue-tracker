@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
-import NotFound from "../../../util/NotFound";
+import NotFound from "../../../common/NotFound";
 import MilestoneCard from "./MilestoneCard";
 
 export interface Milestone {

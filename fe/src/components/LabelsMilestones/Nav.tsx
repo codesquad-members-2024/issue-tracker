@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import LabelsAndMilestoneUI from "../../util/UtilUI";
+import LabelsAndMilestoneUI from "../../common/UtilUI";
 import { PlusOutlined } from "@ant-design/icons";
 import { ModifyDeleteContext } from "../../Providers/ModifyDeleteProvider";
 

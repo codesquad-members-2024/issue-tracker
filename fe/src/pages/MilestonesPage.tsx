@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Header } from "../util/UtilUI";
+import { Header } from "../common/UtilUI";
 import MilestoneEditUI from "../components/LabelsMilestones/Milestones/MilestoneEditUI";
 import Nav from "../components/LabelsMilestones/Nav";
 import ModifyDeleteProvider from "../Providers/ModifyDeleteProvider";
-import { APiUtil } from "../util/APIUtils";
+import { APiUtil } from "../common/APIUtils";
 import { MilestoneFeed } from "../components/LabelsMilestones/Milestones/MilestoneFeed";
 
 const MilestonesPage = () => {
