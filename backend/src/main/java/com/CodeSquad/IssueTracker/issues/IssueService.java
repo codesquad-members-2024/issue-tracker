@@ -10,6 +10,7 @@ import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
+import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
 import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,18 +20,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
 @Slf4j
 @Service
 public class IssueService {
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final MilestoneRepository milestoneRepository;
 
-    public IssueService(IssueRepository issueRepository, CommentRepository commentRepository, UserRepository userRepository) {
+    public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
+                        UserRepository userRepository, MilestoneRepository milestoneRepository) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.milestoneRepository = milestoneRepository;
     }
 
     public List<Issue> getAllIssues() {
@@ -53,7 +56,7 @@ public class IssueService {
         issue.setMilestoneId(issueRequest.milestoneId());
 
         issueRepository.save(issue);
-        issueRepository.incrementIssueCountForMilestone(issue.getMilestoneId());
+        milestoneRepository.incrementIssueCountForMilestone(issue.getMilestoneId());
 
         // 이슈 작성 시 입력한 내용을 첫번째 코멘트로 저장하기 위함.
         Comment comment = new Comment();
@@ -114,6 +117,10 @@ public class IssueService {
                 .orElseThrow(() ->
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.openIssue(issueId);
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
+        milestoneRepository.decrementClosedIssueCountForMilestone(issue.getMilestoneId());
     }
 
     public void closeIssue(long issueId) {
@@ -121,6 +128,10 @@ public class IssueService {
                 .orElseThrow(() ->
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.closeIssue(issueId);
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
+        milestoneRepository.incrementClosedIssueCountForMilestone(issue.getMilestoneId());
     }
 
     private void validateIssueRequest(IssueRequest issueRequest) {
