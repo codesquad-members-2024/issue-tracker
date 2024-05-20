@@ -1,27 +1,48 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Milestone } from "./MilestoneFeed";
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { APiUtil } from "../../../common/APIUtils";
 interface MilestoneEditUIProps {
     curMilestone?: Milestone;
 }
-
-interface FormState {
+export interface FormState {
     title: string;
     dueDate: string;
     description: string;
 }
 
+interface MutationPayload {
+    formData: FormState;
+    type: "createData" | "modifyData";
+    id?: number;
+}
+
 const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
+    const queryClient = useQueryClient();
     const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
+
+    const { mutate } = useMutation({
+        mutationFn: async ({ formData, type, id }: MutationPayload) => {
+            if (type === "createData") {
+                await APiUtil.createData("milestones", formData);
+            } else if (type === "modifyData" && id !== undefined) {
+                await APiUtil.modifyData("milestones", formData, id);
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["milestones"]);
+        },
+    });
+    
 
     const [formData, setFormData]: [
         FormState,
         React.Dispatch<React.SetStateAction<FormState>>
     ] = useState({
         title: "",
-        dueDate: "",
         description: "",
+        dueDate: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,10 +71,12 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
         }
     }, [ModifyDeleteState.state, curMilestone]);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>, id?: number) => {
+        const type = ModifyDeleteState.state === "create" ? "createData" : "modifyData"
         e.preventDefault();
-        console.log(formData);
-    }
+        mutate({formData, type, id});
+        ModifyDeleteDispatch({ type: "SET_INIT", Payload: ""})
+    };
 
     return (
         <div
@@ -70,7 +93,7 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
                         ? "마일스톤 편집"
                         : "새로운 마일스톤 추가"}
                 </h3>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form onSubmit={(e) => handleSubmit(e, curMilestone?.id)} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-6">
                         <div className="flex justify-between">
                             <input
@@ -85,7 +108,7 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
                                 type="text"
                                 name="dueDate"
                                 className="w-full px-3 h-[40px] py-2 ml-4 text-gray-500 border rounded-xl bg-gray-100"
-                                placeholder="완료일(선택) YYYY.MM.DD"
+                                placeholder="완료일(선택) YYYY-MM-DD"
                                 value={formData.dueDate}
                                 onChange={handleChange}
                             />

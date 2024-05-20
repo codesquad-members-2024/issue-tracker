@@ -30,7 +30,7 @@ const NewPage = () => {
     }
 
     return (
-        <main className="w-1280 mx-auto">
+        <main className="w-[1280px] mx-auto">
             <Header />
             <h1 className="font-semibold h-[48px] text-3xl">
                 새로운 이슈 작성

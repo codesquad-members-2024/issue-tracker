@@ -1,29 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { Label } from "./LabelFeed";
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
-import { RedoOutlined } from "@ant-design/icons";
+import { RedoOutlined, DownOutlined } from "@ant-design/icons";
+import { changeColor } from "../../../common/APIUtils";
+
+export interface ChangeColorProps {
+    setColor: Dispatch<SetStateAction<string>>;
+    setFormData: Dispatch<SetStateAction<LabelFormState>>;
+}
 interface LabelEditUIProps {
     curLabel?: Label;
 }
 
-interface FormState {
+export interface LabelFormState {
     name: string;
     description: string;
     color: string;
+    textColor: string;
 }
 
 const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
+    const [isOpen, setIsOpen] = useState(false);
     const [color, setColor] = useState("#ffffff");
     const [ModifyDeleteState, ModifyDeleteDispatch] =
         useContext(ModifyDeleteContext);
 
     const [formData, setFormData]: [
-        FormState,
-        React.Dispatch<React.SetStateAction<FormState>>
+        LabelFormState,
+        React.Dispatch<React.SetStateAction<LabelFormState>>
     ] = useState({
         name: "",
         description: "",
         color: "",
+        textColor: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,35 +50,27 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                 name: curLabel?.name ?? "",
                 description: curLabel?.description ?? "",
                 color: curLabel?.color ?? "",
+                textColor: curLabel?.textColor ?? "",
             }));
             setColor(curLabel?.color ?? "");
         } else {
             setFormData((prevState) => ({
                 ...prevState,
-                name: "",
+                name: "label",
                 description: "",
                 color: "",
+                textColor: "",
             }));
         }
     }, [ModifyDeleteState.state, curLabel]);
 
-    const changeColor = () => {
-        const letters = '0123456789ABCDEF';
-        let newColor = '#';
-        for (let i = 0; i < 6; i++) {
-            newColor += letters[Math.floor(Math.random() * 16)];
-        }
-        setColor(newColor)
-        setFormData((prevState) => ({
-            ...prevState,
-            color: newColor,
-        }));
-    }
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
-    }
+    };
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
 
     return (
         <div
@@ -90,17 +91,17 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                     <div className="flex gap-4">
                         <div className="w-[288px] h-[143px] border-2 border-gray-200 rounded-xl flex items-center justify-center">
                             <div
-                                style={{ backgroundColor: color }}
-                                className={`${
-                                    curLabel?.name ? "text-white" : ""
-                                } rounded-xl px-4 py-1 text-sm `}
+                                style={{ backgroundColor: color, color: formData.textColor}}
+                                className={`rounded-xl px-4 py-1 text-sm `}
                             >
-                                {curLabel?.name ? formData.name : "label"}
+                                {formData.name}
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 w-[904px]">
                             <div className="flex flex-grow w-full h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100">
-                                <div className="w-[100px] text-sm m-auto">이름</div>
+                                <div className="w-[100px] text-sm m-auto">
+                                    이름
+                                </div>
                                 <input
                                     type="text"
                                     name="name"
@@ -111,7 +112,9 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                                 />
                             </div>
                             <div className="flex flex-grow w-full h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100">
-                                <div className="w-[100px] text-sm m-auto">설명(선택)</div>
+                                <div className="w-[100px] text-sm m-auto">
+                                    설명(선택)
+                                </div>
                                 <input
                                     type="text"
                                     name="description"
@@ -121,17 +124,59 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div className="flex flex-grow w-[40%] h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100">
-                                <div className="w-[100px] text-sm m-auto">배경 색상</div>
-                                <input
-                                    type="text"
-                                    name="color"
-                                    className="bg-gray-100 w-[80%] h-full outline-none"
-                                    placeholder={color}
-                                    value={color}
-                                    onChange={handleChange}
-                                />
-                                <RedoOutlined onClick={changeColor}/>
+                            <div className="flex w-[50%]">
+                                <div className="flex flex-grow h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100">
+                                    <div className="w-[100px] text-sm my-auto">
+                                        배경 색상
+                                    </div>
+                                    <input
+                                        type="text"
+                                        name="color"
+                                        className="bg-gray-100 w-[80%] h-full outline-none"
+                                        placeholder={color}
+                                        value={color}
+                                        onChange={handleChange}
+                                    />
+                                    <RedoOutlined onClick={() => changeColor({setColor, setFormData})} />
+                                </div>
+                                <button
+                                    className="w-[50%] m-auto relative"
+                                    onClick={toggleDropdown}
+                                >
+                                    <div>
+                                        텍스트 색상 <DownOutlined />
+                                    </div>
+                                    {isOpen && (
+                                        <div className="absolute bg-gray-100 dark:bg-darkModeBorderBG border border-gray-200 shadow-md z-10 mt-1 w-[200px] flex flex-col rounded-xl">
+                                            <div
+                                                onClick={() =>
+                                                    setFormData(
+                                                        (prevState) => ({
+                                                            ...prevState,
+                                                            textColor: "white",
+                                                        })
+                                                    )
+                                                }
+                                                className="flex-grow border-b-2 border-gray-200 px-6 flex items-center justify-between h-10"
+                                            >
+                                                밝은 색
+                                            </div>
+                                            <div
+                                                onClick={() =>
+                                                    setFormData(
+                                                        (prevState) => ({
+                                                            ...prevState,
+                                                            textColor: "black",
+                                                        })
+                                                    )
+                                                }
+                                                className="flex-grow px-6 flex items-center justify-between h-10"
+                                            >
+                                                어두운 색
+                                            </div>
+                                        </div>
+                                    )}
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Milestone } from "./MilestoneFeed";
 import {
     FlagOutlined,
@@ -9,23 +9,45 @@ import {
 } from "@ant-design/icons";
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
 import MilestoneEditUI from "./MilestoneEditUI";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { APiUtil } from "../../../common/APIUtils";
 interface MilestoneCardProps {
     curMilestone: Milestone;
 }
 
-const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
-    
-    const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
-    useEffect(() => {
+interface MutationArgs {
+    id: number;
+    type: string;
+}
 
-        console.log(ModifyDeleteState)
-    }, [ModifyDeleteState])
+const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
+    const queryClient = useQueryClient();
+    const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
+
+    const { mutate } = useMutation({
+        mutationFn: async({ id, type }: MutationArgs) => {
+            if (type === "삭제") {
+                await APiUtil.deleteData("milestones", id);
+            } else {
+                await APiUtil.patchData("milestones", id)
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries("milestones");
+        },
+    });
+
+    const handleClick = (id : number, e: React.MouseEvent<HTMLButtonElement>, type: string) => {
+        e.preventDefault();
+        mutate({id, type})
+    }
+
     return (
         <>
             {ModifyDeleteState.id === curMilestone.id ? (
                 <MilestoneEditUI curMilestone={curMilestone}/>
             ) : (
-                <div className="h-90 flex border-t-2 border-gray-300 dark:bg-darkModeBorderBGx items-center">
+                <div className="h-[90px] flex border-t-2 border-gray-300 dark:bg-darkModeBorderBGx items-center">
                     <div className="w-4/5 h-4/5 ml-4">
                         <div className="flex items-center h-1/2 gap-4">
                             <div className="">
@@ -43,7 +65,7 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
                     </div>
                     <div className="w-1/5 text-sm mr-6 text-right flex flex-col gap-3">
                         <div className="flex gap-4 justify-end">
-                            <button>
+                            <button onClick={(e) => handleClick(curMilestone.id, e, "닫기")}>
                                 <CreditCardOutlined /> 닫기
                             </button>
                             <button
@@ -56,7 +78,7 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
                             >
                                 <FormOutlined /> 편집
                             </button>
-                            <button>
+                            <button onClick={(e) => handleClick(curMilestone.id, e, "삭제")}>
                                 <DeleteOutlined className="text-red-500" /> 삭제
                             </button>
                         </div>

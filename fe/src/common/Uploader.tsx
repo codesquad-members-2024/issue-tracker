@@ -7,19 +7,19 @@ const FileUploader = () => {
     const upLoadNode = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files.length > 0) {
-            setSelectFile(event.target.files[0]);
+        const { files } = event.target
+        if (files && files.length > 0) {
+            setSelectFile(files[0]);
         } else {
             setSelectFile(null);
         }
     };
 
-    const putFile = () => {
-        console.log(selectFile)
+    const uploadFile = () => {
         if (selectFile) {
             const albumBucketName = import.meta.env.VITE_BECKET_NAME;
-            const path = 'attached';
-            const region = "ap-northeast-2";
+            const path = import.meta.env.VITE_BECKET_PATH;
+            const region = import.meta.env.VITE_REGION;
             const accessKeyId = import.meta.env.VITE_ACCESS_KEY_ID;
             const secretAccessKey = import.meta.env.VITE_ACCESS_SECRET_KEY;
 
@@ -55,9 +55,9 @@ const FileUploader = () => {
         }
     };
 
-    const uploadFile = () => {
+    const handleUpload = () => {
         if (upLoadNode.current) {
-            upLoadNode.current.click();
+            upLoadNode.current?.click();
         }
     };
 
@@ -65,8 +65,8 @@ const FileUploader = () => {
         <div className="flex py-2 border-gray-300 border-t-2 border-dotted mt-2">
             <input className="hidden" ref={upLoadNode} type="file" onChange={handleFileChange}></input>
             {/* 완료 눌렀을때 처리 */}
-            {/* <button onClick={putFile}>올리기</button> */}
-            <button onClick={uploadFile} className="text-sm"><PaperClipOutlined/> 파일 첨부하기</button>
+            <button onClick={uploadFile}>올리기</button>
+            <button onClick={handleUpload} className="text-sm"><PaperClipOutlined/> 파일 첨부하기</button>
         </div>
     );
 };

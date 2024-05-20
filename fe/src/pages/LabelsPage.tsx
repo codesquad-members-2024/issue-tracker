@@ -2,7 +2,6 @@ import { Header } from "../common/UtilUI";
 import ModifyDeleteProvider from "../Providers/ModifyDeleteProvider";
 import Nav from "../components/LabelsMilestones/Nav";
 import { useEffect, useState } from "react";
-import { APiUtil } from "../common/APIUtils";
 import { LabelFeed } from "../components/LabelsMilestones/Labels/LabelFeed";
 import LabelEditUI from "../components/LabelsMilestones/Labels/LabelEditUI";
 const LabelsPage = () => {
@@ -11,15 +10,15 @@ const LabelsPage = () => {
     
     useEffect(() => {
         const getLabelList = async () => {
-            const milestoneList = await APiUtil.getData("labels");
-            setLabelsInfo(milestoneList);
+            const milestoneList = await fetch("http://localhost:9999/labels");
+            const data = await milestoneList.json()
+            setLabelsInfo(data);
         };
         getLabelList();
     }, []);
 
-
     return (
-        <main className="w-1280 mx-auto">
+        <main className="w-[1280px] mx-auto">
             <Header />
             <ModifyDeleteProvider>
                 <Nav location="labels"/>

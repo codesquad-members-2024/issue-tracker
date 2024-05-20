@@ -6,9 +6,11 @@ html,
 body {
     height: 100%;
     width: 100%;
+    background-color: #F3F4F6;
 }
 
 #root {
     height: 100%;
     width: 100%;
 }
+
