@@ -57,13 +57,13 @@ const FeedNav = ({
     };
 
     return (
-        <div className="h-45 bg-gray-200 dark:bg-darkModeBG flex text-sm rounded-t-lg">
-            <div className="flex h-full w-70% items-center">
+        <div className="h-[45px] bg-gray-200 dark:bg-darkModeBG flex text-sm rounded-t-lg">
+            <div className="flex h-full w-[70%] items-center">
                 <input
                     type="checkbox"
                     checked={isAllChecked}
                     onChange={allCheckHandler}
-                    className="w-7%"
+                    className="w-[7%]"
                 />
                 {checkedItem.length ? (
                     <div>{checkedItem.length}개 이슈 선택</div>
@@ -86,7 +86,7 @@ const FeedNav = ({
                     </div>
                 )}
             </div>
-            <div className="flex h-full w-30% items-center z-10">
+            <div className="flex h-full w-[30%] items-center z-10">
                 {checkedItem.length ? "" : Object.keys(taskTable).map((key) => (
                     <FilterUI
                         key={key}

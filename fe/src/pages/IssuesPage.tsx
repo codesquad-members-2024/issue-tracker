@@ -21,7 +21,7 @@ const IssuePage = () => {
     if (error) return <div>error...</div>;
 
     return (
-        <main className="w-1280 mx-auto">
+        <main className="w-[1280px] mx-auto">
             <Header/>
             <FilterProvider>
                 <Nav

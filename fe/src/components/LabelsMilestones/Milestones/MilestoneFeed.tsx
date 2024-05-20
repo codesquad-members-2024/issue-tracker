@@ -31,7 +31,7 @@ export const MilestoneFeed = ({ milestoneData }: MilestoneFeedProps) => {
 
     return (
         <section className="w-full border-2 border-gray-300 rounded-xl mt-4">
-            <div className="h-45 bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG flex text-sm rounded-t-lg">
+            <div className="h-[45px] bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG flex text-sm rounded-t-lg">
                 <div className="flex items-center gap-4 text-sm ml-4">
                     <button
                         className={`${isOpen ? "font-bold" : ""}`}

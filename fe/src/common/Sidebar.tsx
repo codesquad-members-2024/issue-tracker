@@ -32,6 +32,7 @@ const DropDown = ({ curKey, idx, value }: DropDownProps) => {
 
     const toggleDropdown = () => {
         setOpen(!isOpen);
+        console.log(value)
     };
 
     return (
