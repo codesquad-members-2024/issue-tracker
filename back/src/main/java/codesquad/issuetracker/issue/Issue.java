@@ -40,4 +40,12 @@ public class Issue {
         this.issueLabels = new HashSet<>();
         this.comments = new HashSet<>();
     }
+
+    public void open() {
+        isClosed = false;
+    }
+
+    public void close() {
+        isClosed = true;
+    }
 }
