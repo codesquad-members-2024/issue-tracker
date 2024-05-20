@@ -3,6 +3,8 @@ package codesquad.issuetracker.issue;
 import codesquad.issuetracker.comment.CommentShowDto;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelShowDto;
+import codesquad.issuetracker.milestone.Milestone;
+import codesquad.issuetracker.milestone.MilestoneShowDto;
 import codesquad.issuetracker.user.AssigneeShowDto;
 import codesquad.issuetracker.user.User;
 import lombok.Getter;
@@ -16,7 +18,7 @@ public class IssueShowDto {
     private Long id;
     private String title;
     private String content;
-    private String milestoneId;
+    private MilestoneShowDto milestone;
     private List<AssigneeShowDto> assignees;
     private String writer;
     private LocalDateTime createTime;
@@ -24,11 +26,11 @@ public class IssueShowDto {
     private List<LabelShowDto> labels;
     private List<CommentShowDto> comments;
 
-    public IssueShowDto(Issue issue, List<Label> labels, List<User> assignees) {
+    public IssueShowDto(Issue issue, List<Label> labels, List<User> assignees, Milestone milestone) {
         this.id = issue.getId();
         this.title = issue.getTitle();
         this.content = issue.getContent();
-        this.milestoneId = issue.getMilestoneId();
+        this.milestone = new MilestoneShowDto(milestone);
         this.assignees = assignees.stream()
                 .map(user -> new AssigneeShowDto(user))
                 .collect(Collectors.toList());
