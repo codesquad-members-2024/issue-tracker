@@ -2,7 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { DropdownIcon } from "../../../../icons/DropdownIcon";
 import { SearchIcon } from "../../../../icons/SearchIcon";
-import { Popup } from "../Dropdown/Popup";
+import { Popup } from "../../../common/Dropdown/Popup";
+
 
 const issuePopupItems = [
   { id: "open", label: "열린 이슈" },

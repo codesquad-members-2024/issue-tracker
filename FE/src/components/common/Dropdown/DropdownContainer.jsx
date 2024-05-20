@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { DropdownIcon } from "../../../../icons/DropdownIcon";
+import { DropdownIcon } from "../../../icons/DropdownIcon";
 import { Popup } from "./Popup";
 
 export const DropdownContainer = ({ id, label, items }) => {
