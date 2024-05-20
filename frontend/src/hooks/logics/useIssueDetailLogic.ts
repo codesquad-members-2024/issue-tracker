@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "react-query";
-import { closeIssue, openIssue, sendIssueRequestById } from "../../api/IssueAPI";
+import { closeIssue, openIssue, sendIssueRequestById, sendTitleEditRequest } from "../../api/IssueAPI";
 import { useParams } from "react-router-dom";
 
 interface Comment {
@@ -44,6 +44,13 @@ const useIssueDetailLogic = () => {
     onSuccess: () => fetchIssueContent(),
   });
 
+  const { mutate: fetchTitleEdit } = useMutation(sendTitleEditRequest, {
+    onSuccess: () => {
+      fetchIssueContent();
+      setIsTitleEditable(false);
+    },
+  });
+
   const handleStateToggleClick = () => {
     if (issueContent?.closed) {
       fetchOpenIssue(numericIssueId);
@@ -64,11 +71,16 @@ const useIssueDetailLogic = () => {
     const currentIsSubmitable = !!titleInput;
 
     if (currentIsSubmitable === !isTitleSubmitable) setIsTitleSubmitable(currentIsSubmitable);
-  }
+  };
+  const handleTitleEditSubmit = () => {
+    const titleInput = titleInputRef.current?.value;
+
+    if (titleInput) fetchTitleEdit({ issueId: numericIssueId, title: titleInput });
+  };
 
   useEffect(() => fetchIssueContent(), []);
 
-  useEffect(() => setIsTitleSubmitable(false), [isTitleEditable])
+  useEffect(() => setIsTitleSubmitable(false), [isTitleEditable]);
 
   return {
     issueId,
@@ -84,6 +96,7 @@ const useIssueDetailLogic = () => {
     handleCommentChange,
     handleTitleChange,
     handleStateToggleClick,
+    handleTitleEditSubmit,
   };
 };
 

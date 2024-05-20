@@ -33,7 +33,8 @@ const renderButtonWrapperContent = (
   isTitleEditable: boolean,
   isSubmitable: boolean,
   setIsTitleEditable: (value: SetStateAction<boolean>) => void,
-  handleStateToggleClick: () => void
+  handleStateToggleClick: () => void,
+  handleTitleEditSubmit: () => void
 ) =>
   isTitleEditable ? (
     <>
@@ -41,7 +42,7 @@ const renderButtonWrapperContent = (
         <CancelImage src={plusIconInDark} />
         편집 취소
       </IssueToggleButton>
-      <SubmitButton isSubmitable={isSubmitable}>
+      <SubmitButton isSubmitable={isSubmitable} onClick={() => handleTitleEditSubmit()}>
         <img src={submitIconInDark} />
         편집 완료
       </SubmitButton>
@@ -69,6 +70,7 @@ function IssueDetail() {
     handleCommentChange,
     handleTitleChange,
     handleStateToggleClick,
+    handleTitleEditSubmit,
   } = useIssueDetailLogic();
   const { title, author, publishedAt, comments, closed } = issueContent || {};
 
@@ -89,7 +91,14 @@ function IssueDetail() {
         )}
         <ButtonWrapper>
           {closed !== undefined &&
-            renderButtonWrapperContent(closed, isTitleEditable, isTitleSubmitable, setIsTitleEditable, handleStateToggleClick)}
+            renderButtonWrapperContent(
+              closed,
+              isTitleEditable,
+              isTitleSubmitable,
+              setIsTitleEditable,
+              handleStateToggleClick,
+              handleTitleEditSubmit
+            )}
         </ButtonWrapper>
       </TopWrapper>
       <IssueInfo>
