@@ -21,7 +21,7 @@ export function LabelRegister({
 	const [preview, setPreview] = useState({
 		name: '',
 		description: '',
-		textColor: '#6E7191',
+		textColor: '',
 		backgroundColor: '',
 	});
 	useEffect(() => {
@@ -46,7 +46,14 @@ export function LabelRegister({
 				break;
 		}
 	};
-
+	const isFormFilled = () => {
+		for (let key in preview) {
+			if (key !== 'description' && preview[key] === '') {
+				return false;
+			}
+		}
+		return true;
+	};
 	return (
 		<StyledRegister>
 			<h3>{isEdit ? '레이블 편집' : '새로운 레이블 추가'}</h3>
@@ -130,7 +137,6 @@ export function LabelRegister({
 							size='small'
 							buttonText='취소'
 							onClick={() => {
-								// console.log('isEdit', isEdit);
 								setIsEdit(prev => !prev);
 							}}
 							icon={<IconXsquare />}
@@ -156,6 +162,7 @@ export function LabelRegister({
 							type='button'
 							size='small'
 							buttonText='완료'
+							disabled={!isFormFilled()}
 							icon={<IconPlus />}
 						/>
 					</>
