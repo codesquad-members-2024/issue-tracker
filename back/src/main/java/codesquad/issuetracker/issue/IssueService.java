@@ -2,6 +2,8 @@ package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelRepository;
+import codesquad.issuetracker.milestone.Milestone;
+import codesquad.issuetracker.milestone.MilestoneRepository;
 import codesquad.issuetracker.user.User;
 import codesquad.issuetracker.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final LabelRepository labelRepository;
     private final UserRepository userRepository;
+    private final MilestoneRepository milestoneRepository;
 
     public Issue createIssue(Issue issue) {
         return issueRepository.save(issue);
@@ -37,6 +40,10 @@ public class IssueService {
                 .map(IssueAssignee::getUserLoginId)
                 .toList();
         return (List<User>) userRepository.findAllById(assigneeNames);
+    }
+
+    public Milestone getMilestoneForIssue(Issue issue) {
+        return milestoneRepository.findById(issue.getMilestoneId()).get();
     }
 
     public Issue getIssue(Long issueId) {
