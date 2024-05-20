@@ -1,13 +1,14 @@
 package com.CodeSquad.IssueTracker.issues.dto;
 
 import java.util.List;
+import java.util.Optional;
 
 public record IssueRequest(
         String title,
-        String content,
+        Optional<String> content,
         String author,
         List<String> assignees,
-        List<String> labels,
+        List<Long> labels,
         String milestone,
         Long milestoneId
 ) {}
