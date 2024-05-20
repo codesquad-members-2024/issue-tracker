@@ -70,6 +70,7 @@ function IssueDetail() {
     handleCommentChange,
     handleTitleChange,
     handleStateToggleClick,
+    handleCommentSubmit,
     handleTitleEditSubmit,
   } = useIssueDetailLogic();
   const { title, author, publishedAt, comments, closed } = issueContent || {};
@@ -121,7 +122,7 @@ function IssueDetail() {
             height={"184px"}
             onChange={handleCommentChange}
           />
-          <SubmitButton isSubmitable={isCommentSubmitable}>
+          <SubmitButton isSubmitable={isCommentSubmitable} onClick={handleCommentSubmit}>
             <img src={plusIcon} /> 코멘트 작성
           </SubmitButton>
         </CommentWrapper>

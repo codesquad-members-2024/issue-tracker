@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "react-query";
-import { closeIssue, openIssue, sendIssueRequestById, sendTitleEditRequest } from "../../api/IssueAPI";
+import { closeIssue, openIssue, postNewComment, sendIssueRequestById, sendTitleEditRequest } from "../../api/IssueAPI";
 import { useParams } from "react-router-dom";
+import useUserStore from "../stores/useUserStore";
 
 interface Comment {
   commentId: number;
@@ -19,6 +20,7 @@ interface IssueContent {
 }
 
 const useIssueDetailLogic = () => {
+  const { userId } = useUserStore();
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const [isCommentSubmitable, setIsCommentSubmitable] = useState(false);
   const [isTitleSubmitable, setIsTitleSubmitable] = useState(false);
@@ -49,6 +51,11 @@ const useIssueDetailLogic = () => {
       fetchIssueContent();
       setIsTitleEditable(false);
     },
+    onError: () => fetchIssueContent(),
+  });
+
+  const { mutate: fetchNewComment } = useMutation(postNewComment, {
+    onSuccess: () => fetchIssueContent(),
   });
 
   const handleStateToggleClick = () => {
@@ -72,10 +79,18 @@ const useIssueDetailLogic = () => {
 
     if (currentIsSubmitable === !isTitleSubmitable) setIsTitleSubmitable(currentIsSubmitable);
   };
+  const handleCommentSubmit = () => {
+    const comment = commentRef.current?.value;
+
+    if (comment) fetchNewComment({ issueId: numericIssueId, author: userId, content: comment });
+  };
   const handleTitleEditSubmit = () => {
     const titleInput = titleInputRef.current?.value;
 
-    if (titleInput) fetchTitleEdit({ issueId: numericIssueId, title: titleInput });
+    if (titleInput) {
+      fetchTitleEdit({ issueId: numericIssueId, title: titleInput });
+      titleInputRef.current.value = "";
+    }
   };
 
   useEffect(() => fetchIssueContent(), []);
@@ -96,6 +111,7 @@ const useIssueDetailLogic = () => {
     handleCommentChange,
     handleTitleChange,
     handleStateToggleClick,
+    handleCommentSubmit,
     handleTitleEditSubmit,
   };
 };

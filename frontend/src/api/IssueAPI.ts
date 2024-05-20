@@ -11,6 +11,12 @@ interface IssuesRequestProps {
   page: number;
 }
 
+interface CommentRequestProps {
+  issueId: number;
+  author: string;
+  content: string;
+}
+
 interface TitleEditProps {
   issueId: number;
   title: string;
@@ -49,6 +55,28 @@ export const sendIssueRequestById = async (issueId: number) => {
   }
 };
 
+export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) => {
+  try {
+    const request = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title: title }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/title`, request);
+
+    if (response.status === 400) throw new Error(DATA_FORMAT_ERROR_MESSAGE);
+    if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
 export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
   try {
     const request = {
@@ -68,6 +96,27 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
     return response.json();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
+export const postNewComment = async ({ issueId, author, content }: CommentRequestProps) => {
+  try {
+    const request = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ author, content }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/comment`, request);
+
+    if (response.status === 400) throw new Error(DATA_FORMAT_ERROR_MESSAGE);
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
@@ -98,28 +147,6 @@ export const closeIssue = async (issueId: number) => {
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/close`, request);
 
-    if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
-    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
-
-    return response;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
-    throw new Error(message);
-  }
-};
-
-export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) => {
-  try {
-    const request = {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title: title }),
-    };
-    const response = await fetch(`${SERVER}/issue/${issueId}/title`, request);
-
-    if (response.status === 400) throw new Error(DATA_FORMAT_ERROR_MESSAGE);
     if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
