@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ["./src/**/*.{js,jsx,ts,tsx}"],
+	mode: "jit", //번들에 필요한 스타일만 빌드
 	darkMode: "selector",
 	theme: {
 		extend: {
@@ -20,7 +21,8 @@ module.exports = {
 				"accent.red": "#FF3B30",
 			},
 			boxShadow: {
-				profile: "5px 3px 20px 0px rgba(0,0,0,0.15)",
+				modal: "5px 3px 20px 0px rgba(0,0,0,0.15)",
+				dark: "0px 0px 15px 5px #14142B",
 			},
 			animation: {
 				wiggle: "wiggle 1s ease-in-out infinite",

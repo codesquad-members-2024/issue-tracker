@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu/ProfileMenu";
 import { ReactComponent as LogoBlack } from "../LogoBlack.svg";
 import { ReactComponent as LogoWhite } from "../LogoWhite.svg";
@@ -13,12 +14,12 @@ function Header({ darkMode, setDarkMode }: Props) {
 
 	const LogoComponent = useMemo(() => {
 		const Logo = darkMode ? LogoWhite : LogoBlack;
-		return <Logo className="cursor-pointer" onClick={() => window.location.reload()} />;
+		return <Logo className="cursor-pointer" />;
 	}, [darkMode]);
 
 	return (
 		<div className="my-2 flex justify-between items-center">
-			{LogoComponent}
+			<Link to="/">{LogoComponent}</Link>
 			<div className="relative flex justify-between items-center">
 				<button className="z-10" onClick={() => setIsVisible((prev) => !prev)}>
 					{/*TODO : db의 유저프로필로 변경예정 */}
