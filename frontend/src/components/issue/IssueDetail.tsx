@@ -6,11 +6,14 @@ import CreatorForm from "../creator/CreatorForm";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import editIcon from "../../img/icon/editIcon.svg";
 import archieveIcon from "../../img/icon/archieveIcon.svg";
+import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
+import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
+import openedIssueIconInDark from "../../img/icon/openedIssueIcon_dark.svg";
 import useIssueDetailLogic from "../../hooks/logics/useIssueDetailLogic";
 import dateUtils from "../../utils/DateUtils";
 
 function IssueDetail() {
-  const { issueId, issueContent, commentRef, isSubmitable, handleOnChange } = useIssueDetailLogic();
+  const { issueId, issueContent, commentRef, isSubmitable, handleOnChange, handleStateToggleClick } = useIssueDetailLogic();
   const { title, author, publishedAt, comments, closed } = issueContent || {};
 
   return (
@@ -26,14 +29,24 @@ function IssueDetail() {
             <img src={editIcon} />
             제목 편집
           </IssueToggleButton>
-          <IssueToggleButton>
-            <img src={archieveIcon} />
-            이슈 닫기
+          <IssueToggleButton onClick={handleStateToggleClick}>
+            {closed ? (
+              <>
+                <img src={openedIssueIconInDark} />
+                <span>다시 열기</span>
+              </>
+            ) : (
+              <>
+                <img src={archieveIcon} />
+                <span>이슈 닫기</span>
+              </>
+            )}
           </IssueToggleButton>
         </ButtonWrapper>
       </TopWrapper>
       <IssueInfo>
         <IssueStateText>
+          <img src={closed ? closedIssueIcon : openedIssueIcon} />
           <span>{closed ? "닫힌 이슈" : "열린 이슈"}</span>
         </IssueStateText>
         <LastChangedTime>
@@ -98,6 +111,7 @@ const IssueToggleButton = styled.button`
   background-color: transparent;
   border: 1px solid #595959;
   border-radius: 1em;
+  cursor: pointer;
 `;
 
 const IssueInfo = styled.div`
@@ -111,6 +125,7 @@ const IssueStateText = styled.div`
   height: 2em;
   padding: 0 1em;
   display: flex;
+  gap: 0.5em;
   align-items: center;
   background-color: #595959;
   color: #fff;

@@ -68,3 +68,37 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
     throw new Error(message);
   }
 }
+
+export const openIssue = async (issueId: number) => {
+  try {
+    const request = {
+      method: "PATCH",
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/open`, request);
+
+    if (response.status === 404) throw new Error("");
+    if (!response.ok) throw new Error();
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+}
+
+export const closeIssue = async (issueId: number) => {
+  try {
+    const request = {
+      method: "PATCH",
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/close`, request);
+
+    if (response.status === 404) throw new Error("");
+    if (!response.ok) throw new Error();
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+}
