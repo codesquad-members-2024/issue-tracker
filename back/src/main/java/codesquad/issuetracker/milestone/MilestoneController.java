@@ -1,10 +1,11 @@
 package codesquad.issuetracker.milestone;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,11 +16,14 @@ public class MilestoneController {
     private final MilestoneService milestoneService;
 
     @PostMapping("/milestones")
-    public ResponseEntity<Void> createMilestone(@RequestBody MilestoneSaveDto milestoneSaveDto) {
-        milestoneService.createMilestone(milestoneSaveDto.toEntity());
+    public ResponseEntity<Milestone> createMilestone(@RequestBody MilestoneSaveDto milestoneSaveDto, UriComponentsBuilder uriComponentsBuilder) {
+        Milestone createdMilestone = milestoneService.createMilestone(milestoneSaveDto.toEntity());
+        URI location = uriComponentsBuilder.path("/milestones/{id}")
+                .buildAndExpand(createdMilestone.getId())
+                .toUri();
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
+                .created(location)
+                .body(createdMilestone);
     }
 
     @GetMapping("/milestones")
@@ -35,7 +39,7 @@ public class MilestoneController {
     public ResponseEntity<Void> updateMilestoneById(@PathVariable Long milestoneId, @RequestBody MilestoneUpdateDto milestoneUpdateDto) {
         milestoneService.updateMilestoneById(milestoneUpdateDto.toEntity(milestoneId));
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .noContent()
                 .build();
     }
 
@@ -43,7 +47,7 @@ public class MilestoneController {
     public ResponseEntity<Void> deleteMilestone(@PathVariable Long milestoneId) {
         milestoneService.deleteMilestoneById(milestoneId);
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .noContent()
                 .build();
     }
 }

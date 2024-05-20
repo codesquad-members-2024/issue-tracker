@@ -11,8 +11,8 @@ public class MilestoneService {
 
     private final MilestoneRepository milestoneRepository;
 
-    public void createMilestone(Milestone milestone) {
-        milestoneRepository.save(milestone);
+    public Milestone createMilestone(Milestone milestone) {
+        return milestoneRepository.save(milestone);
     }
 
     public List<Milestone> getAllMilestones() {
