@@ -1,18 +1,22 @@
 package codesquad.issuetracker.issue;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.CommentService;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(IssueController.class)
@@ -67,6 +71,15 @@ class IssueControllerTest {
         mockMvc.perform(get("/api/issues?state=CLOSED"))
             .andExpect(jsonPath("$[0].state").value("CLOSED"))
             .andExpect(jsonPath("$[1].state").value("CLOSED"));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 이슈를 조회하면 404 NOT FOUND를 반환한다.")
+    void returnNotFoundStatus() throws Exception {
+        when(issueService.findDetailIssueById(any())).thenThrow(NoSuchElementException.class);
+
+        mockMvc.perform(get("/api/issues/0"))
+            .andExpect(status().isNotFound());
     }
 
 }

@@ -2,13 +2,14 @@ package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.CommentResponse;
-import codesquad.issuetracker.exception.ResourceNotFoundException;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
 import codesquad.issuetracker.user.UserService;
 import codesquad.issuetracker.user.dto.UserResponse;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,8 @@ public class IssueService {
     }
 
     public Issue findById(Long issueId) {
-        return issueRepository.findById(issueId).orElseThrow(ResourceNotFoundException::new);
+        Optional<Issue> optionalIssue = issueRepository.findById(issueId);
+        return optionalIssue.orElseThrow(NoSuchElementException::new);
     }
 
     public List<Issue> findByMilestoneId(Long milestoneId) {
@@ -80,7 +82,7 @@ public class IssueService {
     }
 
     public void delete(Long issueId) {
-        Issue issue = issueRepository.findById(issueId).orElseThrow(ResourceNotFoundException::new);
+        Issue issue = findById(issueId);
         issue.delete();
         issueRepository.save(issue);
     }
