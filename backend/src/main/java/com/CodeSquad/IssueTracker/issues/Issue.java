@@ -6,8 +6,8 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Builder
 @Table("issues")
 public class Issue {
     @Id
