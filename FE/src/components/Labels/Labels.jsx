@@ -1,19 +1,32 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { Header } from "../Main/IssuesList/Header";
 import { ContentNavStyles } from "@/styles/commonStyles";
 import { LabelsContent } from "./LabelsContent";
 import { NavTabs } from "../common/NavTabs";
+import { NewLabels } from "./NewLabels";
 
 export function Labels() {
+  const [showNewLabels, setShowNewLabels] = useState(false);
+
+  const handleNewLabels = () => {
+    setShowNewLabels(true);
+  };
+  
+  const closeNewLabels = () => {
+    setShowNewLabels(false);
+  };
+
   return (
     <>
       <Header />
       <Nav>
         <NavTabs />
-        <LabelsBtn>
-          <div>+ 레이블 작성</div>
+        <LabelsBtn onClick={handleNewLabels}>
+          <div>+ 레이블 추가</div>
         </LabelsBtn>
       </Nav>
+      {showNewLabels && <NewLabels closeNewLabels={closeNewLabels}/>}
       <LabelsContent />
     </>
   );
