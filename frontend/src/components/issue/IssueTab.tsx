@@ -3,9 +3,6 @@ import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
 import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
 import arrowBottom from "../../img/icon/arrowBottom.svg";
 import useIssueStore from "../../hooks/stores/useIssueStore";
-import { useEffect } from "react";
-import { useMutation } from "react-query";
-import { sendFiltersRequest } from "../../api/FilterAPI";
 import { IssueType } from '../../hooks/logics/useIssueListLogic';
 
 export interface IssueTabProps {

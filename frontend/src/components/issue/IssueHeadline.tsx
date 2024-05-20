@@ -25,8 +25,7 @@ const IssueHeadline = React.forwardRef<HTMLDivElement, IssueHeadlineProps>((prop
       <IssueDescriptions>
         <IssueTitleDescription>
           <img src={isClosed ? violetClosedIssueIcon : blueOpenedIssueIcon} />
-          <TitleText onClick={() => navigate("/issue-detail")}>{title}</TitleText>
-          {/* get /issues/{issueId} 구현 완료 시 수정 */}
+          <TitleText onClick={() => navigate(`/issue/${issueId}`)}>{title}</TitleText>
           <LabelBox>Label</LabelBox>
         </IssueTitleDescription>
         <IssueInfo>
