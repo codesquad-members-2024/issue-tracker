@@ -30,10 +30,10 @@ function Filter() {
             </LabelBar>
             <MilestoneBar>
               <SmallIcon src={milestoneIcon} />
-              <LargeTitle onClick={() => navigate("/milestone")}>마일스톤(0)</LargeTitle>
+              <LargeTitle onClick={() => navigate("/milestones")}>마일스톤(0)</LargeTitle>
             </MilestoneBar>
           </FilterBox>
-          <NewIssueButton onClick={() => navigate("/new-issue")}>
+          <NewIssueButton onClick={() => navigate("/new")}>
             <img src={plusIcon} />
             <span>이슈 작성</span>
           </NewIssueButton>

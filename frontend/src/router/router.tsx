@@ -38,11 +38,11 @@ export const router = createBrowserRouter([
     element: <Registration />,
   },
   {
-    path: "/new-issue",
+    path: "/new",
     element: <IssueCreator />,
   },
   {
-    path: "/issue-detail", // get /issues/{issueId} 구현 완료 시 수정
+    path: "/issue/:issueId",
     element: <IssueDetail />,
   },
   {
@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
     element: <LabelList />,
   },
   {
-    path: "/milestone",
+    path: "/milestones",
     element: <MilestoneList />,
   },
 ]);

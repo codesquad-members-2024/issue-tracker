@@ -3,14 +3,16 @@ import useIssueStore from "../stores/useIssueStore";
 import useIntersectionObserver from "../utils/useIntersectionObserver";
 import { useMutation } from "react-query";
 import { sendIssuesRequest } from "../../api/IssueAPI";
-import { sendFiltersRequest } from '../../api/FilterAPI';
+import { sendFiltersRequest } from "../../api/FilterAPI";
 
 export type IssueType = "open" | "close";
 
 const FIRST_PAGE = 1;
+const ISSUE_NUMBER_KEY = "issueNumberResponse";
+const MILESTONES_KEY = "milestoneFilterResponse";
 
 const useIssueListLogic = () => {
-  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts } = useIssueStore();
+  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setMilestones } = useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const [requestError, setRequestError] = useState(false);
   const [page, setPage] = useState(FIRST_PAGE);
@@ -34,7 +36,10 @@ const useIssueListLogic = () => {
   });
 
   const { mutateAsync: fetchFilters } = useMutation(sendFiltersRequest, {
-    onSuccess: (data) => setIssueCounts(data),
+    onSuccess: (data) => {
+      setIssueCounts(data[ISSUE_NUMBER_KEY]);
+      setMilestones(data[MILESTONES_KEY]);
+    },
   });
 
   const { observer } = useIntersectionObserver(fetchNextIssues);
@@ -45,7 +50,7 @@ const useIssueListLogic = () => {
     const fetchData = async () => {
       await fetchFilters();
       fetchIssues({ issueType: focusedTab, page: FIRST_PAGE });
-    }
+    };
 
     if (page !== FIRST_PAGE) setPage(FIRST_PAGE);
     fetchData();
