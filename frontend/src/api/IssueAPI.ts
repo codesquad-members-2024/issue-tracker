@@ -13,6 +13,7 @@ interface IssuesRequestProps {
 
 const PAGE_FORMAT_ERROR_MESSAGE = "페이지의 형식이 맞지 않습니다.";
 const DATA_FORMAT_ERROR_MESSAGE = "데이터 형식에 오류가 생겼습니다.";
+const ISSUE_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 이슈에 접근하였습니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
 export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps) => {
@@ -21,6 +22,20 @@ export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps)
 
     if (response.status === 400) throw new Error(PAGE_FORMAT_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE); 
+
+    return response.json();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+}
+
+export const sendIssueRequestById = async (issueId: number) => {
+  try {
+    const response = await fetch(`${SERVER}/issue/${issueId}`);
+
+    if (response.status === 404) throw new Error(ISSUE_NOT_FOUND_ERROR_MESSAGE);
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
     return response.json();
   } catch (error) {
