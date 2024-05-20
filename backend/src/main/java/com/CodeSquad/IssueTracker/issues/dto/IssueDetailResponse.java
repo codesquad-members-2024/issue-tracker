@@ -1,7 +1,6 @@
 package com.CodeSquad.IssueTracker.issues.dto;
 
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
-import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.relational.core.mapping.Column;
@@ -18,5 +17,4 @@ public class IssueDetailResponse {
     @Column("isClosed")
     private boolean isClosed;
     private List<CommentResponse> comments;
-    private List<LabelRequest> labels;
 }
