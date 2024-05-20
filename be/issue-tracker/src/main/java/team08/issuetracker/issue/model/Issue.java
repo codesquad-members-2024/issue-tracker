@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import team08.issuetracker.issue.ref.Assignee;
+import team08.issuetracker.issue.ref.IssueAttachedLabel;
 
 @ToString
 @Setter
@@ -26,6 +27,9 @@ public class Issue {
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<Assignee> assignees;
 
+    @MappedCollection(idColumn = "ISSUE_ID")
+    private Set<IssueAttachedLabel> issueAttachedLabels;
+
     public Issue(String title, String writer, String content, String uploadedFile) {
 
         // issue 생성시 서버에서 초기화 값을 부여하는 필드들
@@ -42,5 +46,9 @@ public class Issue {
     // 다대다 관계는 setter를 통해 저장
     public void setAssignees(Set<Assignee> assignees) {
         this.assignees = assignees;
+    }
+
+    public void setIssueAttachedLabels(Set<IssueAttachedLabel> issueAttachedLabels) {
+        this.issueAttachedLabels = issueAttachedLabels;
     }
 }
