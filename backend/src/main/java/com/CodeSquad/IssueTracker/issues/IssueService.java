@@ -8,6 +8,7 @@ import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
+import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
 import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
 import com.CodeSquad.IssueTracker.user.User;
@@ -112,6 +113,9 @@ public class IssueService {
     }
 
     public void openIssue(long issueId) {
+        issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.openIssue(issueId);
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() ->
@@ -120,6 +124,9 @@ public class IssueService {
     }
 
     public void closeIssue(long issueId) {
+        issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.closeIssue(issueId);
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() ->
@@ -137,5 +144,13 @@ public class IssueService {
                 || issueRequest.content() == null || issueRequest.content().isEmpty()) {
             throw new InvalidIssueDataException("제목과 내용이 모두 필요합니다.");
         }
+    }
+
+    public void openIssues(IssueIds issueIds) {
+        issueRepository.openIssues(issueIds.issueIds());
+    }
+
+    public void closeIssues(IssueIds issueIds) {
+        issueRepository.closeIssues(issueIds.issueIds());
     }
 }

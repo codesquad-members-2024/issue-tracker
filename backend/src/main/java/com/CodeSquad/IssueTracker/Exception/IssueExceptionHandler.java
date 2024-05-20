@@ -29,6 +29,6 @@ public class IssueExceptionHandler {
 
     @ExceptionHandler(IssueNotExistException.class)
     public ResponseEntity<String> handleIssueNotExistException(IssueNotExistException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
