@@ -22,13 +22,14 @@ const StyledPopup = styled.div`
   border-radius: 10px;
   border: solid #dadbef;
   margin: 45px 0px 0px -1px;
+  overflow: hidden;
+  ${(props) => props.$isopen && `display: block;`}
   div {
     color: #777777;
     padding: 0.5rem;
     border-radius: 10px 0 0 10px;
     background-color: #f7f7fc;
   }
-  ${(props) => props.$isopen && `display: block;`}
 `;
 
 const Ul = styled.ul`
@@ -47,5 +48,3 @@ const Li = styled.li`
 const Checkbox = styled.input`
   margin-right: 0.5rem;
 `;
-
-export default Popup;

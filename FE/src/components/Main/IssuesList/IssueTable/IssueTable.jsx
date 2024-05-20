@@ -15,6 +15,7 @@ export function IssueTable() {
       const updatedItems = new Set(prevItems);
       updatedItems.has(issueId) ? updatedItems.delete(issueId) : updatedItems.add(issueId);
       setCheckedCount(updatedItems.size);
+      setIsChecked(updatedItems.size > 0); // check 되면 이슈선택 Header로 변경 
       return updatedItems;
     });
   };

@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Open } from "../../../../icons/open";
 import { issues } from "../../../../test.json"; // test data
+import { calculateTime } from "../../../../Utils/calculateTime";
 
 export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
   return (
@@ -19,19 +21,26 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
                 onChange={() => onIssueCheckboxChange(issue.issue_id)}
               />
               <Content>
-                <div className="top">
-                  <Open />
-                  <div className="title">{issue.title}</div>
-                  <div>{issue.labels}</div>
-                </div>
-                <div className="bottom">
+                <Top>
+                  <StyledOpen />
+                  <StyledLink to={`/issues/${issue.issue_id}`}>
+                    <div className="title">{issue.title}</div>
+                  </StyledLink>
+                  <div>
+                    {issue.labels.map((label) => (
+                      <Label key={label.id} color={label.color}>
+                        {label.name}
+                      </Label>
+                    ))}
+                  </div>
+                </Top>
+                <Bottom>
                   <div>#{issue.issue_id}</div>
                   <div>
-                    이 이슈가 {issue.create_time} 전, {issue.assignee}님에 의해
-                    작성되었습니다
+                    이 이슈가 {calculateTime(issue.create_time)}, {issue.writer}님에 의해 작성되었습니다
                   </div>
                   <div>{issue.milestone}</div>
-                </div>
+                </Bottom>
               </Content>
             </Issues>
           ))
@@ -59,15 +68,40 @@ const Content = styled.div`
     margin-left: 10px;
     font-size: 20px;
   }
-  .top,
-  .bottom {
-    display: flex;
-    align-items: center;
-    height: 30px;
+`;
+
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  height: 30px;
+`;
+
+const Label = styled.span`
+  background-color: ${({ color }) => color};
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: white;
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  height: 30px;
+  color: #6e7191;
 `;
 
 const Checkbox = styled.input`
   height: 50%;
   padding: 20px;
   margin-left: 25px;
+`;
+
+const StyledLink = styled(Link)`
+  color: black;
+  text-decoration: none;
+`;
+
+const StyledOpen = styled(Open)`
+  stroke: #007aff;
 `;
