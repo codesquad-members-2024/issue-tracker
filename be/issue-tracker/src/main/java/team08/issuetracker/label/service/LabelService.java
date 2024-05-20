@@ -5,16 +5,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team08.issuetracker.exception.label.LabelNotFoundException;
 import team08.issuetracker.label.model.Label;
-import team08.issuetracker.label.model.dto.LabelCountDto;
-import team08.issuetracker.label.model.dto.LabelCreationDto;
-import team08.issuetracker.label.model.dto.LabelUpdateDto;
+import team08.issuetracker.label.model.dto.*;
 import team08.issuetracker.label.repository.LabelRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class LabelService {
     private final LabelRepository labelRepository;
+
+    public LabelResponse getLabelsWithCount() {
+        LabelCountDto labelCount = getLabelCountDto();
+
+        List<LabelDto> labels = labelRepository.getAllLabels().stream()
+                .map(LabelDto::new)
+                .collect(Collectors.toList());
+
+        return new LabelResponse(labelCount, labels);
+    }
+
 
     public Label createLabel(LabelCreationDto labelCreationDto) {
         // 1) DTO -> Entity 변환
@@ -24,20 +36,6 @@ public class LabelService {
         return labelRepository.save(label);
     }
 
-    private Label convertToEntity(LabelCreationDto labelCreationDto) {
-        return new Label(
-                labelCreationDto.name(),
-                labelCreationDto.description(),
-                labelCreationDto.backgroundColor(),
-                labelCreationDto.textColor()
-        );
-    }
-
-    public LabelCountDto getLabelCount() {
-        long totalCount = labelRepository.count();
-
-        return new LabelCountDto(totalCount);
-    }
 
     public Label updateLabel(Long id, LabelUpdateDto labelUpdateDto) {
         // 1) 주어진 id에 해당하는 라벨 찾기. 없으면 예외 발생
@@ -50,9 +48,25 @@ public class LabelService {
         return labelRepository.save(label);
     }
 
+
     public void deleteLabel(Long id) {
         Label label = labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
 
         labelRepository.delete(label);
+    }
+
+
+    private Label convertToEntity(LabelCreationDto labelCreationDto) {
+        return new Label(
+                labelCreationDto.name(),
+                labelCreationDto.description(),
+                labelCreationDto.backgroundColor(),
+                labelCreationDto.textColor()
+        );
+    }
+
+
+    private LabelCountDto getLabelCountDto() {
+        return new LabelCountDto(labelRepository.countLabels());
     }
 }
