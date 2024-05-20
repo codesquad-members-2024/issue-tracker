@@ -34,7 +34,8 @@ public class IssueController {
                         .map(issue -> new IssueShowDto(
                                 issue,
                                 issueService.getLabelsForIssue(issue),
-                                issueService.getAssigneesForIssue(issue)))
+                                issueService.getAssigneesForIssue(issue),
+                                issueService.getMilestoneForIssue(issue)))
                         .collect(Collectors.toList()));
     }
 
@@ -44,7 +45,8 @@ public class IssueController {
         return ResponseEntity
                 .ok(new IssueShowDto(issue,
                         issueService.getLabelsForIssue(issue),
-                        issueService.getAssigneesForIssue(issue)));
+                        issueService.getAssigneesForIssue(issue),
+                        issueService.getMilestoneForIssue(issue)));
     }
 
     @PutMapping("/issues/{issueId}/title")
