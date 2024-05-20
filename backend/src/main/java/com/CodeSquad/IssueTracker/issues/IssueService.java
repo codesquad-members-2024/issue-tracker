@@ -4,12 +4,21 @@ import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
+import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
-import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
+import com.CodeSquad.IssueTracker.issues.dto.IssueMilestoneRequest;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
+import com.CodeSquad.IssueTracker.issues.dto.IssueTitleRequest;
+import com.CodeSquad.IssueTracker.milestone.Milestone;
+import com.CodeSquad.IssueTracker.milestone.MilestoneService;
+import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
+import com.CodeSquad.IssueTracker.issues.issueLabel.*;
+import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
+import com.CodeSquad.IssueTracker.labels.Label;
+import com.CodeSquad.IssueTracker.labels.LabelRepository;
 import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
 import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
@@ -18,7 +27,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,15 +37,23 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final MilestoneService milestoneService;
     private final MilestoneRepository milestoneRepository;
-
+    private final LabelRepository labelRepository;
+    private final IssueLabelRepository issueLabelRepository;
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
-                        UserRepository userRepository, MilestoneRepository milestoneRepository) {
+                        UserRepository userRepository, MilestoneRepository milestoneRepository,
+                        LabelRepository labelRepository, IssueLabelRepository issueLabelRepository,
+                       MilestoneService milestoneService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.milestoneRepository = milestoneRepository;
+        this.labelRepository = labelRepository;
+        this.issueLabelRepository = issueLabelRepository;
+        this.milestoneService = milestoneService;
     }
+
 
     public List<Issue> getAllIssues() {
         List<Issue> issues = (List<Issue>) issueRepository.findAll();
@@ -57,7 +76,7 @@ public class IssueService {
                 .build();
 
         issueRepository.save(issue);
-        milestoneRepository.incrementIssueCountForMilestone(issue.getMilestoneId());
+        milestoneService.incrementTotalIssue(issue.getMilestoneId());
 
         // 이슈 작성 시 입력한 내용을 첫번째 코멘트로 저장하기 위함.
         Comment comment = Comment.builder()
@@ -94,11 +113,23 @@ public class IssueService {
     }
 
     public IssueDetailResponse getIssueById(long issueId) {
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
+        Issue issue = findIssueById(issueId);
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
+        List<LabelRequest> issueLabels = issueLabelRepository.findByIssueId(issueId);
+        List<LabelRequest> labelResponses = issueLabels.stream()
+                .map(issueLabel -> {
+                    Optional<Label> label = labelRepository.findById(issueLabel.getLabelId());
+                    return label.map(l -> LabelRequest.builder()
+                                    .labelId(l.getLabelId())
+                                    .labelName(l.getLabelName())
+                                    .textColor(l.getTextColor())
+                                    .bgColor(l.getBgColor())
+                                    .build())
+                            .orElse(null);
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
         return IssueDetailResponse.builder()
                 .issueId(issue.getIssueId())
@@ -107,9 +138,9 @@ public class IssueService {
                 .publishedAt(issue.getPublishedAt().toString())
                 .isClosed(issue.getIsClosed())
                 .comments(comments)
+                .labels(labelResponses)
                 .build();
     }
-
     public void validateIssueListPage(long page) {
         if (page < 1) {
             throw new InvalidIssuePageException("page는 1 이상의 정수여야 합니다.");
@@ -121,10 +152,8 @@ public class IssueService {
                 .orElseThrow(() ->
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.openIssue(issueId);
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        milestoneRepository.decrementClosedIssueCountForMilestone(issue.getMilestoneId());
+        Issue issue = findIssueById(issueId);
+        milestoneService.decrementClosedIssue(issue.getMilestoneId());
     }
 
     public void closeIssue(long issueId) {
@@ -132,10 +161,18 @@ public class IssueService {
                 .orElseThrow(() ->
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.closeIssue(issueId);
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        milestoneRepository.incrementClosedIssueCountForMilestone(issue.getMilestoneId());
+        Issue issue = findIssueById(issueId);
+        milestoneService.incrementClosedIssue(issue.getMilestoneId());
+    }
+
+    public void updateIssueTitle(Long issueId, IssueTitleRequest issueTitleRequest) {
+        findIssueById(issueId);
+        if (issueTitleRequest.title() != null) {
+            issueRepository.updateIssueTitle(issueId, issueTitleRequest.title());
+        }else {
+            throw new InvalidIssueDataException("제목이 필요합니다.");
+        }
+        issueRepository.updateIssueTitle(issueId, issueTitleRequest.title());
     }
 
     private void validateIssueRequest(IssueRequest issueRequest) {
@@ -147,6 +184,63 @@ public class IssueService {
         if (issueRequest.title() == null || issueRequest.title().isEmpty()) {
             throw new InvalidIssueDataException("제목이 필요합니다.");
         }
+    }
+
+    public Milestone updateMilestoneIdForIssue(Long issueId, IssueMilestoneRequest issueMilestoneRequest) {
+        Issue issue = findIssueById(issueId);
+        Long milestoneId = issueMilestoneRequest.milestoneId();
+        log.info("Updating milestone id for issue: {}", milestoneId);
+        if (issue.getMilestoneId() == null) {
+            // 이슈에 마일스톤 ID가 없는 경우
+            milestoneService.incrementTotalIssue(milestoneId);
+            if (issue.getIsClosed()) {
+                milestoneService.incrementClosedIssue(milestoneId);
+            }
+            issueRepository.updateMilestoneIdForIssue(issueId, milestoneId);
+            return milestoneService.getMilestoneById(milestoneId);
+        } else
+        if (milestoneId != null) {
+            // 마일스톤 ID가 존재하는 경우 업데이트
+            milestoneService.decrementTotalIssue(issue.getMilestoneId());
+            milestoneService.incrementTotalIssue(milestoneId);
+
+            if (issue.getIsClosed()) {
+                milestoneService.decrementClosedIssue(issue.getMilestoneId());
+                milestoneService.incrementClosedIssue(milestoneId);
+            }
+
+            issueRepository.updateMilestoneIdForIssue(issueId, milestoneId);
+            return milestoneService.getMilestoneById(milestoneId);
+        } else {
+            // 마일스톤 ID가 null인 경우 해당 이슈의 마일스톤을 삭제
+            milestoneService.decrementTotalIssue(issue.getMilestoneId());
+
+            if (issue.getIsClosed()) {
+                milestoneService.decrementClosedIssue(issue.getMilestoneId());
+            }
+
+            issueRepository.removeMilestoneFromIssue(issueId);
+            return null;
+        }
+    }
+    public void addLabelToIssue(Long issueId, Long labelId) {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new IssueNotExistException("해당 이슈가 존재하지 않습니다. issueId=" + issueId));
+
+        Label label = labelRepository.findById(labelId)
+                .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다. labelId=" + labelId));
+
+        issueLabelRepository.addLabelToIssue(issueId, labelId);
+    }
+
+    public void removeLabelFromIssue(Long issueId, Long labelId) {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new IssueNotExistException("해당 이슈가 존재하지 않습니다. issueId=" + issueId));
+
+        Label label = labelRepository.findById(labelId)
+                .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다. labelId=" + labelId));
+
+        issueLabelRepository.removeLabelFromIssue(issueId, labelId);
     }
 
     public void openIssues(IssueIds issueIds) {
