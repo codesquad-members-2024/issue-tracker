@@ -20,7 +20,6 @@ export function NewLabels({ closeNewLabels }) {
               <input
                 type="text"
                 id="name"
-                name="name"
                 value={labelName}
                 placeholder="레이블의 이름을 입력하세요"
                 onChange={(e) => setLabelName(e.target.value)}
@@ -31,7 +30,6 @@ export function NewLabels({ closeNewLabels }) {
               <input
                 type="text"
                 id="description"
-                name="description"
                 placeholder="레이블에 대한 설명을 입력하세요"
               />
             </LabelWrapper>
@@ -40,7 +38,6 @@ export function NewLabels({ closeNewLabels }) {
               <input
                 type="text"
                 id="backgroundcolor"
-                name="backgroundcolor"
                 value={labelColor}
                 onChange={(e) => setLabelColor(e.target.value)}
               />
