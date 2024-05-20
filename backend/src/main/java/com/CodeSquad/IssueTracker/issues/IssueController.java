@@ -46,4 +46,16 @@ public class IssueController {
         Issue issue = issueService.findIssueById(issueId);
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
+    @PostMapping("/issue/{issueId}/labels/{labelId}")
+    public ResponseEntity<Void> addLabelToIssue(@PathVariable Long issueId, @PathVariable Long labelId) {
+        issueService.addLabelToIssue(issueId, labelId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/issue/{issueId}/labels/{labelId}")
+    public ResponseEntity<Void> removeLabelFromIssue(@PathVariable Long issueId, @PathVariable Long labelId) {
+        issueService.removeLabelFromIssue(issueId, labelId);
+        return ResponseEntity.ok().build();
+    }
+
 }
