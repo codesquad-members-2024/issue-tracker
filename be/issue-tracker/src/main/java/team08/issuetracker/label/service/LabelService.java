@@ -17,23 +17,28 @@ import java.util.stream.Collectors;
 public class LabelService {
     private final LabelRepository labelRepository;
 
-    public LabelResponse getLabelsWithCount() {
+    public LabelOverviewDto getLabelsWithCount() {
         LabelCountDto labelCount = getLabelCountDto();
 
         List<LabelDto> labels = labelRepository.getAllLabels().stream()
                 .map(LabelDto::new)
                 .collect(Collectors.toList());
 
-        return new LabelResponse(labelCount, labels);
+        return new LabelOverviewDto(labelCount, labels);
     }
 
 
     public Label createLabel(LabelCreationDto labelCreationDto) {
         // 1) DTO -> Entity 변환
-        Label label = convertToEntity(labelCreationDto);
+        Label label = labelCreationDto.toEntity();
 
         // 2) 저장 및 반환
         return labelRepository.save(label);
+    }
+
+
+    public Label getLabel(Long id) {
+        return labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
     }
 
 
@@ -53,16 +58,6 @@ public class LabelService {
         Label label = labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
 
         labelRepository.delete(label);
-    }
-
-
-    private Label convertToEntity(LabelCreationDto labelCreationDto) {
-        return new Label(
-                labelCreationDto.name(),
-                labelCreationDto.description(),
-                labelCreationDto.backgroundColor(),
-                labelCreationDto.textColor()
-        );
     }
 
 
