@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Builder
 public class IssueDetailResponse {
+    private Long issueId;
     private String title;
     private String author;
     private String publishedAt;

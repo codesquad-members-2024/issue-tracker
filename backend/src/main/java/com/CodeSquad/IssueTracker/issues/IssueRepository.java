@@ -24,6 +24,14 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
     @Query("UPDATE issues SET is_closed = true WHERE issue_id = :issueId")
     void closeIssue(long issueId);
 
+    @Modifying
+    @Query("UPDATE issues SET is_closed = false WHERE issue_id IN (:issueIds)")
+    void openIssues(List<Long> issueIds);
+
+    @Modifying
+    @Query("UPDATE issues SET is_closed = true WHERE issue_id IN (:issueIds)")
+    void closeIssues(List<Long> issueIds);
+
     @Query("SELECT COUNT(issue_id) FROM issues WHERE is_closed = false")
     long countOpenIssues();
 

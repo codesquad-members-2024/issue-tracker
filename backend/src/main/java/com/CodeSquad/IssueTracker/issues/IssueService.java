@@ -9,6 +9,7 @@ import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
+import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
 import com.CodeSquad.IssueTracker.issues.issueLabel.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
@@ -59,24 +60,27 @@ public class IssueService {
         log.info("Creating issue: {}", issueRequest);
 
         // 이슈 저장을 위한 객체 생성
-        Issue issue = new Issue();
-        issue.setTitle(issueRequest.title());
-        issue.setAuthor(issueRequest.author());
-        issue.setPublishedAt(LocalDateTime.now());
-        issue.setIsClosed(false);
-        issue.setMilestoneId(issueRequest.milestoneId());
+        Issue issue = Issue.builder()
+                .title(issueRequest.title())
+                .author(issueRequest.author())
+                .publishedAt(LocalDateTime.now())
+                .isClosed(false)
+                .milestoneId(issueRequest.milestoneId())
+                .build();
 
         issueRepository.save(issue);
         milestoneRepository.incrementIssueCountForMilestone(issue.getMilestoneId());
 
         // 이슈 작성 시 입력한 내용을 첫번째 코멘트로 저장하기 위함.
-        Comment comment = new Comment();
-        comment.setAuthor(issueRequest.author());
-        comment.setContent(issueRequest.content());
-        comment.setPublishedAt(LocalDateTime.now());
-
-        // save 메소드가 호출된 후, @ID 식별자로 지정된 필드에 자동생성된 ID가 설정되어 이용할 수 있다.
-        comment.setIssueId(issue.getIssueId());
+        Comment comment = Comment.builder()
+                .author(issueRequest.author())
+                .content(issueRequest.content().
+                        filter(content -> !content.isEmpty()).
+                        orElse("이슈 작성자의 설명이 제공되지 않았습니다."))
+                .publishedAt(LocalDateTime.now())
+                // save 메소드가 호출된 후, @ID 식별자로 지정된 필드에 자동생성된 ID가 설정되어 이용할 수 있다.
+                .issueId(issue.getIssueId())
+                .build();
 
         commentRepository.save(comment);
 
@@ -122,6 +126,7 @@ public class IssueService {
                 .collect(Collectors.toList());
 
         return IssueDetailResponse.builder()
+                .issueId(issue.getIssueId())
                 .title(issue.getTitle())
                 .author(issue.getAuthor())
                 .publishedAt(issue.getPublishedAt().toString())
@@ -137,6 +142,9 @@ public class IssueService {
     }
 
     public void openIssue(long issueId) {
+        issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.openIssue(issueId);
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() ->
@@ -145,6 +153,9 @@ public class IssueService {
     }
 
     public void closeIssue(long issueId) {
+        issueRepository.findById(issueId)
+                .orElseThrow(() ->
+                        new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.closeIssue(issueId);
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() ->
@@ -158,9 +169,8 @@ public class IssueService {
             throw new AuthorNotFoundException("작성자가 유효하지 않습니다. : " + issueRequest.author());
         }
 
-        if (issueRequest.title() == null || issueRequest.title().isEmpty()
-                || issueRequest.content() == null || issueRequest.content().isEmpty()) {
-            throw new InvalidIssueDataException("제목과 내용이 모두 필요합니다.");
+        if (issueRequest.title() == null || issueRequest.title().isEmpty()) {
+            throw new InvalidIssueDataException("제목이 필요합니다.");
         }
     }
     public void addLabelToIssue(Long issueId, Long labelId) {
@@ -181,5 +191,12 @@ public class IssueService {
                 .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다. labelId=" + labelId));
 
         issueLabelRepository.removeLabelFromIssue(issueId, labelId);
+
+    public void openIssues(IssueIds issueIds) {
+        issueRepository.openIssues(issueIds.issueIds());
+    }
+
+    public void closeIssues(IssueIds issueIds) {
+        issueRepository.closeIssues(issueIds.issueIds());
     }
 }
