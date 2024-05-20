@@ -18,4 +18,10 @@ function timestamp(createTime) {
 		: `${diffSeconds}초 전`;
 }
 
-export { timestamp };
+function colorGenerator() {
+	const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+	console.log(color);
+	return color;
+}
+
+export { timestamp, colorGenerator };

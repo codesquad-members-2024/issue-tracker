@@ -15,3 +15,4 @@ export * from './IconChecks';
 export * from './IconCheckCircle';
 export * from './IconCheckOff';
 export * from './IconChevronDown';
+export * from './IconRefresh';

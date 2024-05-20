@@ -11,6 +11,8 @@ export function InputRadio({
 	src,
 	bgColor,
 	fontColor,
+	onChange,
+
 	...props
 }) {
 	const radio = useRef(null);
@@ -28,7 +30,7 @@ export function InputRadio({
 				value={value}
 				type='radio'
 				ref={radio}
-				onChange={() => {}}
+				onChange={onChange}
 			/>
 		</StyledLabel>
 	);
@@ -63,5 +65,5 @@ const StyledCircle = styled.b`
 `;
 const StyledValue = styled.strong`
 	${({ theme }) => theme.typography.medium[16]};
-	color: ${({ theme }) => theme.color.neutral.text.default};
+	color: ${({ theme }) => theme.color.neutral.text.strong};
 `;

@@ -31,6 +31,7 @@ const StyledWrapper = styled.div`
 		column-gap: 4px;
 		color: ${({ theme }) => theme.color.neutral.text.default};
 		${({ theme }) => theme.typography.medium[14]};
+		background-color: 
 		&:first-child {
 			border-right: 1px solid
 				${({ theme }) => theme.color.neutral.border.default};
