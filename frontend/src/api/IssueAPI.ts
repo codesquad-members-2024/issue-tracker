@@ -62,7 +62,7 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
     if (response.status === 400) throw new Error(DATA_FORMAT_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
-    return response;
+    return response.json();
   } catch (error) {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);

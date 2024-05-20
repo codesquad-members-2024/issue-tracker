@@ -28,8 +28,7 @@ const useIssueCreatorLogic = () => {
     const title = titleRef.current?.value;
     const content = commentRef.current?.value;
 
-    // 추후 /issue/{issueId} 로 라우팅 예정
-    if (title && content) postNewIssue({ title, content, userId }).then(() => navigate("/"));
+    if (title && content) postNewIssue({ title, content, userId }).then((data) => navigate(`/issue/${data.issueId}`));
   };
 
   useEffect(() => {

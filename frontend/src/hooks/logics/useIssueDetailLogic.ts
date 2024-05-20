@@ -20,9 +20,11 @@ interface IssueContent {
 
 const useIssueDetailLogic = () => {
   const commentRef = useRef<HTMLTextAreaElement>(null);
-  const [isSubmitable, setIsSubmitable] = useState(false);
+  const [isCommentSubmitable, setIsCommentSubmitable] = useState(false);
+  const [isTitleSubmitable, setIsTitleSubmitable] = useState(false);
   const [isTitleEditable, setIsTitleEditable] = useState(false);
   const [issueContent, setIssueContent] = useState<IssueContent | null>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
   const { issueId } = useParams();
   const numericIssueId = Number(issueId);
 
@@ -51,23 +53,36 @@ const useIssueDetailLogic = () => {
     fetchCloseIssue(numericIssueId);
   };
 
-  const handleOnChange = () => {
+  const handleCommentChange = () => {
     const comment = commentRef.current?.value;
     const currentIsSubmitable = !!comment;
 
-    if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
+    if (currentIsSubmitable === !isCommentSubmitable) setIsCommentSubmitable(currentIsSubmitable);
   };
+  const handleTitleChange = () => {
+    const titleInput = titleInputRef.current?.value;
+    const currentIsSubmitable = !!titleInput;
+
+    if (currentIsSubmitable === !isTitleSubmitable) setIsTitleSubmitable(currentIsSubmitable);
+  }
 
   useEffect(() => fetchIssueContent(), []);
+
+  useEffect(() => setIsTitleSubmitable(false), [isTitleEditable])
 
   return {
     issueId,
     issueContent,
     commentRef,
-    isSubmitable,
+    titleInputRef,
+    isTitleSubmitable,
+    isCommentSubmitable,
     isTitleEditable,
-    setIsSubmitable,
-    handleOnChange,
+    setIsTitleEditable,
+    setIsTitleSubmitable,
+    setIsCommentSubmitable,
+    handleCommentChange,
+    handleTitleChange,
     handleStateToggleClick,
   };
 };
