@@ -7,9 +7,9 @@ import codesquad.issuetracker.milestone.Milestone;
 import codesquad.issuetracker.milestone.MilestoneShowDto;
 import codesquad.issuetracker.user.AssigneeShowDto;
 import codesquad.issuetracker.user.User;
+import codesquad.issuetracker.util.TimeCalculator;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +21,7 @@ public class IssueShowDto {
     private MilestoneShowDto milestone;
     private List<AssigneeShowDto> assignees;
     private String writer;
-    private LocalDateTime createTime;
+    private String duration;
     private boolean isClosed; // 기본 값 false
     private List<LabelShowDto> labels;
     private List<CommentShowDto> comments;
@@ -35,7 +35,7 @@ public class IssueShowDto {
                 .map(user -> new AssigneeShowDto(user))
                 .collect(Collectors.toList());
         this.writer = issue.getWriter();
-        this.createTime = issue.getCreateTime();
+        this.duration = TimeCalculator.calculateTimeDifference(issue.getCreateTime());
         this.isClosed = issue.isClosed();
         this.labels = labels.stream()
                 .map(label -> new LabelShowDto(label))
