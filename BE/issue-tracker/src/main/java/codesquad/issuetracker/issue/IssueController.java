@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.comment.CommentCreateRequest;
 import codesquad.issuetracker.comment.CommentService;
@@ -33,8 +34,8 @@ public class IssueController {
     }
 
     @GetMapping
-    public List<Issue> getIssues(@RequestParam boolean isOpen) {
-        return issueService.findIssuesByIsOpen(isOpen);
+    public List<Issue> getIssues(@RequestParam State state) {
+        return issueService.findIssuesByState(state);
     }
 
     @GetMapping("/{issueId}")

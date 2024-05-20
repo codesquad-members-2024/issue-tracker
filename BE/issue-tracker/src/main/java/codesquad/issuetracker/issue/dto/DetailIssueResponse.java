@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue.dto;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.CommentResponse;
 import codesquad.issuetracker.issue.Issue;
 import codesquad.issuetracker.label.Label;
@@ -24,7 +25,7 @@ public class DetailIssueResponse {
     LocalDateTime updatedAt;
     LocalDateTime closedAt;
     Long milestoneId;
-    boolean isOpen;
+    State state;
     boolean isDeleted;
     Set<Label> labels;
     Set<UserResponse> assignees;
@@ -40,7 +41,7 @@ public class DetailIssueResponse {
             .updatedAt(issue.getUpdatedAt())
             .closedAt(issue.getClosedAt())
             .milestoneId(issue.getMilestoneId().getId())
-            .isOpen(issue.isOpen())
+            .state(issue.getState())
             .isDeleted(issue.isDeleted())
             .labels(labels)
             .assignees(assignees)

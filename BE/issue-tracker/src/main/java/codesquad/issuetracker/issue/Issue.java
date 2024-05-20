@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.milestone.Milestone;
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ public class Issue {
     private LocalDateTime updatedAt;
     private LocalDateTime closedAt;
     private AggregateReference<Milestone, Long> milestoneId;
-    private boolean isOpen;
+    private State state;
     private boolean isDeleted;
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<IssueAttachedLabel> labelRefs = new HashSet<>();
@@ -43,7 +44,7 @@ public class Issue {
     @PersistenceCreator
     public Issue(Long id, String authorId, String title, String description,
         LocalDateTime openAt,
-        LocalDateTime updatedAt, LocalDateTime closedAt, AggregateReference<Milestone, Long> milestoneId, boolean isOpen,
+        LocalDateTime updatedAt, LocalDateTime closedAt, AggregateReference<Milestone, Long> milestoneId, State state,
         boolean isDeleted, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assigneeIds,
         List<Comment> comments) {
         this.id = id;
@@ -54,7 +55,7 @@ public class Issue {
         this.updatedAt = updatedAt;
         this.closedAt = closedAt;
         this.milestoneId = milestoneId;
-        this.isOpen = isOpen;
+        this.state = state;
         this.isDeleted = isDeleted;
         this.labelRefs = labelRefs;
         this.assigneeIds = assigneeIds;
@@ -71,7 +72,7 @@ public class Issue {
             .updatedAt(LocalDateTime.now())
             .closedAt(LocalDateTime.now())
             .milestoneId(AggregateReference.to(milestoneId))
-            .isOpen(true)
+            .state(State.OPEN)
             .isDeleted(false)
             .labelRefs(labelRefs)
             .assigneeIds(assignees)

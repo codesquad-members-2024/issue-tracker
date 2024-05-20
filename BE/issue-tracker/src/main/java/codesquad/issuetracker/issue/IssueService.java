@@ -1,11 +1,11 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.CommentResponse;
 import codesquad.issuetracker.exception.ResourceNotFoundException;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
-import codesquad.issuetracker.milestone.MilestoneService;
 import codesquad.issuetracker.user.UserService;
 import codesquad.issuetracker.user.dto.UserResponse;
 import java.util.List;
@@ -29,8 +29,8 @@ public class IssueService {
         this.userService = userService;
     }
 
-    public List<Issue> findIssuesByIsOpen(boolean isOpen) {
-        return issueRepository.findAllByIsOpen(isOpen);
+    public List<Issue> findIssuesByState(State state) {
+        return issueRepository.findAllByState(state);
     }
 
     public List<Issue> findAllIssues() {
