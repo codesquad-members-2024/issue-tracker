@@ -1,8 +1,9 @@
-import { SearchOutlined, TagOutlined, PlusOutlined, FlagOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import FilterUI from "../../util/FilterUI";
+import FilterUI from "../../common/FilterUI";
 import { FilterContext } from "../../Providers/FilterProvider";
-import React, { ChangeEvent, useContext, useEffect } from "react";
+import React, { ChangeEvent, useContext } from "react";
+import LabelsAndMilestoneUI from "../../common/UtilUI";
 
 interface NavProps {
     resetFilterUI: boolean;
@@ -18,22 +19,13 @@ const ISSUES_FILTER = [
     { value: "닫힌 이슈", query: "is_open=false" },
 ];
 
-const Nav: React.FC<NavProps> = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI}) => {
+const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI}: NavProps) => {
 
     const [FilterState, FilterDispatch] = useContext(FilterContext);
     
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         FilterDispatch({type: "SEARCH", curFilter: event.target.value})
     };
-
-    useEffect(() => {
-        const getIssueList = async () => {
-            const issueList = await fetch("https://4eefaa4a-29f7-497b-bf78-85336db84286.mock.pstmn.io/api/issues?is_open=false");
-            const data = await issueList.json()
-            console.log(data)
-        };
-        getIssueList();
-    }, []);
 
     return (
         <div>
@@ -42,10 +34,10 @@ const Nav: React.FC<NavProps> = ({ resetFilterUI, setResetFilterUI, handleResetF
                     <div className="border-l-2 border-t-2 border-b-2 rounded-l-lg border-gray-300 h-full w-1/5 flex items-center">
                         <FilterUI  filterInfo={ISSUES_FILTER} filterType={"필터"} resetFilterUI={resetFilterUI} setResetFilterUI={setResetFilterUI}/>
                     </div>
-                    <div className="bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG flex border-2 rounded-r-lg border-gray-300 overflow-hidden h-full w-4/5 px-4 gap-2">
-                        <SearchOutlined className="" />
+                    <div className="bg-gray-200 dark:bg-darkModeBorderBG flex border-2 rounded-r-lg border-gray-300 overflow-hidden h-full w-4/5 px-4 gap-2">
+                        <SearchOutlined/>
                         <input
-                            className="bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG w-full outline-none "
+                            className="bg-gray-200 dark:bg-darkModeBorderBG w-full outline-none "
                             type="text"
                             value={FilterState.req_query}
                             onChange={handleChange}
@@ -53,23 +45,10 @@ const Nav: React.FC<NavProps> = ({ resetFilterUI, setResetFilterUI, handleResetF
                     </div>
                 </div>
                     <div className="flex gap-2">
-                        <div className="flex items-center">
-                            <Link
-                                to="/labels"
-                                className=" w-32 border-l-2 border-t-2 border-b-2 rounded-l-lg border-gray-300 px-6 py-1"
-                            >
-                                <TagOutlined /> 레이블
-                            </Link>
-                            <Link
-                                to="/milestones"
-                                className="w-32 border-2 rounded-r-lg border-gray-300 px-6 py-1"
-                            >
-                                <FlagOutlined /> 마일스톤
-                            </Link>
-                        </div>
+                        <LabelsAndMilestoneUI/>
                         <Link
                             to="/new"
-                            className="flex items-center border-none bg-blue-500 px-6 rounded-xl text-white text-xs"
+                            className="flex items-center border-none bg-blue-500 px-6 rounded-xl text-white text-xs w-[128px] justify-center"
                         >
                             <PlusOutlined /> 이슈 작성
                         </Link>

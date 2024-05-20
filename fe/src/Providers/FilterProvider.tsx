@@ -28,7 +28,7 @@ function FilterReducer(state: FilterState, { type, prevFilter, curFilter }: Acti
             if (prevFilter === "") return { ...state, req_query: state.req_query +  " " + curFilter};
             return { ...state, req_query: state.req_query.replace(prevFilter as string, curFilter).trim()};
 
-        case "REMOVE_CUR_FILTER":
+        case "REMOVE_CURRENT_FILTER":
             if(state.req_query.replace(curFilter, "") === "") return {...state, req_query: "is_open=true"}
             return {...state, req_query: state.req_query.replace(curFilter, "").trim()};
 

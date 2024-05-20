@@ -35,8 +35,8 @@ const FilterUI: React.FC<FilterProps> = ({
         if (resetFilterUI) setSelectItem(filterInfo[INITIAL_IDX]);
         setResetFilterUI(false);
         FilterDispatch({ type: "SET_INIT", prevFilter: "", curFilter: "" });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resetFilterUI]);
+        console.log(FilterState)
+    }, [resetFilterUI, filterInfo, FilterDispatch, setResetFilterUI]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -61,7 +61,7 @@ const FilterUI: React.FC<FilterProps> = ({
     const handleClick = (type: Filter) => {
         if (selectItem?.value === type.value) {
             FilterDispatch({
-                type: "REMOVE_CUR_FILTER",
+                type: "REMOVE_CURRENT_FILTER",
                 prevFilter: "",
                 curFilter: type.query,
             });
