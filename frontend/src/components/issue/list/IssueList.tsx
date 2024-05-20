@@ -2,9 +2,9 @@ import styled from "styled-components";
 import IssueTab from "./IssueTab";
 import IssueHeadline from "./IssueHeadline";
 import { MutableRefObject } from "react";
-import { Headline } from "../../hooks/stores/useIssueStore";
-import RefreshRequest from "../error/RefreshRequest";
-import useIssueListLogic, { IssueType } from "../../hooks/logics/useIssueListLogic";
+import { Headline } from "../../../hooks/stores/useIssueStore";
+import RefreshRequest from "../../error/RefreshRequest";
+import useIssueListLogic, { IssueType } from "../../../hooks/logics/useIssueListLogic";
 
 const renderHeadlines = (issues: Headline[], lastIssueRef: MutableRefObject<null>) =>
   issues.map((issue, index) =>

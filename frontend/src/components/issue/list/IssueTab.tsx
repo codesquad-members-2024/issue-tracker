@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import openedIssueIcon from "../../img/icon/openedIssueIcon_dark.svg";
-import closedIssueIcon from "../../img/icon/closedIssueIcon_dark.svg";
-import arrowBottom from "../../img/icon/arrowBottom.svg";
-import useIssueStore from "../../hooks/stores/useIssueStore";
-import { IssueType } from '../../hooks/logics/useIssueListLogic';
+import openedIssueIcon from "../../../img/icon/openedIssueIcon_dark.svg";
+import closedIssueIcon from "../../../img/icon/closedIssueIcon_dark.svg";
+import arrowBottom from "../../../img/icon/arrowBottom.svg";
+import useIssueStore from "../../../hooks/stores/useIssueStore";
+import { IssueType } from "../../../hooks/logics/useIssueListLogic";
 
 export interface IssueTabProps {
   focusedTab: string;

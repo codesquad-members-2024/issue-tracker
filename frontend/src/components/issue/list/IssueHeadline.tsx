@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import userIcon from "../../img/icon/userIcon.png";
-import blueOpenedIssueIcon from "../../img/icon/blueOpenedIssueIcon.svg";
-import violetClosedIssueIcon from "../../img/icon/violetClosedIssueIcon.svg";
-import milestoneIcon from "../../img/icon/milestoneIcon.svg";
-import dateUtils from "../../utils/DateUtils";
+import userIcon from "../../../img/icon/userIcon.png";
+import blueOpenedIssueIcon from "../../../img/icon/blueOpenedIssueIcon.svg";
+import violetClosedIssueIcon from "../../../img/icon/violetClosedIssueIcon.svg";
+import milestoneIcon from "../../../img/icon/milestoneIcon.svg";
+import dateUtils from "../../../utils/DateUtils";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 

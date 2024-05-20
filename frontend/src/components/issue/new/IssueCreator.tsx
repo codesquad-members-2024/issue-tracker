@@ -1,10 +1,10 @@
 import styled, { keyframes } from "styled-components";
-import Header from "../header/Header";
+import Header from "../../header/Header";
 import CreatorForm from "./CreatorForm";
-import userIcon from "../../img/icon/userIcon.png";
-import plusIcon from "../../img/icon/plusIcon_dark.svg";
-import Sidebar from "../issue/Sidebar";
-import useIssueCreatorLogic from "../../hooks/logics/useIssueCreatorLogic";
+import userIcon from "../../../img/icon/userIcon.png";
+import plusIcon from "../../../img/icon/plusIcon_dark.svg";
+import Sidebar from "../Sidebar";
+import useIssueCreatorLogic from "../../../hooks/logics/useIssueCreatorLogic";
 
 function IssueCreator() {
   const { titleRef, commentRef, commentCount, isSubmitable, handleOnChange, handleCancel, handleSubmit } =

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import userIcon from "../../img/icon/userIcon.png";
-import editIcon from "../../img/icon/editIcon.svg";
-import smileIcon from "../../img/icon/smileIcon.svg";
-import dateUtils from "../../utils/DateUtils";
+import userIcon from "../../../img/icon/userIcon.png";
+import editIcon from "../../../img/icon/editIcon.svg";
+import smileIcon from "../../../img/icon/smileIcon.svg";
+import dateUtils from "../../../utils/DateUtils";
 
 export interface CommentProps {
   commentId: number;

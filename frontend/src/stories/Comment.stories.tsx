@@ -1,5 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react/*';
-import Comment, { CommentProps } from '../components/issue/Comment';
+import { Meta, StoryFn } from "@storybook/react/*";
+import Comment, { CommentProps } from "../components/issue/detail/Comment";
 
 export default {
   title: "Components/Comment",
@@ -14,5 +14,5 @@ DefaultComment.args = {
   author: "schnee",
   isAuthor: true,
   content: "안녕하세요 슈니입니다\n안녕하십니까 슈니입니다\n안녕하세요\n안녕하세요",
-  publishedAt: "2024-05-17 11:23:31.0"
-}
+  publishedAt: "2024-05-17 11:23:31.0",
+};
