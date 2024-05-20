@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Open } from "../../../../icons/open";
-import { issues } from "../../../../test.json"; // test data
-import { calculateTime } from "../../../../Utils/calculateTime";
+import { OpenIcon } from "@/icons/OpenIcon";
+import { calculateTime } from "@/Utils/calculateTime";
+import { issues } from "@/test.json"; // test data
 
 export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
   return (
@@ -102,6 +102,6 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-const StyledOpen = styled(Open)`
+const StyledOpen = styled(OpenIcon)`
   stroke: #007aff;
 `;

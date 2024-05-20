@@ -1,11 +1,13 @@
-import { Content } from "./Content";
 import { Header } from "./Header";
+import { IssueListBar } from "./IssueListBar/IssueListBar";
+import { IssueTable } from "./IssueTable/IssueTable";
 
 export function Main() {
   return (
     <>
       <Header />
-      <Content />
+      <IssueListBar />
+      <IssueTable />
     </>
   );
 }

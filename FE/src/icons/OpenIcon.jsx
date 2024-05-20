@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Open = (props) => (
+export const OpenIcon = (props) => (
   <Styledsvg
     {...props}
     width="16"

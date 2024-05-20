@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { Logo } from "../../icons/logo";
-import { LoginButtonStyles } from "../../styles/commonStyles";
+import { LogoIcon } from "@/icons/LogoIcon";
+import { LoginButtonStyles } from "@/styles/commonStyles";
 
 export function Login() {
   const [id, setId] = useState("");
@@ -28,7 +28,7 @@ export function Login() {
       <LoginContainer>
         {!isAuthenticated && (
           <>
-            <Logo />
+            <LogoIcon />
             <GitHubBtn>GitHub 계정으로 로그인</GitHubBtn>
             <p>or</p>
             <Input type="text" placeholder="아이디" value={id}

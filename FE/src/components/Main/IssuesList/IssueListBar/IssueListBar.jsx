@@ -1,31 +1,19 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { ContentNavStyles } from "../../../../styles/commonStyles";
-import { Label } from "../../../../icons/label";
-import { Milestones } from "../../../../icons/milestones";
+import { ContentNavStyles } from "@/styles/commonStyles";
 import { FilterBar } from "./FilterBar";
+import { NavTabs } from "@/components/common/NavTabs";
 
 export function IssueListBar() {
   const navigate = useNavigate();
 
-  const handleLabels = () => navigate("/labels");
-  const handleMilestones = () => navigate("/Milestones");
   const handleIssues = () => navigate("/issues/create");
 
   return (
     <Bar>
       <FilterBar />
       <Nav>
-        <Tabs>
-          <NavLabel onClick={handleLabels}>
-            <Label />
-            <div>레이블</div>
-          </NavLabel>
-          <NavMilestones onClick={handleMilestones}>
-            <Milestones />
-            <div>마일스톤</div>
-          </NavMilestones>
-        </Tabs>
+        <NavTabs />
         <Issue onClick={handleIssues}>
           <div>+ 이슈 작성</div>
         </Issue>
@@ -45,23 +33,6 @@ const Nav = styled.div`
   display: flex;
   justify-content: space-between;
   width: 500px;
-`;
-
-const Tabs = styled.div`
-  display: flex;
-  border: solid#dadbef;
-  border-radius: 10px;
-  width: 320px;
-  justify-content: center;
-`;
-
-const NavLabel = styled.div`
-  ${ContentNavStyles}
-  border-right: solid #dadbef;
-`;
-
-const NavMilestones = styled.div`
-  ${ContentNavStyles}
 `;
 
 const Issue = styled.div`

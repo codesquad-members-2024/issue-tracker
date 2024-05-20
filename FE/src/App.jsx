@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./components/Login/Login";
 import { Main } from "./components/Main/IssuesList/Main";
-import { Milestones } from "./components/Main/Milestones/Milestones";
-import { Labels } from "./components/Main/Labels/Labels";
 import { NewIssue } from "./components/Main/NewIssue/NewIssue";
 import { IssueDetail } from "./components/Main/IssueDetail/IssueDetail";
+import { Milestones } from "./components/Milestones/Milestones";
+import { Labels } from "./components/Labels/Labels";
 
 function App() {
   return (

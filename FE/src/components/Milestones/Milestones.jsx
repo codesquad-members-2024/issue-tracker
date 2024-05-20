@@ -1,6 +1,5 @@
-import { Header } from "../IssuesList/Header";
+import { Header } from "../Main/IssuesList/Header";
 
 export function Milestones() {
   return <Header />;
 }
-

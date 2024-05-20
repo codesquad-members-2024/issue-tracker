@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Edit } from "../../../icons/edit";
-import { Smile } from "../../../icons/smile";
+import { EditIcon } from "@/icons/EditIcon";
+import { SmileIcon } from "@/icons/SmileIcon";
 
 export function Comment({ selectedIssue, elapsedTime }) {
   return (
@@ -14,11 +14,11 @@ export function Comment({ selectedIssue, elapsedTime }) {
         <Buttons>
           <div className="writer">작성자</div>
           <StyledCommentButton>
-            <Edit />
+            <EditIcon />
             <div>편집</div>
           </StyledCommentButton>
           <StyledCommentButton>
-            <Smile />
+            <SmileIcon />
             <div>반응</div>
           </StyledCommentButton>
         </Buttons>
