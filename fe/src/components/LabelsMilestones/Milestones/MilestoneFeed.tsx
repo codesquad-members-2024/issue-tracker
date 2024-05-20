@@ -10,23 +10,23 @@ export interface Milestone {
     dueDate: string;
     openAt: string;
     updatedAt: string;
-    open: boolean;
+    state: string;
     deleted: boolean;
 }
 
 
 interface MilestoneFeedProps {
-    milestoneInfo: Milestone[];
+    milestoneData: Milestone[];
 }
 
-export const MilestoneFeed = ({ milestoneInfo }: MilestoneFeedProps) => {
-    const [isOpen, setOpen] = useState(true);
-    const isOpenInfo = milestoneInfo.filter(
-        (curInfo) => curInfo.open === isOpen
+export const MilestoneFeed = ({ milestoneData }: MilestoneFeedProps) => {
+    const [isOpen, setOpen] = useState("OPEN");
+    const isOpenInfo = milestoneData.filter(
+        (curInfo) => curInfo.state === isOpen
     );
     const MilestoneLength = {
-        open: milestoneInfo.filter((curIssue) => curIssue.open).length,
-        closed: milestoneInfo.filter((curIssue) => !curIssue.open).length,
+        open: milestoneData.filter((curIssue) => curIssue.state === "OPEN").length,
+        closed: milestoneData.filter((curIssue) => curIssue.state === "CLOSED").length,
     };
 
     return (
@@ -35,14 +35,14 @@ export const MilestoneFeed = ({ milestoneInfo }: MilestoneFeedProps) => {
                 <div className="flex items-center gap-4 text-sm ml-4">
                     <button
                         className={`${isOpen ? "font-bold" : ""}`}
-                        onClick={() => setOpen(true)}
+                        onClick={() => setOpen("OPEN")}
                     >
                         <InfoCircleOutlined /> 열린 마일스톤(
                         {MilestoneLength.open})
                     </button>
                     <button
                         className={`${!isOpen ? "font-bold" : ""}`}
-                        onClick={() => setOpen(false)}
+                        onClick={() => setOpen("CLOSED")}
                     >
                         <CreditCardOutlined /> 닫힌 마일스톤(
                         {MilestoneLength.closed})

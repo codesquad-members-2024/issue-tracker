@@ -31,8 +31,8 @@ const taskTable: TaskTable = {
 };
 
 interface FeedNavProps {
-    isOpen: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isOpen: string;
+    setOpen: React.Dispatch<React.SetStateAction<string>>;
     issueInfo: Issue[];
     resetFilterUI: boolean;
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,8 +52,8 @@ const FeedNav = ({
     checkedItem,
 }: FeedNavProps) => {
     const issuesLength = {
-        open: issueInfo.filter((curIssue) => curIssue.is_open).length,
-        closed: issueInfo.filter((curIssue) => !curIssue.is_open).length,
+        open: issueInfo.filter((curIssue) => curIssue.state === "OPEN").length,
+        closed: issueInfo.filter((curIssue) => curIssue.state === "CLOSED").length,
     };
 
     return (
@@ -71,14 +71,14 @@ const FeedNav = ({
                     <div>
                         <button
                             className={`mr-6 ${isOpen ? "font-bold" : ""}`}
-                            onClick={() => setOpen(true)}
+                            onClick={() => setOpen("OPEN")}
                         >
                             <InfoCircleOutlined /> 열린 이슈({issuesLength.open}
                             )
                         </button>
                         <button
                             className={isOpen ? "" : "font-bold"}
-                            onClick={() => setOpen(false)}
+                            onClick={() => setOpen("CLOSED")}
                         >
                             <CreditCardOutlined /> 닫힌 이슈(
                             {issuesLength.closed})

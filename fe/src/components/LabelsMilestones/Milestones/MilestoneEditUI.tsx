@@ -1,27 +1,43 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Milestone } from "./MilestoneFeed";
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { APiUtil } from "../../../common/APIUtils";
 
 interface MilestoneEditUIProps {
     curMilestone?: Milestone;
 }
-
-interface FormState {
+export interface FormState {
     title: string;
     dueDate: string;
     description: string;
 }
 
 const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
+    const queryClient = useQueryClient();
     const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
+
+    const { mutate } = useMutation({
+        mutationFn: async(formData: FormState) => {
+            await APiUtil.createData("milestones", formData);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries("milestones");
+            console.log("성공!")
+        },
+        onError: () => {
+            console.log("실패")
+        }
+    });
+    
 
     const [formData, setFormData]: [
         FormState,
         React.Dispatch<React.SetStateAction<FormState>>
     ] = useState({
         title: "",
-        dueDate: "",
         description: "",
+        dueDate: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,8 +68,8 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
-    }
+        mutate(formData);
+    };
 
     return (
         <div
