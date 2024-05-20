@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 
-export function Label({ label }) {
+export function Label({ name, textColor, backgroundColor }) {
 	return (
-		<StyledWrapper $bg={label.color} className='label'>
-			{label.name}
+		<StyledWrapper
+			$bg={backgroundColor}
+			$textColor={textColor}
+			className='label'
+		>
+			{name}
 		</StyledWrapper>
 	);
 }
@@ -12,7 +16,8 @@ const StyledWrapper = styled.div`
 	padding: 4px 12px;
 	border-radius: ${({ theme }) => theme.radius.large};
 	background: ${({ $bg }) => $bg};
-	color: ${({ theme }) => theme.color.brand.text.default};
+	color: ${({ $textColor }) => $textColor};
+
 	${({ theme }) => theme.typography.medium[12]};
 	& + .label {
 		margin-left: 8px;

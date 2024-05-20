@@ -10,6 +10,7 @@ import {
 	Button,
 	Dropdowns,
 	InputRadio,
+	Tabs,
 } from '~/common/components';
 import {
 	IconPlus,
@@ -34,16 +35,8 @@ export function IssueListViewContainer() {
 			<StyledSearch>
 				<div className='tab'></div>
 				<div className='tab'>
-					<span className='outlined-flex'>
-						<Link to='/'>
-							<IconLabel />
-							레이블 (0)
-						</Link>
-						<Link to='/'>
-							<IconLandmark />
-							마일스톤 (2)
-						</Link>
-					</span>
+					<Tabs labelCount={2} milestoneCount={3} />
+
 					<Link to='/issues/new' className='create'>
 						<IconPlus />
 						이슈작성
@@ -113,25 +106,7 @@ const StyledSearch = styled.div`
 	.tab {
 		display: flex;
 		column-gap: 16px;
-		.outlined-flex {
-			display: flex;
-			border: 1px solid ${({ theme }) => theme.color.neutral.border.default};
-			border-radius: ${({ theme }) => theme.radius.medium};
-			a {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 159.5px;
-				height: 40px;
-				column-gap: 4px;
-				color: ${({ theme }) => theme.color.neutral.text.default};
-				${({ theme }) => theme.typography.medium[14]};
-				&:first-child {
-					border-right: 1px solid
-						${({ theme }) => theme.color.neutral.border.default};
-				}
-			}
-		}
+
 		.create {
 			display: flex;
 			width: 128px;
