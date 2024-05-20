@@ -1,4 +1,4 @@
-export const Milestones = () => (
+export const MilestonesIcon = () => (
   <svg
     width="15"
     height="16"

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { ContentNavStyles } from "../../../../styles/commonStyles";
-import { Label } from "../../../../icons/label";
-import { Milestones } from "../../../../icons/milestones";
+import { LabelIcon } from "../../../../icons/LabelIcon";
+import { MilestonesIcon } from "../../../../icons/MilestonesIcon";
 import { FilterBar } from "./FilterBar";
 
 export function IssueListBar() {
@@ -18,11 +18,11 @@ export function IssueListBar() {
       <Nav>
         <Tabs>
           <NavLabel onClick={handleLabels}>
-            <Label />
+            <LabelIcon />
             <div>레이블</div>
           </NavLabel>
           <NavMilestones onClick={handleMilestones}>
-            <Milestones />
+            <MilestonesIcon />
             <div>마일스톤</div>
           </NavMilestones>
         </Tabs>

@@ -1,6 +1,6 @@
-import { Dropdown } from "../../../../icons/dropdown";
 import { useState } from "react";
 import styled from "styled-components";
+import { DropdownIcon } from "../../../../icons/DropdownIcon";
 import { Popup } from "./Popup";
 
 export const DropdownContainer = ({ id, label, items }) => {
@@ -18,7 +18,7 @@ export const DropdownContainer = ({ id, label, items }) => {
       />
       <Filter htmlFor={id}>
         <div>{label}</div>
-        <Dropdown />
+        <DropdownIcon/>
       </Filter>
       <StyledPopup
         id={label}

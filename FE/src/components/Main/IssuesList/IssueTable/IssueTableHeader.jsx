@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Closed } from "../../../../icons/closed";
-import { Open } from "../../../../icons/open";
+import { ClosedIcon } from "../../../../icons/ClosedIcon";
+import { OpenIcon } from "../../../../icons/OpenIcon";
 import { DropdownContainer } from "../Dropdown/DropdownContainer";
 
 const assigneePopupItems = [{ id: "no_assignee", label: "담당자가 없는 이슈" }];
@@ -48,11 +48,11 @@ export function IssueTableHeader({ checkedCount, isChecked, onCheckedChange }) {
         <Wrap>
           <Left>
             <StyledIssueBtn>
-              <Open />
+              <OpenIcon />
               <div className="open">열린 이슈(3)</div>
             </StyledIssueBtn>
             <StyledIssueBtn>
-              <Closed />
+              <ClosedIcon />
               <div className="closed">닫힌 이슈(0)</div>
             </StyledIssueBtn>
           </Left>

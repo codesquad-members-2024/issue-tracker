@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Dropdown } from "../../../../icons/dropdown";
-import { Search } from "../../../../icons/search";
+import { DropdownIcon } from "../../../../icons/DropdownIcon";
+import { SearchIcon } from "../../../../icons/SearchIcon";
 import { Popup } from "../Dropdown/Popup";
 
 const issuePopupItems = [
@@ -28,7 +28,7 @@ export function FilterBar() {
       <Input id="issue" type="checkbox" onChange={handleToggleCheckbox} />
       <Filter htmlFor="issue">
         <div>필터</div>
-        <Dropdown />
+        <DropdownIcon />
       </Filter>
       <Popup
         id="이슈"
@@ -37,7 +37,7 @@ export function FilterBar() {
         onChange={handleCloseContent}
       />
       <TextInput>
-        <Search />
+        <SearchIcon />
         <input type="text" defaultValue="is:issues is:open" />
       </TextInput>
     </Container>

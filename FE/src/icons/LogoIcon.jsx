@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Logo = (props) => (
+export const LogoIcon = (props) => (
   <StyledSvg {...props}
     viewBox="0 0 339 43"
     fill="none"
