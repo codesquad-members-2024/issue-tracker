@@ -14,7 +14,6 @@ public class IssueController {
     private IssueService issueService;
     private final static long DEFAULT_OFFSET = 15;
 
-
     public IssueController(IssueService issueService) {
         this.issueService = issueService;
     }
