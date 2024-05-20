@@ -52,7 +52,7 @@ public class IssueService {
                 .title(issueRequest.title())
                 .author(issueRequest.author())
                 .publishedAt(LocalDateTime.now())
-                .isClosed(true)
+                .isClosed(false)
                 .milestoneId(issueRequest.milestoneId())
                 .build();
 
