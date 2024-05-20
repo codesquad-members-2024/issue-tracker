@@ -32,7 +32,7 @@ public class IssueController {
     @PostMapping("/issue")
     public ResponseEntity<String> createIssue(@RequestBody IssueCreationDto issueCreationDto) {
 
-        issueService.createIssue(issueCreationDto);
+        issueService.createNewIssue(issueCreationDto);
 
         return ResponseEntity.ok("이슈 생성 성공");
     }

@@ -34,12 +34,13 @@ public class IssueService {
     }
 
     @Transactional
-    public void createIssue(IssueCreationDto issueCreationDto) {
+    public void createNewIssue(IssueCreationDto issueCreationDto) {
 
         // 다대다 관계를 갖는 assignee 를 제외한 값으로 issue 생성
         Issue issue = issueCreationDto.createIssue();
         Issue savedIssue = issueRepository.save(issue); // db에 저장하여 id(pk) 값이 autoIncrement 로 설정된 객체를 반환 받는다
 
+        //다대다 관계 설정
         Set<Assignee> assignees = issueCreationDto.createAssigneesWithIssueId(savedIssue.getId());
         assigneeRepository.saveAll(assignees);
 
