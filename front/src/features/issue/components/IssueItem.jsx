@@ -1,38 +1,40 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Checkbox } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { IconUser } from '../../../common/icons/IconUser';
 import { IconLandmark } from '../../../common/icons/IconLandmark';
-export function IssueItem() {
+import { CheckBox, Label } from '~/common/components';
+import { timestamp } from '~/utils/util';
+
+export function IssueItem({ issue }) {
 	return (
 		<StyledWrapper>
-			<StyledInner>
-				<StyledCheckbox />
-				<StyledFlex>
-					<ExclamationCircleOutlined />
-					<StyledIssueTitle to='/'>이슈제목</StyledIssueTitle>
+			<StyledCheckbox />
+			<StyledFlex>
+				<ExclamationCircleOutlined />
+				<StyledIssueTitle to={`/issues/${issue?.id}`}>
+					{issue?.title}
+				</StyledIssueTitle>
 
-					<strong>documentaion</strong>
-				</StyledFlex>
-				<StyledDetail>
-					<p>이슈번호</p>
-					<StyledAuthour>작성자 및 타임스탬프</StyledAuthour>
-					<StyledMilestone>
-						<IconLandmark />
-						<p>그룹프로젝트:이슈트래커</p>
-					</StyledMilestone>
-				</StyledDetail>
-
-				<StyledIconUser />
-			</StyledInner>
+				{issue?.labels?.map((label, index) => (
+					<Label label={label} key={index} />
+				))}
+			</StyledFlex>
+			<StyledDetail>
+				<p>#{issue.id}</p>
+				<StyledAuthour>
+					이 이슈가 {timestamp(issue?.createTime)}, {issue?.writer}님에 의해
+					작성되었습니다.
+				</StyledAuthour>
+				<StyledMilestone>
+					<IconLandmark />
+					<p>{issue?.milestoneId}</p>
+				</StyledMilestone>
+			</StyledDetail>
+			<StyledUserImage src={issue?.profileImage} />
 		</StyledWrapper>
 	);
 }
 const StyledWrapper = styled.div`
-	padding: 0;
-`;
-const StyledInner = styled.div`
 	display: block;
 	border-bottom: 1px solid #d9dbe9;
 	width: 100%;
@@ -41,8 +43,10 @@ const StyledInner = styled.div`
 	&:last-child {
 		border-bottom: 0;
 	}
+	background: ${({ theme }) => theme.color.neutral.surface.strong};
 `;
-const StyledCheckbox = styled(Checkbox)`
+
+const StyledCheckbox = styled(CheckBox)`
 	position: absolute;
 	top: 50%;
 	left: 32px;
@@ -75,20 +79,22 @@ const StyledDetail = styled.div`
 	display: flex;
 	align-items: center;
 	p {
-		font-size: 16px;
-		color: #6e7191;
+		${({ theme }) => theme.typography.medium[16]}
+		color: ${({ theme }) => theme.color.neutral.text.weak};
 	}
 `;
 const StyledAuthour = styled.p`
 	margin: 0 16px;
 `;
-const StyledIconUser = styled(IconUser)`
+const StyledUserImage = styled.img`
 	width: 20px;
 	height: 20px;
 	position: absolute;
 	top: 50%;
 	right: 54px;
 	transform: translateY(-50%);
+	border: 1px solid ${({ theme }) => theme.color.neutral.border.active};
+	border-radius: 50%;
 `;
 const StyledMilestone = styled.div`
 	display: flex;

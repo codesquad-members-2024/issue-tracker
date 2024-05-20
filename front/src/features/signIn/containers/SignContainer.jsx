@@ -2,8 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Logo } from '../../../common/Logo';
-import { Button } from '../../../common/components/Button';
-import { Input } from 'antd';
+import { Button } from '~/common/components';
+import { Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 export function SignContainer() {
@@ -11,42 +11,59 @@ export function SignContainer() {
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
 	const submitLogin = () => {
-		navigate('/issue');
+		navigate('/issues');
+	};
+
+	const [messageApi, contextHolder] = message.useMessage();
+
+	const notReady = () => {
+		message.info('현재 준비중인 기능이에요 🥲');
 	};
 
 	return (
-		<StyledWrapper>
-			<StyledLogo />
-			<StyledButton type='button' buttonType='outline' size='large'>
-				GitHub 계정으로 로그인
-			</StyledButton>
-			<b>or</b>
-			<StyledInputWrap>
-				<StyledId
-					placeholder='아이디'
-					name='id'
-					password='id'
-					onChange={e => setId(e.target.value)}
+		<>
+			{contextHolder}
+			<StyledWrapper>
+				<StyledLogo />
+				<StyledButton
+					type='button'
+					size='large'
+					buttonType='outline'
+					onClick={notReady}
+					buttonText='GitHub 계정으로 로그인'
 				/>
-				<StyledPassword
-					placeholder='비밀번호'
-					name='password'
-					id='password'
-					onChange={e => setPassword(e.target.value)}
+				<b>or</b>
+				<StyledInputWrap>
+					<StyledId
+						placeholder='아이디'
+						name='id'
+						password='id'
+						onChange={e => setId(e.target.value)}
+					/>
+					<StyledPassword
+						placeholder='비밀번호'
+						name='password'
+						id='password'
+						onChange={e => setPassword(e.target.value)}
+					/>
+				</StyledInputWrap>
+				<StyledButton
+					type='button'
+					size='large'
+					buttonType='container'
+					onClick={submitLogin}
+					buttonText='아이디로 로그인'
 				/>
-			</StyledInputWrap>
-			<StyledButton
-				type='button'
-				size='large'
-				buttonType='container'
-				onClick={submitLogin}
-			>
-				아이디로 로그인
-			</StyledButton>
-			<StyledJoinButton buttonType='ghost' size='large'>
-				회원가입
-			</StyledJoinButton>
-		</StyledWrapper>
+
+				<StyledButton
+					type='button'
+					size='large'
+					buttonType='ghost'
+					onClick={notReady}
+					buttonText='회원가입'
+				/>
+			</StyledWrapper>
+		</>
 	);
 }
 // TODO: 스타일 수정, 버튼 theme 만들기

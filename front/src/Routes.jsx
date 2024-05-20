@@ -1,14 +1,18 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { IssueListViewsPage } from './features/issue/pages/IssueListViewsPage';
+import { IssueListViewsPage, IssueCreatePage } from '~/features/issue/pages';
+import { Layout } from './features/main/pages/Layout';
 import { SignInPage } from './features/signIn/pages/SignInPage';
-export const Router = () => (
-	<BrowserRouter>
-		<Routes>
-			<Route path='/' element={<SignInPage />} />
-			<Route path='/issue' element={<IssueListViewsPage />} />
+import { IssueDetailPage } from './features/issue/pages/IssueDetailPage';
 
-			{/* <Route path='issue' element={<IssueListViewsPage />} />
-			<Route path='issue/:id' element={<IssueDetailViewPage />} /> */}
-		</Routes>
-	</BrowserRouter>
-);
+export const routes = [
+	{
+		path: '/',
+		element: <Layout />,
+		children: [
+			{ path: '/', element: <SignInPage /> },
+			{ path: 'signIn', element: <SignInPage /> },
+			{ path: 'issues', element: <IssueListViewsPage /> },
+			{ path: 'issues/new', element: <IssueCreatePage /> },
+			{ path: 'issues/:id', element: <IssueDetailPage /> },
+		],
+	},
+];
