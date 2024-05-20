@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export function Label({ name, textColor, backgroundColor }) {
+export function Label({ textColor, name, backgroundColor }) {
 	return (
 		<StyledWrapper
-			$bg={backgroundColor}
+			$backgroundColor={backgroundColor}
 			$textColor={textColor}
 			className='label'
 		>
@@ -15,7 +15,8 @@ const StyledWrapper = styled.div`
 	display: inline-block;
 	padding: 4px 12px;
 	border-radius: ${({ theme }) => theme.radius.large};
-	background: ${({ $bg }) => $bg};
+	background: ${({ $backgroundColor }) => $backgroundColor};
+
 	color: ${({ $textColor }) => $textColor};
 
 	${({ theme }) => theme.typography.medium[12]};
@@ -23,6 +24,3 @@ const StyledWrapper = styled.div`
 		margin-left: 8px;
 	}
 `;
-// "name": "bug",
-// "description": "bug",
-// "color": "#0075CA"

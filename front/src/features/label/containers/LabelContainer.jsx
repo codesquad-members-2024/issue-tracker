@@ -8,16 +8,16 @@ export function LabelContainer() {
 		{
 			id: 2,
 			name: 'documentation',
-			description: 'documentation',
+			description: 'documentation description',
 			backgroundColor: '#008672',
-			textColor: '#0075ca',
+			textColor: '#ffffff',
 		},
 		{
 			id: 4,
 			name: 'bug',
-			description: 'bugggg',
+			description: 'bugggg description',
 			backgroundColor: '#008672',
-			textColor: '#0075ca',
+			textColor: '#ffffff',
 		},
 	];
 	return (
@@ -35,9 +35,10 @@ export function LabelContainer() {
 					<StyledListItem key={label.id}>
 						<StyledLabelInfo>
 							<Label
+								className='label'
 								name={label.name}
-								text={label.textColor}
-								bg={label.backgroundColor}
+								textColor={label.textColor}
+								backgroundColor={label.backgroundColor}
 							/>
 							<p>{label.description}</p>
 						</StyledLabelInfo>
@@ -59,28 +60,6 @@ export function LabelContainer() {
 						</div>
 					</StyledListItem>
 				))}
-				<StyledListItem>
-					<StyledLabelInfo>
-						<Label name={'이름'} />
-						<p>라벨에 대한 설명 어쩌구 </p>
-					</StyledLabelInfo>
-					<div className='button-list'>
-						<Button
-							type='button'
-							buttonType='ghost'
-							size='small'
-							buttonText='편집'
-							icon={<IconEdit />}
-						/>
-						<Button
-							type='button'
-							buttonType='ghost'
-							size='small'
-							buttonText='삭제'
-							icon={<IconTrash />}
-						/>
-					</div>
-				</StyledListItem>
 			</ListBody>
 		</StyledWrapper>
 	);
@@ -110,7 +89,11 @@ const StyledListItem = styled.div`
 	padding: 32px;
 	display: flex;
 	align-items: center;
-	coulumn-gap: 32px;
+	column-gap: 32px;
+	border-bottom: 1px solid ${({ theme }) => theme.color.neutral.border.default};
+	&:last-child {
+		border-bottom: none;
+	}
 	.button-list {
 		display: flex;
 		column-gap: 24px;
@@ -127,8 +110,12 @@ const StyledListItem = styled.div`
 `;
 
 const StyledLabelInfo = styled.span`
+	width: 100%;
 	display: flex;
+	column-gap: 32px;
+	align-items: center;
 	p {
-		background: gold;
+		flex: 1 1 100%;
+		cursor: pointer;
 	}
 `;
