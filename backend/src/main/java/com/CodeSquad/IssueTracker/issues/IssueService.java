@@ -8,8 +8,11 @@ import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
+import com.CodeSquad.IssueTracker.issues.dto.IssueMilestoneRequest;
 import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
-import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
+import com.CodeSquad.IssueTracker.issues.dto.IssueTitleRequest;
+import com.CodeSquad.IssueTracker.milestone.Milestone;
+import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +28,14 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final MilestoneRepository milestoneRepository;
+    private final MilestoneService milestoneService;
 
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
-                        UserRepository userRepository, MilestoneRepository milestoneRepository) {
+                        UserRepository userRepository, MilestoneService milestoneService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        this.milestoneRepository = milestoneRepository;
+        this.milestoneService = milestoneService;
     }
 
     public List<Issue> getAllIssues() {
@@ -55,7 +58,7 @@ public class IssueService {
         issue.setMilestoneId(issueRequest.milestoneId());
 
         issueRepository.save(issue);
-        milestoneRepository.incrementIssueCountForMilestone(issue.getMilestoneId());
+        milestoneService.incrementTotalIssue(issue.getMilestoneId());
 
         // 이슈 작성 시 입력한 내용을 첫번째 코멘트로 저장하기 위함.
         Comment comment = new Comment();
@@ -90,9 +93,7 @@ public class IssueService {
     }
 
     public IssueDetailResponse getIssueById(long issueId) {
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
+        Issue issue = findIssueById(issueId);
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
 
@@ -113,18 +114,24 @@ public class IssueService {
 
     public void openIssue(long issueId) {
         issueRepository.openIssue(issueId);
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        milestoneRepository.decrementClosedIssueCountForMilestone(issue.getMilestoneId());
+        Issue issue = findIssueById(issueId);
+        milestoneService.decrementClosedIssue(issue.getMilestoneId());
     }
 
     public void closeIssue(long issueId) {
         issueRepository.closeIssue(issueId);
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        milestoneRepository.incrementClosedIssueCountForMilestone(issue.getMilestoneId());
+        Issue issue = findIssueById(issueId);
+        milestoneService.incrementClosedIssue(issue.getMilestoneId());
+    }
+
+    public void updateIssueTitle(Long issueId, IssueTitleRequest issueTitleRequest) {
+        findIssueById(issueId);
+        if (issueTitleRequest.title() != null) {
+            issueRepository.updateIssueTitle(issueId, issueTitleRequest.title());
+        }else {
+            throw new InvalidIssueDataException("제목이 필요합니다.");
+        }
+        issueRepository.updateIssueTitle(issueId, issueTitleRequest.title());
     }
 
     private void validateIssueRequest(IssueRequest issueRequest) {
@@ -136,6 +143,44 @@ public class IssueService {
         if (issueRequest.title() == null || issueRequest.title().isEmpty()
                 || issueRequest.content() == null || issueRequest.content().isEmpty()) {
             throw new InvalidIssueDataException("제목과 내용이 모두 필요합니다.");
+        }
+    }
+
+    public Milestone updateMilestoneIdForIssue(Long issueId, IssueMilestoneRequest issueMilestoneRequest) {
+        Issue issue = findIssueById(issueId);
+        Long milestoneId = issueMilestoneRequest.milestoneId();
+        log.info("Updating milestone id for issue: {}", milestoneId);
+        if (issue.getMilestoneId() == null) {
+            // 이슈에 마일스톤 ID가 없는 경우
+            milestoneService.incrementTotalIssue(milestoneId);
+            if (issue.getIsClosed()) {
+                milestoneService.incrementClosedIssue(milestoneId);
+            }
+            issueRepository.updateMilestoneIdForIssue(issueId, milestoneId);
+            return milestoneService.getMilestoneById(milestoneId);
+        } else
+        if (milestoneId != null) {
+            // 마일스톤 ID가 존재하는 경우 업데이트
+            milestoneService.decrementTotalIssue(issue.getMilestoneId());
+            milestoneService.incrementTotalIssue(milestoneId);
+
+            if (issue.getIsClosed()) {
+                milestoneService.decrementClosedIssue(issue.getMilestoneId());
+                milestoneService.incrementClosedIssue(milestoneId);
+            }
+
+            issueRepository.updateMilestoneIdForIssue(issueId, milestoneId);
+            return milestoneService.getMilestoneById(milestoneId);
+        } else {
+            // 마일스톤 ID가 null인 경우 해당 이슈의 마일스톤을 삭제
+            milestoneService.decrementTotalIssue(issue.getMilestoneId());
+
+            if (issue.getIsClosed()) {
+                milestoneService.decrementClosedIssue(issue.getMilestoneId());
+            }
+
+            issueRepository.removeMilestoneFromIssue(issueId);
+            return null;
         }
     }
 }
