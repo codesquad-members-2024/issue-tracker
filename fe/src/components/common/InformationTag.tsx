@@ -1,8 +1,8 @@
 import { ReactComponent as AlertCircle } from "../../svg/AlertCircle.svg";
 import { ReactComponent as CheckOnCircle } from "../../svg/CheckOnCircle.svg";
 
-// 테일윈드 동적 bg color은 컴파일 안되서 주석으로 컴파일 할 색 추가
-// bg-[#FEFEFE] bg-[#dfdeff] bg-[#0025e6] bg-[#6ab43e] bg-[#ff3b30] bg-[#feff79] bg-[#f4c9e7] bg-[#ffd7c0] bg-[#def1ff]
+// 테일윈드 동적 bg color은 트랜스파일링 안되서 주석으로 색 추가
+// bg-[#007AFF] bg-[#8250DF] bg-[#FEFEFE] bg-[#dfdeff] bg-[#0025e6] bg-[#6ab43e] bg-[#ff3b30] bg-[#feff79] bg-[#f4c9e7] bg-[#ffd7c0] bg-[#def1ff]
 
 interface PropsType {
 	text: string;
@@ -31,7 +31,7 @@ function InformationTag({ text, icon, fillColor, textBright }: PropsType) {
 			} text-xs`}
 		>
 			{icon && ICON[icon]}
-			<span 
+			<span
 				className={`${
 					textBright ? "text-grayscale.50" : "text-grayscale.600"
 				} whitespace-nowrap px-1`}

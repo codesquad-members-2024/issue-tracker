@@ -18,3 +18,22 @@ interface Milestone {
 	description: string;
 	complete_date: string;
 }
+
+interface Issue {
+	id: number;
+	title: string;
+	open: boolean;
+	content: string;
+	timestamp: string;
+	writer: string;
+	milestone_name: string;
+	comments: IssueComment[];
+	labels: Label[];
+}
+
+interface IssueComment {
+	id: number;
+	writer: string;
+	timestamp: string;
+	content: string;
+}

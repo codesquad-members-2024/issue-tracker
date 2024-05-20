@@ -1,6 +1,7 @@
 import InformationTag from "../../common/InformationTag";
 import { ReactComponent as AlertCircle } from "../../../svg/AlertCircle.svg";
 import { ReactComponent as Milestone } from "../../../svg/Milestone.svg";
+import { Link } from "react-router-dom";
 
 interface PropsType {
 	issue: IssueType;
@@ -46,10 +47,11 @@ function Issue({ issue }: PropsType) {
 		<div className="h-[96px] flex flex-col justify-evenly">
 			<div className="flex items-center">
 				<AlertCircle className="mr-2 stroke-accent.blue" />
-				{/* TODO link 상세페이지 */}
-				<span className="text-grayscale.900 dark:text-grayscale.50 text-xl font-medium mr-2 cursor-pointer hover:text-grayscale.900/80 dark:hover:text-grayscale.50/80">
-					{issue.title}
-				</span>
+				<Link to={`/issue/${issue.id}`}>
+					<span className="text-grayscale.900 dark:text-grayscale.50 text-xl font-medium mr-2 cursor-pointer hover:text-grayscale.900/80 dark:hover:text-grayscale.50/80">
+						{issue.title}
+					</span>
+				</Link>
 				{issue.labels.length &&
 					issue.labels.map((label) => (
 						<span key={label.id} className="mr-2">
