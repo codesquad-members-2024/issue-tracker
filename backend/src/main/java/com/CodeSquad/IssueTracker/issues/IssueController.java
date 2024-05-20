@@ -7,13 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/issue")
 public class IssueController {
 
-    private final static long DEFAULT_OFFSET = 15;
     private final IssueService issueService;
 
     public IssueController(IssueService issueService) {
@@ -46,13 +44,13 @@ public class IssueController {
         Issue issue = issueService.findIssueById(issueId);
         return new ResponseEntity<>(issue, HttpStatus.OK);
     }
-    @PostMapping("/issue/{issueId}/labels/{labelId}")
+    @PostMapping("/{issueId}/labels/{labelId}")
     public ResponseEntity<Void> addLabelToIssue(@PathVariable Long issueId, @PathVariable Long labelId) {
         issueService.addLabelToIssue(issueId, labelId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/issue/{issueId}/labels/{labelId}")
+    @DeleteMapping("/{issueId}/labels/{labelId}")
     public ResponseEntity<Void> removeLabelFromIssue(@PathVariable Long issueId, @PathVariable Long labelId) {
         issueService.removeLabelFromIssue(issueId, labelId);
         return ResponseEntity.ok().build();
