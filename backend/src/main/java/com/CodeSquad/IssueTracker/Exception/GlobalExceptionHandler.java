@@ -79,6 +79,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-//    @ExceptionHandler(LabelUpdateException.class)
-//    public ResponseEntity<String> handleLabelUpdateException(LabelUpdateException ex) {
 }
