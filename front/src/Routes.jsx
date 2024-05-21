@@ -7,6 +7,7 @@ import { Layout } from '~/features/main/pages/Layout';
 import { SignInPage } from '~/features/signIn/pages/SignInPage';
 
 import { LabelPage } from '~/features/label/pages/LabelPage';
+import { MilestonePage } from '~/features/milestone/pages';
 
 export const routes = [
 	{
@@ -15,6 +16,7 @@ export const routes = [
 		children: [
 			{ path: '/', element: <SignInPage /> },
 			{ path: 'labels', element: <LabelPage /> },
+			{ path: 'milestones', element: <MilestonePage /> },
 			{ path: 'signIn', element: <SignInPage /> },
 			{ path: 'issues', element: <IssueListViewsPage /> },
 			{ path: 'issues/new', element: <IssueCreatePage /> },

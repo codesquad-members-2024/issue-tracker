@@ -5,11 +5,11 @@ import { IconLabel, IconLandmark } from '~/common/icons';
 export function Tabs({ labelCount = 1, milestoneCount = 0, ...props }) {
 	return (
 		<StyledWrapper {...props}>
-			<Link to='/'>
+			<Link to='/labels'>
 				<IconLabel />
 				레이블 ({labelCount})
 			</Link>
-			<Link to='/'>
+			<Link to='/milestones'>
 				<IconLandmark />
 				마일스톤 ({milestoneCount})
 			</Link>
