@@ -1,4 +1,4 @@
-package team08.issuetracker.member.model;
+package team08.issuetracker.member.model.dto;
 
 import lombok.Getter;
 

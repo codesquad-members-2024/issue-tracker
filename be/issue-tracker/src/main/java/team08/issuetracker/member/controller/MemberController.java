@@ -1,18 +1,15 @@
 package team08.issuetracker.member.controller;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import team08.issuetracker.jwt.JwtService;
 import team08.issuetracker.member.model.Member;
-import team08.issuetracker.member.model.MemberResponse;
-import team08.issuetracker.member.model.dto.MemberCreationDto;
-import team08.issuetracker.member.model.dto.MemberLoginDto;
+import team08.issuetracker.member.model.dto.MemberCreationResponse;
+import team08.issuetracker.member.model.dto.MemberResponse;
+import team08.issuetracker.member.model.dto.MemberCreationRequest;
+import team08.issuetracker.member.model.dto.MemberLoginRequest;
 import team08.issuetracker.member.service.MemberService;
 
 @RestController
@@ -29,19 +26,23 @@ public class MemberController {
     private static final String TOKEN_HEADER_VALUE = "Bearer ";
 
     @PostMapping
-    public ResponseEntity<String> registerMember(@RequestBody MemberCreationDto memberCreationDto) {
-        memberService.registerMember(memberCreationDto);
+    public ResponseEntity<MemberCreationResponse> registerMember(@RequestBody MemberCreationRequest memberCreationRequest) {
+        Member member = memberService.registerMember(memberCreationRequest);
 
-        return ResponseEntity.ok("회원가입 성공!");
+        MemberCreationResponse response = MemberCreationResponse.from(member);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginMember(@RequestBody MemberLoginDto memberLoginDto) {
-        Member member = memberService.loginMember(memberLoginDto);
+    public ResponseEntity<?> loginMember(@RequestBody MemberLoginRequest memberLoginRequest) {
+        Member member = memberService.loginMember(memberLoginRequest);
 
-        MemberResponse response = new MemberResponse(member.getMemberId(), jwtService.createJwtToken(member));
+        String token = jwtService.createJwtToken(member);
 
-        HttpCookie httpCookie = ResponseCookie.from(TOKEN_NAME, response.getToken())
+        HttpCookie httpCookie = ResponseCookie.from(TOKEN_NAME, token)
                 .maxAge(TOKEN_DURATION_90DAYS)
                 .httpOnly(true)
                 .secure(true)
@@ -50,10 +51,14 @@ public class MemberController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
-                .header(HttpHeaders.AUTHORIZATION, TOKEN_HEADER_VALUE + response.getToken())
+                .header(HttpHeaders.AUTHORIZATION, TOKEN_HEADER_VALUE + token)
                 .build();
     }
 
+    /* TODO : validate url 삭제하기
+    *   - intercepter 사용하여 로그인 쿠키 토큰 검증하기
+    *   - jwtService의 validate 분리하기
+    * */
     @GetMapping("/validate")
     public ResponseEntity<?> validateToken(@CookieValue(name = TOKEN_NAME) String jwtToken) {
         if (!jwtService.parseJwtToken(jwtToken)) {
