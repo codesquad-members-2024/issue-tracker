@@ -3,6 +3,7 @@ package team08.issuetracker.milestone.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.milestone.*;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.model.dto.*;
@@ -17,8 +18,6 @@ import java.util.stream.Collectors;
 public class MilestoneService {
     private final MilestoneRepository milestoneRepository;
 
-    private static final boolean OPEN_STATE = true;
-    private static final boolean CLOSE_STATE = false;
     private static final String OPEN_STATE_QUERY = "opened";
     private static final String CLOSE_STATE_QUERY = "closed";
 
@@ -57,31 +56,23 @@ public class MilestoneService {
         return milestoneRepository.save(milestone);
     }
 
+    @Transactional
     public Milestone updateMilestoneStateToOpen(Long id) {
         Milestone milestone = milestoneRepository
                 .findById(id)
                 .orElseThrow(MilestoneIdNotFoundException::new);
 
-        if (milestone.isOpen()) {
-            throw new MilestoneAlreadyOpenedException();
-        }
-
-        milestone.updateOpenState(OPEN_STATE);
-
+        milestone.open();
         return milestoneRepository.save(milestone);
     }
 
+    @Transactional
     public Milestone updateMilestoneStateToClose(Long id) {
         Milestone milestone = milestoneRepository
                 .findById(id)
                 .orElseThrow(MilestoneIdNotFoundException::new);
 
-        if (!milestone.isOpen()) {
-            throw new MilestoneAlreadyClosedException();
-        }
-
-        milestone.updateOpenState(CLOSE_STATE);
-
+        milestone.close();
         return milestoneRepository.save(milestone);
     }
 
