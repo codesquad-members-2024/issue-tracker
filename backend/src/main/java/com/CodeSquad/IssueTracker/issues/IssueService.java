@@ -11,6 +11,9 @@ import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelRepository;
+import com.CodeSquad.IssueTracker.milestone.Milestone;
+import com.CodeSquad.IssueTracker.milestone.MilestoneService;
+import com.CodeSquad.IssueTracker.issues.issueLabel.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.Label;
 import com.CodeSquad.IssueTracker.labels.LabelRepository;
@@ -21,8 +24,10 @@ import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,11 +141,8 @@ public class IssueService {
     }
 
     public void openIssue(long issueId) {
-        issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        issueRepository.openIssue(issueId);
         Issue issue = findIssueById(issueId);
+        issueRepository.openIssue(issueId);
 
         if (issue.getMilestoneId() != null){
             milestoneService.decrementClosedIssue(issue.getMilestoneId());
@@ -148,11 +150,8 @@ public class IssueService {
     }
 
     public void closeIssue(long issueId) {
-        issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        issueRepository.closeIssue(issueId);
         Issue issue = findIssueById(issueId);
+        issueRepository.closeIssue(issueId);
 
         if (issue.getMilestoneId() != null){
             milestoneService.incrementClosedIssue(issue.getMilestoneId());
@@ -237,12 +236,40 @@ public class IssueService {
         issueLabelRepository.removeLabelFromIssue(issueId, labelId);
     }
 
+    @Transactional
     public void openIssues(IssueIds issueIds) {
-        issueRepository.openIssues(issueIds.issueIds());
+        for (Long issueId : issueIds.issueIds()) {
+            openIssue(issueId);
+        }
     }
 
+    @Transactional
     public void closeIssues(IssueIds issueIds) {
-        issueRepository.closeIssues(issueIds.issueIds());
+        for (Long issueId : issueIds.issueIds()) {
+            closeIssue(issueId);
+        }
+    }
+
+    public IssueNumberResponse getIssueNumber() {
+        long openIssueNum = issueRepository.countOpenIssues();
+        long closeIssueNum = issueRepository.countCloseIssues();
+        return IssueNumberResponse.builder()
+                .openIssueCount(openIssueNum)
+                .closeIssueCount(closeIssueNum)
+                .build();
+    }
+
+    public List<AuthorListResponse> getAuthorList() {
+        List<String> authors = issueRepository.findDistinctAuthors();
+        List<AuthorListResponse> authorListResponses = new ArrayList<>();
+
+        for (String author : authors) {
+            authorListResponses.add(AuthorListResponse.builder()
+                    .userId(author)
+                    .build());
+        }
+
+        return authorListResponses;
     }
 
     public Issue validateExistIssue(Long issueId) {

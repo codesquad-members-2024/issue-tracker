@@ -1,12 +1,10 @@
 package com.CodeSquad.IssueTracker.filter;
 
+import com.CodeSquad.IssueTracker.filter.dto.FilterListResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class FilterController {
@@ -18,8 +16,8 @@ public class FilterController {
     }
 
     @GetMapping("/filters")
-    public ResponseEntity<FilterResponse> getIssueNumber() {
-        FilterResponse filterResponse = filterService.getFilterResponse();
-        return new ResponseEntity<>(filterResponse, HttpStatus.OK);
+    public ResponseEntity<FilterListResponse> getIssueNumber() {
+        FilterListResponse filterListResponse = filterService.getFilterListResponse();
+        return new ResponseEntity<>(filterListResponse, HttpStatus.OK);
     }
 }
