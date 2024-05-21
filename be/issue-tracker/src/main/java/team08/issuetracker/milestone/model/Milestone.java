@@ -2,7 +2,7 @@ package team08.issuetracker.milestone.model;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
-import team08.issuetracker.milestone.model.dto.MilestoneUpdateDto;
+import team08.issuetracker.milestone.model.dto.MilestoneUpdateRequest;
 
 import java.time.LocalDate;
 
@@ -22,10 +22,10 @@ public class Milestone {
         this.completeDate = completeDate;
     }
 
-    public Milestone update(MilestoneUpdateDto milestoneUpdateDto) {
-        this.name = milestoneUpdateDto.name();
-        this.description = milestoneUpdateDto.description();
-        this.completeDate = milestoneUpdateDto.completeDate();
+    public Milestone update(MilestoneUpdateRequest milestoneUpdateRequest) {
+        this.name = milestoneUpdateRequest.name();
+        this.description = milestoneUpdateRequest.description();
+        this.completeDate = milestoneUpdateRequest.completeDate();
 
         return this;
     }
