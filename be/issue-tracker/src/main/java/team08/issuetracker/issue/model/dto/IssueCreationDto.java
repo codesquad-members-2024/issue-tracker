@@ -13,13 +13,19 @@ import team08.issuetracker.issue.ref.Assignee;
  * @param title       Non-Null
  * @param writer      Non-Null
  * @param content     Nullable
- * @param mileStone   Nullable
- * @param labels      Nullable
+ * @param milestoneId   Nullable
+ * @param labelIds      Nullable
  * @param assigneeIds Nullable
  * @param file        Nullable
  */
-public record IssueCreationDto(String title, String writer, String content, Object mileStone,
-                               List<Object> labels, List<String> assigneeIds, String file) {
+public record IssueCreationDto(
+        String title,
+        String writer,
+        String content,
+        Long milestoneId,
+        List<Long> labelIds,
+        List<String> assigneeIds,
+        String file) {
 
     public Issue createIssue() {
         return new Issue(
