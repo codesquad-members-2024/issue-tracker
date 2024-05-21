@@ -1,4 +1,4 @@
-package com.CodeSquad.IssueTracker.filter;
+package com.CodeSquad.IssueTracker.issues.dto;
 
 import lombok.Builder;
 import lombok.Getter;

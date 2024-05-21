@@ -1,11 +1,13 @@
 package com.CodeSquad.IssueTracker.labels;
 
 import com.CodeSquad.IssueTracker.Exception.label.*;
+import com.CodeSquad.IssueTracker.labels.dto.LabelListResponse;
 import com.CodeSquad.IssueTracker.labels.utils.ColorValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,5 +70,20 @@ public class LabelService {
             throw new LabelNotFoundException("라벨 id: " + id + " 삭제 실패, 해당 라벨이 존재하지 않습니다.");
         }
         labelRepository.deleteById(id);
+    }
+
+    public List<LabelListResponse> getLabelList() {
+        List<Label> labels = getAllLabels();
+        List<LabelListResponse> labelListResponses = new ArrayList<>();
+
+        for (Label label : labels) {
+            labelListResponses.add(LabelListResponse.builder()
+                    .labelId(label.getLabelId())
+                    .labelName(label.getLabelName())
+                    .labelBgColor(label.getBgColor())
+                    .build());
+        }
+
+        return labelListResponses;
     }
 }
