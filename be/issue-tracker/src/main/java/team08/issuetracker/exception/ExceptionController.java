@@ -7,12 +7,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
-import team08.issuetracker.exception.member.MemberIdDuplicateKeyException;
-import team08.issuetracker.exception.member.MemberNotFoundException;
+import team08.issuetracker.exception.member.MemberIdDuplicateException;
+import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.exception.member.MemberPasswordMismatchException;
-import team08.issuetracker.exception.milestone.*;
+import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
+import team08.issuetracker.exception.milestone.MilestoneAlreadyClosedException;
+import team08.issuetracker.exception.milestone.MilestoneAlreadyOpenedException;
+import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
+import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 
-import static team08.issuetracker.exception.ExceptionMessageBuilder.*;
+import static team08.issuetracker.exception.ExceptionMessageBuilder.buildMessage;
 
 @ControllerAdvice
 @Slf4j
@@ -23,8 +27,8 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(MemberNotFoundException.class)
-    public ResponseEntity<String> handleMemberNotFoundException(MemberNotFoundException e) {
+    @ExceptionHandler(MemberIdNotFoundException.class)
+    public ResponseEntity<String> handleMemberNotFoundException(MemberIdNotFoundException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
@@ -41,8 +45,8 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(MilestoneNotFoundException.class)
-    public ResponseEntity<String> handleMilestoneNotFoundException(MilestoneNotFoundException e) {
+    @ExceptionHandler(MilestoneIdNotFoundException.class)
+    public ResponseEntity<String> handleMilestoneNotFoundException(MilestoneIdNotFoundException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
@@ -59,8 +63,8 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
     }
 
-    @ExceptionHandler(MemberIdDuplicateKeyException.class)
-    public ResponseEntity<String> handleMemberIdDuplicateKeyException(MemberIdDuplicateKeyException e) {
+    @ExceptionHandler(MemberIdDuplicateException.class)
+    public ResponseEntity<String> handleMemberIdDuplicateKeyException(MemberIdDuplicateException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
@@ -69,7 +73,6 @@ public class ExceptionController {
     public ResponseEntity<String> handleMilestoneQueryStateException(MilestoneQueryStateException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-
     }
 
 

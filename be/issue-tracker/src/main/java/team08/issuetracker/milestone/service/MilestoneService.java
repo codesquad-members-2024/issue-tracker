@@ -3,6 +3,7 @@ package team08.issuetracker.milestone.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.milestone.*;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.model.dto.*;
@@ -17,16 +18,14 @@ import java.util.stream.Collectors;
 public class MilestoneService {
     private final MilestoneRepository milestoneRepository;
 
-    private static final boolean OPEN_STATE = true;
-    private static final boolean CLOSE_STATE = false;
     private static final String OPEN_STATE_QUERY = "opened";
     private static final String CLOSE_STATE_QUERY = "closed";
 
-    public MilestoneOverviewDto getAllMilestonesWithCounts(String state) {
+    public MilestoneOverviewResponse getAllMilestonesWithCounts(String state) {
         boolean openState = convertStateQueryToOpenState(state);
 
-        List<MilestoneDetailDto> milestones = milestoneRepository.getAllMilestonesByOpenState(openState).stream()
-                .map(MilestoneDetailDto::from)
+        List<MilestoneDetailResponse> milestones = milestoneRepository.getAllMilestonesByOpenState(openState).stream()
+                .map(MilestoneDetailResponse::from)
                 /* TODO : 마일스톤과 이슈간의 연관된 정보 추가하기
                 1) openedIssueCount : 마일스톤에 해당하는 열린 이슈 개수 [long]
                 2) closedIssueCount : 마일스톤에 해당하는 닫힌 이슈 개수 [long]
@@ -34,60 +33,52 @@ public class MilestoneService {
                  */
                 .collect(Collectors.toList());
 
-        return new MilestoneOverviewDto(getMilestoneCountDto(), milestones);
+        return new MilestoneOverviewResponse(getMilestoneCountDto(), milestones);
     }
 
-    public Milestone saveMilestone(MilestoneCreationDto milestoneCreationDto) {
-        validateMilestoneForm(milestoneCreationDto.name());
+    public Milestone saveMilestone(MilestoneCreationRequest milestoneCreationRequest) {
+        validateMilestoneForm(milestoneCreationRequest.name());
 
-        Milestone milestone = milestoneCreationDto.toEntity();
+        Milestone milestone = milestoneCreationRequest.toEntity();
 
         return milestoneRepository.save(milestone);
     }
 
-    public Milestone updateMilestone(Long id, MilestoneUpdateDto milestoneUpdateDto) {
-        validateMilestoneForm(milestoneUpdateDto.name());
+    public Milestone updateMilestone(Long id, MilestoneUpdateRequest milestoneUpdateRequest) {
+        validateMilestoneForm(milestoneUpdateRequest.name());
 
         Milestone milestone = milestoneRepository
                 .findById(id)
-                .orElseThrow(MilestoneNotFoundException::new);
+                .orElseThrow(MilestoneIdNotFoundException::new);
 
-        milestone.update(milestoneUpdateDto);
+        milestone.update(milestoneUpdateRequest);
 
         return milestoneRepository.save(milestone);
     }
 
+    @Transactional
     public Milestone updateMilestoneStateToOpen(Long id) {
         Milestone milestone = milestoneRepository
                 .findById(id)
-                .orElseThrow(MilestoneNotFoundException::new);
+                .orElseThrow(MilestoneIdNotFoundException::new);
 
-        if (milestone.isOpen()) {
-            throw new MilestoneAlreadyOpenedException();
-        }
-
-        milestone.updateOpenState(OPEN_STATE);
-
+        milestone.open();
         return milestoneRepository.save(milestone);
     }
 
+    @Transactional
     public Milestone updateMilestoneStateToClose(Long id) {
         Milestone milestone = milestoneRepository
                 .findById(id)
-                .orElseThrow(MilestoneNotFoundException::new);
+                .orElseThrow(MilestoneIdNotFoundException::new);
 
-        if (!milestone.isOpen()) {
-            throw new MilestoneAlreadyClosedException();
-        }
-
-        milestone.updateOpenState(CLOSE_STATE);
-
+        milestone.close();
         return milestoneRepository.save(milestone);
     }
 
 
     public void deleteMilestone(Long id) {
-        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
+        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneIdNotFoundException::new);
 
         milestoneRepository.delete(milestone);
     }
@@ -102,8 +93,8 @@ public class MilestoneService {
         throw new MilestoneQueryStateException();
     }
 
-    private MilestoneCountDto getMilestoneCountDto() {
-        return new MilestoneCountDto(    // 마일스톤 총 개수, 열린 개수, 닫힌 개수
+    private MilestoneCountResponse getMilestoneCountDto() {
+        return new MilestoneCountResponse(    // 마일스톤 총 개수, 열린 개수, 닫힌 개수
                 milestoneRepository.count(),
                 milestoneRepository.countOpenedMilestones(),
                 milestoneRepository.countClosedMilestones()
