@@ -23,5 +23,4 @@ export const CommonBtnStyles = `
   height: inherit;
   cursor: pointer;
   border-radius: 20px;
-  font-size: 20px;
 `;
