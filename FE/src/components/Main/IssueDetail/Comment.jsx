@@ -1,38 +1,49 @@
 import styled from "styled-components";
 import { EditIcon } from "@/icons/EditIcon";
 import { SmileIcon } from "@/icons/SmileIcon";
+import { NewComment } from "./NewComment";
 
 export function Comment({ selectedIssue, elapsedTime }) {
   return (
-    <StyledComment>
-      <Header>
-        <Info>
-          <img src="/img/frog.png" />
-          <div>{selectedIssue.writer}</div>
-          <div>{elapsedTime}</div>
-        </Info>
-        <Buttons>
-          <div className="writer">작성자</div>
-          <StyledCommentButton>
-            <EditIcon />
-            <div>편집</div>
-          </StyledCommentButton>
-          <StyledCommentButton>
-            <SmileIcon />
-            <div>반응</div>
-          </StyledCommentButton>
-        </Buttons>
-      </Header>
-      <Content></Content>
-    </StyledComment>
+    <Wrap>
+      <StyledComment>
+        <Header>
+          <Info>
+            <img src="/img/frog.png" />
+            <div>{selectedIssue.writer}</div>
+            <div>{elapsedTime}</div>
+          </Info>
+          <Buttons>
+            <div className="writer">작성자</div>
+            <StyledCommentButton>
+              <EditIcon />
+              <div>편집</div>
+            </StyledCommentButton>
+            <StyledCommentButton>
+              <SmileIcon />
+              <div>반응</div>
+            </StyledCommentButton>
+          </Buttons>
+        </Header>
+        <Content>
+          <div> </div>
+        </Content>
+      </StyledComment>
+      <NewComment />
+    </Wrap>
   );
 }
+
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  width: 75%;
+`;
 
 const StyledComment = styled.div`
   border: solid #dadbe9;
   border-radius: 10px;
-  width: 75%;
-  height: 300px;
   overflow: hidden;
 `;
 
@@ -76,6 +87,7 @@ const StyledCommentButton = styled.div`
 `;
 
 const Content = styled.div`
-  height: 240px;
+  min-height: 20px;
   background: white;
+  padding: 20px;
 `;

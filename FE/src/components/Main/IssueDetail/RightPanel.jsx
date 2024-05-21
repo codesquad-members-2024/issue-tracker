@@ -1,26 +1,24 @@
 import styled from "styled-components";
+import { DropdownContainer } from "@/components/common/Dropdown/DropdownContainer";
+
+const assigneePopupItems = [{ id: "no_assignee", label: "담당자가 없는 이슈" }];
+const labelPopupItems = [{ id: "no_label", label: "레이블이 없는 이슈" },{ id: "bug", label: "bug" }];
+const milestonesPopupItems = [{ id: "no_milestones", label: "마일스톤이 없는 이슈" },];
+
+const headerFilters = [
+  { id: "assignee", label: "담당자", items: assigneePopupItems },
+  { id: "label", label: "레이블", items: labelPopupItems },
+  { id: "milestones", label: "마일스톤", items: milestonesPopupItems },
+];
 
 export function RightPanel() {
   return (
     <StyledRightPanel>
-      <SideBar>
-        <Title>
-          담당자
-          <PlusButton>+</PlusButton>
-        </Title>
-      </SideBar>
-      <SideBar>
-        <Title>
-          레이블
-          <PlusButton>+</PlusButton>
-        </Title>
-      </SideBar>
-      <SideBar>
-        <Title>
-          마일스톤
-          <PlusButton>+</PlusButton>
-        </Title>
-      </SideBar>
+      {headerFilters.map(({ id, label, items }) => (
+        <SideBar key={id}>
+          <DropdownContainer id={id} label={label} items={items} />
+        </SideBar>
+      ))}
     </StyledRightPanel>
   );
 }
@@ -35,18 +33,8 @@ const StyledRightPanel = styled.div`
 
 const SideBar = styled.div`
   border-bottom: solid #dadbe9;
-  padding: 20px 20px 120px 20px;
+  padding: 10px 20px 100px 10px;
   &:last-child {
     border-bottom: none; // 마일스톤 bottom
   }
-`;
-
-const Title = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const PlusButton = styled.span`
-  cursor: pointer;
-  font-size: 20px;
 `;
