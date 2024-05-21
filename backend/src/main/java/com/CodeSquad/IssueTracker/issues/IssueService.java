@@ -24,6 +24,7 @@ import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -150,11 +151,8 @@ public class IssueService {
     }
 
     public void openIssue(long issueId) {
-        issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        issueRepository.openIssue(issueId);
         Issue issue = findIssueById(issueId);
+        issueRepository.openIssue(issueId);
 
         if (issue.getMilestoneId() != null){
             milestoneService.decrementClosedIssue(issue.getMilestoneId());
@@ -162,11 +160,8 @@ public class IssueService {
     }
 
     public void closeIssue(long issueId) {
-        issueRepository.findById(issueId)
-                .orElseThrow(() ->
-                        new IssueNotExistException("존재하지 않는 이슈입니다."));
-        issueRepository.closeIssue(issueId);
         Issue issue = findIssueById(issueId);
+        issueRepository.closeIssue(issueId);
 
         if (issue.getMilestoneId() != null){
             milestoneService.incrementClosedIssue(issue.getMilestoneId());
@@ -251,11 +246,17 @@ public class IssueService {
         issueLabelRepository.removeLabelFromIssue(issueId, labelId);
     }
 
+    @Transactional
     public void openIssues(IssueIds issueIds) {
-        issueRepository.openIssues(issueIds.issueIds());
+        for (Long issueId : issueIds.issueIds()) {
+            openIssue(issueId);
+        }
     }
 
+    @Transactional
     public void closeIssues(IssueIds issueIds) {
-        issueRepository.closeIssues(issueIds.issueIds());
+        for (Long issueId : issueIds.issueIds()) {
+            closeIssue(issueId);
+        }
     }
 }
