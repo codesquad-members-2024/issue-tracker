@@ -19,4 +19,7 @@ public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
     @Query("UPDATE MILESTONE m SET m.state = :state WHERE m.id = :id")
     int updateMilestoneState(@Param("id") Long id, @Param("state") String state);
 
+    @Query("SELECT COUNT(*) FROM MILESTONE WHERE IS_DELETED = FALSE AND STATE = 'OPEN'")
+    Long countOpenMilestones();
+
 }
