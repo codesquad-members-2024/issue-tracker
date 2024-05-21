@@ -2,8 +2,7 @@ package team08.issuetracker.label.model;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
-import team08.issuetracker.label.model.dto.LabelCreationDto;
-import team08.issuetracker.label.model.dto.LabelUpdateDto;
+import team08.issuetracker.label.model.dto.LabelUpdateRequest;
 
 @Getter
 public class Label {
@@ -22,11 +21,11 @@ public class Label {
         this.textColor = textColor;
     }
 
-    public Label update(LabelUpdateDto labelUpdateDto){
-        this.name = labelUpdateDto.name();
-        this.description = labelUpdateDto.description();
-        this.backgroundColor = labelUpdateDto.backgroundColor();
-        this.textColor = labelUpdateDto.textColor();
+    public Label update(LabelUpdateRequest labelUpdateRequest){
+        this.name = labelUpdateRequest.name();
+        this.description = labelUpdateRequest.description();
+        this.backgroundColor = labelUpdateRequest.backgroundColor();
+        this.textColor = labelUpdateRequest.textColor();
 
         return this;
     }

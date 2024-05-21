@@ -17,16 +17,16 @@ public class LabelController {
     private final LabelService labelService;
 
     @GetMapping
-    public ResponseEntity<LabelOverviewDto> getLabelsWithCount() {
-        LabelOverviewDto labelOverviewDto = labelService.getLabelsWithCount();
+    public ResponseEntity<LabelOverviewResponse> getLabelsWithCount() {
+        LabelOverviewResponse labelOverviewResponse = labelService.getLabelsWithCount();
 
-        return ResponseEntity.ok(labelOverviewDto);
+        return ResponseEntity.ok(labelOverviewResponse);
     }
 
 
     @PostMapping
-    public ResponseEntity<String> createLabel(@RequestBody LabelCreationDto labelCreationDto) {
-        Label label = labelService.createLabel(labelCreationDto);
+    public ResponseEntity<String> createLabel(@RequestBody LabelCreationRequest labelCreationRequest) {
+        Label label = labelService.createLabel(labelCreationRequest);
 
         log.info("라벨 생성 성공 : {}", label.toString());
 
@@ -35,18 +35,18 @@ public class LabelController {
 
 
     @GetMapping("{id}")
-    public ResponseEntity<LabelDto> getLabel(@PathVariable long id) {
+    public ResponseEntity<LabelResponse> getLabel(@PathVariable long id) {
         Label label = labelService.getLabel(id);
 
-        LabelDto labelDto = new LabelDto(label);
+        LabelResponse labelResponse = new LabelResponse(label);
 
-        return ResponseEntity.ok(labelDto);
+        return ResponseEntity.ok(labelResponse);
     }
 
 
     @PatchMapping("{id}")
-    public ResponseEntity<String> updateLabel(@PathVariable long id, @RequestBody LabelUpdateDto labelUpdateDto) {
-        Label label = labelService.updateLabel(id, labelUpdateDto);
+    public ResponseEntity<String> updateLabel(@PathVariable long id, @RequestBody LabelUpdateRequest labelUpdateRequest) {
+        Label label = labelService.updateLabel(id, labelUpdateRequest);
 
         return ResponseEntity.ok(String.format("라벨수정 성공! 라벨 #%d 라벨 이름 : %s", label.getId(), label.getName()));
     }

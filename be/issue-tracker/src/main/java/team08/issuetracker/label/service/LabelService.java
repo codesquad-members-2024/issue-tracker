@@ -17,20 +17,20 @@ import java.util.stream.Collectors;
 public class LabelService {
     private final LabelRepository labelRepository;
 
-    public LabelOverviewDto getLabelsWithCount() {
-        LabelCountDto labelCount = getLabelCountDto();
+    public LabelOverviewResponse getLabelsWithCount() {
+        LabelCountResponse labelCount = getLabelCountDto();
 
-        List<LabelDto> labels = labelRepository.getAllLabels().stream()
-                .map(LabelDto::new)
+        List<LabelResponse> labels = labelRepository.getAllLabels().stream()
+                .map(LabelResponse::new)
                 .collect(Collectors.toList());
 
-        return new LabelOverviewDto(labelCount, labels);
+        return new LabelOverviewResponse(labelCount, labels);
     }
 
 
-    public Label createLabel(LabelCreationDto labelCreationDto) {
+    public Label createLabel(LabelCreationRequest labelCreationRequest) {
         // 1) DTO -> Entity 변환
-        Label label = labelCreationDto.toEntity();
+        Label label = labelCreationRequest.toEntity();
 
         // 2) 저장 및 반환
         return labelRepository.save(label);
@@ -42,12 +42,12 @@ public class LabelService {
     }
 
 
-    public Label updateLabel(Long id, LabelUpdateDto labelUpdateDto) {
+    public Label updateLabel(Long id, LabelUpdateRequest labelUpdateRequest) {
         // 1) 주어진 id에 해당하는 라벨 찾기. 없으면 예외 발생
         Label label = labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
 
         // 2) 찾은 라벨을 업데이트 데이터로 갱신
-        label.update(labelUpdateDto);
+        label.update(labelUpdateRequest);
 
         // 3) 업데이트 내용 저장 및 반환
         return labelRepository.save(label);
@@ -61,7 +61,7 @@ public class LabelService {
     }
 
 
-    private LabelCountDto getLabelCountDto() {
-        return new LabelCountDto(labelRepository.countLabels());
+    private LabelCountResponse getLabelCountDto() {
+        return new LabelCountResponse(labelRepository.countLabels());
     }
 }
