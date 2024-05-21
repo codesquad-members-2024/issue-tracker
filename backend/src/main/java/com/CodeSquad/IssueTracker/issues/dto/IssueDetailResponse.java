@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.issues.dto;
 
+import com.CodeSquad.IssueTracker.assignee.dto.AssigneeResponse;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import lombok.Builder;
@@ -19,4 +20,5 @@ public class IssueDetailResponse {
     private boolean isClosed;
     private List<CommentResponse> comments;
     private List<LabelRequest> labels;
+    private List<AssigneeResponse> assignees;
 }
