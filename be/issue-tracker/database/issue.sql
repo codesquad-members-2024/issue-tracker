@@ -3,7 +3,7 @@ CREATE TABLE issue (
                        is_open boolean NOT NULL,
                        title varchar NOT NULL,
                        content varchar,
-                       timestamp timestamp NOT NULL,
+                       created_at timestamp NOT NULL,
                        writer varchar NOT NULL,
                        milestone_id bigint,
                        uploaded_file varchar
