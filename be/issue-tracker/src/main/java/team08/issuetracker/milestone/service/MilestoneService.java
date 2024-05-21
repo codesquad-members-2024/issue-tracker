@@ -50,7 +50,7 @@ public class MilestoneService {
 
         Milestone milestone = milestoneRepository
                 .findById(id)
-                .orElseThrow(MilestoneNotFoundException::new);
+                .orElseThrow(MilestoneIdNotFoundException::new);
 
         milestone.update(milestoneUpdateDto);
 
@@ -60,7 +60,7 @@ public class MilestoneService {
     public Milestone updateMilestoneStateToOpen(Long id) {
         Milestone milestone = milestoneRepository
                 .findById(id)
-                .orElseThrow(MilestoneNotFoundException::new);
+                .orElseThrow(MilestoneIdNotFoundException::new);
 
         if (milestone.isOpen()) {
             throw new MilestoneAlreadyOpenedException();
@@ -74,7 +74,7 @@ public class MilestoneService {
     public Milestone updateMilestoneStateToClose(Long id) {
         Milestone milestone = milestoneRepository
                 .findById(id)
-                .orElseThrow(MilestoneNotFoundException::new);
+                .orElseThrow(MilestoneIdNotFoundException::new);
 
         if (!milestone.isOpen()) {
             throw new MilestoneAlreadyClosedException();
@@ -87,7 +87,7 @@ public class MilestoneService {
 
 
     public void deleteMilestone(Long id) {
-        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneNotFoundException::new);
+        Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneIdNotFoundException::new);
 
         milestoneRepository.delete(milestone);
     }

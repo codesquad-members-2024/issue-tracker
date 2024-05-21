@@ -13,7 +13,7 @@ import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
 import team08.issuetracker.exception.milestone.MilestoneAlreadyClosedException;
 import team08.issuetracker.exception.milestone.MilestoneAlreadyOpenedException;
-import team08.issuetracker.exception.milestone.MilestoneNotFoundException;
+import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 
 import static team08.issuetracker.exception.ExceptionMessageBuilder.buildMessage;
@@ -45,8 +45,8 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(MilestoneNotFoundException.class)
-    public ResponseEntity<String> handleMilestoneNotFoundException(MilestoneNotFoundException e) {
+    @ExceptionHandler(MilestoneIdNotFoundException.class)
+    public ResponseEntity<String> handleMilestoneNotFoundException(MilestoneIdNotFoundException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
