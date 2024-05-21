@@ -94,7 +94,6 @@ const IssueFeed = ({
                     isAllChecked={isAllChecked}
                 />
             ))}
-            
         </section>
     );
 };

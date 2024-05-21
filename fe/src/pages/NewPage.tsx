@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Sidebar from "../common/Sidebar";
 import { Header } from "../common/UtilUI";
-import Comment from "../components/NewIssue/Comment";
 import { Link } from "react-router-dom";
+import NewIssue from "../components/NewIssue/NewIssue";
 
 export interface IssueData {
     userId: string;
@@ -43,7 +43,7 @@ const NewPage = () => {
                     />
                 </div>
                 <div className="w-[912px]">
-                    <Comment issueData={issueData} setIssueData={setIssueData}/>
+                    <NewIssue issueData={issueData} setIssueData={setIssueData}/>
                 </div>
                 <Sidebar />
             </section>

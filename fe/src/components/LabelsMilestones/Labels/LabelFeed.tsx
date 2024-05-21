@@ -6,12 +6,11 @@ export interface Label {
     id: number;
     name: string;
     description: string;
-    color: string;
     textColor: string;
-    created_at: string;
-    updated_at: string;
+    backgroundColor: string;
+    labelCount: number;
+    milestoneCount: number;
 }
-
 interface LabelFeedProps {
     labelsInfo: Label[];
 }

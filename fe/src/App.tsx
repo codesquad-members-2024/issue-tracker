@@ -4,7 +4,7 @@ import IssuePage from "./pages/IssuesPage";
 import LabelsPage from "./pages/LabelsPage";
 import MilestonesPage from "./pages/MilestonesPage";
 import NewPage from "./pages/NewPage";
-import IssueProduct from "./pages/IssueProduct";
+import IssueProduct from "./pages/IssueDetail";
 
 function App() {
     return (

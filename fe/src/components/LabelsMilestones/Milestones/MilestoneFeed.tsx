@@ -2,16 +2,16 @@ import { useState } from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
 import NotFound from "../../../common/NotFound";
 import MilestoneCard from "./MilestoneCard";
+import { Issue } from "../../IssueContainer/IssueFeed";
 
 export interface Milestone {
     id: number;
     title: string;
     description: string;
     dueDate: string;
-    openAt: string;
-    updatedAt: string;
     state: string;
-    deleted: boolean;
+    updatedAt: string;
+    issues: Issue[]
 }
 
 

@@ -8,8 +8,7 @@ interface LabelCardProps {
 }
 
 const LabelCard = ({ curLabel }: LabelCardProps) => {
-    const [ModifyDeleteState, ModifyDeleteDispatch] =
-        useContext(ModifyDeleteContext);
+    const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
 
     return (
         <>
@@ -19,7 +18,7 @@ const LabelCard = ({ curLabel }: LabelCardProps) => {
                 <div className="h-[90px] flex border-t-2 border-gray-300 dark:bg-darkModeBorderBGx items-center">
                     <div className="w-1/5 h-4/5 ml-4 flex items-center">
                         <div
-                            style={{ backgroundColor: curLabel.color }}
+                            style={{ backgroundColor: curLabel.backgroundColor, color: curLabel.textColor }}
                             className="rounded-xl px-4 py-1 text-white text-sm"
                         >
                             {curLabel.name}

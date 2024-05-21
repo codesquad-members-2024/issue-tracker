@@ -11,6 +11,8 @@ import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
 import MilestoneEditUI from "./MilestoneEditUI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { APiUtil } from "../../../common/APIUtils";
+import { ModalComponent } from "../../../common/Modal";
+import Progressbar from "../../../common/Progressbar";
 interface MilestoneCardProps {
     curMilestone: Milestone;
 }
@@ -21,15 +23,21 @@ interface MutationArgs {
 }
 
 const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
+    const length = {
+        open: curMilestone.issues.filter((cur) => cur.state === "OPEN").length,
+        closed: curMilestone.issues.filter((cur) => cur.state === "CLOSED").length,
+    };
+
     const queryClient = useQueryClient();
-    const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
+    const [ModifyDeleteState, ModifyDeleteDispatch] =
+        useContext(ModifyDeleteContext);
 
     const { mutate } = useMutation({
-        mutationFn: async({ id, type }: MutationArgs) => {
+        mutationFn: async ({ id, type }: MutationArgs) => {
             if (type === "삭제") {
                 await APiUtil.deleteData("milestones", id);
             } else {
-                await APiUtil.patchData("milestones", id)
+                await APiUtil.patchData("milestones", id);
             }
         },
         onSuccess: () => {
@@ -37,15 +45,19 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
         },
     });
 
-    const handleClick = (id : number, e: React.MouseEvent<HTMLButtonElement>, type: string) => {
+    const handleClick = (
+        id: number,
+        e: React.MouseEvent<HTMLButtonElement>,
+        type: string
+    ) => {
         e.preventDefault();
-        mutate({id, type})
-    }
+        mutate({ id, type });
+    };
 
     return (
         <>
             {ModifyDeleteState.id === curMilestone.id ? (
-                <MilestoneEditUI curMilestone={curMilestone}/>
+                <MilestoneEditUI curMilestone={curMilestone} />
             ) : (
                 <div className="h-[90px] flex border-t-2 border-gray-300 dark:bg-darkModeBorderBGx items-center">
                     <div className="w-4/5 h-4/5 ml-4">
@@ -65,9 +77,15 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
                     </div>
                     <div className="w-1/5 text-sm mr-6 text-right flex flex-col gap-3">
                         <div className="flex gap-4 justify-end">
-                            <button onClick={(e) => handleClick(curMilestone.id, e, "닫기")}>
-                                <CreditCardOutlined /> 닫기
-                            </button>
+                            <div>
+                                <CreditCardOutlined className="mr-1" />
+                                <ModalComponent
+                                    type="닫기"
+                                    callBack={(e) =>
+                                        handleClick(curMilestone.id, e, "닫기")
+                                    }
+                                />
+                            </div>
                             <button
                                 onClick={() =>
                                     ModifyDeleteDispatch({
@@ -78,20 +96,21 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
                             >
                                 <FormOutlined /> 편집
                             </button>
-                            <button onClick={(e) => handleClick(curMilestone.id, e, "삭제")}>
-                                <DeleteOutlined className="text-red-500" /> 삭제
-                            </button>
-                        </div>
-                        <div>
-                            <div className="h-2 w-full bg-gray-200 rounded-md overflow-hidden">
-                                <div className="h-full bg-blue-500 w-[50%]"></div>
+                            <div>
+                                <DeleteOutlined className="text-red-500 mr-1" />
+                                <ModalComponent
+                                    type="삭제"
+                                    callBack={(e) =>
+                                        handleClick(curMilestone.id, e, "삭제")
+                                    }
+                                />
                             </div>
-                            <div className="text-left mb-[-20px]">50%</div>
                         </div>
+                        <Progressbar open={length.open} closed={length.closed}/>
 
                         <div className="flex justify-end gap-2 text-xs">
-                            <div>열린 이슈(1)</div>
-                            <div>닫힌 이슈(1)</div>
+                            <div>열린 이슈({length.open})</div>
+                            <div>닫힌 이슈({length.closed})</div>
                         </div>
                     </div>
                 </div>
