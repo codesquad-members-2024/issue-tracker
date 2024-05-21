@@ -10,9 +10,13 @@ import team08.issuetracker.exception.member.InvalidRegisterFormException;
 import team08.issuetracker.exception.member.MemberIdDuplicateKeyException;
 import team08.issuetracker.exception.member.MemberNotFoundException;
 import team08.issuetracker.exception.member.MemberPasswordMismatchException;
-import team08.issuetracker.exception.milestone.*;
+import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
+import team08.issuetracker.exception.milestone.MilestoneAlreadyClosedException;
+import team08.issuetracker.exception.milestone.MilestoneAlreadyOpenedException;
+import team08.issuetracker.exception.milestone.MilestoneNotFoundException;
+import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 
-import static team08.issuetracker.exception.ExceptionMessageBuilder.*;
+import static team08.issuetracker.exception.ExceptionMessageBuilder.buildMessage;
 
 @ControllerAdvice
 @Slf4j
@@ -69,7 +73,6 @@ public class ExceptionController {
     public ResponseEntity<String> handleMilestoneQueryStateException(MilestoneQueryStateException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-
     }
 
 
