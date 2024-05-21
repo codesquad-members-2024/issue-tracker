@@ -4,7 +4,7 @@ import { Header } from "../Main/IssuesList/Header";
 import { ContentNavStyles } from "@/styles/commonStyles";
 import { NavTabs } from "../common/NavTabs";
 import { NewMilestones } from "./NewMilestones";
-import { MilestonesContent } from "./MilestonesContent";
+import { MilestonesList } from "./MilestonesList";
 
 export function Milestones() {
   const [showNewMilestones, setShowNewMilestones] = useState(false);
@@ -29,7 +29,7 @@ export function Milestones() {
       {showNewMilestones && (
         <NewMilestones closeNewMilestones={closeNewMilestones} />
       )}
-      <MilestonesContent />
+      <MilestonesList />
     </>
   );
 }

@@ -2,95 +2,62 @@ import styled from "styled-components";
 import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
 import { ClosedIcon } from "@/icons/ClosedIcon";
-import { OpenIcon } from "@/icons/OpenIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
-import { milestonesList } from "@/test.json";
 import { CalendarOutlined } from "@ant-design/icons";
+import { milestonesList } from "@/test.json";
 
 export function MilestonesContent() {
+  const progress = (1 / 2) * 100; // (닫힌 이슈 / 모든 이슈)
+
   return (
-    <Wrap>
-      <MilestonesHeader>
-        <StyledBtn>
-          <OpenIcon />
-          <div className="open">열린 마일스톤()</div>
-        </StyledBtn>
-        <StyledBtn>
-          <ClosedIcon />
-          <div className="closed">닫힌 마일스톤()</div>
-        </StyledBtn>
-      </MilestonesHeader>
-      <MilestonesList>
-        {milestonesList.length === 0 ? (
-          <Content />
-        ) : (
-          milestonesList.map((milestone) => (
-            <Content key={milestone.id}>
-              <StyledDescript>
-                <div className="top">
-                  <div className="milestone">
-                    <StyledMilestonesIcon />
-                    <span>{milestone.title}</span>
-                  </div>
-                  <div className="deadLine">
-                    <CalendarOutlined />
-                    <span>{milestone.deadLine}</span>
-                  </div>
+    <>
+      {milestonesList.length === 0 ? (
+        <Content />
+      ) : (
+        milestonesList.map((milestone) => (
+          <Content key={milestone.id}>
+            <StyledDescript>
+              <div className="top">
+                <div className="milestone">
+                  <StyledMilestonesIcon />
+                  <span>{milestone.title}</span>
                 </div>
-                <div className="description">{milestone.description}</div>
-              </StyledDescript>
+                <div className="deadLine">
+                  <CalendarOutlined />
+                  <span>{milestone.deadLine}</span>
+                </div>
+              </div>
+              <div className="description">{milestone.description}</div>
+            </StyledDescript>
+            <div className="right">
               <Buttons>
                 <Button>
-                  <ClosedIcon />
-                  <div>닫기</div>
+                  <ClosedIcon /><span>닫기</span>
                 </Button>
                 <Button>
-                  <EditIcon />
-                  <div>편집</div>
+                  <EditIcon /><span>편집</span>
                 </Button>
-                <Button>
-                  <TrashIcon />
-                  <div>삭제</div>
+                <Button className="delete">
+                  <TrashIcon /><span>삭제</span>
                 </Button>
               </Buttons>
-            </Content>
-          ))
-        )}
-      </MilestonesList>
-    </Wrap>
+              <StyledProgress>
+                <div className="progressBar">
+                  <StyledProgressBar $progress={progress}></StyledProgressBar>
+                </div>
+                <div className="element">
+                  <span>{progress}%</span>
+                  <span>열린 이슈 0</span>
+                  <span>닫힌 이슈 0</span>
+                </div>
+              </StyledProgress>
+            </div>
+          </Content>
+        ))
+      )}
+    </>
   );
 }
-
-const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 20px 100px;
-  border: solid #dadbef;
-  border-radius: 10px;
-  overflow: hidden;
-`;
-
-const MilestonesHeader = styled.div`
-  height: 60px;
-  display: flex;
-  align-items: center;
-  width: 280px;
-  justify-content: space-between;
-  margin-left: 35px;
-`;
-
-const StyledBtn = styled.div`
-  display: flex;
-  div {
-    margin-left: 10px;
-  }
-`;
-
-const MilestonesList = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-`;
 
 const Content = styled.div`
   height: 90px;
@@ -99,7 +66,7 @@ const Content = styled.div`
   justify-content: space-between;
   background-color: white;
   border-top: solid #dadbef;
-  padding-left: 25px;
+  padding: 0 25px;
 `;
 
 const StyledDescript = styled.div`
@@ -109,7 +76,6 @@ const StyledDescript = styled.div`
   }
   .description {
     margin-top: 10px;
-    margin-left: 25px;
   }
   span {
     margin-left: 10px;
@@ -118,21 +84,20 @@ const StyledDescript = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-  padding-right: 25px;
   cursor: pointer;
+  justify-content: flex-end;
+  width: 240px;
   .delete {
-    margin-left: 20px;
     color: red;
   }
 `;
 
-const Button = styled.div`
+const Button = styled.button`
   display: flex;
-  padding-left: 5px;
   align-items: center;
-  padding-left: 20px;
-  cursor: pointer;
-  div {
+  background: none;
+  border: none;
+  span {
     margin-left: 10px;
   }
 `;
@@ -140,4 +105,26 @@ const Button = styled.div`
 const StyledMilestonesIcon = styled(MilestonesIcon)`
   padding: 0;
   stroke: blue;
+`;
+
+const StyledProgress = styled.div`
+  margin-top: 10px;
+  .progressBar {
+    border: solid #dadbef;
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .element {
+    display: flex;
+    margin-top: 10px;
+    cursor: pointer;
+    justify-content: space-between;
+  }
+`;
+
+const StyledProgressBar = styled.div`
+  width: ${({ $progress }) => `${$progress}%`};
+  height: 10px;
+  background-color: #007bff;
 `;
