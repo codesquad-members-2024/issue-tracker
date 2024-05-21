@@ -6,22 +6,17 @@ import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
 import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
 import com.CodeSquad.IssueTracker.assignee.AssigneeRepository;
-import com.CodeSquad.IssueTracker.assignee.dto.AssigneeResponse;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
-import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
-import com.CodeSquad.IssueTracker.issues.dto.IssueMilestoneRequest;
-import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
-import com.CodeSquad.IssueTracker.issues.dto.IssueTitleRequest;
-import com.CodeSquad.IssueTracker.milestone.Milestone;
-import com.CodeSquad.IssueTracker.milestone.MilestoneService;
-import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
-import com.CodeSquad.IssueTracker.issues.issueLabel.*;
+import com.CodeSquad.IssueTracker.issues.dto.*;
+import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelRepository;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.Label;
 import com.CodeSquad.IssueTracker.labels.LabelRepository;
+import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
+import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -122,9 +115,8 @@ public class IssueService {
         Issue issue = findIssueById(issueId);
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
-        List<AssigneeResponse> assignees = assigneeRepository.findUsersByIssueId(issueId);
+        List<String> assignees = assigneeRepository.findUsersByIssueId(issueId);
         List<LabelRequest> labels = issueLabelRepository.getLabelRequestByIssueId(issueId);
-
 
         return IssueDetailResponse.builder()
                 .issueId(issue.getIssueId())

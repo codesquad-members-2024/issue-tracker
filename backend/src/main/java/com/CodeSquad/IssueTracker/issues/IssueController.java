@@ -3,6 +3,7 @@ package com.CodeSquad.IssueTracker.issues;
 import com.CodeSquad.IssueTracker.issues.dto.*;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class IssueController {
 
 
     @PostMapping
-    public ResponseEntity<IssueIdResponse> createIssue(@RequestBody IssueRequest issueRequest) {
+    public ResponseEntity<IssueIdResponse> createIssue(@Valid @RequestBody IssueRequest issueRequest) {
         Long createdIssueId = issueService.createIssue(issueRequest);
         IssueIdResponse issueIdResponse = new IssueIdResponse(createdIssueId);
         return ResponseEntity.ok(issueIdResponse);
