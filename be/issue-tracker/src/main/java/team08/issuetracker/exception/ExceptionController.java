@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
-import team08.issuetracker.exception.member.MemberIdDuplicateKeyException;
+import team08.issuetracker.exception.member.MemberIdDuplicateException;
 import team08.issuetracker.exception.member.MemberNotFoundException;
 import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
@@ -63,8 +63,8 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
     }
 
-    @ExceptionHandler(MemberIdDuplicateKeyException.class)
-    public ResponseEntity<String> handleMemberIdDuplicateKeyException(MemberIdDuplicateKeyException e) {
+    @ExceptionHandler(MemberIdDuplicateException.class)
+    public ResponseEntity<String> handleMemberIdDuplicateKeyException(MemberIdDuplicateException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }

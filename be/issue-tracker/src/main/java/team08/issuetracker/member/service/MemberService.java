@@ -2,8 +2,10 @@ package team08.issuetracker.member.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.stereotype.Service;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
+import team08.issuetracker.exception.member.MemberIdDuplicateException;
 import team08.issuetracker.exception.member.MemberNotFoundException;
 import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.member.model.Member;
@@ -29,7 +31,11 @@ public class MemberService {
 
         Member member = new Member(memberCreationDto.memberId(), memberCreationDto.password());
 
-        memberRepository.insert(member);
+        try {
+            memberRepository.insert(member);
+        } catch (DbActionExecutionException e) {
+            throw new MemberIdDuplicateException();
+        }
 
         log.info("회원가입 성공! 아이디 : {}", member.getMemberId());
     }
