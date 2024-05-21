@@ -28,4 +28,9 @@ public class LabelService {
     public Long countLabels() {
         return labelRepository.countLabels();
     }
+
+    public void deleteById(Long labelId) {
+        Label label = findById(labelId);
+        labelRepository.deleteById(labelId);
+    }
 }
