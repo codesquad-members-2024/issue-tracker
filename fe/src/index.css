@@ -34,7 +34,6 @@
 	}
 
 	.input-text--focus {
-		outline: 1px solid theme("colors[grayscale.900]");
 		background-color: theme("colors[grayscale.50]");
 		caret-color: theme("colors[grayscale.700]");
 		color: theme("colors.black");
@@ -51,7 +50,7 @@
 		transform: translate(7px, 12px) scale(1.3);
 	}
 	.input--invalid {
-		outline-color: theme("colors[accent.red]");
+		outline: 1px solid theme("colors[accent.red]");
 		border: 1px solid theme("colors[accent.red]");
 		color: theme("colors[accent.red]");
 	}

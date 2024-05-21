@@ -2,11 +2,6 @@ import Header from "../components/Header/Header";
 import IssueDetailContent from "../components/IssueDetail/IssueDetailContent";
 import IssueDetailTitle from "../components/IssueDetail/IssueDetailTitle";
 
-interface PropsType {
-	darkMode: string;
-	setDarkMode: React.Dispatch<React.SetStateAction<string>>;
-}
-
 const issue: Issue = {
 	id: 222,
 	title: "FE 이슈트래커 디자인",
@@ -62,12 +57,12 @@ const getTimeStamp = (timestamp: string) => {
 	return new Intl.DateTimeFormat("ja-JP").format(date);
 };
 
-function IssueDetail({ darkMode, setDarkMode }: PropsType) {
+function IssueDetail() {
 	const timeSince = getTimeStamp(issue.timestamp);
 	return (
 		<div className="w-screen h-screen flex items-center justify-center overflow-auto">
 			<div className="h-screen w-[85%]">
-				<Header darkMode={darkMode} setDarkMode={setDarkMode} />
+				<Header />
 				<IssueDetailTitle issue={issue} timeSince={timeSince} />
 				<IssueDetailContent issue={issue} timeSince={timeSince} />
 			</div>

@@ -1,13 +1,14 @@
+import { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { ThemeContext } from "../../../provider/ThemeProvider";
 
 interface Props {
-	darkMode: string;
-	setDarkMode: React.Dispatch<React.SetStateAction<string>>;
 	setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function ProfileMenu({ darkMode, setDarkMode, setIsVisible }: Props) {
+function ProfileMenu({ setIsVisible }: Props) {
+	const [darkMode, setDarkMode] = useContext(ThemeContext);
 	return (
 		<>
 			<div
