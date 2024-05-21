@@ -3,6 +3,7 @@ package com.CodeSquad.IssueTracker.issues.comment;
 
 import com.CodeSquad.IssueTracker.Exception.comment.AuthorNotMatchedException;
 import com.CodeSquad.IssueTracker.Exception.comment.CommentNotFoundException;
+import com.CodeSquad.IssueTracker.issues.IssueService;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentCreateRequest;
 import com.CodeSquad.IssueTracker.user.UserService;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,18 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserService userService;
+    private final IssueService issueService;
 
-    public CommentService(CommentRepository commentRepository, UserService userService) {
+    public CommentService(CommentRepository commentRepository, UserService userService, IssueService issueService) {
         this.commentRepository = commentRepository;
         this.userService = userService;
+        this.issueService = issueService;
     }
 
 
     public void addComment(CommentCreateRequest request, Long issueId) {
-        validateAuthor(request.author());
+        issueService.validateExistIssue(issueId);
+        userService.validateExistUser(request.author());
         Comment comment = Comment.builder()
                 .author(request.author())
                 .content(request.content())
@@ -40,10 +44,6 @@ public class CommentService {
         }
 
         commentRepository.updateComment(commentId, request.content());
-    }
-
-    public void validateAuthor(String author) {
-        userService.validateExistUser(author);
     }
 
     public Comment validateExistComment(Long commentId) {

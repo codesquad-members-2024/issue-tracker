@@ -250,4 +250,9 @@ public class IssueService {
     public void closeIssues(IssueIds issueIds) {
         issueRepository.closeIssues(issueIds.issueIds());
     }
+
+    public Issue validateExistIssue(Long issueId) {
+        return issueRepository.findById(issueId)
+                .orElseThrow(() -> new IssueNotExistException("이슈가 존재하지 않습니다."));
+    }
 }
