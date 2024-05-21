@@ -20,7 +20,7 @@ function LabelHeader() {
         </LabelBar>
         <MilestoneBar>
           <SmallIcon src={milestoneIcon} />
-          <LargeTitle onClick={() => navigate("/milestones")}>마일스톤({milestones.length})</LargeTitle>
+          <LargeTitle onClick={() => navigate("/milestones")}>마일스톤({milestones && milestones.length || 0})</LargeTitle>
         </MilestoneBar>
       </NavigateBox>
       <AddButton isAvailable={isAddAvailable} onClick={() => setIsAddAvailable(!isAddAvailable)}>
