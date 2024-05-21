@@ -14,8 +14,6 @@ import static com.codesquad.team3.issuetracker.support.repository.RepositorySupp
 public interface SoftDeleteCrudRepository<T extends SoftDeleteEntity, ID> extends
     SimpleCrudRepository<T, ID> {
 
-    Class<T> getType();
-
     default T softDelete(T entity) {
         entity.delete();
         update(entity);
@@ -29,6 +27,8 @@ public interface SoftDeleteCrudRepository<T extends SoftDeleteEntity, ID> extend
 
         return entity;
     }
+
+    Class<T> getType();
 
     @Override
     @Deprecated

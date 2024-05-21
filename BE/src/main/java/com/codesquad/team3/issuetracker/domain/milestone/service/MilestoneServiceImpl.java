@@ -57,7 +57,7 @@ public class MilestoneServiceImpl implements MilestoneService {
     @Override
     public List<MilestoneInfo> getOpenMilestones() {
 
-        List<Milestone> openmilestones = (List<Milestone>) milestoneRepository.findAll(Milestone.class, OPEN);
+        List<Milestone> openmilestones = (List<Milestone>) milestoneRepository.findAll(OPEN);
         List<MilestoneInfo> opens = new ArrayList<>();
         for (Milestone milestone : openmilestones) {
             MilestoneInfo milestoneInfo = createMilestoneInfo(milestone);
@@ -69,7 +69,7 @@ public class MilestoneServiceImpl implements MilestoneService {
 
     @Override
     public List<MilestoneInfo> getClosedMilestones() {
-        List<Milestone> closedList = (List<Milestone>) milestoneRepository.findAll(Milestone.class, CLOSE);
+        List<Milestone> closedList = (List<Milestone>) milestoneRepository.findAll(CLOSE);
         List<MilestoneInfo> closed = new ArrayList<>();
         for (Milestone milestone : closedList) {
             MilestoneInfo milestoneInfo = createMilestoneInfo(milestone);

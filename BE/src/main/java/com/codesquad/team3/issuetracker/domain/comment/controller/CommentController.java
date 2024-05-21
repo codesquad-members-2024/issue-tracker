@@ -42,12 +42,10 @@ public class CommentController {
         commentService.update(id, form);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Comment>> findAll(){
-        List<Comment> commentList = commentService.findAll();
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Comment>> findComments(@PathVariable("id")Integer id){
+        List<Comment> commentList = commentService.findComments(id);
 
         return ResponseEntity.ok(commentList);
     }
-
-
 }

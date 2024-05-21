@@ -18,7 +18,7 @@ import static com.codesquad.team3.issuetracker.support.enums.OpenCloseSearchFlag
 
 @Service
 @RequiredArgsConstructor
-public class IssueServiceImpl implements IssueService{
+public class IssueServiceImpl implements IssueService {
 
     private final IssueRepository issueRepository;
     private final CommentService commentService;
@@ -27,19 +27,19 @@ public class IssueServiceImpl implements IssueService{
     public void createIssue(CreateIssue createIssue) {
 
         Issue issue = new Issue(
-                        createIssue.getWriterId(),
-                        createIssue.getTitle(),
-                        LocalDateTime.now(),
-                        createIssue.getMilestoneId()
-                        );
+                createIssue.getWriterId(),
+                createIssue.getTitle(),
+                LocalDateTime.now(),
+                createIssue.getMilestoneId()
+        );
 
 
         Issue insertdIssue = issueRepository.insert(issue);
         commentService.createComment(
                 new CreateComment(createIssue.getWriterId(),
-                createIssue.getContents(),
-                insertdIssue.getId(),
-                null));
+                        createIssue.getContents(),
+                        insertdIssue.getId(),
+                        null));
     }
 
     @Override
@@ -62,14 +62,14 @@ public class IssueServiceImpl implements IssueService{
 
     @Override
     public int getIssueCount(OpenCloseSearchFlags flags) {
-        return issueRepository.countByCloseCondition(Issue.class, flags);
+        return issueRepository.countByCloseCondition(flags);
 
     }
 
     @Override
     public void openIssue(List<Integer> issueIds) throws NoSuchRecordException {
         for (Integer issueId : issueIds) {
-            Optional<Issue> findIssue = issueRepository.findByIdWithOpenCondition(issueId, Issue.class, OPEN);
+            Optional<Issue> findIssue = issueRepository.findByIdWithOpenCondition(issueId, OPEN);
             issueRepository.open(findIssue.orElseThrow(NoSuchRecordException::new));
         }
     }
@@ -77,7 +77,7 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public void closeIssue(List<Integer> issueIds) throws NoSuchRecordException {
         for (Integer issueId : issueIds) {
-            Optional<Issue> findIssue = issueRepository.findByIdWithOpenCondition(issueId, Issue.class, OPEN);
+            Optional<Issue> findIssue = issueRepository.findByIdWithOpenCondition(issueId, OPEN);
             issueRepository.close(findIssue.orElseThrow(NoSuchRecordException::new));
         }
     }
@@ -86,8 +86,6 @@ public class IssueServiceImpl implements IssueService{
     public List<Issue> getIssueByMilestoneId(Integer milestoneId) {
         return issueRepository.getIssueListByMilestoneId(milestoneId);
     }
-
-
 
 
 }

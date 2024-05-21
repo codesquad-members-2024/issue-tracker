@@ -1,17 +1,18 @@
 package com.codesquad.team3.issuetracker.domain.issue.entity;
 
 import com.codesquad.team3.issuetracker.global.entity.OpenCloseEntity;
-import com.codesquad.team3.issuetracker.global.entity.SoftDeleteEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 
 import java.time.LocalDateTime;
 
-@Table("ISSUE")
+@Table(name="ISSUE")
 @Getter
-public class Issue implements SoftDeleteEntity, OpenCloseEntity {
+@NoArgsConstructor
+public class Issue implements OpenCloseEntity {
 
     @Id
     private Integer id;
@@ -46,14 +47,5 @@ public class Issue implements SoftDeleteEntity, OpenCloseEntity {
         return this.isClosed;
     }
 
-    @Override
-    public void delete() {
-        this.isDeleted = true;
-    }
-
-    @Override
-    public void recover() {
-        this.isDeleted = false;
-    }
 
 }

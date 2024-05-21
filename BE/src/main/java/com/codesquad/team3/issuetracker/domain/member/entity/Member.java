@@ -61,16 +61,4 @@ public class Member implements SoftDeleteEntity {
     public void recover() {
         this.isDeleted = false;
     }
-
-    @Override
-    public void delete() {
-        isDeleted = true;
-
-    }
-
-    @Override
-    public void recover() {
-        isDeleted= false;
-
-    }
 }

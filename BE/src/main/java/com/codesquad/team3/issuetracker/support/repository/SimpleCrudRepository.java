@@ -19,4 +19,6 @@ public interface SimpleCrudRepository<T, ID> extends CrudRepository<T, ID> {
     default T update(T t) {
         return getJdbcAggregateTemplate().update(t);
     }
+
+
 }

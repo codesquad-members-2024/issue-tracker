@@ -8,4 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MilestoneRepository extends OpenCloseCrudRepository<Milestone, Integer> {
 
+    @Override
+    default Class<Milestone> getType(){
+        return Milestone.class;
+    }
 }

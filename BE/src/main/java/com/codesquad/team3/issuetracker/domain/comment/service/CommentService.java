@@ -13,5 +13,5 @@ public interface CommentService {
 
     void update(Integer id, CreateComment form);
 
-    List<Comment> findAll();
+    List<Comment> findComments(Integer id);
 }
