@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.issue.model.Issue;
-import team08.issuetracker.issue.model.dto.IssueCreationDto;
+import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
 import team08.issuetracker.issue.repository.AssigneeRepository;
@@ -34,17 +34,17 @@ public class IssueService {
     }
 
     @Transactional
-    public void createNewIssue(IssueCreationDto issueCreationDto) {
+    public void createNewIssue(IssueCreationRequest issueCreationRequest) {
 
         // 다대다 관계를 갖는 assignee 를 제외한 값으로 issue 생성
-        Issue issue = issueCreationDto.createIssue();
+        Issue issue = issueCreationRequest.createIssue();
         Issue savedIssue = issueRepository.save(issue); // db에 저장하여 id(pk) 값이 autoIncrement 로 설정된 객체를 반환 받는다
 
         //다대다 관계 설정
-        Set<Assignee> assignees = issueCreationDto.createAssigneesWithIssueId(savedIssue.getId());
+        Set<Assignee> assignees = issueCreationRequest.createAssigneesWithIssueId(savedIssue.getId());
         assigneeRepository.saveAll(assignees);
 
-        Set<IssueAttachedLabel> issueAttachedLabels = issueCreationDto.createIssueAttachedLabelsWithIssueId(
+        Set<IssueAttachedLabel> issueAttachedLabels = issueCreationRequest.createIssueAttachedLabelsWithIssueId(
                 savedIssue.getId());
         issueAttachedLabelRepository.saveAll(issueAttachedLabels);
 
