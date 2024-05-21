@@ -94,3 +94,4 @@ ALTER TABLE comment ADD FOREIGN KEY (writer_id) REFERENCES member (id);
 ALTER TABLE labels_in_issue ADD FOREIGN KEY (label_id) REFERENCES label (id);
 
 ALTER TABLE labels_in_issue ADD FOREIGN KEY (issue_id) REFERENCES issue (id);
+

@@ -1,9 +1,11 @@
 package com.codesquad.team3.issuetracker.domain.issue;
 
 import com.codesquad.team3.issuetracker.domain.issue.dto.request.CreateIssue;
+import com.codesquad.team3.issuetracker.domain.issue.entity.Issue;
 import com.codesquad.team3.issuetracker.domain.issue.service.IssueService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
