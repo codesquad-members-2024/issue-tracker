@@ -76,7 +76,9 @@ public class IssueService {
                 .build();
 
         issueRepository.save(issue);
-        milestoneService.incrementTotalIssue(issue.getMilestoneId());
+        if (issue.getMilestoneId() != null){
+            milestoneService.incrementTotalIssue(issue.getMilestoneId());
+        }
 
         // 이슈 작성 시 입력한 내용을 첫번째 코멘트로 저장하기 위함.
         Comment comment = Comment.builder()
@@ -153,7 +155,10 @@ public class IssueService {
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.openIssue(issueId);
         Issue issue = findIssueById(issueId);
-        milestoneService.decrementClosedIssue(issue.getMilestoneId());
+
+        if (issue.getMilestoneId() != null){
+            milestoneService.decrementClosedIssue(issue.getMilestoneId());
+        }
     }
 
     public void closeIssue(long issueId) {
@@ -162,7 +167,10 @@ public class IssueService {
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
         issueRepository.closeIssue(issueId);
         Issue issue = findIssueById(issueId);
-        milestoneService.incrementClosedIssue(issue.getMilestoneId());
+
+        if (issue.getMilestoneId() != null){
+            milestoneService.incrementClosedIssue(issue.getMilestoneId());
+        }
     }
 
     public void updateIssueTitle(Long issueId, IssueTitleRequest issueTitleRequest) {
