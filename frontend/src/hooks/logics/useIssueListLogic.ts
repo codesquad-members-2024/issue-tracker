@@ -9,7 +9,7 @@ export type IssueType = "open" | "close";
 
 const FIRST_PAGE = 1;
 const ISSUE_NUMBER_KEY = "issueNumberResponse";
-const MILESTONES_KEY = "milestoneFilterResponse";
+const MILESTONES_KEY = "milestoneListResponse";
 
 const useIssueListLogic = () => {
   const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setMilestones } = useIssueStore();

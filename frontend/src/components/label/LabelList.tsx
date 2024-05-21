@@ -4,20 +4,21 @@ import Header from "../header/Header";
 import { useEffect, useState } from "react";
 import { sendLabelsRequest } from "../../api/LabelAPI";
 import LabelDetail, { LabelDetailProps } from "./LabelDetail";
+import LabelEditBox from "./LabelEditBox";
 
 function LabelList() {
   const [labels, setLabels] = useState([]);
+  const [isAddable, setIsAddable] = useState(true);
 
   useEffect(() => {
     sendLabelsRequest().then((data) => setLabels(data));
   }, []);
 
-  useEffect(() => {}, [labels]);
-
   return (
     <Wrapper>
       <Header />
       <LabelHeader />
+      {isAddable && (<LabelEditBox />)}
       <LabelTable>
         <LabelTab>
           <span>{labels.length}개의 레이블</span>
@@ -40,7 +41,6 @@ const Wrapper = styled.div`
 
 const LabelTable = styled.div`
   width: 80em;
-  height: calc(100% - 4em);
   border: 1px solid #d9dbe9;
   border-radius: 0.725em;
   overflow: scroll;

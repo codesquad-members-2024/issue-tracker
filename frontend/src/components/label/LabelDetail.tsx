@@ -22,7 +22,7 @@ function LabelDetail({ labelId, labelName, description, textColor, bgColor }: La
 }
 
 const Wrapper = styled.div`
-  height: 12em;
+  height: 7em;
   padding: 0 2em;
   display: flex;
   align-items: center;
