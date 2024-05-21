@@ -15,7 +15,7 @@ interface LabelEditUIProps {
 export interface LabelFormState {
     name: string;
     description: string;
-    color: string;
+    backgroundColor: string;
     textColor: string;
 }
 
@@ -31,7 +31,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
     ] = useState({
         name: "",
         description: "",
-        color: "",
+        backgroundColor: "",
         textColor: "",
     });
 
@@ -49,10 +49,10 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                 ...prevState,
                 name: curLabel?.name ?? "",
                 description: curLabel?.description ?? "",
-                color: curLabel?.color ?? "",
+                color: curLabel?.backgroundColor ?? "",
                 textColor: curLabel?.textColor ?? "",
             }));
-            setColor(curLabel?.color ?? "");
+            setColor(curLabel?.backgroundColor ?? "");
         } else {
             setFormData((prevState) => ({
                 ...prevState,
@@ -66,6 +66,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // post 보내기
     };
 
     const toggleDropdown = () => {

@@ -12,7 +12,7 @@ const MilestonesPage = () => {
         queryKey: ["milestones"],
         queryFn: () => APiUtil.getData("milestones"),
     });
-    // 에러 로딩 처리 따로 
+    // 에러 로딩 처리 따로
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>error...</div>;
 

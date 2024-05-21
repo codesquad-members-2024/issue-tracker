@@ -10,7 +10,7 @@ interface CommentProps {
     setIssueData: React.Dispatch<React.SetStateAction<IssueData>>;
 }
 
-const Comment = ({issueData, setIssueData}: CommentProps) => {
+const NewIssue = ({issueData, setIssueData}: CommentProps) => {
     const [isActive, setActive] = useState({
         title: false,
         description: false,
@@ -64,4 +64,4 @@ const Comment = ({issueData, setIssueData}: CommentProps) => {
     );
 };
 
-export default Comment;
+export default NewIssue;
