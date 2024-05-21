@@ -88,4 +88,28 @@ public class IssueController {
                 .noContent()
                 .build();
     }
+
+    @PutMapping("/issues/{issueId}/assignee")
+    public ResponseEntity<Void> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
+        issueService.addAssigneesById(issueId, userLoginIds);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @PutMapping("/issues/{issueId}/label")
+    public ResponseEntity<Void> addLabelsById(@PathVariable Long issueId, @RequestBody List<Long> labelIds) {
+        issueService.addLabelsById(issueId, labelIds);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @PutMapping("/issues/{issueId}/milestone")
+    public ResponseEntity<Void> addMilestoneById(@PathVariable Long issueId, @RequestBody Long milestoneId) {
+        issueService.addMilestoneById(issueId, milestoneId);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }

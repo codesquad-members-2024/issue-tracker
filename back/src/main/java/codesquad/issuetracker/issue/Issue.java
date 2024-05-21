@@ -7,6 +7,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -47,5 +48,27 @@ public class Issue {
 
     public void close() {
         isClosed = true;
+    }
+
+    public void addAssignee(List<String> userLoginIds) {
+        for (String userLoginId : userLoginIds) {
+            issueAssignees.add(IssueAssignee.builder()
+                    .userLoginId(userLoginId)
+                    .build()
+            );
+        }
+    }
+
+    public void addLabel(List<Long> labelIds) {
+        for (Long labelId : labelIds) {
+            issueLabels.add(IssueLabel.builder()
+                    .labelId(labelId)
+                    .build()
+            );
+        }
+    }
+
+    public void addMilestone(Long milestoneId) {
+        this.milestoneId = milestoneId;
     }
 }

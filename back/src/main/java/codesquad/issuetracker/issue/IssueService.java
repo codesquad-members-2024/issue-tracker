@@ -76,4 +76,22 @@ public class IssueService {
                 .peek(Issue::close)
                 .collect(Collectors.toList()));
     }
+
+    public void addAssigneesById(Long issueId, List<String> userLoginIds) {
+        Issue issue = issueRepository.findById(issueId).get();
+        issue.addAssignee(userLoginIds);
+        issueRepository.save(issue);
+    }
+
+    public void addLabelsById(Long issueId, List<Long> labelIds) {
+        Issue issue = issueRepository.findById(issueId).get();
+        issue.addLabel(labelIds);
+        issueRepository.save(issue);
+    }
+
+    public void addMilestoneById(Long issueId, Long milestoneId) {
+        Issue issue = issueRepository.findById(issueId).get();
+        issue.addMilestone(milestoneId);
+        issueRepository.save(issue);
+    }
 }
