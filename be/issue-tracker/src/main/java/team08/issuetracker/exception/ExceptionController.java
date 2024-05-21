@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
 import team08.issuetracker.exception.member.MemberIdDuplicateException;
-import team08.issuetracker.exception.member.MemberNotFoundException;
+import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
 import team08.issuetracker.exception.milestone.MilestoneAlreadyClosedException;
@@ -27,8 +27,8 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(MemberNotFoundException.class)
-    public ResponseEntity<String> handleMemberNotFoundException(MemberNotFoundException e) {
+    @ExceptionHandler(MemberIdNotFoundException.class)
+    public ResponseEntity<String> handleMemberNotFoundException(MemberIdNotFoundException e) {
         log.error(buildMessage(e));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }

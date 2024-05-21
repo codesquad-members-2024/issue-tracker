@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.conversion.DbActionExecutionExce
 import org.springframework.stereotype.Service;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
 import team08.issuetracker.exception.member.MemberIdDuplicateException;
-import team08.issuetracker.exception.member.MemberNotFoundException;
+import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.model.dto.MemberCreationDto;
@@ -44,7 +44,7 @@ public class MemberService {
         validateMemberForm(memberLoginDto.memberId(), memberLoginDto.password());
 
         Member member = memberRepository.findById(memberLoginDto.memberId())
-                .orElseThrow(MemberNotFoundException::new);
+                .orElseThrow(MemberIdNotFoundException::new);
 
         validateLoginCredential(member, memberLoginDto.password());
 
