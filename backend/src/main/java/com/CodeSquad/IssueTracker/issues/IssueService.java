@@ -8,13 +8,9 @@ import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
-import com.CodeSquad.IssueTracker.issues.dto.IssueDetailResponse;
-import com.CodeSquad.IssueTracker.issues.dto.IssueMilestoneRequest;
-import com.CodeSquad.IssueTracker.issues.dto.IssueRequest;
-import com.CodeSquad.IssueTracker.issues.dto.IssueTitleRequest;
+import com.CodeSquad.IssueTracker.issues.dto.*;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
-import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
 import com.CodeSquad.IssueTracker.issues.issueLabel.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.Label;
@@ -27,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -258,5 +255,27 @@ public class IssueService {
         for (Long issueId : issueIds.issueIds()) {
             closeIssue(issueId);
         }
+    }
+
+    public IssueNumberResponse getIssueNumber() {
+        long openIssueNum = issueRepository.countOpenIssues();
+        long closeIssueNum = issueRepository.countCloseIssues();
+        return IssueNumberResponse.builder()
+                .openIssueCount(openIssueNum)
+                .closeIssueCount(closeIssueNum)
+                .build();
+    }
+
+    public List<AuthorListResponse> getAuthorList() {
+        List<String> authors = issueRepository.findDistinctAuthors();
+        List<AuthorListResponse> authorListResponses = new ArrayList<>();
+
+        for (String author : authors) {
+            authorListResponses.add(AuthorListResponse.builder()
+                    .userId(author)
+                    .build());
+        }
+
+        return authorListResponses;
     }
 }

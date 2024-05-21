@@ -49,4 +49,7 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
     @Modifying
     @Query("UPDATE issues SET milestone_id = NULL WHERE issue_id = :issueId")
     void removeMilestoneFromIssue(Long issueId);
+
+    @Query("SELECT DISTINCT author FROM issues")
+    List<String> findDistinctAuthors();
 }
