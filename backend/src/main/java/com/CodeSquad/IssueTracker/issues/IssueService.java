@@ -123,20 +123,8 @@ public class IssueService {
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
         List<AssigneeResponse> assignees = assigneeRepository.findUsersByIssueId(issueId);
-        List<LabelRequest> issueLabels = issueLabelRepository.findByIssueId(issueId);
-        List<LabelRequest> labelResponses = issueLabels.stream()
-                .map(issueLabel -> {
-                    Optional<Label> label = labelRepository.findById(issueLabel.getLabelId());
-                    return label.map(l -> LabelRequest.builder()
-                                    .labelId(l.getLabelId())
-                                    .labelName(l.getLabelName())
-                                    .textColor(l.getTextColor())
-                                    .bgColor(l.getBgColor())
-                                    .build())
-                            .orElse(null);
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<LabelRequest> labels = issueLabelRepository.getLabelRequestByIssueId(issueId);
+
 
         return IssueDetailResponse.builder()
                 .issueId(issue.getIssueId())
@@ -146,7 +134,7 @@ public class IssueService {
                 .isClosed(issue.getIsClosed())
                 .comments(comments)
                 .assignees(assignees)
-                .labels(labelResponses)
+                .labels(labels)
                 .build();
     }
     public void validateIssueListPage(long page) {

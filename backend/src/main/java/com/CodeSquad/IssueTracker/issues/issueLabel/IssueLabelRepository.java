@@ -16,6 +16,9 @@ public interface IssueLabelRepository extends CrudRepository<IssueLabel, Long> {
     @Query("select * from issueLabel where issue_id = :issueId")
     List<LabelRequest> findByIssueId(Long issueId);
 
+    @Query("SELECT il.label_id, la.label_name, la.text_color, la.bg_color FROM issueLabel il JOIN labels la ON il.label_id = la.label_id WHERE il.issue_id = :issueId")
+    List<LabelRequest> getLabelRequestByIssueId(Long issueId);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM issueLabel WHERE issue_id = :issueId AND label_id = :labelId")
