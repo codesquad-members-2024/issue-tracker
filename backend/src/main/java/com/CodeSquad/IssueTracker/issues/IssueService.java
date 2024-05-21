@@ -5,6 +5,8 @@ import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
 import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
+import com.CodeSquad.IssueTracker.assignee.AssigneeRepository;
+import com.CodeSquad.IssueTracker.assignee.dto.AssigneeResponse;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
@@ -41,10 +43,11 @@ public class IssueService {
     private final MilestoneRepository milestoneRepository;
     private final LabelRepository labelRepository;
     private final IssueLabelRepository issueLabelRepository;
+    private final AssigneeRepository assigneeRepository;
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
                         UserRepository userRepository, MilestoneRepository milestoneRepository,
                         LabelRepository labelRepository, IssueLabelRepository issueLabelRepository,
-                       MilestoneService milestoneService) {
+                        MilestoneService milestoneService, AssigneeRepository assigneeRepository) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
@@ -52,6 +55,7 @@ public class IssueService {
         this.labelRepository = labelRepository;
         this.issueLabelRepository = issueLabelRepository;
         this.milestoneService = milestoneService;
+        this.assigneeRepository = assigneeRepository;
     }
 
 
@@ -118,6 +122,7 @@ public class IssueService {
         Issue issue = findIssueById(issueId);
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
+        List<AssigneeResponse> assignees = assigneeRepository.findUsersByIssueId(issueId);
         List<LabelRequest> issueLabels = issueLabelRepository.findByIssueId(issueId);
         List<LabelRequest> labelResponses = issueLabels.stream()
                 .map(issueLabel -> {
@@ -140,6 +145,7 @@ public class IssueService {
                 .publishedAt(issue.getPublishedAt().toString())
                 .isClosed(issue.getIsClosed())
                 .comments(comments)
+                .assignees(assignees)
                 .labels(labelResponses)
                 .build();
     }
