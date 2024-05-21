@@ -24,6 +24,7 @@ public class Member implements SoftDeleteEntity {
     private String password;
     private String nickname;
     private LocalDateTime birthday;
+
     @CreatedDate
     @Column("join_time")
     private LocalDateTime joinTime;
@@ -59,5 +60,17 @@ public class Member implements SoftDeleteEntity {
     @Override
     public void recover() {
         this.isDeleted = false;
+    }
+
+    @Override
+    public void delete() {
+        isDeleted = true;
+
+    }
+
+    @Override
+    public void recover() {
+        isDeleted= false;
+
     }
 }

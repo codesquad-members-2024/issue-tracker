@@ -6,6 +6,5 @@ public interface SoftDeleteEntity {
 
      void delete();
      void recover();
-     boolean isDeleted();
-
+  
 }
