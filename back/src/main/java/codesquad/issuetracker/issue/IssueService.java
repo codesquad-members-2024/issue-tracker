@@ -94,4 +94,22 @@ public class IssueService {
         issue.addMilestone(milestoneId);
         issueRepository.save(issue);
     }
+
+    public void deleteAssigneesById(Long issueId, List<String> userLoginIds) {
+        Issue issue = issueRepository.findById(issueId).get();
+        issue.deleteAssignee(userLoginIds);
+        issueRepository.save(issue);
+    }
+
+    public void deleteLabelsById(Long issueId, List<Long> labelIds) {
+        Issue issue = issueRepository.findById(issueId).get();
+        issue.deleteLabel(labelIds);
+        issueRepository.save(issue);
+    }
+
+    public void deleteMilestoneById(Long issueId) {
+        Issue issue = issueRepository.findById(issueId).get();
+        issue.deleteMilestone();
+        issueRepository.save(issue);
+    }
 }

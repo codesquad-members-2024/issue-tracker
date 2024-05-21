@@ -71,4 +71,16 @@ public class Issue {
     public void addMilestone(Long milestoneId) {
         this.milestoneId = milestoneId;
     }
+
+    public void deleteAssignee(List<String> userLoginIds) {
+        issueAssignees.removeIf(issueAssignee -> userLoginIds.contains(issueAssignee.getUserLoginId()));
+    }
+
+    public void deleteLabel(List<Long> labelIds) {
+        issueLabels.removeIf(issueLabel -> labelIds.contains(issueLabel.getLabelId()));
+    }
+
+    public void deleteMilestone() {
+        this.milestoneId = null;
+    }
 }

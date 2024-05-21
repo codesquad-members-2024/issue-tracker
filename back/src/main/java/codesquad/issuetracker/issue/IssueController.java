@@ -112,4 +112,28 @@ public class IssueController {
                 .noContent()
                 .build();
     }
+
+    @DeleteMapping("/issues/{issueId}/assignee")
+    public ResponseEntity<Void> deleteAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
+        issueService.deleteAssigneesById(issueId, userLoginIds);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @DeleteMapping("/issues/{issueId}/label")
+    public ResponseEntity<Void> deleteLabelsById(@PathVariable Long issueId, @RequestBody List<Long> labelIds) {
+        issueService.deleteLabelsById(issueId, labelIds);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @DeleteMapping("/issues/{issueId}/milestone")
+    public ResponseEntity<Void> deleteMilestoneById(@PathVariable Long issueId) {
+        issueService.deleteMilestoneById(issueId);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }
