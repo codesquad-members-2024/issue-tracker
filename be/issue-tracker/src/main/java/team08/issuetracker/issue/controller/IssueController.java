@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
-import team08.issuetracker.issue.model.dto.IssueCreationDto;
+import team08.issuetracker.issue.model.dto.IssueCreationRequest;
+import team08.issuetracker.issue.model.dto.IssueListResponse;
 import team08.issuetracker.issue.service.IssueService;
 
 @Slf4j
@@ -19,20 +20,16 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping("/issue")
-    public ResponseEntity<String> issues() {
+    public ResponseEntity<IssueListResponse> issues() {
         List<Issue> issues = issueService.issues();
-        StringBuilder sb = new StringBuilder();
-        for (Issue issue : issues) {
-            sb.append(issue);
-            sb.append("\n");
-        }
-        return ResponseEntity.ok(sb.toString());
+        IssueListResponse issueListResponse = new IssueListResponse(issues);
+        return ResponseEntity.ok(issueListResponse);
     }
 
     @PostMapping("/issue")
-    public ResponseEntity<String> createIssue(@RequestBody IssueCreationDto issueCreationDto) {
+    public ResponseEntity<String> createIssue(@RequestBody IssueCreationRequest issueCreationRequest) {
 
-        issueService.createNewIssue(issueCreationDto);
+        issueService.createNewIssue(issueCreationRequest);
 
         return ResponseEntity.ok("이슈 생성 성공");
     }
