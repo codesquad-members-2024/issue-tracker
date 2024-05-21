@@ -5,8 +5,10 @@ import labelIcon from "../../img/icon/labelIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import { useNavigate } from "react-router-dom";
+import useIssueStore from "../../hooks/stores/useIssueStore";
 
 function Filter() {
+  const { milestones } = useIssueStore();
   const navigate = useNavigate();
 
   return (
@@ -30,7 +32,7 @@ function Filter() {
             </LabelBar>
             <MilestoneBar>
               <SmallIcon src={milestoneIcon} />
-              <LargeTitle onClick={() => navigate("/milestones")}>마일스톤(0)</LargeTitle>
+              <LargeTitle onClick={() => navigate("/milestones")}>마일스톤({milestones.length})</LargeTitle>
             </MilestoneBar>
           </FilterBox>
           <NewIssueButton onClick={() => navigate("/new")}>
