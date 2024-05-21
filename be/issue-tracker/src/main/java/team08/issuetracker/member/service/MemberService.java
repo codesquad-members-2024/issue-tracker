@@ -9,8 +9,8 @@ import team08.issuetracker.exception.member.MemberIdDuplicateException;
 import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.member.model.Member;
-import team08.issuetracker.member.model.dto.MemberCreationDto;
-import team08.issuetracker.member.model.dto.MemberLoginDto;
+import team08.issuetracker.member.model.dto.MemberCreationRequest;
+import team08.issuetracker.member.model.dto.MemberLoginRequest;
 import team08.issuetracker.member.repository.MemberRepository;
 
 import java.util.regex.Matcher;
@@ -26,27 +26,25 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public void registerMember(MemberCreationDto memberCreationDto) {
-        validateMemberForm(memberCreationDto.memberId(), memberCreationDto.password());
+    public Member registerMember(MemberCreationRequest memberCreationRequest) {
+        validateMemberForm(memberCreationRequest.memberId(), memberCreationRequest.password());
 
-        Member member = new Member(memberCreationDto.memberId(), memberCreationDto.password());
+        Member member = new Member(memberCreationRequest.memberId(), memberCreationRequest.password());
 
         try {
-            memberRepository.insert(member);
+            return memberRepository.insert(member);
         } catch (DbActionExecutionException e) {
             throw new MemberIdDuplicateException();
         }
-
-        log.info("회원가입 성공! 아이디 : {}", member.getMemberId());
     }
 
-    public Member loginMember(MemberLoginDto memberLoginDto) {
-        validateMemberForm(memberLoginDto.memberId(), memberLoginDto.password());
+    public Member loginMember(MemberLoginRequest memberLoginRequest) {
+        validateMemberForm(memberLoginRequest.memberId(), memberLoginRequest.password());
 
-        Member member = memberRepository.findById(memberLoginDto.memberId())
+        Member member = memberRepository.findById(memberLoginRequest.memberId())
                 .orElseThrow(MemberIdNotFoundException::new);
 
-        validateLoginCredential(member, memberLoginDto.password());
+        validateLoginCredential(member, memberLoginRequest.password());
 
         return member;
     }
