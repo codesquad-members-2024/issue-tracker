@@ -18,7 +18,6 @@ export function NewComment() {
         placeholder="코멘트를 입력하세요"
         ref={textareaHeight}
         onInput={handleTextareaHeight}
-        rows={1}
       />
       <StyledBtn>
         <div>+ 코멘트 작성</div>
