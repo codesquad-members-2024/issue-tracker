@@ -15,5 +15,6 @@ public interface LabelService {
 
     Label findById(Integer id);
 
+    List<Label> findByIssueId(Integer issueId);
     List<Label> findAll();
 }

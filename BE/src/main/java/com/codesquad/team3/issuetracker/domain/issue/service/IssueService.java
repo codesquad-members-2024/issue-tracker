@@ -1,6 +1,7 @@
 package com.codesquad.team3.issuetracker.domain.issue.service;
 
 import com.codesquad.team3.issuetracker.domain.issue.dto.request.CreateIssue;
+import com.codesquad.team3.issuetracker.domain.issue.dto.response.IssuseResponse;
 import com.codesquad.team3.issuetracker.domain.issue.entity.Issue;
 import com.codesquad.team3.issuetracker.global.exceptions.NoSuchRecordException;
 import com.codesquad.team3.issuetracker.support.enums.OpenCloseSearchFlags;
@@ -24,4 +25,8 @@ public interface IssueService {
     void closeIssue(List<Integer> issueIds) throws NoSuchRecordException;
 
     List<Issue> getIssueByMilestoneId(Integer milestoneId);
+
+    IssuseResponse getIssue(Integer id);
+
+    void putLabel(Integer LabelId);
 }

@@ -33,7 +33,6 @@ public class LabelServiceImpl implements LabelService {
 
     }
 
-
     @Override
     public void delete(Integer id) {
         labelRepository.deleteById(id);
@@ -45,8 +44,16 @@ public class LabelServiceImpl implements LabelService {
     }
 
     @Override
+    public List<Label> findByIssueId(Integer issueId) {
+        return labelRepository.findByIssueId(issueId);
+    }
+
+    @Override
     public List<Label> findAll() {
         return StreamSupport.stream(labelRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
+
+
+
 }

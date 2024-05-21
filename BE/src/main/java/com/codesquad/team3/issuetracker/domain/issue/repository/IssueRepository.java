@@ -18,4 +18,6 @@ public interface IssueRepository extends OpenCloseCrudRepository<Issue, Integer>
     default Class<Issue> getType(){
         return Issue.class;
     }
+
+    //mappedcoolection
 }
