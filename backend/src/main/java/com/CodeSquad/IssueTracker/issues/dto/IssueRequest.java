@@ -15,7 +15,7 @@ public record IssueRequest(
         @NotBlank(message = "작성자 정보가 필요합니다.")
         String author,
         Set<String> assignees,
-        List<Long> labels,
+        Set<Long> labels,
         String milestone,
         Long milestoneId
 ) {}

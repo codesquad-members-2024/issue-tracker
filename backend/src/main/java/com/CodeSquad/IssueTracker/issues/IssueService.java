@@ -1,7 +1,6 @@
 package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
-import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
 import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
@@ -13,9 +12,7 @@ import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelRepository;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.IssueLabelRequest;
-import com.CodeSquad.IssueTracker.milestone.Milestone;
-import com.CodeSquad.IssueTracker.milestone.MilestoneService;
-import com.CodeSquad.IssueTracker.issues.issueLabel.*;
+import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelId;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.Label;
 import com.CodeSquad.IssueTracker.labels.LabelRepository;
@@ -29,7 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -67,10 +68,13 @@ public class IssueService {
         validateIssueRequest(issueRequest);
 
         log.info("Creating issue: {}", issueRequest);
-        Set<AssigneeId> assigneeIds = new HashSet<>();
-        for (String assignee : issueRequest.assignees()) {
-            assigneeIds.add(new AssigneeId(assignee));
-        }
+        Set<AssigneeId> assigneeIds = issueRequest.assignees().stream()
+                                                    .map(AssigneeId::new)
+                                                    .collect(Collectors.toSet());
+
+        Set<LabelId> labelIds = issueRequest.labels().stream()
+                                            .map(LabelId::new)
+                                            .collect(Collectors.toSet());
 
         // 이슈 저장을 위한 객체 생성
         Issue issue = Issue.builder()
@@ -80,6 +84,7 @@ public class IssueService {
                 .isClosed(false)
                 .milestoneId(issueRequest.milestoneId())
                 .assignees(assigneeIds)
+                .labels(labelIds)
                 .build();
 
         issueRepository.save(issue);
