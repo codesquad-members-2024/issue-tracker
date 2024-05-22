@@ -6,6 +6,7 @@ import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
 import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
 import com.CodeSquad.IssueTracker.assignee.AssigneeRepository;
+import com.CodeSquad.IssueTracker.assignee.dto.AssigneeId;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
@@ -66,6 +67,10 @@ public class IssueService {
         validateIssueRequest(issueRequest);
 
         log.info("Creating issue: {}", issueRequest);
+        Set<AssigneeId> assigneeIds = new HashSet<>();
+        for (String assignee : issueRequest.assignees()) {
+            assigneeIds.add(new AssigneeId(assignee));
+        }
 
         // 이슈 저장을 위한 객체 생성
         Issue issue = Issue.builder()
@@ -74,6 +79,7 @@ public class IssueService {
                 .publishedAt(LocalDateTime.now())
                 .isClosed(false)
                 .milestoneId(issueRequest.milestoneId())
+                .assignees(assigneeIds)
                 .build();
 
         issueRepository.save(issue);

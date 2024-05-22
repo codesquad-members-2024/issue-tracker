@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public record IssueRequest(
         @NotBlank(message = "제목이 필요합니다.")
@@ -13,7 +14,7 @@ public record IssueRequest(
         Optional<String> content,
         @NotBlank(message = "작성자 정보가 필요합니다.")
         String author,
-        List<String> assignees,
+        Set<String> assignees,
         List<Long> labels,
         String milestone,
         Long milestoneId
