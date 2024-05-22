@@ -8,30 +8,33 @@ import LabelEditBox from "./LabelEditBox";
 import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
 
 function LabelList() {
-  const { labels, setLabels, labelState } = useContext(LabelStateContext);
+  const { labels, setLabels, labelState, setLabelState } = useContext(LabelStateContext);
   const { isToAdd } = labelState;
 
   useEffect(() => {
-    sendLabelsRequest().then((data) => {
-      setLabels(data)});
+    sendLabelsRequest().then((data) => setLabels(data));
   }, []);
 
   return (
-      <Wrapper>
-        <Header />
-        <LabelHeader />
-        {isToAdd && <LabelEditBox />}
-        <LabelTable>
-          <LabelTab>
-            <span>{labels.length}개의 레이블</span>
-          </LabelTab>
-          <ScrollableArea>
-            {labels.map((label: LabelDetailType) => (
-              <LabelDetail {...label} />
-            ))}
-          </ScrollableArea>
-        </LabelTable>
-      </Wrapper>
+    <Wrapper>
+      <Header />
+      <LabelHeader />
+      {isToAdd && (
+        <EditBoxWrapper>
+          <LabelEditBox type="new" handleCancelClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} handleSubmitClick={() => {}}/>
+        </EditBoxWrapper>
+      )}
+      <LabelTable>
+        <LabelTab>
+          <span>{labels.length}개의 레이블</span>
+        </LabelTab>
+        <ScrollableArea>
+          {labels.map((label: LabelDetailType) => (
+            <LabelDetail {...label} />
+          ))}
+        </ScrollableArea>
+      </LabelTable>
+    </Wrapper>
   );
 }
 
@@ -39,6 +42,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2em;
+`;
+
+const EditBoxWrapper = styled.div`
+  border: 1px solid #d9dbe9;
+  border-radius: 0.75em;
 `;
 
 const LabelTable = styled.div`

@@ -1,30 +1,61 @@
 import styled from "styled-components";
 import plusIcon from "../../img/icon/plusIcon_blue.svg";
 import submitIcon from "../../img/icon/editSubmit.svg";
+import { LabelDetailType } from "../../hooks/contexts/useLabelStateContext";
+import { ChangeEvent, useRef, useState } from "react";
 
-function LabelEditBox() {
+type EditType = "new" | "edit";
+
+interface LabelEditBoxProps {
+  type: EditType;
+  content?: LabelDetailType;
+  handleCancelClick: () => void;
+  handleSubmitClick: () => void;
+}
+
+const defaultContent = {
+  labelId: 0,
+  labelName: "Label",
+  description: "",
+  textColor: "#000",
+  bgColor: "#fff",
+};
+
+function LabelEditBox({ type, content = defaultContent, handleCancelClick, handleSubmitClick }: LabelEditBoxProps) {
+  const [labelName, setLabelName] = useState(content.labelName);
+  const [description, setDescription] = useState(content.description);
+  const [bgColor, setBgColor] = useState(content.bgColor);
+  const [textColor, setTextColor] = useState(content.textColor);
+
+  const handleLabelNameChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setLabelName(value);
+  const handleDescriptionChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setDescription(value);
+  const handleBgColorChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setBgColor(value);
+  const handleTextColorChange = ({ target: { value } }: ChangeEvent<HTMLSelectElement>) => setTextColor(value);
+
   return (
-    <Wrapper>
-      <Title>새로운 레이블 추가</Title>
+    <Wrapper type={type}>
+      <Title>{type === "new" ? "새로운 레이블 추가" : "레이블 편집"}</Title>
       <Content>
         <LabelPreviewBox>
-          <LabelPreview>Label</LabelPreview>
+          <LabelPreview bgColor={bgColor} textColor={textColor}>
+            {labelName}
+          </LabelPreview>
         </LabelPreviewBox>
         <FormWrapper>
           <Form>
             <FormType>이름</FormType>
-            <FormInput required />
+            <FormInput value={labelName} onChange={handleLabelNameChange} required />
           </Form>
           <Form>
             <FormType>설명(선택)</FormType>
-            <FormInput required />
+            <FormInput value={description} onChange={handleDescriptionChange} required />
           </Form>
           <ColorFormWrapper>
             <BackgroundColorForm>
               <FormType>배경 색상</FormType>
-              <FormInput required />
+              <FormInput value={bgColor} onChange={handleBgColorChange} required />
             </BackgroundColorForm>
-            <TextColorSelection>
+            <TextColorSelection value={textColor} onChange={handleTextColorChange}>
               <TextColorOption value="#000">어두운 색</TextColorOption>
               <TextColorOption value="#fff">밝은 색</TextColorOption>
             </TextColorSelection>
@@ -32,11 +63,11 @@ function LabelEditBox() {
         </FormWrapper>
       </Content>
       <ButtonWrapper>
-        <CancelButton>
+        <CancelButton onClick={handleCancelClick}>
           <img src={plusIcon} />
           취소
         </CancelButton>
-        <SubmitButton>
+        <SubmitButton onClick={handleSubmitClick}>
           <img src={submitIcon} />
           편집 완료
         </SubmitButton>
@@ -45,15 +76,14 @@ function LabelEditBox() {
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ type: EditType }>`
   width: 80em;
   box-sizing: border-box;
   padding: 2em;
   display: flex;
   flex-direction: column;
   gap: 1em;
-  border: 1px solid #d9dbe9;
-  border-radius: 0.75em;
+  ${({ type }) => type === "edit" && "border-top: 1px solid #d9dbe9;"}
 `;
 
 const Title = styled.span`
@@ -76,12 +106,14 @@ const LabelPreviewBox = styled.div`
   border-radius: 0.75em;
 `;
 
-const LabelPreview = styled.div`
+const LabelPreview = styled.div<{ bgColor: string; textColor: string }>`
   height: 1.5em;
   padding: 0 1em;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: ${({ bgColor }) => bgColor};
+  color: ${({ textColor }) => textColor};
   border: 1px solid #d9dbe9;
   border-radius: 0.75em;
 `;
@@ -110,10 +142,15 @@ const BackgroundColorForm = styled.div`
   border-radius: 12px;
 `;
 
-const TextColorSelection = styled.select``;
-
-const TextColorOption = styled.option`
+const TextColorSelection = styled.select`
+  width: 6em;
+  display: flex;
+  font-size: 16px;
+  border: none;
+  background-color: transparent;
 `;
+
+const TextColorOption = styled.option``;
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -128,10 +165,10 @@ const CancelButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  border: 1px solid #007AFF;
+  border: 1px solid #007aff;
   border-radius: 12px;
   background-color: transparent;
-  color: #007AFF;
+  color: #007aff;
 `;
 
 const SubmitButton = styled.button`
@@ -141,9 +178,9 @@ const SubmitButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  border: 1px solid #007AFF;
+  border: 1px solid #007aff;
   border-radius: 12px;
-  background-color: #007AFF;
+  background-color: #007aff;
   color: white;
 `;
 

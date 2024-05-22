@@ -1,16 +1,41 @@
 import styled from "styled-components";
-import { LabelDetailType } from "../../hooks/contexts/useLabelStateContext";
+import editIcon from "../../img/icon/editIcon_gray.svg";
+import deleteIcon from "../../img/icon/deleteIcon.svg";
+import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { useContext, useState } from "react";
+import LabelEditBox from "./LabelEditBox";
 
-function LabelDetail({ labelId, labelName, description, textColor, bgColor }: LabelDetailType) {
+function LabelDetail(props: LabelDetailType) {
+  const { labelId, labelName, description, textColor, bgColor } = props;
+  const [isToEdit, setIsToEdit] = useState(false);
+
   return (
-    <Wrapper>
-      <LabelWrapper>
-        <Label textColor={textColor} bgColor={bgColor}>
-          {labelName}
-        </Label>
-      </LabelWrapper>
-      <Description>{description}</Description>
-    </Wrapper>
+    <>
+      {isToEdit ? (
+        <LabelEditBox type="edit" content={props} handleCancelClick={() => setIsToEdit(!isToEdit)} handleSubmitClick={() => {}} />
+      ) : (
+        <Wrapper>
+          <ContentWrapper>
+            <LabelWrapper>
+              <Label textColor={textColor} bgColor={bgColor}>
+                {labelName}
+              </Label>
+            </LabelWrapper>
+            <Description>{description}</Description>
+          </ContentWrapper>
+          <ButtonWrapper>
+            <EditButton onClick={() => setIsToEdit(!isToEdit)}>
+              <img src={editIcon} />
+              편집
+            </EditButton>
+            <DeleteButton>
+              <img src={deleteIcon} />
+              삭제
+            </DeleteButton>
+          </ButtonWrapper>
+        </Wrapper>
+      )}
+    </>
   );
 }
 
@@ -18,9 +43,14 @@ const Wrapper = styled.div`
   height: 7em;
   padding: 0 2em;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   border-top: 1px solid #d9dbe9;
   gap: 2em;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
 `;
 
 const LabelWrapper = styled.div`
@@ -44,6 +74,27 @@ const Label = styled.div<{ textColor: string; bgColor: string }>`
 
 const Description = styled.span`
   color: #6e7191;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 1em;
+`;
+
+const EditButton = styled.button`
+  display: flex;
+  gap: 0.5em;
+  color: #4e4b66;
+  background-color: transparent;
+  border: none;
+`;
+
+const DeleteButton = styled.button`
+  display: flex;
+  gap: 0.5em;
+  color: #ff3b30;
+  background-color: transparent;
+  border: none;
 `;
 
 export default LabelDetail;
