@@ -16,7 +16,7 @@ public class LabelService {
     }
 
     public List<Label> getAllLabels() {
-        return (List<Label>) labelRepository.findAll();
+        return labelRepository.findAll();
     }
 
     public Label getLabelById(Long labelId) {

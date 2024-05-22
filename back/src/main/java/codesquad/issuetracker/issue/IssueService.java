@@ -26,7 +26,7 @@ public class IssueService {
     }
 
     public List<Issue> getAllIssues() {
-        return (List<Issue>) issueRepository.findAll();
+        return issueRepository.findAll();
     }
 
     public List<Label> getLabelsForIssue(Issue issue) {
