@@ -1,32 +1,25 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
-import { fetchData } from "@/utils/fetchData";
+import useFetch from "../../hooks/useFetch";
 
 export function LabelsContent() {
-  const [labelsList, setLabelsList] = useState([]);
+  const {state: data, loading, error } = useFetch({ url: `${import.meta.env.VITE_SERVER}/labels` });
 
-  useEffect(() => {
-    const fetchLabels = async () => {
-      try {
-        await fetchData(`${import.meta.env.VITE_SERVER}labels`, setLabelsList);
-      } catch (error) {
-        console.error(`Error fetching labels: ${error.message}`);
-      }
-    };
-
-    fetchLabels();
-  }, []);
+  if (loading) return <h1>LOADING...</h1>;
+  if (error) {
+    console.log(error);
+    return <div>Error loading labels</div>;
+  }
 
   return (
     <Wrap>
-      <LabelsHeader>{labelsList.length}개의 레이블</LabelsHeader>
+      <LabelsHeader>{data.countsOfLabels}개의 레이블</LabelsHeader>
       <LabelsList>
-        {labelsList.length === 0 ? (
+        {data.countsOfLabels === 0 ? (
           <Content />
         ) : (
-          labelsList.map((label) => (
+          data.labelList.map((label) => (
             <Content key={label.id}>
               <div className="label">
                 <StyledLabel $backcolor={label.color} color={label.fontColor}>

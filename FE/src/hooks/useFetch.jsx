@@ -10,8 +10,8 @@ const useFetch = ({ url }) => {
       try {
         const res = await fetch(url);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const list = await res.json();
-        setState(list);
+        const data = await res.json();
+        setState(data);
       } catch (err) {
         setError(err);
       } finally {
