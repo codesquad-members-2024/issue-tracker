@@ -1,6 +1,6 @@
 package codesquad.issuetracker.milestone;
 
-import codesquad.issuetracker.milestone.dto.MilestoneCreateRequest;
+import codesquad.issuetracker.milestone.dto.MilestoneRequest;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
 import codesquad.issuetracker.milestone.dto.MilestoneResponse;
 import java.net.URI;
@@ -30,8 +30,8 @@ public class MilestoneController {
 
     @PostMapping("/new")
     public ResponseEntity<Milestone> createNewMilestone(
-        @RequestBody MilestoneCreateRequest milestoneCreateRequest) {
-        Milestone newMilestone = milestoneService.createNewMilestone(milestoneCreateRequest);
+        @RequestBody MilestoneRequest milestoneRequest) {
+        Milestone newMilestone = milestoneService.createNewMilestone(milestoneRequest);
         return ResponseEntity.created(URI.create("/api/milestones/" + newMilestone.getId()))
             .body(newMilestone);
     }
@@ -47,24 +47,15 @@ public class MilestoneController {
 
     @PutMapping("/{milestoneId}")
     public ResponseEntity<Milestone> updateMilestone(@PathVariable Long milestoneId,
-        @RequestBody MilestoneCreateRequest milestoneCreateRequest) {
+        @RequestBody MilestoneRequest milestoneRequest) {
         Milestone updatedMilestone = milestoneService.updateMilestone(milestoneId,
-            milestoneCreateRequest);
+            milestoneRequest);
         return ResponseEntity.ok().body(updatedMilestone);
     }
 
     @DeleteMapping("/{milestoneId}")
     public ResponseEntity<String> deleteMilestone(@PathVariable Long milestoneId) {
         return milestoneService.softDeleteByMilestoneId(milestoneId);
-    }
-
-
-    @GetMapping("/test")
-    public ResponseEntity<String> test(@ModelAttribute MilestoneQueryInfo milestoneQueryInfo) {
-        log.info(milestoneQueryInfo.getDirection().name());
-        log.info(milestoneQueryInfo.getSort());
-        log.info(milestoneQueryInfo.getState().name());
-        return ResponseEntity.ok().body(milestoneQueryInfo.toString());
     }
 
     @PatchMapping("/{milestoneId}/close")

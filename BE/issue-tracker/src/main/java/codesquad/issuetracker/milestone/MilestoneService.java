@@ -2,7 +2,7 @@ package codesquad.issuetracker.milestone;
 
 import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.issue.IssueService;
-import codesquad.issuetracker.milestone.dto.MilestoneCreateRequest;
+import codesquad.issuetracker.milestone.dto.MilestoneRequest;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
 import codesquad.issuetracker.milestone.dto.MilestoneResponse;
 import java.util.List;
@@ -25,8 +25,8 @@ public class MilestoneService {
         this.issueService = issueService;
     }
 
-    public Milestone createNewMilestone(MilestoneCreateRequest milestoneCreateRequest) {
-        return milestoneRepository.save(milestoneCreateRequest.toEntity());
+    public Milestone createNewMilestone(MilestoneRequest milestoneRequest) {
+        return milestoneRepository.save(milestoneRequest.toEntity());
     }
 
     public List<MilestoneResponse> fetchFilteredMilestones(MilestoneQueryInfo milestoneQueryInfo) {
@@ -45,10 +45,10 @@ public class MilestoneService {
     }
 
     public Milestone updateMilestone(Long milestoneId,
-        MilestoneCreateRequest milestoneCreateRequest) {
+        MilestoneRequest milestoneRequest) {
         int affectedRow = milestoneRepository.updateMilestone(milestoneId,
-            milestoneCreateRequest.getTitle(),
-            milestoneCreateRequest.getDescription(), milestoneCreateRequest.getDueDate());
+            milestoneRequest.getTitle(),
+            milestoneRequest.getDescription(), milestoneRequest.getDueDate());
         if (affectedRow == 0) {
             throw new IllegalArgumentException("Milestone not found");
         }
