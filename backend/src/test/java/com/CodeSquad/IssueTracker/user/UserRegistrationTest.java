@@ -1,6 +1,7 @@
 package com.CodeSquad.IssueTracker.user;
 
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
+import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,9 @@ public class UserRegistrationTest {
     @Test
     @DisplayName("유효한 사용자의 회원가입")
     public void testSaveValidUser() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest("validU", "vidPas");
         User user = new User("validU", "vidPas");
-        assertTrue(userService.save(user));
+        assertTrue(userService.save(userRegisterRequest));
     }
 
 
