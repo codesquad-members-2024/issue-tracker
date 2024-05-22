@@ -137,7 +137,7 @@ const NewIssueButton = styled.button`
   align-items: center;
   gap: 0.5em;
   color: white;
-  background-color: #007aff;
+  background-color: #595959;
   border: 0;
   border-radius: 0.725em;
   cursor: pointer;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import plusIcon from "../../img/icon/plusIcon_blue.svg";
+import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import submitIcon from "../../img/icon/editSubmit.svg";
 import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
 import { ChangeEvent, useContext, useRef, useState } from "react";
@@ -77,7 +77,7 @@ function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCance
       </Content>
       <ButtonWrapper>
         <CancelButton onClick={handleCancelClick}>
-          <img src={plusIcon} />
+          <CancelImage src={plusIcon} />
           취소
         </CancelButton>
         <SubmitButton onClick={handleSubmitClick}>
@@ -178,10 +178,15 @@ const CancelButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  border: 1px solid #007aff;
+  border: 1px solid #595959;
   border-radius: 12px;
   background-color: transparent;
-  color: #007aff;
+  color: #595959;
+  cursor: pointer;
+`;
+
+const CancelImage = styled.img`
+  transform: rotate(45deg);
 `;
 
 const SubmitButton = styled.button`
@@ -191,10 +196,11 @@ const SubmitButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  border: 1px solid #007aff;
+  border: 1px solid #595959;
   border-radius: 12px;
-  background-color: #007aff;
+  background-color: #595959;
   color: white;
+  cursor: pointer;
 `;
 
 const Form = styled.div`

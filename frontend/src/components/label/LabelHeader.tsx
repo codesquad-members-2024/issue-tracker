@@ -92,6 +92,7 @@ const AddButton = styled.button<{ isAvailable: boolean }>`
   align-items: center;
   opacity: ${({ isAvailable }) => (isAvailable ? 0.5 : 1)};
   transition: all 0.5s ease;
+  cursor: pointer;
 `;
 
 export default LabelHeader;
