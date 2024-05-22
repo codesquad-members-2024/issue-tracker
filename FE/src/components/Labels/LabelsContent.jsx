@@ -1,9 +1,24 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
-import { labelsList } from "@/test.json";
+import { fetchData } from "@/utils/fetchData";
 
 export function LabelsContent() {
+  const [labelsList, setLabelsList] = useState([]);
+
+  useEffect(() => {
+    const fetchLabels = async () => {
+      try {
+        await fetchData(`${import.meta.env.VITE_SERVER}labels`, setLabelsList);
+      } catch (error) {
+        console.error(`Error fetching labels: ${error.message}`);
+      }
+    };
+
+    fetchLabels();
+  }, []);
+
   return (
     <Wrap>
       <LabelsHeader>{labelsList.length}개의 레이블</LabelsHeader>
@@ -14,7 +29,7 @@ export function LabelsContent() {
           labelsList.map((label) => (
             <Content key={label.id}>
               <div className="label">
-                <StyledLabel $backcolor={label.color} color={label.font_color}>
+                <StyledLabel $backcolor={label.color} color={label.fontColor}>
                   {label.title}
                 </StyledLabel>
               </div>
@@ -78,11 +93,11 @@ const Content = styled.div`
 `;
 
 const StyledLabel = styled.span`
-  background-color: ${({ $backcolor }) => $backcolor};
+  background-color: ${({ $backcolor }) => "#" + $backcolor};
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 14px;
-  color: ${({ color }) => color};
+  color: ${({ color }) => "#" + color};
 `;
 
 const Buttons = styled.div`

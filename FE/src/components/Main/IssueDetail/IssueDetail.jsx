@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { Comment } from "./Comment";
 import { RightPanel } from "./RightPanel";
-import { calculateTime } from "@/Utils/calculateTime";
+import { calculateTime } from "@/utils/calculateTime";
 import { issues } from "@/test.json";
 
 export function IssueDetail() {
