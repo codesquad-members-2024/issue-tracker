@@ -6,18 +6,19 @@ export const useMilestoneList = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	const fetchMilestoneList = async () => {
+		try {
+			const response = await getMilestones();
+			setMilestoneList(response);
+		} catch (error) {
+			setError(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
-		const fetchMilestoneList = async () => {
-			try {
-				const response = await getMilestones();
-				setMilestoneList(response);
-			} catch (error) {
-				setError(error);
-			} finally {
-				setLoading(false);
-			}
-		};
 		fetchMilestoneList();
 	}, []);
-	return { milestoneList, loading, error };
+	return { milestoneList, loading, error, fetching: fetchMilestoneList };
 };

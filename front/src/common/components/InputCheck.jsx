@@ -7,10 +7,12 @@ import { IconCheckCircle } from '~/common/icons';
  */
 export function InputCheck({
 	listName,
+	id,
 	value,
 	src,
 	bgColor,
 	fontColor,
+	onChange,
 	...props
 }) {
 	const select = useRef(null);
@@ -24,11 +26,12 @@ export function InputCheck({
 			</span>
 
 			<input
+				id={id}
 				name={listName}
 				value={value}
 				type='checkbox'
 				ref={select}
-				onChange={() => {}}
+				onChange={onChange}
 			/>
 		</StyledLabel>
 	);

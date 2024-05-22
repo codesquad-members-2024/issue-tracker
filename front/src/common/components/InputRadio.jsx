@@ -6,6 +6,7 @@ import { IconCheckCircle, IconCheckOff, IconChecks } from '~/common/icons';
  * value = [] or [id1, id2, id3, ...]
  */
 export function InputRadio({
+	id,
 	listName,
 	value,
 	src,
@@ -26,6 +27,7 @@ export function InputRadio({
 			</span>
 			{/* {checked ? <IconCheckCircle /> : <IconCheckOff />} */}
 			<input
+				id={id}
 				name={listName}
 				value={value}
 				type='radio'

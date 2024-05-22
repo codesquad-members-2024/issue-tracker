@@ -6,18 +6,22 @@ export const useLabelList = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	const fetchLabelList = async () => {
+		setLoading(true);
+		try {
+			await new Promise(resolve => setTimeout(resolve, 2000)); // API 호출을 2초로 가정
+			const response = await getLabels();
+			setLabelList(response);
+		} catch (error) {
+			setError(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
-		const fetchLabelList = async () => {
-			try {
-				const response = await getLabels();
-				setLabelList(response);
-			} catch (error) {
-				setError(error);
-			} finally {
-				setLoading(false);
-			}
-		};
 		fetchLabelList();
 	}, []);
-	return { labelList, loading, error };
+
+	return { labelList, loading, error, fetching: fetchLabelList };
 };

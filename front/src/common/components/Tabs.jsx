@@ -5,7 +5,7 @@ import { IconLabel, IconMilestone } from '~/common/icons';
 import { useLabelMilestoneCounter } from '~/context/hooks';
 
 export const Tabs = ({ ...props }) => {
-	const { labelCounter, milestoneCounter } = useLabelMilestoneCounter();
+	const { labelCounter = 0, milestoneCounter = 0 } = useLabelMilestoneCounter();
 
 	return (
 		<StyledWrapper {...props}>

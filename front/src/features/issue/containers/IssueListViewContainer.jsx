@@ -1,20 +1,77 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { Input } from 'antd';
 
 import { IssueItem } from '../components/IssueItem';
-import { useIssueList } from '~/features/issue/hooks';
+import {
+	useIssueList,
+	useLabelList,
+	useMilestoneList,
+} from '~/features/issue/hooks';
 import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
 
-import { CheckBox, Dropdowns, InputRadio, Tabs } from '~/common/components';
+import {
+	CheckBox,
+	Dropdowns,
+	InputRadio,
+	Tabs,
+	Loading,
+} from '~/common/components';
 import { IconPlus, IconChevronDown } from '~/common/icons';
 
 export function IssueListViewContainer() {
-	const { issueList, loading, error } = useIssueList();
+	const { Search } = Input;
+	const {
+		issueList,
+		loading: issueLoading,
+		error: issueError,
+	} = useIssueList();
 
+	const [issue, setIssue] = useState([]);
+
+	const {
+		labelList,
+		loading: labelLoading,
+		fetching: fetchLabelList,
+	} = useLabelList();
+	const {
+		milestoneList,
+		loading: mileLoading,
+		fetching: fetchMilestoneList,
+	} = useMilestoneList();
+
+	const [searchValue, setSearchValue] = useState('');
+	const [queryString, setQueryString] = useState('');
+	const navigate = useNavigate();
+	const onChangeFilter = (e, prefix) => {
+		setSearchValue(value =>
+			e.target.checked ? `${value} ${prefix}:${e.target.value},` : ''
+		);
+		setQueryString(value =>
+			e.target.checked ? `${value} ${prefix} = ${e.target.id},` : ''
+		);
+		console.log(queryString);
+	};
+
+	// TODO: 검색어를 이용한 이슈 검색
+	const onSearch = queryString => {
+		navigate(`/issues?search=${queryString}`);
+	};
 	return (
 		<StyledWrapper>
 			<StyledSearch>
-				<div className='tab'></div>
+				<div className='tab'>
+					<Search
+						value={searchValue}
+						placeholder='input search text'
+						allowClear
+						onSearch={() => {
+							onSearch(queryString);
+						}}
+						style={{ width: 560 }}
+					/>
+				</div>
 				<div className='tab'>
 					<LabelMilestoneCounterProvider>
 						<Tabs />
@@ -55,36 +112,39 @@ export function IssueListViewContainer() {
 					<details>
 						<summary>
 							레이블
-							<IconChevronDown />
+							<IconChevronDown onClick={fetchLabelList} />
 						</summary>
 						<StyledDropdowns dropdownTitle='레이블 필터'>
 							<InputRadio listName={'labels'} value={'레이블이 없는 이슈'} />
-							<InputRadio
-								listName={'labels'}
-								value={'docu'}
-								bgColor={'#d4c5f9'}
-								fontColor={'#fff'}
-							/>
-							<InputRadio
-								listName={'labels'}
-								value={'bugs'}
-								bgColor={'#d2f7f1'}
-								fontColor={'#fff'}
-							/>
+							{labelLoading && <Loading size='small' />}
+							{labelList?.map(label => (
+								<InputRadio
+									key={label.id}
+									id={label.id}
+									listName={'labels'}
+									value={label.name}
+									bgColor={label.backgroundColor}
+									fontColor={label.textColor}
+									onChange={e => onChangeFilter(e, 'label')}
+								/>
+							))}
 						</StyledDropdowns>
 					</details>
 					<details>
 						<summary>
 							마일스톤
-							<IconChevronDown />
+							<IconChevronDown onClick={fetchMilestoneList} />
 						</summary>
 						<StyledDropdowns dropdownTitle='마일스톤 필터'>
-							<InputRadio
-								listName={'milestones'}
-								value={'마일스톤이 없는 이슈'}
-							/>
-							<InputRadio listName={'milestones'} value={'마일스톤 제목2'} />
-							<InputRadio listName={'milestones'} value={'마일스톤 제목1'} />
+							{milestoneList?.map(milestone => (
+								<InputRadio
+									key={milestone.id}
+									id={milestone.id}
+									listName={'milestones'}
+									value={milestone.name}
+									onChange={e => onChangeFilter(e, 'milestone')}
+								/>
+							))}
 						</StyledDropdowns>
 					</details>
 					<details>
@@ -110,7 +170,7 @@ export function IssueListViewContainer() {
 			<StyledList>
 				{/* {loading && <Loading size='large' />} */}
 
-				{issueList.map((issue, index) => (
+				{issueList?.map((issue, index) => (
 					<IssueItem key={issue.id} issue={issue} index={issue[index]} />
 				))}
 			</StyledList>
