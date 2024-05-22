@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public interface AssigneeRepository extends CrudRepository<Assignee, Long> {
 
+    @Query("SELECT DISTINCT user_id FROM assignees")
+    List<String> findAllAssignee();
+
     @Query("SELECT user_id FROM assignees WHERE issue_id = :issueId")
     List<String> findUsersByIssueId(Long issueId);
 

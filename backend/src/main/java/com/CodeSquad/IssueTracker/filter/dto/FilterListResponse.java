@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class FilterListResponse {
     private IssueNumberResponse issueNumberResponse;
-    //private List<AssigneeFilterResponse> assigneeListResponse;
+    private List<String> assigneeListResponse;
     private List<LabelListResponse> labelListResponse;
     private List<MilestoneListResponse> milestoneListResponse;
     private List<AuthorListResponse> authorListResponse;

@@ -7,6 +7,8 @@ import com.CodeSquad.IssueTracker.issues.IssueService;
 import com.CodeSquad.IssueTracker.user.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AssigneeService {
 
@@ -44,5 +46,9 @@ public class AssigneeService {
                 .orElseThrow(() -> new AssigneeNotFoundException("담당자가 존재하지 않습니다."));
 
         assigneeRepository.deleteByIssueIdAndUserId(issueId, userId);
+    }
+
+    public List<String> getAllAssignees() {
+        return assigneeRepository.findAllAssignee();
     }
 }
