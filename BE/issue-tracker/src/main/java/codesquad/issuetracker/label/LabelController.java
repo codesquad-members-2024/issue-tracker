@@ -3,6 +3,7 @@ package codesquad.issuetracker.label;
 import codesquad.issuetracker.label.dto.LabelRequest;
 import codesquad.issuetracker.label.dto.LabelResponse;
 import codesquad.issuetracker.milestone.MilestoneService;
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,12 @@ public class LabelController {
             .map(label -> LabelResponse.of(label, labelService.countLabels(), milestoneService.countOpenMilestones()))
             .toList();
         return ResponseEntity.ok().body(labelResponses);
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<Label> createLabel(@RequestBody LabelRequest labelRequest) {
+        Label labelResponse = labelService.createLabel(labelRequest);
+        return ResponseEntity.created(URI.create("/api/labels/" + labelResponse.getId())).build();
     }
 
     @PutMapping("/{labelId}")
