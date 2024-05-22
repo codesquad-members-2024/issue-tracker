@@ -13,7 +13,7 @@ public class IssueCreateRequest {
 
     String userId;
     String title;
-    String description;
+    String content;
     Set<String> assigneeIds;
     List<Long> labelIds;
     Long milestoneId;
@@ -27,7 +27,7 @@ public class IssueCreateRequest {
             .map(Assignee::new)
             .collect(Collectors.toSet());
 
-        return Issue.from(userId, title, description, milestoneId, labelRefs, assigneeIds);
+        return Issue.of(userId, title, content, milestoneId, labelRefs, assigneeIds);
     }
 
 }

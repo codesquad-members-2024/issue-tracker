@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.milestone.Milestone;
 import java.time.LocalDateTime;
@@ -25,12 +26,12 @@ public class Issue {
     private Long id;
     private String authorId;
     private String title;
-    private String description;
+    private String content;
     private LocalDateTime openAt;
     private LocalDateTime updatedAt;
     private LocalDateTime closedAt;
     private AggregateReference<Milestone, Long> milestoneId;
-    private boolean isOpen;
+    private State state;
     private boolean isDeleted;
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<IssueAttachedLabel> labelRefs = new HashSet<>();
@@ -41,37 +42,37 @@ public class Issue {
 
     @Builder
     @PersistenceCreator
-    public Issue(Long id, String authorId, String title, String description,
+    public Issue(Long id, String authorId, String title, String content,
         LocalDateTime openAt,
-        LocalDateTime updatedAt, LocalDateTime closedAt, AggregateReference<Milestone, Long> milestoneId, boolean isOpen,
+        LocalDateTime updatedAt, LocalDateTime closedAt, AggregateReference<Milestone, Long> milestoneId, State state,
         boolean isDeleted, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assigneeIds,
         List<Comment> comments) {
         this.id = id;
         this.authorId = authorId;
         this.title = title;
-        this.description = description;
+        this.content = content;
         this.openAt = openAt;
         this.updatedAt = updatedAt;
         this.closedAt = closedAt;
         this.milestoneId = milestoneId;
-        this.isOpen = isOpen;
+        this.state = state;
         this.isDeleted = isDeleted;
         this.labelRefs = labelRefs;
         this.assigneeIds = assigneeIds;
         this.comments = comments;
     }
 
-    public static Issue from(String authorId, String title, String description,
+    public static Issue of(String authorId, String title, String content,
         Long milestoneId, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assignees) {
         return Issue.builder()
             .authorId(authorId)
             .title(title)
-            .description(description)
+            .content(content)
             .openAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .closedAt(LocalDateTime.now())
             .milestoneId(AggregateReference.to(milestoneId))
-            .isOpen(true)
+            .state(State.OPEN)
             .isDeleted(false)
             .labelRefs(labelRefs)
             .assigneeIds(assignees)

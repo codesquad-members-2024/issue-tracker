@@ -17,7 +17,6 @@ public class MilestoneCustom implements MilestoneCustomRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private static final String FILTER_SQL_QUERY = "SELECT * FROM MILESTONE WHERE IS_DELETED = FALSE";
     private static final String DELETE_SQL_QUERY = "UPDATE MILESTONE SET IS_DELETED = TRUE WHERE id = :milestoneId";
-    private static final String CHECK_IS_DELETED_QUERY = "SELECT IS_DELETED FROM MILESTONE WHERE id = :milestoneId";
 
     @Autowired
     public MilestoneCustom(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -54,10 +53,10 @@ public class MilestoneCustom implements MilestoneCustomRepository {
             rs.getLong("id"),
             rs.getString("title"),
             rs.getString("description"),
-            rs.getDate("due_date").toLocalDate().atTime(0, 0),
+            rs.getTimestamp("due_date").toLocalDateTime(),
             State.valueOf(rs.getString("state")),
             rs.getBoolean("is_deleted"),
-            rs.getDate("updated_at").toLocalDate().atTime(0, 0)
+            rs.getTimestamp("updated_at").toLocalDateTime()
         ));
     }
 

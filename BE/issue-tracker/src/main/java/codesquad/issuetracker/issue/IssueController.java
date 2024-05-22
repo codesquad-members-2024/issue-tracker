@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.comment.CommentCreateRequest;
 import codesquad.issuetracker.comment.CommentService;
@@ -33,8 +34,8 @@ public class IssueController {
     }
 
     @GetMapping
-    public List<Issue> getIssues(@RequestParam boolean isOpen) {
-        return issueService.findIssuesByIsOpen(isOpen);
+    public List<Issue> getIssues(@RequestParam State state) {
+        return issueService.findIssuesByState(state);
     }
 
     @GetMapping("/{issueId}")
@@ -43,16 +44,15 @@ public class IssueController {
     }
 
     @PostMapping
-    public ResponseEntity<Issue> createIssue(@RequestBody IssueCreateRequest request) {
-        Issue issue = request.toEntity();
-        Issue savedIssue = issueService.create(issue);
+    public ResponseEntity<Issue> createIssue(@RequestBody IssueCreateRequest issueCreateRequest) {
+        Issue savedIssue = issueService.create(issueCreateRequest);
         return ResponseEntity.created(URI.create("/api/issues/" + savedIssue.getId())).build();
     }
 
     @PostMapping("/{issueId}/comments")
     public Comment addComment(@PathVariable Long issueId, @RequestBody
     CommentCreateRequest commentCreateRequest) {
-        return commentService.addComment(issueId, commentCreateRequest);
+        return issueService.addComment(issueId, commentCreateRequest);
     }
 
     @PatchMapping("/{issueId}")
@@ -62,7 +62,8 @@ public class IssueController {
     }
 
     @DeleteMapping("/{issueId}")
-    public void deleteIssue(@PathVariable Long issueId) {
+    public ResponseEntity<?> deleteIssue(@PathVariable Long issueId) {
         issueService.delete(issueId);
+        return ResponseEntity.noContent().build();
     }
 }

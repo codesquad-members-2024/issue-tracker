@@ -1,5 +1,6 @@
 package codesquad.issuetracker.milestone.dto;
 
+import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.milestone.Milestone;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,8 @@ public class MilestoneCreateRequest {
             .title(this.title)
             .description(this.description)
             .dueDate(this.dueDate)
+            .updatedAt(LocalDateTime.now())
+            .state(State.OPEN)
             .build();
     }
 
