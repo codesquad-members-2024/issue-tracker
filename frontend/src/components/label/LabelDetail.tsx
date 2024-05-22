@@ -1,19 +1,13 @@
 import styled from "styled-components";
 import editIcon from "../../img/icon/editIcon_gray.svg";
 import deleteIcon from "../../img/icon/deleteIcon.svg";
-import { LabelDetailType, LabelContext } from "../../contexts/LabelContext";
-import { useContext, useState } from "react";
+import { LabelDetailType } from "../../contexts/LabelContext";
 import LabelEditBox from "./LabelEditBox";
-import { sendDeleteLabelRequest, sendLabelsRequest } from "../../api/LabelAPI";
+import useLabelDetail from "../../hooks/logics/useLabelDetail";
 
 function LabelDetail(props: LabelDetailType) {
   const { labelId, labelName, description, textColor, bgColor } = props;
-  const { setLabels } = useContext(LabelContext);
-  const [isToEdit, setIsToEdit] = useState(false);
-
-  const handleDeleteClick = () => {
-    sendDeleteLabelRequest(labelId).then(() => sendLabelsRequest().then((data: LabelDetailType[]) => setLabels(data)))
-  }
+  const { isToEdit, toggleEdit, handleDeleteClick } = useLabelDetail(labelId);
 
   return (
     <>
@@ -21,8 +15,8 @@ function LabelDetail(props: LabelDetailType) {
         <LabelEditBox
           type="edit"
           labelId={labelId}
-          content={props}
-          handleCancelClick={() => setIsToEdit(!isToEdit)}
+          content={{ labelId, labelName, description, textColor, bgColor }}
+          handleCancelClick={toggleEdit}
         />
       ) : (
         <Wrapper>
@@ -35,12 +29,12 @@ function LabelDetail(props: LabelDetailType) {
             <Description>{description}</Description>
           </ContentWrapper>
           <ButtonWrapper>
-            <EditButton onClick={() => setIsToEdit(!isToEdit)}>
-              <img src={editIcon} />
+            <EditButton onClick={toggleEdit}>
+              <img src={editIcon} alt="편집" />
               편집
             </EditButton>
             <DeleteButton onClick={handleDeleteClick}>
-              <img src={deleteIcon} />
+              <img src={deleteIcon} alt="삭제" />
               삭제
             </DeleteButton>
           </ButtonWrapper>

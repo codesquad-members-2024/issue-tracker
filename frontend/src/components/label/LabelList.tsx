@@ -11,7 +11,8 @@ import { useQuery } from "react-query";
 function LabelList() {
   const { labels, setLabels, labelState, setLabelState } = useContext(LabelContext);
   const { isToAdd } = labelState;
-  const { data } = useQuery("labels", sendLabelsRequest, {
+  
+  useQuery("labels", sendLabelsRequest, {
     onSuccess: (data) => setLabels(data),
   });
 

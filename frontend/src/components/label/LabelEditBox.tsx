@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import submitIcon from "../../img/icon/editSubmit.svg";
-import { LabelDetailType, LabelContext } from "../../contexts/LabelContext";
-import { ChangeEvent, useContext, useRef, useState } from "react";
-import { postNewLabel, sendLabelsRequest, sendPutLabelRequest } from "../../api/LabelAPI";
+import { LabelDetailType } from "../../contexts/LabelContext";
+import useLabelEdit from '../../hooks/logics/useLabelEdit';
 
 type EditType = "new" | "edit";
 
@@ -18,32 +17,22 @@ const defaultContent = {
   labelId: 0,
   labelName: "Label",
   description: "",
-  textColor: "#000",
-  bgColor: "#fff",
+  textColor: "#000000",
+  bgColor: "#FFFFFF",
 };
 
 function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCancelClick }: LabelEditBoxProps) {
-  const { setLabels } = useContext(LabelContext);
-  const [labelName, setLabelName] = useState(content.labelName);
-  const [description, setDescription] = useState(content.description);
-  const [bgColor, setBgColor] = useState(content.bgColor);
-  const [textColor, setTextColor] = useState(content.textColor);
-
-  const handleLabelNameChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setLabelName(value);
-  const handleDescriptionChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setDescription(value);
-  const handleBgColorChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setBgColor(value);
-  const handleTextColorChange = ({ target: { value } }: ChangeEvent<HTMLSelectElement>) => setTextColor(value);
-
-  const handleSubmitClick = () => {
-    if (type === "new")
-      postNewLabel({ labelName, description, bgColor, textColor }).then(() =>
-        sendLabelsRequest().then((data: LabelDetailType[]) => setLabels(data)).then(handleCancelClick)
-      );
-    if (type === "edit")
-      sendPutLabelRequest(labelId, { labelName, description, bgColor, textColor }).then(() =>
-        sendLabelsRequest().then((data: LabelDetailType[]) => setLabels(data)).then(handleCancelClick)
-      );
-  };
+  const {
+    labelName,
+    description,
+    bgColor,
+    textColor,
+    handleLabelNameChange,
+    handleDescriptionChange,
+    handleBgColorChange,
+    handleTextColorChange,
+    handleSubmitClick,
+  } = useLabelEdit(type, labelId, content, handleCancelClick);
 
   return (
     <Wrapper type={type}>
@@ -69,8 +58,8 @@ function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCance
               <FormInput value={bgColor} onChange={handleBgColorChange} required />
             </BackgroundColorForm>
             <TextColorSelection value={textColor} onChange={handleTextColorChange}>
-              <TextColorOption value="#000">어두운 색</TextColorOption>
-              <TextColorOption value="#fff">밝은 색</TextColorOption>
+              <TextColorOption value="#000000">어두운 색</TextColorOption>
+              <TextColorOption value="#FFFFFF">밝은 색</TextColorOption>
             </TextColorSelection>
           </ColorFormWrapper>
         </FormWrapper>
