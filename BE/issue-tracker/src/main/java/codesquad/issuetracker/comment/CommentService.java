@@ -11,8 +11,8 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public Comment addComment(Long issueId, CommentCreateRequest commentCreateRequest) {
-        Comment comment = Comment.of(issueId, commentCreateRequest);
+    public Comment addComment(CommentCreateRequest commentCreateRequest) {
+        Comment comment = Comment.of(commentCreateRequest);
         return commentRepository.save(comment);
     }
 }

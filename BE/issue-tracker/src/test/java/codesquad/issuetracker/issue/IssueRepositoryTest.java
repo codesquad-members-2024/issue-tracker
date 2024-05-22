@@ -152,16 +152,14 @@ class IssueRepositoryTest {
 
     @Test
     @DisplayName("이슈를 삭제하면 연관된 댓글도 삭제 한다.")
-    void deleteIssue() {
+    void  deleteIssue() {
         Comment comment1 = Comment.builder()
             .contents("댓글 1")
             .isDeleted(false)
-            .issueId(AggregateReference.to(1L))
             .build();
         Comment comment2 = Comment.builder()
             .contents("댓글 1")
             .isDeleted(false)
-            .issueId(AggregateReference.to(1L))
             .build();
 
         Issue issue = Issue.builder()

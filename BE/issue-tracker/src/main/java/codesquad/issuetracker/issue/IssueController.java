@@ -53,7 +53,7 @@ public class IssueController {
     @PostMapping("/{issueId}/comments")
     public Comment addComment(@PathVariable Long issueId, @RequestBody
     CommentCreateRequest commentCreateRequest) {
-        return commentService.addComment(issueId, commentCreateRequest);
+        return commentService.addComment(commentCreateRequest);
     }
 
     @PatchMapping("/{issueId}")
