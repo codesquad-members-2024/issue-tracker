@@ -3,6 +3,7 @@ package codesquad.issuetracker.milestone;
 import codesquad.issuetracker.milestone.dto.MilestoneCreateRequest;
 import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
 import codesquad.issuetracker.milestone.dto.MilestoneResponse;
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,11 +28,12 @@ public class MilestoneController {
     private static final Logger log = LoggerFactory.getLogger(MilestoneController.class);
     private final MilestoneService milestoneService;
 
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<Milestone> createNewMilestone(
         @RequestBody MilestoneCreateRequest milestoneCreateRequest) {
         Milestone newMilestone = milestoneService.createNewMilestone(milestoneCreateRequest);
-        return ResponseEntity.ok().body(newMilestone);
+        return ResponseEntity.created(URI.create("/api/milestones/" + newMilestone.getId()))
+            .body(newMilestone);
     }
 
     @GetMapping
