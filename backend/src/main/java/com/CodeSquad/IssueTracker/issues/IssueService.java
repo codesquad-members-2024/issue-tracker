@@ -160,11 +160,6 @@ public class IssueService {
 
     public void updateIssueTitle(Long issueId, IssueTitleRequest issueTitleRequest) {
         findIssueById(issueId);
-        if (issueTitleRequest.title() != null) {
-            issueRepository.updateIssueTitle(issueId, issueTitleRequest.title());
-        }else {
-            throw new InvalidIssueDataException("제목이 필요합니다.");
-        }
         issueRepository.updateIssueTitle(issueId, issueTitleRequest.title());
     }
 
@@ -172,10 +167,6 @@ public class IssueService {
         Optional<User> user = userRepository.findById(issueRequest.author());
         if (user.isEmpty()) {
             throw new AuthorNotFoundException("작성자가 유효하지 않습니다. : " + issueRequest.author());
-        }
-
-        if (issueRequest.title() == null || issueRequest.title().isEmpty()) {
-            throw new InvalidIssueDataException("제목이 필요합니다.");
         }
     }
 
