@@ -2,13 +2,10 @@ package codesquad.issuetracker.label.dto;
 
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.TextColor;
-import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Setter;
 import lombok.Value;
 
 @Value
-@Setter(AccessLevel.NONE)
 @Builder
 public class LabelResponse {
 
@@ -20,7 +17,7 @@ public class LabelResponse {
     Long labelCount;
     Long milestoneCount;
 
-public static LabelResponse of(Label label, Long labelCount, Long milestoneCount) {
+    public static LabelResponse of(Label label, Long labelCount, Long milestoneCount) {
         return LabelResponse.builder()
             .id(label.getId())
             .name(label.getName())
