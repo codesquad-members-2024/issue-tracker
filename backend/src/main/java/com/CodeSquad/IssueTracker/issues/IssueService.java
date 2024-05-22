@@ -140,6 +140,7 @@ public class IssueService {
         }
     }
 
+    @Transactional
     public void openIssue(long issueId) {
         Issue issue = findIssueById(issueId);
         issueRepository.openIssue(issueId);
@@ -149,6 +150,7 @@ public class IssueService {
         }
     }
 
+    @Transactional
     public void closeIssue(long issueId) {
         Issue issue = findIssueById(issueId);
         issueRepository.closeIssue(issueId);
@@ -170,6 +172,7 @@ public class IssueService {
         }
     }
 
+    @Transactional
     public Milestone updateMilestoneIdForIssue(Long issueId, IssueMilestoneRequest issueMilestoneRequest) {
         Issue issue = findIssueById(issueId);
         Long milestoneId = issueMilestoneRequest.milestoneId();
