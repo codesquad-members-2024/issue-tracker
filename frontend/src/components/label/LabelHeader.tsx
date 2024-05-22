@@ -5,11 +5,11 @@ import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useContext } from "react";
-import { LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { LabelContext } from "../../contexts/LabelContext";
 
 function LabelHeader() {
-  const { milestones } = useIssueStore();
-  const { labels, labelState, setLabelState } = useContext(LabelStateContext);
+  const { labels, milestones } = useIssueStore();
+  const { labelState, setLabelState } = useContext(LabelContext);
   const { isToAdd } = labelState;
   const navigate = useNavigate();
 

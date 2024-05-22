@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import editIcon from "../../img/icon/editIcon_gray.svg";
 import deleteIcon from "../../img/icon/deleteIcon.svg";
-import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { LabelDetailType, LabelContext } from "../../contexts/LabelContext";
 import { useContext, useState } from "react";
 import LabelEditBox from "./LabelEditBox";
 import { sendDeleteLabelRequest, sendLabelsRequest } from "../../api/LabelAPI";
 
 function LabelDetail(props: LabelDetailType) {
   const { labelId, labelName, description, textColor, bgColor } = props;
-  const { setLabels } = useContext(LabelStateContext);
+  const { setLabels } = useContext(LabelContext);
   const [isToEdit, setIsToEdit] = useState(false);
 
   const handleDeleteClick = () => {

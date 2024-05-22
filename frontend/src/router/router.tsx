@@ -7,7 +7,7 @@ import IssueCreator from "../components/issue/new/IssueCreator";
 import IssueDetail from "../components/issue/detail/IssueDetail";
 import LabelList from "../components/label/LabelList";
 import MilestoneList from "../components/milestone/MilestoneList";
-import { LabelStateProvider } from "../hooks/contexts/useLabelStateContext";
+import { LabelProvider } from "../contexts/LabelContext";
 
 interface AuthRouteProps {
   children: React.ReactNode;
@@ -49,9 +49,9 @@ export const router = createBrowserRouter([
   {
     path: "/labels",
     element: (
-      <LabelStateProvider>
+      <LabelProvider>
         <LabelList />
-      </LabelStateProvider>
+      </LabelProvider>
     ),
   },
   {
