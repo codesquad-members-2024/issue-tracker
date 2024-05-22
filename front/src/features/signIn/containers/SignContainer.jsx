@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 
 import { Logo } from '../../../common/Logo';
 import { Button } from '~/common/components';
+import { getUser } from '~/features/signIn/apis';
 import { Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,9 +12,29 @@ export function SignContainer() {
 	const [id, setId] = useState('');
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
-	const submitLogin = () => {
-		navigate('/issues');
+
+	const submitLogin = async e => {
+		e.preventDefault();
+		try {
+			const response = await getUser(id, password);
+			if (response.message === '로그인 성공') {
+				// messageApi.success('로그인 성공');
+
+				navigate('/issues');
+			}
+			if (response.error) {
+				messageApi.error(response.error);
+				return;
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		}
 	};
+	const sessionId = localStorage.getItem('JSESSIONID');
+	if (sessionId) {
+		// JSESSIONID를 이용한 추가 작업
+		console.log('JSESSIONID:', sessionId);
+	}
 
 	const [messageApi, contextHolder] = message.useMessage();
 
@@ -33,6 +55,7 @@ export function SignContainer() {
 					buttonText='GitHub 계정으로 로그인'
 				/>
 				<b>or</b>
+
 				<StyledInputWrap>
 					<StyledId
 						placeholder='아이디'
@@ -48,10 +71,10 @@ export function SignContainer() {
 					/>
 				</StyledInputWrap>
 				<StyledButton
-					type='button'
+					type='submit'
 					size='large'
-					buttonType='container'
 					onClick={submitLogin}
+					buttonType='container'
 					buttonText='아이디로 로그인'
 				/>
 
@@ -66,7 +89,7 @@ export function SignContainer() {
 		</>
 	);
 }
-// TODO: 스타일 수정, 버튼 theme 만들기
+const StyledForm = styled.form``;
 const StyledWrapper = styled.div`
 	width: 342px;
 	b {
@@ -88,10 +111,4 @@ const StyledId = styled(Input)`
 `;
 const StyledPassword = styled(Input.Password)`
 	margin-bottom: 16px;
-`;
-const StyledJoinButton = styled(Button)`
-	text-align: center;
-	width: 100%;
-	margin-top: 16px;
-	height: 32px;
 `;

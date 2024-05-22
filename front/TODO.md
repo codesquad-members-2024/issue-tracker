@@ -51,3 +51,7 @@
 ### 주말 백로그
 
 - [ ] 필터 UI 다 만들기
+
+커스텀 hook 예시
+예를들어 useInput이라는 커스텀 훅을 만들때
+useEffect, useState같은 리액트 기본 hook들이 들어가 있음

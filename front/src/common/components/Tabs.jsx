@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { IconLabel, IconLandmark } from '~/common/icons';
+import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
+import { useLabelMilestoneCounter } from '~/context/hooks';
 
 export function Tabs({ labelCount = 1, milestoneCount = 0, ...props }) {
+	// const { labelCounter, milestoneCounter } = useLabelMilestoneCounter;
 	return (
+		// <LabelMilestoneCounterProvider>
 		<StyledWrapper {...props}>
 			<Link to='/labels'>
 				<IconLabel />
@@ -14,6 +18,7 @@ export function Tabs({ labelCount = 1, milestoneCount = 0, ...props }) {
 				마일스톤 ({milestoneCount})
 			</Link>
 		</StyledWrapper>
+		// </LabelMilestoneCounterProvider>
 	);
 }
 const StyledWrapper = styled.div`

@@ -1,34 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { getIssues } from '../apis/getIssues';
-import { IssueItem } from '../components/IssueItem';
 
-import {
-	Loading,
-	CheckBox,
-	Button,
-	Dropdowns,
-	InputRadio,
-	Tabs,
-} from '~/common/components';
-import {
-	IconPlus,
-	IconLandmark,
-	IconLabel,
-	IconChevronDown,
-} from '~/common/icons';
+import { IssueItem } from '../components/IssueItem';
+import { getIssues } from '../apis';
+
+import { CheckBox, Dropdowns, InputRadio, Tabs } from '~/common/components';
+import { IconPlus, IconChevronDown } from '~/common/icons';
 
 export function IssueListViewContainer() {
-	const [issueData, setIssueData] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [issueList, setissueList] = useState([]);
 
 	useEffect(() => {
-		getIssues().then(issueData => {
-			setIssueData(issueData);
-			setIsLoading(false);
+		getIssues().then(issueList => {
+			setissueList(issueList);
 		});
 	}, []);
+	console.log(issueList);
 
 	return (
 		<StyledWrapper>
@@ -83,11 +71,11 @@ export function IssueListViewContainer() {
 				</StyledDropList>
 			</StyledFilter>
 			<StyledList>
-				{isLoading && <Loading size='large' />}
+				{/* {loading && <Loading size='large' />} */}
 
-				{issueData.map((issue, index) => (
+				{/* {issueList.map((issue, index) => (
 					<IssueItem key={issue.id} issue={issue} index={issue[index]} />
-				))}
+				))} */}
 			</StyledList>
 		</StyledWrapper>
 	);

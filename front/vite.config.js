@@ -7,6 +7,11 @@ import react from '@vitejs/plugin-react';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
 	plugins: [react()],
+	server: {
+		host: '192.168.45.216',
+		port: 5173,
+		open: true,
+	},
 	resolve: {
 		extensions: ['.js', '.jsx'],
 		alias: [{ find: '~', replacement: path.resolve(__dirname, 'src') }],
