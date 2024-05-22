@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IconPlus } from '~/common/icons';
+import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
 import { Tabs, ListHeader, ListBody, Button, Label } from '~/common/components';
 import { LabelRegister, LabelListItem } from '~/features/label/components';
 
@@ -27,7 +28,10 @@ export function LabelContainer() {
 		<>
 			<StyledWrapper>
 				<div className='container-header'>
-					<Tabs labelCount={1} milestoneCount={0} />
+					<LabelMilestoneCounterProvider>
+						<Tabs />
+					</LabelMilestoneCounterProvider>
+
 					<Button
 						type='button'
 						size='small'

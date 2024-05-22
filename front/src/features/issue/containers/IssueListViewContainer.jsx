@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IssueItem } from '../components/IssueItem';
 import { useIssueList } from '~/features/issue/hooks';
+import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
 
 import { CheckBox, Dropdowns, InputRadio, Tabs } from '~/common/components';
 import { IconPlus, IconChevronDown } from '~/common/icons';
 
 export function IssueListViewContainer() {
 	const { issueList, loading, error } = useIssueList();
+	console.log(issueList);
+
 	return (
 		<StyledWrapper>
 			<StyledSearch>
 				<div className='tab'></div>
 				<div className='tab'>
-					<Tabs labelCount={2} milestoneCount={3} />
-
+					<LabelMilestoneCounterProvider>
+						<Tabs />
+					</LabelMilestoneCounterProvider>
 					<Link to='/issues/new' className='create'>
 						<IconPlus />
 						이슈작성
@@ -74,7 +77,7 @@ export function IssueListViewContainer() {
 }
 const StyledWrapper = styled.div`
 	position: relative;
-
+	padding-bottom: 100px;
 	.ant-checkbox-group {
 		width: 100%;
 	}

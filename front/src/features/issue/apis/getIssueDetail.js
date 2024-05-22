@@ -11,7 +11,7 @@ export async function getIssueDetail(id) {
 	try {
 		const response = await fetch(`${server}/issues/${id}`, {
 			method: 'GET',
-			credentials: 'include',
+			// credentials: 'include',
 		}).then(res => res.json());
 		const data = response;
 		return data;

@@ -1,26 +1,26 @@
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { IconLabel, IconLandmark } from '~/common/icons';
-import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
+import { IconLabel, IconMilestone } from '~/common/icons';
+
 import { useLabelMilestoneCounter } from '~/context/hooks';
 
-export function Tabs({ labelCount = 1, milestoneCount = 0, ...props }) {
-	// const { labelCounter, milestoneCounter } = useLabelMilestoneCounter;
+export const Tabs = ({ ...props }) => {
+	const { labelCounter, milestoneCounter } = useLabelMilestoneCounter();
+
 	return (
-		// <LabelMilestoneCounterProvider>
 		<StyledWrapper {...props}>
 			<Link to='/labels'>
 				<IconLabel />
-				레이블 ({labelCount})
+				레이블 ({labelCounter})
 			</Link>
 			<Link to='/milestones'>
-				<IconLandmark />
-				마일스톤 ({milestoneCount})
+				<IconMilestone />
+				마일스톤 ({milestoneCounter})
 			</Link>
 		</StyledWrapper>
-		// </LabelMilestoneCounterProvider>
 	);
-}
+};
 const StyledWrapper = styled.div`
 	display: flex;
 	width: 320px;
