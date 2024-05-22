@@ -1,19 +1,19 @@
 import styled from "styled-components";
 import LabelHeader from "./LabelHeader";
 import Header from "../header/Header";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { sendLabelsRequest } from "../../api/LabelAPI";
 import LabelDetail from "./LabelDetail";
 import LabelEditBox from "./LabelEditBox";
 import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { useQuery } from "react-query";
 
 function LabelList() {
   const { labels, setLabels, labelState, setLabelState } = useContext(LabelStateContext);
   const { isToAdd } = labelState;
-
-  useEffect(() => {
-    sendLabelsRequest().then((data) => setLabels(data));
-  }, []);
+  const { data } = useQuery("labels", sendLabelsRequest, {
+    onSuccess: (data) => setLabels(data),
+  });
 
   return (
     <Wrapper>
