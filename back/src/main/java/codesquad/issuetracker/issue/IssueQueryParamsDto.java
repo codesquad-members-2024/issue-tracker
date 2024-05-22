@@ -11,7 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class IssueQueryParamsDto {
 
-    private Long milestoneId;
+    private List<String> assigneeIds;
     private List<Long> labelIds;
-    private List<Long> assigneeIds;
+    private Long milestoneId;
+    private String writer;
 }
