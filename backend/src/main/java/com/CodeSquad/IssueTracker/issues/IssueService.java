@@ -250,19 +250,6 @@ public class IssueService {
                 .build();
     }
 
-    public List<AuthorListResponse> getAuthorList() {
-        List<String> authors = issueRepository.findDistinctAuthors();
-        List<AuthorListResponse> authorListResponses = new ArrayList<>();
-
-        for (String author : authors) {
-            authorListResponses.add(AuthorListResponse.builder()
-                    .userId(author)
-                    .build());
-        }
-
-        return authorListResponses;
-    }
-
     public Issue validateExistIssue(Long issueId) {
         return issueRepository.findById(issueId)
                 .orElseThrow(() -> new IssueNotExistException("이슈가 존재하지 않습니다."));

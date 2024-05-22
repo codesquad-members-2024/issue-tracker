@@ -47,8 +47,4 @@ public class AssigneeService {
 
         assigneeRepository.deleteByIssueIdAndUserId(issueId, userId);
     }
-
-    public List<String> getAllAssignees() {
-        return assigneeRepository.findAllAssignee();
-    }
 }
