@@ -27,7 +27,7 @@ public class IssueCreateRequest {
             .map(Assignee::new)
             .collect(Collectors.toSet());
 
-        return Issue.from(userId, title, content, milestoneId, labelRefs, assigneeIds);
+        return Issue.of(userId, title, content, milestoneId, labelRefs, assigneeIds);
     }
 
 }

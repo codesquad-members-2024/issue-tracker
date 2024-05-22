@@ -26,7 +26,7 @@ public class Issue {
     private Long id;
     private String authorId;
     private String title;
-    private String description;
+    private String content;
     private LocalDateTime openAt;
     private LocalDateTime updatedAt;
     private LocalDateTime closedAt;
@@ -42,7 +42,7 @@ public class Issue {
 
     @Builder
     @PersistenceCreator
-    public Issue(Long id, String authorId, String title, String description,
+    public Issue(Long id, String authorId, String title, String content,
         LocalDateTime openAt,
         LocalDateTime updatedAt, LocalDateTime closedAt, AggregateReference<Milestone, Long> milestoneId, State state,
         boolean isDeleted, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assigneeIds,
@@ -50,7 +50,7 @@ public class Issue {
         this.id = id;
         this.authorId = authorId;
         this.title = title;
-        this.description = description;
+        this.content = content;
         this.openAt = openAt;
         this.updatedAt = updatedAt;
         this.closedAt = closedAt;
@@ -62,12 +62,12 @@ public class Issue {
         this.comments = comments;
     }
 
-    public static Issue from(String authorId, String title, String description,
+    public static Issue of(String authorId, String title, String content,
         Long milestoneId, Set<IssueAttachedLabel> labelRefs, Set<Assignee> assignees) {
         return Issue.builder()
             .authorId(authorId)
             .title(title)
-            .description(description)
+            .content(content)
             .openAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .closedAt(LocalDateTime.now())
