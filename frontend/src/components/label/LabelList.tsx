@@ -5,11 +5,11 @@ import { useContext } from "react";
 import { sendLabelsRequest } from "../../api/LabelAPI";
 import LabelDetail from "./LabelDetail";
 import LabelEditBox from "./LabelEditBox";
-import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { LabelDetailType, LabelContext } from "../../contexts/LabelContext";
 import { useQuery } from "react-query";
 
 function LabelList() {
-  const { labels, setLabels, labelState, setLabelState } = useContext(LabelStateContext);
+  const { labels, setLabels, labelState, setLabelState } = useContext(LabelContext);
   const { isToAdd } = labelState;
   const { data } = useQuery("labels", sendLabelsRequest, {
     onSuccess: (data) => setLabels(data),

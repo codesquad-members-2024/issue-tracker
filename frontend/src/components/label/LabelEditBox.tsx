@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import submitIcon from "../../img/icon/editSubmit.svg";
-import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { LabelDetailType, LabelContext } from "../../contexts/LabelContext";
 import { ChangeEvent, useContext, useRef, useState } from "react";
 import { postNewLabel, sendLabelsRequest, sendPutLabelRequest } from "../../api/LabelAPI";
 
@@ -23,7 +23,7 @@ const defaultContent = {
 };
 
 function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCancelClick }: LabelEditBoxProps) {
-  const { setLabels } = useContext(LabelStateContext);
+  const { setLabels } = useContext(LabelContext);
   const [labelName, setLabelName] = useState(content.labelName);
   const [description, setDescription] = useState(content.description);
   const [bgColor, setBgColor] = useState(content.bgColor);

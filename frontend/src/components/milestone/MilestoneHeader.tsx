@@ -1,16 +1,12 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import labelIcon from "../../img/icon/labelIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import useIssueStore from "../../hooks/stores/useIssueStore";
-import { useContext } from "react";
-import { LabelContext } from "../../contexts/LabelContext";
+import { useNavigate } from "react-router-dom";
 
-function LabelHeader() {
+function MilestoneHeader() {
   const { labels, milestones } = useIssueStore();
-  const { labelState, setLabelState } = useContext(LabelContext);
-  const { isToAdd } = labelState;
   const navigate = useNavigate();
 
   return (
@@ -27,9 +23,9 @@ function LabelHeader() {
           </LargeTitle>
         </MilestoneBar>
       </NavigateBox>
-      <AddButton isAvailable={isToAdd} onClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })}>
+      <AddButton isAvailable={false}>
         <img src={plusIcon} />
-        레이블 추가
+        마일스톤 추가
       </AddButton>
     </Wrapper>
   );
@@ -95,4 +91,4 @@ const AddButton = styled.button<{ isAvailable: boolean }>`
   cursor: pointer;
 `;
 
-export default LabelHeader;
+export default MilestoneHeader;

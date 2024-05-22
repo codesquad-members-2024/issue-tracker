@@ -25,20 +25,20 @@ const defaultState: LabelState = {
   isToEdit: false,
 };
 
-export const LabelStateContext = createContext<LabelContextType>({
+export const LabelContext = createContext<LabelContextType>({
   labelState: defaultState,
   setLabelState: () => {},
   labels: [],
   setLabels: () => {},
 });
 
-export const LabelStateProvider: FC<PropsWithChildren> = ({ children }) => {
+export const LabelProvider: FC<PropsWithChildren> = ({ children }) => {
   const [labels, setLabels] = useState<LabelDetailType[]>([]);
   const [labelState, setLabelState] = useState<LabelState>(defaultState);
 
   return (
-    <LabelStateContext.Provider value={{ labelState, setLabelState, labels, setLabels }}>
+    <LabelContext.Provider value={{ labelState, setLabelState, labels, setLabels }}>
       {children}
-    </LabelStateContext.Provider>
+    </LabelContext.Provider>
   );
 };
