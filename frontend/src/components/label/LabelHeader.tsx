@@ -8,8 +8,8 @@ import { useContext } from "react";
 import { LabelContext } from "../../contexts/LabelContext";
 
 function LabelHeader() {
-  const { labels, milestones } = useIssueStore();
-  const { labelState, setLabelState } = useContext(LabelContext);
+  const { milestones } = useIssueStore();
+  const { labels, labelState, setLabelState } = useContext(LabelContext);
   const { isToAdd } = labelState;
   const navigate = useNavigate();
 
