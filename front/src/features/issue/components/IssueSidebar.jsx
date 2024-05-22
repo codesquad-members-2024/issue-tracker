@@ -13,7 +13,7 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
-	console.log(assignees);
+
 	return (
 		<StyledWrapper>
 			<StyledSideItem>

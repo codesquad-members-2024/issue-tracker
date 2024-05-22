@@ -70,7 +70,6 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 						placeholder={content}
 						onChange={e => {
 							setComment(e.target.value);
-							console.log(e.target.value);
 						}}
 					/>
 				) : (
