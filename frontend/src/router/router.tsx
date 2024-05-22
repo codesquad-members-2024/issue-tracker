@@ -8,6 +8,7 @@ import IssueDetail from "../components/issue/detail/IssueDetail";
 import LabelList from "../components/label/LabelList";
 import MilestoneList from "../components/milestone/MilestoneList";
 import { LabelProvider } from "../contexts/LabelContext";
+import { MilestoneProvider } from "../contexts/MilestoneContext";
 
 interface AuthRouteProps {
   children: React.ReactNode;
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/milestones",
-    element: <MilestoneList />,
+    element: (
+      <MilestoneProvider>
+        <MilestoneList />
+      </MilestoneProvider>
+    ),
   },
 ]);
