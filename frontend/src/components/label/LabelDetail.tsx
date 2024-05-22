@@ -4,15 +4,26 @@ import deleteIcon from "../../img/icon/deleteIcon.svg";
 import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
 import { useContext, useState } from "react";
 import LabelEditBox from "./LabelEditBox";
+import { sendDeleteLabelRequest, sendLabelsRequest } from "../../api/LabelAPI";
 
 function LabelDetail(props: LabelDetailType) {
   const { labelId, labelName, description, textColor, bgColor } = props;
+  const { setLabels } = useContext(LabelStateContext);
   const [isToEdit, setIsToEdit] = useState(false);
+
+  const handleDeleteClick = () => {
+    sendDeleteLabelRequest(labelId).then(() => sendLabelsRequest().then((data: LabelDetailType[]) => setLabels(data)))
+  }
 
   return (
     <>
       {isToEdit ? (
-        <LabelEditBox type="edit" content={props} handleCancelClick={() => setIsToEdit(!isToEdit)} handleSubmitClick={() => {}} />
+        <LabelEditBox
+          type="edit"
+          labelId={labelId}
+          content={props}
+          handleCancelClick={() => setIsToEdit(!isToEdit)}
+        />
       ) : (
         <Wrapper>
           <ContentWrapper>
@@ -28,7 +39,7 @@ function LabelDetail(props: LabelDetailType) {
               <img src={editIcon} />
               편집
             </EditButton>
-            <DeleteButton>
+            <DeleteButton onClick={handleDeleteClick}>
               <img src={deleteIcon} />
               삭제
             </DeleteButton>
@@ -87,6 +98,7 @@ const EditButton = styled.button`
   color: #4e4b66;
   background-color: transparent;
   border: none;
+  cursor: pointer;
 `;
 
 const DeleteButton = styled.button`
@@ -95,6 +107,7 @@ const DeleteButton = styled.button`
   color: #ff3b30;
   background-color: transparent;
   border: none;
+  cursor: pointer;
 `;
 
 export default LabelDetail;

@@ -1,16 +1,17 @@
 import styled from "styled-components";
 import plusIcon from "../../img/icon/plusIcon_blue.svg";
 import submitIcon from "../../img/icon/editSubmit.svg";
-import { LabelDetailType } from "../../hooks/contexts/useLabelStateContext";
-import { ChangeEvent, useRef, useState } from "react";
+import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { ChangeEvent, useContext, useRef, useState } from "react";
+import { postNewLabel, sendLabelsRequest, sendPutLabelRequest } from "../../api/LabelAPI";
 
 type EditType = "new" | "edit";
 
 interface LabelEditBoxProps {
   type: EditType;
+  labelId?: number;
   content?: LabelDetailType;
   handleCancelClick: () => void;
-  handleSubmitClick: () => void;
 }
 
 const defaultContent = {
@@ -21,7 +22,8 @@ const defaultContent = {
   bgColor: "#fff",
 };
 
-function LabelEditBox({ type, content = defaultContent, handleCancelClick, handleSubmitClick }: LabelEditBoxProps) {
+function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCancelClick }: LabelEditBoxProps) {
+  const { setLabels } = useContext(LabelStateContext);
   const [labelName, setLabelName] = useState(content.labelName);
   const [description, setDescription] = useState(content.description);
   const [bgColor, setBgColor] = useState(content.bgColor);
@@ -31,6 +33,17 @@ function LabelEditBox({ type, content = defaultContent, handleCancelClick, handl
   const handleDescriptionChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setDescription(value);
   const handleBgColorChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setBgColor(value);
   const handleTextColorChange = ({ target: { value } }: ChangeEvent<HTMLSelectElement>) => setTextColor(value);
+
+  const handleSubmitClick = () => {
+    if (type === "new")
+      postNewLabel({ labelName, description, bgColor, textColor }).then(() =>
+        sendLabelsRequest().then((data: LabelDetailType[]) => setLabels(data)).then(handleCancelClick)
+      );
+    if (type === "edit")
+      sendPutLabelRequest(labelId, { labelName, description, bgColor, textColor }).then(() =>
+        sendLabelsRequest().then((data: LabelDetailType[]) => setLabels(data)).then(handleCancelClick)
+      );
+  };
 
   return (
     <Wrapper type={type}>

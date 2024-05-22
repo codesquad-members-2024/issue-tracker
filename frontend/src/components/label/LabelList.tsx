@@ -21,7 +21,7 @@ function LabelList() {
       <LabelHeader />
       {isToAdd && (
         <EditBoxWrapper>
-          <LabelEditBox type="new" handleCancelClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} handleSubmitClick={() => {}}/>
+          <LabelEditBox type="new" handleCancelClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} />
         </EditBoxWrapper>
       )}
       <LabelTable>
