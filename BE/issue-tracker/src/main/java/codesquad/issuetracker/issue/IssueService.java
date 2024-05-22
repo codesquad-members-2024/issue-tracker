@@ -1,8 +1,11 @@
 package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.base.State;
+import codesquad.issuetracker.comment.Comment;
+import codesquad.issuetracker.comment.CommentCreateRequest;
 import codesquad.issuetracker.comment.CommentResponse;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
+import codesquad.issuetracker.issue.dto.IssueCreateRequest;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
 import codesquad.issuetracker.user.UserService;
@@ -34,15 +37,8 @@ public class IssueService {
         return issueRepository.findAllByState(state);
     }
 
-    public List<Issue> findAllIssues() {
-        return (List<Issue>) issueRepository.findAll();
-    }
-
-    public List<Issue> findAllByLabelId(Long labelId) {
-        return issueRepository.findAllByLabelId(labelId);
-    }
-
-    public Issue create(Issue issue) {
+    public Issue create(IssueCreateRequest issueCreateRequest) {
+        Issue issue = issueCreateRequest.toEntity();
         return issueRepository.save(issue);
     }
 
@@ -62,7 +58,7 @@ public class IssueService {
             .map(CommentResponse::of)
             .toList();
 
-        return DetailIssueResponse.from(issue, labels, assignees, comments);
+        return DetailIssueResponse.of(issue, labels, assignees, comments);
     }
 
     public Issue findById(Long issueId) {
@@ -88,4 +84,12 @@ public class IssueService {
     }
 
 
+    public Comment addComment(Long issueId, CommentCreateRequest commentCreateRequest) {
+        Comment comment = Comment.of(commentCreateRequest);
+        Optional<Issue> optionalIssue = issueRepository.findById(issueId);
+        Issue issue = optionalIssue.orElseThrow(NoSuchElementException::new);
+        issue.addComment(comment);
+        issueRepository.save(issue);
+        return comment;
+    }
 }
