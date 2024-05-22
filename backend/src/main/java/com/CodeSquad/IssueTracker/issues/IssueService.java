@@ -188,6 +188,19 @@ public class IssueService {
         issueRepository.save(issue);
     }
 
+    @Transactional
+    public void updateLabels(Long issueId, Set<Long> newLabels) {
+        Issue issue = findIssueById(issueId);
+
+        Set<LabelId> labelIds = newLabels.stream()
+                .map(LabelId::new)
+                .collect(Collectors.toSet());
+
+        issue.setLabels(labelIds);
+
+        issueRepository.save(issue);
+    }
+
     private void validateIssueRequest(IssueRequest issueRequest) {
         Optional<User> user = userRepository.findById(issueRequest.author());
         if (user.isEmpty()) {

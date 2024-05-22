@@ -31,6 +31,7 @@ public class Issue {
     @Setter
     @MappedCollection(idColumn = "issue_id")
     private Set<AssigneeId> assignees;
+    @Setter
     @MappedCollection(idColumn = "issue_id")
     private Set<LabelId> labels;
 

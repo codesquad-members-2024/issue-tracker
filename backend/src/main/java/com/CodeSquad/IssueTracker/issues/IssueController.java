@@ -1,9 +1,7 @@
 package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.issues.dto.*;
-import com.CodeSquad.IssueTracker.issues.issueLabel.dto.IssueLabelRequest;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
-import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,8 +73,8 @@ public class IssueController {
 
     @PostMapping("/{issueId}/labels")
     public ResponseEntity<Void> updateLabelsToIssue(@PathVariable("issueId") Long issueId,
-                                                 @Valid @RequestBody IssueLabelRequest issueLabelRequest) {
-        issueService.updateLabelsToIssue(issueId, issueLabelRequest);
+                                                    @RequestBody IssueLabelIdsRequest labelIdsRequest) {
+        issueService.updateLabels(issueId, labelIdsRequest.labels());
         return ResponseEntity.ok().build();
     }
 }
