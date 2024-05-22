@@ -5,6 +5,11 @@ import { useState } from "react";
 export function NewLabels({ closeNewLabels }) {
   const [labelName, setLabelName] = useState("");
   const [labelColor, setLabelColor] = useState("");
+  const [labelFontColor, setLabelFontColor] = useState("white");
+
+  const toggleFontColor = () => {
+    setLabelFontColor((prev) => (prev === "white" ? "black" : "white"));
+  };
 
   return (
     <>
@@ -12,7 +17,9 @@ export function NewLabels({ closeNewLabels }) {
         <h3>새로운 레이블 추가</h3>
         <Content>
           <Preview>
-            <StyledLabel $backgroundColor={labelColor}>{labelName}</StyledLabel>
+            <StyledLabel $backgroundColor={labelColor} color={labelFontColor}>
+              {labelName}
+            </StyledLabel>
           </Preview>
           <LabelDescript>
             <LabelWrapper>
@@ -33,15 +40,18 @@ export function NewLabels({ closeNewLabels }) {
                 placeholder="레이블에 대한 설명을 입력하세요"
               />
             </LabelWrapper>
-            <ColorWrapper>
-              <label htmlFor="backgroundcolor">색상</label>
-              <input
-                type="text"
-                id="backgroundcolor"
-                value={labelColor}
-                onChange={(e) => setLabelColor(e.target.value)}
-              />
-            </ColorWrapper>
+            <ColorWraper>
+              <StyledColor>
+                <label htmlFor="backgroundcolor">색상</label>
+                <input
+                  type="text"
+                  id="backgroundcolor"
+                  value={labelColor}
+                  onChange={(e) => setLabelColor(e.target.value)}
+                />
+              </StyledColor>
+              <button onClick={toggleFontColor}>{labelFontColor}</button>
+            </ColorWraper>
           </LabelDescript>
         </Content>
         <Buttons>
@@ -84,22 +94,24 @@ const Preview = styled.div`
 
 const StyledLabel = styled.span`
   background-color: ${(props) => props.$backgroundColor || "white"};
+  color: ${({ color }) => color};
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 14px;
   border: solid #dadbef;
-  color: black;
   height: 17px;
 `;
 
 const LabelDescript = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 75%;
 `;
 
 const LabelWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 10px 0 10px 20px;
+  margin: 0.5em;
   border-radius: 10px;
   padding: 10px;
   background-color: #eff0f6;
@@ -115,7 +127,7 @@ const LabelWrapper = styled.div`
   }
 `;
 
-const ColorWrapper = styled(LabelWrapper)`
+const StyledColor = styled(LabelWrapper)`
   width: 250px;
   input {
     width: 65%;
@@ -145,4 +157,17 @@ const CompleteButton = styled.div`
   border-radius: 10px;
   width: 120px;
   height: 40px;
+`;
+
+const ColorWraper = styled.div`
+  display: flex;
+  button {
+    padding: 0 20px;
+    margin: 0.5em;
+    background-color: unset;
+    border: solid #dadbef;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+  }
 `;
