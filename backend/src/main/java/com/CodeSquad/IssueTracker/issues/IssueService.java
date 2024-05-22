@@ -11,6 +11,7 @@ import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelRepository;
+import com.CodeSquad.IssueTracker.issues.issueLabel.dto.IssueLabelRequest;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import com.CodeSquad.IssueTracker.issues.issueLabel.*;
@@ -27,9 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -256,5 +255,22 @@ public class IssueService {
     public Issue validateExistIssue(Long issueId) {
         return issueRepository.findById(issueId)
                 .orElseThrow(() -> new IssueNotExistException("이슈가 존재하지 않습니다."));
+    }
+
+    @Transactional
+    public void updateLabelsToIssue(Long issueId, IssueLabelRequest issueLabelRequest) {
+        Set<Long> oldLabelIds = issueLabelRepository.findLabelIdsByIssueId(issueId);
+        Set<Long> newLabelIds = issueLabelRequest.labelIds();
+
+        Set<Long> labelIdsToDelete = new HashSet<>(oldLabelIds);
+        labelIdsToDelete.removeAll(newLabelIds);
+        if (!labelIdsToDelete.isEmpty())
+            issueLabelRepository.deleteByIssueIdAndLabelIds(issueId, labelIdsToDelete);
+
+        Set<Long> labelIdsToInsert = new HashSet<>(newLabelIds);
+        labelIdsToInsert.removeAll(oldLabelIds);
+        for (Long labelId : labelIdsToInsert) {
+            issueLabelRepository.addLabelToIssue(issueId, labelId);
+        }
     }
 }

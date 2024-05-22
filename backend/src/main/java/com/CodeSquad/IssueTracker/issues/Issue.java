@@ -1,10 +1,13 @@
 package com.CodeSquad.IssueTracker.issues;
 
+import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabel;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -22,4 +25,9 @@ public class Issue {
     private Boolean isClosed;
 
     private Long milestoneId;
+
+    @Setter
+    @MappedCollection(idColumn = "issue_id")
+    private Set<IssueLabel> labels;
+
 }

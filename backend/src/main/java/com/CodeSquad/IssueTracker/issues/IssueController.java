@@ -1,6 +1,7 @@
 package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.issues.dto.*;
+import com.CodeSquad.IssueTracker.issues.issueLabel.dto.IssueLabelRequest;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import jakarta.validation.Valid;
@@ -53,12 +54,13 @@ public class IssueController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping ("/{issueId}/milestone")
+    @PatchMapping("/{issueId}/milestone")
     public ResponseEntity<Milestone> editIssueMilestone(@PathVariable Long issueId,
                                                         @RequestBody(required = false) IssueMilestoneRequest issueMilestoneRequest) {
-        Milestone milestone = issueService.updateMilestoneIdForIssue(issueId,issueMilestoneRequest);
+        Milestone milestone = issueService.updateMilestoneIdForIssue(issueId, issueMilestoneRequest);
         return ResponseEntity.ok(milestone);
     }
+
     @PostMapping("/{issueId}/labels/{labelId}")
     public ResponseEntity<Void> addLabelToIssue(@PathVariable Long issueId, @PathVariable Long labelId) {
         issueService.addLabelToIssue(issueId, labelId);
@@ -71,4 +73,10 @@ public class IssueController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{issueId}/labels")
+    public ResponseEntity<Void> updateLabelsToIssue(@PathVariable("issueId") Long issueId,
+                                                 @Valid @RequestBody IssueLabelRequest issueLabelRequest) {
+        issueService.updateLabelsToIssue(issueId, issueLabelRequest);
+        return ResponseEntity.ok().build();
+    }
 }

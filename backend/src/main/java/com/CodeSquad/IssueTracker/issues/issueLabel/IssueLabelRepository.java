@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface IssueLabelRepository extends CrudRepository<IssueLabel, Long> {
@@ -28,4 +29,11 @@ public interface IssueLabelRepository extends CrudRepository<IssueLabel, Long> {
     @Transactional
     @Query("INSERT INTO issueLabel (issue_id, label_id) VALUES (:issueId, :labelId)")
     int addLabelToIssue(@Param("issueId") Long issueId, @Param("labelId") Long labelId);
+
+    @Query("SELECT label_id FROM issueLabel WHERE issue_id = :issueId")
+    Set<Long> findLabelIdsByIssueId(Long issueId);
+
+    @Modifying
+    @Query("DELETE FROM issueLabel WHERE issue_id = :issueId AND label_id IN (:labelIds)")
+    void deleteByIssueIdAndLabelIds(Long issueId, Set<Long> labelIds);
 }
