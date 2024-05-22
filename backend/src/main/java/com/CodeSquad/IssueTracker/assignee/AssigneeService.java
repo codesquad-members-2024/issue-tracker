@@ -3,11 +3,16 @@ package com.CodeSquad.IssueTracker.assignee;
 import ch.qos.logback.core.pattern.util.AsIsEscapeUtil;
 import com.CodeSquad.IssueTracker.Exception.assignee.AssigneeAlredyExistException;
 import com.CodeSquad.IssueTracker.Exception.assignee.AssigneeNotFoundException;
+import com.CodeSquad.IssueTracker.assignee.dto.AssigneeId;
+import com.CodeSquad.IssueTracker.issues.Issue;
 import com.CodeSquad.IssueTracker.issues.IssueService;
 import com.CodeSquad.IssueTracker.user.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AssigneeService {
@@ -46,5 +51,9 @@ public class AssigneeService {
                 .orElseThrow(() -> new AssigneeNotFoundException("담당자가 존재하지 않습니다."));
 
         assigneeRepository.deleteByIssueIdAndUserId(issueId, userId);
+    }
+
+    public void updateAssignees(Long issueId, Set<String> newAssigneeIds) {
+        issueService.updateAssignees(issueId, newAssigneeIds);
     }
 }

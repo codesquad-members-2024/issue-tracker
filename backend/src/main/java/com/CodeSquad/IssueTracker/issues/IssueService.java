@@ -175,6 +175,19 @@ public class IssueService {
         issueRepository.updateIssueTitle(issueId, issueTitleRequest.title());
     }
 
+    @Transactional
+    public void updateAssignees(Long issueId, Set<String> newAssignees) {
+        Issue issue = findIssueById(issueId);
+
+        Set<AssigneeId> assigneeIds = newAssignees.stream()
+                .map(AssigneeId::new)
+                .collect(Collectors.toSet());
+
+        issue.setAssignees(assigneeIds);
+
+        issueRepository.save(issue);
+    }
+
     private void validateIssueRequest(IssueRequest issueRequest) {
         Optional<User> user = userRepository.findById(issueRequest.author());
         if (user.isEmpty()) {
