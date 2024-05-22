@@ -53,7 +53,7 @@ public class IssueController {
     @PostMapping("/{issueId}/comments")
     public Comment addComment(@PathVariable Long issueId, @RequestBody
     CommentCreateRequest commentCreateRequest) {
-        return commentService.addComment(issueId, commentCreateRequest);
+        return commentService.addComment(commentCreateRequest);
     }
 
     @PatchMapping("/{issueId}")
@@ -63,7 +63,8 @@ public class IssueController {
     }
 
     @DeleteMapping("/{issueId}")
-    public void deleteIssue(@PathVariable Long issueId) {
+    public ResponseEntity<?> deleteIssue(@PathVariable Long issueId) {
         issueService.delete(issueId);
+        return ResponseEntity.noContent().build();
     }
 }
