@@ -19,6 +19,5 @@ export const useIssueList = () => {
 		};
 		fetchIssueList();
 	}, [issueList]);
-	console.log(issueList);
 	return { issueList, loading, error };
 };

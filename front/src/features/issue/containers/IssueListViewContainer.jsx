@@ -3,21 +3,13 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { IssueItem } from '../components/IssueItem';
-import { getIssues } from '../apis';
+import { useIssueList } from '~/features/issue/hooks';
 
 import { CheckBox, Dropdowns, InputRadio, Tabs } from '~/common/components';
 import { IconPlus, IconChevronDown } from '~/common/icons';
 
 export function IssueListViewContainer() {
-	const [issueList, setissueList] = useState([]);
-
-	useEffect(() => {
-		getIssues().then(issueList => {
-			setissueList(issueList);
-		});
-	}, []);
-	console.log(issueList);
-
+	const { issueList, loading, error } = useIssueList();
 	return (
 		<StyledWrapper>
 			<StyledSearch>
@@ -73,9 +65,9 @@ export function IssueListViewContainer() {
 			<StyledList>
 				{/* {loading && <Loading size='large' />} */}
 
-				{/* {issueList.map((issue, index) => (
+				{issueList.map((issue, index) => (
 					<IssueItem key={issue.id} issue={issue} index={issue[index]} />
-				))} */}
+				))}
 			</StyledList>
 		</StyledWrapper>
 	);
