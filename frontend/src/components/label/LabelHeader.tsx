@@ -4,11 +4,13 @@ import labelIcon from "../../img/icon/labelIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import useIssueStore from "../../hooks/stores/useIssueStore";
-import { useState } from "react";
+import { useContext } from "react";
+import { LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
 
 function LabelHeader() {
-  const { labels, milestones } = useIssueStore();
-  const [isAddAvailable, setIsAddAvailable] = useState(true);
+  const { milestones } = useIssueStore();
+  const { labels, labelState, setLabelState } = useContext(LabelStateContext);
+  const { isToAdd } = labelState;
   const navigate = useNavigate();
 
   return (
@@ -25,7 +27,7 @@ function LabelHeader() {
           </LargeTitle>
         </MilestoneBar>
       </NavigateBox>
-      <AddButton isAvailable={isAddAvailable} onClick={() => setIsAddAvailable(!isAddAvailable)}>
+      <AddButton isAvailable={isToAdd} onClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })}>
         <img src={plusIcon} />
         레이블 추가
       </AddButton>
@@ -88,7 +90,7 @@ const AddButton = styled.button<{ isAvailable: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: ${({ isAvailable }) => (isAvailable ? "1" : "0.5")};
+  opacity: ${({ isAvailable }) => (isAvailable ? 0.5 : 1)};
   transition: all 0.5s ease;
 `;
 

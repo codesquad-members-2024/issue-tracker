@@ -24,7 +24,10 @@ function LabelEditBox() {
               <FormType>배경 색상</FormType>
               <FormInput required />
             </BackgroundColorForm>
-            <TextColorSelection>어두운 색</TextColorSelection>
+            <TextColorSelection>
+              <TextColorOption value="#000">어두운 색</TextColorOption>
+              <TextColorOption value="#fff">밝은 색</TextColorOption>
+            </TextColorSelection>
           </ColorFormWrapper>
         </FormWrapper>
       </Content>
@@ -107,7 +110,10 @@ const BackgroundColorForm = styled.div`
   border-radius: 12px;
 `;
 
-const TextColorSelection = styled.div``;
+const TextColorSelection = styled.select``;
+
+const TextColorOption = styled.option`
+`;
 
 const ButtonWrapper = styled.div`
   display: flex;

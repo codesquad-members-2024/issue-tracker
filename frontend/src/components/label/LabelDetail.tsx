@@ -1,14 +1,7 @@
 import styled from "styled-components";
+import { LabelDetailType } from "../../hooks/contexts/useLabelStateContext";
 
-export interface LabelDetailProps {
-  labelId: number;
-  labelName: string;
-  description: string;
-  textColor: string;
-  bgColor: string;
-}
-
-function LabelDetail({ labelId, labelName, description, textColor, bgColor }: LabelDetailProps) {
+function LabelDetail({ labelId, labelName, description, textColor, bgColor }: LabelDetailType) {
   return (
     <Wrapper>
       <LabelWrapper>
