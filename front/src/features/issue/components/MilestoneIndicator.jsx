@@ -1,15 +1,21 @@
 import styled, { keyframes } from 'styled-components';
 
-export function MilestoneIndicator({ milestone, progess = 40 }) {
+export function MilestoneIndicator({ milestone, detail }) {
 	return (
 		<StyledWrapper>
 			<span className='total'>
 				<StyledProgress
 					className='percentage'
-					$width={progess}
+					$width={milestone?.progress}
 				></StyledProgress>
 			</span>
-			<p>{milestone}</p>
+			{!detail && <p>{milestone?.name}</p>}
+			{detail && (
+				<StyledStatus>
+					<p className='percent-text'>{milestone?.progress}%</p>
+					<p className='open-close'>열린 이슈 1 닫힌 이슈 1</p>
+				</StyledStatus>
+			)}
 		</StyledWrapper>
 	);
 }
@@ -24,6 +30,7 @@ const AnimationFill = keyframes`
 
 const StyledWrapper = styled.div`
 	width: 224px;
+	position: relative;
 
 	.total {
 		position: relative;
@@ -50,4 +57,15 @@ const StyledWrapper = styled.div`
 const StyledProgress = styled.i`
 	width: ${({ $width }) => $width}%;
 	animation: ${AnimationFill} 1s forwards;
+`;
+const StyledStatus = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	color: ${({ theme }) => theme.color.neutral.text.weak};
+	${({ theme }) => theme.typography.medium[12]}
+	p {
+		color: inherit;
+	}
 `;

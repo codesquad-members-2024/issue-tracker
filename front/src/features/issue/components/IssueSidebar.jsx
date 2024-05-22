@@ -4,6 +4,8 @@ import { IconPlus } from '~/common/icons';
 import { Dropdowns, Label, InputRadio, InputCheck } from '~/common/components';
 import { Assignee, MilestoneIndicator } from '~/features/issue/components';
 
+//여기서는 각각의 셀렉트/라디오 리스트를 fetch로 받은 다음에 리스트 렌더링하고, assignees, milestone, labels 값이 체크되어 있으면 체크된 상태로 렌더링하도록 구현했습니다.
+
 export function IssueSidebar({ assignees, milestone, labels }) {
 	const [isOpen, setIsOpen] = useState({
 		assignee: false,
@@ -48,19 +50,29 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 				{isOpen.label && (
 					<StyledDropdown dropdownTitle='레이블 설정'>
 						{labels.map((label, index) => (
-							<InputRadio
+							<InputCheck
 								key={index}
 								listName={'label'}
 								value={label.name}
 								bgColor={label.backgroundColor}
 								fontColor={label.textColor}
+								onChange={e => {
+									console.log(e.target.checked);
+								}}
 							/>
 						))}
 					</StyledDropdown>
 				)}
 				<StyledSideContent>
 					{labels &&
-						labels?.map(label => <Label key={label.name} label={label} />)}
+						labels?.map(label => (
+							<Label
+								key={label.name}
+								name={label.name}
+								backgroundColor={label.backgroundColor}
+								textColor={label.textColor}
+							/>
+						))}
 				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
@@ -68,25 +80,13 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 					<StyledTitle>마일스톤</StyledTitle>
 					<IconPlus />
 				</StyledTitleWrapper>
-				{/* {isOpen.milestone && (
+				{isOpen.milestone && (
 					<StyledDropdown dropdownTitle='마일스톤 설정'>
-					{milestone.map((mile, index) => (
-						<InputRadio
-							key={index}
-							listName={'label'}
-							value={label.name}
-							bgColor={label.backgroundColor}
-							fontColor={label.textColor}
-						/>
-					))}
-				</StyledDropdown>
-				)} */}
+						<InputRadio listName={milestone.name} value={milestone.name} />
+					</StyledDropdown>
+				)}
 				<StyledSideContent>
-					{/* {milestone &&
-						milestone?.map((mile, index) => (
-							<MilestoneIndicator milestone={mile} key={index} />
-						))} */}
-					<MilestoneIndicator milestone={milestone} />
+					{milestone && <MilestoneIndicator milestone={milestone} />}
 				</StyledSideContent>
 			</StyledSideItem>
 		</StyledWrapper>
@@ -109,8 +109,8 @@ const StyledSideItem = styled.div`
 	}
 `;
 const StyledDropdown = styled(Dropdowns)`
-	top: 160px;
-	left: 150px;
+	top: 40%;
+	right: 25px;
 `;
 
 const StyledTitleWrapper = styled.div`

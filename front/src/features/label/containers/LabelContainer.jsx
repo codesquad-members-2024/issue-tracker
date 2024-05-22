@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import { IconPlus } from '~/common/icons';
 import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
-import { Tabs, ListHeader, ListBody, Button, Label } from '~/common/components';
+import { Tabs, ListHeader, ListBody, Button } from '~/common/components';
 import { LabelRegister, LabelListItem } from '~/features/label/components';
 
 export function LabelContainer() {
@@ -65,18 +65,6 @@ const StyledWrapper = styled.div`
 		align-items: center;
 		margin-bottom: 24px;
 	}
-`;
-const StyledLink = styled(Link)`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	column-gap: 4px;
-	width: 128px;
-	height: 40px;
-	border-radius: ${({ theme }) => theme.radius.medium};
-	background-color: ${({ theme }) => theme.color.brand.surface.default};
-	${({ theme }) => theme.typography.medium[12]};
-	color: ${({ theme }) => theme.color.brand.text.default};
 `;
 const StyledListHeader = styled(ListHeader)``;
 const StyledLabeCount = styled.strong`

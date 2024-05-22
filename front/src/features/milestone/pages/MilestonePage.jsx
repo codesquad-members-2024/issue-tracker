@@ -1,13 +1,11 @@
 import styled from 'styled-components';
+import { InnerLayout } from '~/common/components';
 import { MilestoneContainer } from '~/features/milestone/containers';
 
 export function MilestonePage() {
 	return (
-		<StyledWrapper>
+		<InnerLayout>
 			<MilestoneContainer />
-		</StyledWrapper>
+		</InnerLayout>
 	);
 }
-const StyledWrapper = styled.div`
-	padding: 0;
-`;

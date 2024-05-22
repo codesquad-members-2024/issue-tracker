@@ -12,7 +12,7 @@ import {
 	IconXsquare,
 	IconPlus,
 } from '~/common/icons';
-import { timestamp } from '~/utils/util';
+
 import { postComment } from '../apis/postComment';
 
 import {
@@ -94,7 +94,7 @@ export function IssueDetailContainer() {
 	};
 	const isNewComment = detailState.newComment !== '';
 	const hasChanged = detailState.title !== issueDetail?.title;
-	// TODO: error 재연
+
 	return (
 		<>
 			{loading && <div>Loading...</div>}
@@ -161,8 +161,7 @@ export function IssueDetailContainer() {
 							열린 이슈
 						</StyledBadge>
 						<p>
-							이 이슈가 {timestamp(issueDetail.createTime)}에{' '}
-							{issueDetail.writer}
+							이 이슈가 {issueDetail.duration} 전에 {issueDetail.writer}
 							님에 의해 열렸습니다
 						</p>
 
@@ -215,7 +214,7 @@ export function IssueDetailContainer() {
 					<aside>
 						<IssueSidebar
 							assignees={issueDetail.assignees}
-							milestone={issueDetail.milestoneId}
+							milestone={issueDetail.milestone}
 							labels={issueDetail.labels}
 						/>
 						<div className='right-align'>

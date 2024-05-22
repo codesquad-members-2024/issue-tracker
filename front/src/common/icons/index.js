@@ -16,3 +16,5 @@ export * from './IconCheckCircle';
 export * from './IconCheckOff';
 export * from './IconChevronDown';
 export * from './IconRefresh';
+export * from './IconArchive';
+export * from './IconCalendar';
