@@ -9,10 +9,11 @@ export type IssueType = "open" | "close";
 
 const FIRST_PAGE = 1;
 const ISSUE_NUMBER_KEY = "issueNumberResponse";
+const LABELS_KEY = "labelListResponse";
 const MILESTONES_KEY = "milestoneListResponse";
 
 const useIssueListLogic = () => {
-  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setMilestones } = useIssueStore();
+  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setLabels, setMilestones } = useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const [requestError, setRequestError] = useState(false);
   const [page, setPage] = useState(FIRST_PAGE);
@@ -38,6 +39,7 @@ const useIssueListLogic = () => {
   const { mutateAsync: fetchFilters } = useMutation(sendFiltersRequest, {
     onSuccess: (data) => {
       setIssueCounts(data[ISSUE_NUMBER_KEY]);
+      setLabels(data[LABELS_KEY]);
       setMilestones(data[MILESTONES_KEY]);
     },
   });

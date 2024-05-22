@@ -1,30 +1,35 @@
 import styled from "styled-components";
 import LabelHeader from "./LabelHeader";
 import Header from "../header/Header";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { sendLabelsRequest } from "../../api/LabelAPI";
-import LabelDetail, { LabelDetailProps } from "./LabelDetail";
+import LabelDetail from "./LabelDetail";
 import LabelEditBox from "./LabelEditBox";
+import { LabelDetailType, LabelStateContext } from "../../hooks/contexts/useLabelStateContext";
+import { useQuery } from "react-query";
 
 function LabelList() {
-  const [labels, setLabels] = useState([]);
-  const [isAddable, setIsAddable] = useState(true);
-
-  useEffect(() => {
-    sendLabelsRequest().then((data) => setLabels(data));
-  }, []);
+  const { labels, setLabels, labelState, setLabelState } = useContext(LabelStateContext);
+  const { isToAdd } = labelState;
+  const { data } = useQuery("labels", sendLabelsRequest, {
+    onSuccess: (data) => setLabels(data),
+  });
 
   return (
     <Wrapper>
       <Header />
       <LabelHeader />
-      {isAddable && (<LabelEditBox />)}
+      {isToAdd && (
+        <EditBoxWrapper>
+          <LabelEditBox type="new" handleCancelClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} />
+        </EditBoxWrapper>
+      )}
       <LabelTable>
         <LabelTab>
           <span>{labels.length}개의 레이블</span>
         </LabelTab>
         <ScrollableArea>
-          {labels.map((label: LabelDetailProps) => (
+          {labels.map((label: LabelDetailType) => (
             <LabelDetail {...label} />
           ))}
         </ScrollableArea>
@@ -37,6 +42,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2em;
+`;
+
+const EditBoxWrapper = styled.div`
+  border: 1px solid #d9dbe9;
+  border-radius: 0.75em;
 `;
 
 const LabelTable = styled.div`
