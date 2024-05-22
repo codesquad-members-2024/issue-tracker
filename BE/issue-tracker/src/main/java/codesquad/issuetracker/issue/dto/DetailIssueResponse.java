@@ -20,7 +20,7 @@ public class DetailIssueResponse {
     Long id;
     String authorId;
     String title;
-    String description;
+    String content;
     LocalDateTime openAt;
     LocalDateTime updatedAt;
     LocalDateTime closedAt;
@@ -31,12 +31,12 @@ public class DetailIssueResponse {
     Set<UserResponse> assignees;
     List<CommentResponse> comments;
 
-    public static DetailIssueResponse from(Issue issue, Set<Label> labels, Set<UserResponse> assignees, List<CommentResponse> comments) {
+    public static DetailIssueResponse of(Issue issue, Set<Label> labels, Set<UserResponse> assignees, List<CommentResponse> comments) {
         return DetailIssueResponse.builder()
             .id(issue.getId())
             .authorId(issue.getAuthorId())
             .title(issue.getTitle())
-            .description(issue.getDescription())
+            .content(issue.getContent())
             .openAt(issue.getOpenAt())
             .updatedAt(issue.getUpdatedAt())
             .closedAt(issue.getClosedAt())
