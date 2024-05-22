@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useIssueStore from "../../hooks/stores/useIssueStore";
 
 function Filter() {
-  const { milestones } = useIssueStore();
+  const { labels, milestones } = useIssueStore();
   const navigate = useNavigate();
 
   return (
@@ -28,11 +28,13 @@ function Filter() {
           <FilterBox>
             <LabelBar>
               <SmallIcon src={labelIcon} />
-              <LargeTitle onClick={() => navigate("/labels")}>레이블(0)</LargeTitle>
+              <LargeTitle onClick={() => navigate("/labels")}>레이블({(labels && labels.length) || 0})</LargeTitle>
             </LabelBar>
             <MilestoneBar>
               <SmallIcon src={milestoneIcon} />
-              <LargeTitle onClick={() => navigate("/milestones")}>마일스톤({milestones && milestones.length || 0})</LargeTitle>
+              <LargeTitle onClick={() => navigate("/milestones")}>
+                마일스톤({(milestones && milestones.length) || 0})
+              </LargeTitle>
             </MilestoneBar>
           </FilterBox>
           <NewIssueButton onClick={() => navigate("/new")}>

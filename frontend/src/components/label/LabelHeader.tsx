@@ -7,7 +7,7 @@ import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useState } from "react";
 
 function LabelHeader() {
-  const { milestones } = useIssueStore();
+  const { labels, milestones } = useIssueStore();
   const [isAddAvailable, setIsAddAvailable] = useState(true);
   const navigate = useNavigate();
 
@@ -16,11 +16,13 @@ function LabelHeader() {
       <NavigateBox>
         <LabelBar>
           <SmallIcon src={labelIcon} />
-          <LargeTitle onClick={() => navigate("/labels")}>레이블(0)</LargeTitle>
+          <LargeTitle onClick={() => navigate("/labels")}>레이블({(labels && labels.length) || 0})</LargeTitle>
         </LabelBar>
         <MilestoneBar>
           <SmallIcon src={milestoneIcon} />
-          <LargeTitle onClick={() => navigate("/milestones")}>마일스톤({milestones && milestones.length || 0})</LargeTitle>
+          <LargeTitle onClick={() => navigate("/milestones")}>
+            마일스톤({(milestones && milestones.length) || 0})
+          </LargeTitle>
         </MilestoneBar>
       </NavigateBox>
       <AddButton isAvailable={isAddAvailable} onClick={() => setIsAddAvailable(!isAddAvailable)}>
