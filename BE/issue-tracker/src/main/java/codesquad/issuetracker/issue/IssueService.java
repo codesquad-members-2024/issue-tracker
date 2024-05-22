@@ -1,8 +1,10 @@
 package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.base.State;
+import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.comment.CommentResponse;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
+import codesquad.issuetracker.issue.dto.IssueCreateRequest;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
 import codesquad.issuetracker.user.UserService;
@@ -13,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,15 +37,14 @@ public class IssueService {
         return issueRepository.findAllByState(state);
     }
 
-    public List<Issue> findAllIssues() {
-        return (List<Issue>) issueRepository.findAll();
-    }
+    public Issue create(IssueCreateRequest issueCreateRequest) {
+        Issue issue = issueCreateRequest.toEntity();
+        Comment comment = Comment.builder()
+            .authorId(AggregateReference.to(issueCreateRequest.getUserId()))
+            .contents(issueCreateRequest.getContent())
+            .build();
 
-    public List<Issue> findAllByLabelId(Long labelId) {
-        return issueRepository.findAllByLabelId(labelId);
-    }
-
-    public Issue create(Issue issue) {
+        issue.addComment(comment);
         return issueRepository.save(issue);
     }
 

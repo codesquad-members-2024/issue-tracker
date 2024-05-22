@@ -44,9 +44,8 @@ public class IssueController {
     }
 
     @PostMapping
-    public ResponseEntity<Issue> createIssue(@RequestBody IssueCreateRequest request) {
-        Issue issue = request.toEntity();
-        Issue savedIssue = issueService.create(issue);
+    public ResponseEntity<Issue> createIssue(@RequestBody IssueCreateRequest issueCreateRequest) {
+        Issue savedIssue = issueService.create(issueCreateRequest);
         return ResponseEntity.created(URI.create("/api/issues/" + savedIssue.getId())).build();
     }
 
