@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.CodeSquad.IssueTracker.labels.utils.ColorValidator.isValidColor;
 
@@ -31,6 +32,10 @@ public class LabelService {
         }
         log.info("라벨 id: {} 조회 요청", id);
         return labelRepository.findById(id);
+    }
+
+    public Set<Label> findAllByIds(Set<Long> ids) {
+        return labelRepository.findAllById(ids);
     }
 
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -88,5 +89,9 @@ public class UserService {
 
     public List<String> getAllUserIds() {
         return userRepository.getAllUserIds();
+    }
+
+    public Set<User> findAllByIds(Set<String> newAssigneeIds) {
+        return userRepository.findAllById(newAssigneeIds);
     }
 }

@@ -16,6 +16,7 @@ import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelId;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.Label;
 import com.CodeSquad.IssueTracker.labels.LabelRepository;
+import com.CodeSquad.IssueTracker.labels.LabelService;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
@@ -43,10 +44,11 @@ public class IssueService {
     private final LabelRepository labelRepository;
     private final IssueLabelRepository issueLabelRepository;
     private final AssigneeRepository assigneeRepository;
+    private final LabelService labelService;
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
                         UserRepository userRepository, MilestoneRepository milestoneRepository,
                         LabelRepository labelRepository, IssueLabelRepository issueLabelRepository,
-                        MilestoneService milestoneService, AssigneeRepository assigneeRepository) {
+                        MilestoneService milestoneService, AssigneeRepository assigneeRepository, LabelService labelService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
@@ -55,6 +57,7 @@ public class IssueService {
         this.issueLabelRepository = issueLabelRepository;
         this.milestoneService = milestoneService;
         this.assigneeRepository = assigneeRepository;
+        this.labelService = labelService;
     }
 
 
@@ -190,6 +193,10 @@ public class IssueService {
 
     @Transactional
     public void updateLabels(Long issueId, Set<Long> newLabels) {
+        Set<Label> labels = labelService.findAllByIds(newLabels);
+        if (labels.size() != newLabels.size())
+            throw new LabelNotFoundException("존재하지 않는 라벨이 포함되어 있습니다.");
+
         Issue issue = findIssueById(issueId);
 
         Set<LabelId> labelIds = newLabels.stream()
