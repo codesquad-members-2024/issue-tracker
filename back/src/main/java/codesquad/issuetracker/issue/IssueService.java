@@ -112,4 +112,9 @@ public class IssueService {
         issue.deleteMilestone();
         issueRepository.save(issue);
     }
+
+    public List<Issue> getFilteredIssues(List<String> assigneeIds, List<Long> labelIds, Long milestoneId, String writer) {
+        List<Issue> issues = (List<Issue>) issueRepository.findAll();
+        return issues.stream().filter(issue -> issue.checkFilter(assigneeIds, labelIds, milestoneId, writer)).collect(Collectors.toList());
+    }
 }

@@ -136,4 +136,22 @@ public class IssueController {
                 .noContent()
                 .build();
     }
+
+    @GetMapping("/issues/filter")
+    public ResponseEntity<List<IssueShowDto>> filter(@ModelAttribute IssueQueryParamsDto queryParams) {
+        List<Issue> filteredIssues = issueService.getFilteredIssues(
+                queryParams.getAssigneeIds(),
+                queryParams.getLabelIds(),
+                queryParams.getMilestoneId(),
+                queryParams.getWriter()
+        );
+        return ResponseEntity
+                .ok(filteredIssues.stream()
+                        .map(issue -> new IssueShowDto(
+                                issue,
+                                issueService.getLabelsForIssue(issue),
+                                issueService.getAssigneesForIssue(issue),
+                                issueService.getMilestoneForIssue(issue)))
+                        .collect(Collectors.toList()));
+    }
 }
