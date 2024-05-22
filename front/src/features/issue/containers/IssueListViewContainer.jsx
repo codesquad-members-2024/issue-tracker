@@ -54,7 +54,7 @@ export function IssueListViewContainer() {
 		console.log(queryString);
 	};
 
-	// TODO: 검색어를 이용한 이슈 검색
+	// TODO: 검색어를 이용한 이슈 필터링
 	const onSearch = queryString => {
 		navigate(`/issues?search=${queryString}`);
 	};

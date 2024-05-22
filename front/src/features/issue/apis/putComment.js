@@ -1,7 +1,6 @@
-import { server } from '../../../apis/baseApi';
+import { server } from '~/apis/baseApi';
 
 export async function putComment(id, comment) {
-	console.log('putComment🎾', id, comment, typeof comment);
 	try {
 		const response = await fetch(`${server}/comments/${id}`, {
 			method: 'PUT',

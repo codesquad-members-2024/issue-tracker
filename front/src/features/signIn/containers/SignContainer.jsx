@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -18,23 +18,12 @@ export function SignContainer() {
 		try {
 			const response = await getUser(id, password);
 			if (response.message === '로그인 성공') {
-				// messageApi.success('로그인 성공');
-
 				navigate('/issues');
-			}
-			if (response.error) {
-				messageApi.error(response.error);
-				return;
 			}
 		} catch (error) {
 			console.error('Error:', error);
 		}
 	};
-	const sessionId = localStorage.getItem('JSESSIONID');
-	if (sessionId) {
-		// JSESSIONID를 이용한 추가 작업
-		console.log('JSESSIONID:', sessionId);
-	}
 
 	const [messageApi, contextHolder] = message.useMessage();
 

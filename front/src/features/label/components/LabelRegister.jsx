@@ -9,6 +9,7 @@ import {
 } from '~/common/icons';
 import { Input } from 'antd';
 import { Button, Label, InputRadio } from '~/common/components';
+import { putLabel } from '~/features/label/apis';
 import { colorGenerator } from '~/utils/util';
 
 export function LabelRegister({
@@ -24,6 +25,11 @@ export function LabelRegister({
 		textColor: '',
 		backgroundColor: '',
 	});
+
+	const handleEditLabel = () => {
+		putLabel(label.id, label);
+	};
+
 	useEffect(() => {
 		if (isEdit) {
 			setPreview({
@@ -145,6 +151,7 @@ export function LabelRegister({
 							type='button'
 							size='small'
 							buttonText='편집 완료'
+							onClick={handleEditLabel}
 							icon={<IconEdit />}
 						/>
 					</>

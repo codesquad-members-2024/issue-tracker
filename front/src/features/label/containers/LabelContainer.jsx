@@ -3,27 +3,21 @@ import { useState } from 'react';
 
 import { IconPlus } from '~/common/icons';
 import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
-import { Tabs, ListHeader, ListBody, Button } from '~/common/components';
+import { useLabelList } from '~/features/issue/hooks';
+import {
+	Tabs,
+	ListHeader,
+	ListBody,
+	Button,
+	Loading,
+} from '~/common/components';
+
 import { LabelRegister, LabelListItem } from '~/features/label/components';
 
 export function LabelContainer() {
-	const labelArray = [
-		{
-			id: 2,
-			name: 'documentation',
-			description: 'documentation description',
-			backgroundColor: '#008672',
-			textColor: '#ffffff',
-		},
-		{
-			id: 4,
-			name: 'bug',
-			description: 'bugggg description',
-			backgroundColor: '#008672',
-			textColor: '#ffffff',
-		},
-	];
 	const [newLabel, setNewLabel] = useState(false);
+	const { labelList, loading } = useLabelList();
+
 	return (
 		<>
 			<StyledWrapper>
@@ -50,7 +44,8 @@ export function LabelContainer() {
 					<StyledLabeCount>{3}개의 레이블</StyledLabeCount>
 				</StyledListHeader>
 				<ListBody>
-					{labelArray.map(label => (
+					{loading && <Loading size='big' />}
+					{labelList?.map(label => (
 						<LabelListItem key={label.id} label={label} />
 					))}
 				</ListBody>

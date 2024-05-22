@@ -1,4 +1,4 @@
-import { server, devServer } from '~/apis/baseApi';
+import { server } from '~/apis/baseApi';
 
 /**
  * 이슈 상세 조회 API
@@ -11,7 +11,7 @@ export async function getIssueDetail(id) {
 	try {
 		const response = await fetch(`${server}/issues/${id}`, {
 			method: 'GET',
-			// credentials: 'include',
+			credentials: 'include',
 		}).then(res => res.json());
 		const data = response;
 		return data;

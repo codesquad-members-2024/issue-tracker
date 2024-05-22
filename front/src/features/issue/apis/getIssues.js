@@ -9,7 +9,7 @@ export async function getIssues() {
 	try {
 		const response = await fetch(`${server}/issues`, {
 			method: 'GET',
-			// credentials: 'include',
+			credentials: 'include',
 		}).then(res => res.json());
 		const data = response;
 		return data;

@@ -7,8 +7,6 @@ import { server, devServer } from '~/apis/baseApi';
  * @param {loginId, password}
  */
 export async function getUser(id, password) {
-	console.log('🚀 ~ getUser ~ id, password:', id, password);
-
 	try {
 		const response = await fetch(`${server}/login`, {
 			method: 'POST',
@@ -25,12 +23,10 @@ export async function getUser(id, password) {
 		const data = await response.json();
 
 		if (response.status === 200) {
-			sessionStorage.setItem('token', data.token);
-			sessionStorage.setItm('email', data.email);
 			console.log('🚀 ~ getUser ~ data:', data);
+			return data;
 		} else {
-			console.log('🚀 ~ getUser ~ data:', data);
-			return { error: data.message };
+			return { error: data };
 		}
 	} catch (error) {
 		console.error('Error:', error);
