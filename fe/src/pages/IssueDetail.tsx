@@ -4,7 +4,7 @@ import TitleContainer from "../components/IssueDetail/TitleContainer";
 import Sidebar from "../common/Sidebar";
 import { CommentCard } from "../components/IssueDetail/CommentCard";
 import { DeleteOutlined } from "@ant-design/icons";
-import FileUploader from "../common/Uploader";
+import FileUploader from "../common/FileUploader";
 import CommentArea from "../components/IssueDetail/CommentArea";
 
 const mockData = {

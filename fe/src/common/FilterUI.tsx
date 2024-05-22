@@ -35,7 +35,6 @@ const FilterUI: React.FC<FilterProps> = ({
         if (resetFilterUI) setSelectItem(filterInfo[INITIAL_IDX]);
         setResetFilterUI(false);
         FilterDispatch({ type: "SET_INIT", prevFilter: "", curFilter: "" });
-        console.log(FilterState)
     }, [resetFilterUI, filterInfo, FilterDispatch, setResetFilterUI]);
 
     useEffect(() => {

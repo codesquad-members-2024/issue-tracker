@@ -10,7 +10,7 @@ import {
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
 import MilestoneEditUI from "./MilestoneEditUI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { APiUtil } from "../../../common/APIUtils";
+import { APiUtil } from "../../../common/Utils";
 import { ModalComponent } from "../../../common/Modal";
 import Progressbar from "../../../common/Progressbar";
 interface MilestoneCardProps {
@@ -41,7 +41,7 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries("milestones");
+            queryClient.invalidateQueries({ queryKey: ["milestones"]});
         },
     });
 

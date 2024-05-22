@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Milestone } from "./MilestoneFeed";
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { APiUtil } from "../../../common/APIUtils";
+import { APiUtil } from "../../../common/Utils";
 interface MilestoneEditUIProps {
     curMilestone?: Milestone;
 }
