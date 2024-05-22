@@ -35,14 +35,14 @@ export function InputRadio({
 		</StyledLabel>
 	);
 }
-const StyledRadioList = styled.div``;
 const StyledLabel = styled.label`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	padding: 8px 16px;
 	background: ${({ theme }) => theme.color.neutral.surface.strong};
-	display: flex;
+	color: ${({ theme }) => theme.color.neutral.text.default};
+	${({ theme }) => theme.typography.medium[16]};
 	span {
 		display: flex;
 		column-gap: 8px;

@@ -10,7 +10,6 @@ import { IconPlus, IconChevronDown } from '~/common/icons';
 
 export function IssueListViewContainer() {
 	const { issueList, loading, error } = useIssueList();
-	console.log(issueList);
 
 	return (
 		<StyledWrapper>
@@ -40,7 +39,17 @@ export function IssueListViewContainer() {
 							<IconChevronDown />
 						</summary>
 						<StyledDropdowns dropdownTitle='담당자 필터'>
-							<InputRadio />
+							<InputRadio listName={'assignees'} value={'담당자가 없는 이슈'} />
+							<InputRadio
+								listName={'assignees'}
+								value={'melroh629'}
+								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+							/>
+							<InputRadio
+								listName={'assignees'}
+								value={'guest=1243'}
+								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+							/>
 						</StyledDropdowns>
 					</details>
 					<details>
@@ -48,20 +57,53 @@ export function IssueListViewContainer() {
 							레이블
 							<IconChevronDown />
 						</summary>
-						<StyledDropdowns />
+						<StyledDropdowns dropdownTitle='레이블 필터'>
+							<InputRadio listName={'labels'} value={'레이블이 없는 이슈'} />
+							<InputRadio
+								listName={'labels'}
+								value={'docu'}
+								bgColor={'#d4c5f9'}
+								fontColor={'#fff'}
+							/>
+							<InputRadio
+								listName={'labels'}
+								value={'bugs'}
+								bgColor={'#d2f7f1'}
+								fontColor={'#fff'}
+							/>
+						</StyledDropdowns>
 					</details>
 					<details>
 						<summary>
 							마일스톤
 							<IconChevronDown />
 						</summary>
-						<StyledDropdowns />
+						<StyledDropdowns dropdownTitle='마일스톤 필터'>
+							<InputRadio
+								listName={'milestones'}
+								value={'마일스톤이 없는 이슈'}
+							/>
+							<InputRadio listName={'milestones'} value={'마일스톤 제목2'} />
+							<InputRadio listName={'milestones'} value={'마일스톤 제목1'} />
+						</StyledDropdowns>
 					</details>
 					<details>
 						<summary>
 							작성자 <IconChevronDown />
 						</summary>
-						<StyledDropdowns />
+						<StyledDropdowns dropdownTitle='작성자 필터'>
+							<InputRadio listName={'writer'} value={'담당자가 없는 이슈'} />
+							<InputRadio
+								listName={'writer'}
+								value={'melroh629'}
+								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+							/>
+							<InputRadio
+								listName={'writer'}
+								value={'guest=1243'}
+								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+							/>
+						</StyledDropdowns>
 					</details>
 				</StyledDropList>
 			</StyledFilter>
