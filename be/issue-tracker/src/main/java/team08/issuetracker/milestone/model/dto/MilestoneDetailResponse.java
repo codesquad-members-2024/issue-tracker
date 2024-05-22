@@ -6,7 +6,7 @@ import team08.issuetracker.milestone.model.Milestone;
 import java.time.LocalDate;
 
 @Getter
-public class MilestoneDetailDto {
+public class MilestoneDetailResponse {
     private long id;
     private String name;
     private LocalDate completeDate;
@@ -15,15 +15,15 @@ public class MilestoneDetailDto {
     private long closedIssueCount;
     private double milestoneProgress;
 
-    public MilestoneDetailDto(Long id, String name, LocalDate completeDate, String description) {
+    public MilestoneDetailResponse(Long id, String name, LocalDate completeDate, String description) {
         this.id = id;
         this.name = name;
         this.completeDate = completeDate;
         this.description = description;
     }
 
-    public static MilestoneDetailDto from(Milestone milestone) {
-        return new MilestoneDetailDto(
+    public static MilestoneDetailResponse from(Milestone milestone) {
+        return new MilestoneDetailResponse(
                 milestone.getId(),
                 milestone.getName(),
                 milestone.getCompleteDate(),
