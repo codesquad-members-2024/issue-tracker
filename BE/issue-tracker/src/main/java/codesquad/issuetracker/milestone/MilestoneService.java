@@ -65,10 +65,11 @@ public class MilestoneService {
         if (milestone.isEmpty()) {
             return new ResponseEntity<>("Milestone not found", HttpStatus.NOT_FOUND);
         }
-        if (milestone.get().isDeleted()) {
-            return new ResponseEntity<>("Milestone is already deleted", HttpStatus.BAD_REQUEST);
-        }
         milestoneCustomRepository.softDeleteByMilestoneId(milestoneId);
         return new ResponseEntity<>("Milestone is successfully deleted", HttpStatus.OK);
+    }
+
+    public Long countOpenMilestones() {
+        return milestoneRepository.countOpenMilestones();
     }
 }

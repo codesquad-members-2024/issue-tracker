@@ -21,7 +21,7 @@ class LabelRepositoryTest {
         Label label = Label.builder()
             .name("테스트 라벨")
             .description("테스트 내용")
-            .color("#FF0000")
+            .backgroundColor("#FF0000")
             .build();
 
         Label savedLabel = labelRepository.save(label);
