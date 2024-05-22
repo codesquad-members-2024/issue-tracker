@@ -3,7 +3,7 @@ import IssueFeed from "../components/IssueContainer/IssueFeed";
 import { useState } from "react";
 import FilterProvider from "../Providers/FilterProvider";
 import { Header } from "../common/UtilUI";
-import { APiUtil } from "../common/APIUtils";
+import { APiUtil } from "../common/Utils";
 import { useQuery } from "@tanstack/react-query";
 
 const IssuePage = () => {

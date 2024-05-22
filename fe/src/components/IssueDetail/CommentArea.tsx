@@ -1,4 +1,4 @@
-import FileUploader from "../../common/Uploader";
+import FileUploader from "../../common/FileUploader";
 import { CommentCard } from "./CommentCard";
 import { Comment } from "./TitleContainer";
 

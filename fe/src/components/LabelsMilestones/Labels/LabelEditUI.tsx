@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from
 import { Label } from "./LabelFeed";
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
 import { RedoOutlined, DownOutlined } from "@ant-design/icons";
-import { changeColor } from "../../../common/APIUtils";
+import { changeColor } from "../../../common/Utils";
 
 export interface ChangeColorProps {
     setColor: Dispatch<SetStateAction<string>>;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Issue } from "./IssueFeed";
 import { Link } from "react-router-dom";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { getDateDifference } from "../../common/Utils";
 interface IssueCardProps {
     curIssue: Issue;
     id: number;
@@ -58,7 +59,7 @@ const IssueCard = ({ curIssue, id, isLast, checkItemHandler, isAllChecked }: Iss
                         <div className="w-full h-1/2 flex items-center">
                             <div className="mr-2">#{curIssue.id}</div>
                             <div className="w-full">
-                                이 이슈가 {curIssue.updatedAt}에,{" "}
+                                이 이슈가 {getDateDifference(curIssue.updatedAt)},{" "}
                                 {curIssue.authorId}님에 의해 작성되었습니다.
                             </div>
                         </div>

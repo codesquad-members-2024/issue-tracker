@@ -4,7 +4,7 @@ import Nav from "../components/LabelsMilestones/Nav";
 import { LabelFeed } from "../components/LabelsMilestones/Labels/LabelFeed";
 import LabelEditUI from "../components/LabelsMilestones/Labels/LabelEditUI";
 import { useQuery } from "@tanstack/react-query";
-import { APiUtil } from "../common/APIUtils";
+import { APiUtil } from "../common/Utils";
 
 const LabelsPage = () => {
     const { data, error, isLoading } = useQuery({

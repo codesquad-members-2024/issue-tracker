@@ -1,16 +1,16 @@
-import { useState } from "react";
-import FileUploader from "../../common/Uploader";
+import { useEffect, useState } from "react";
+import FileUploader from "../../common/FileUploader";
 import { IssueData } from "../../pages/NewPage";
-
-
-
-
 interface CommentProps {
     issueData: IssueData;
     setIssueData: React.Dispatch<React.SetStateAction<IssueData>>;
 }
 
 const NewIssue = ({issueData, setIssueData}: CommentProps) => {
+    useEffect(() => {
+        console.log(issueData)
+    }, [issueData])
+
     const [isActive, setActive] = useState({
         title: false,
         description: false,
@@ -28,7 +28,6 @@ const NewIssue = ({issueData, setIssueData}: CommentProps) => {
             [type]: false
         })
     }
-
 
     return (
         <div className="flex flex-col gap-2">
@@ -57,7 +56,7 @@ const NewIssue = ({issueData, setIssueData}: CommentProps) => {
                         value={issueData.description}
                         onChange={(e) => setIssueData({ ...issueData, description: e.target.value })}
                         />
-                        <FileUploader/>
+                        <FileUploader setIssueData={setIssueData}/>
                 </div>
             </div>
         </div>
