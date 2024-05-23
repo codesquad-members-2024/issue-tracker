@@ -23,7 +23,7 @@ async function getMilestones() {
 	try {
 		const response = await fetch(`${server}/milestones`, {
 			method: 'GET',
-			// credentials: 'include',
+			credentials: 'include',
 		}).then(res => res.json());
 		const data = response;
 		return data;

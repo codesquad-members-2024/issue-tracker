@@ -4,6 +4,7 @@ export async function putLabel(labelId, label) {
 	console.log(labelId);
 	const response = await fetch(`${server}/labels/${labelId}`, {
 		method: 'PUT',
+		// credentials: 'include',
 		headers: {
 			'Content-Type': 'application/json',
 		},

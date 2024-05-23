@@ -8,7 +8,7 @@ export function GlobalHeader({ ...props }) {
 	return (
 		<StyledHeader {...props}>
 			<StyledInnerLayout>
-				<StyledLink to='/'>
+				<StyledLink to='/issues'>
 					<Logo />
 				</StyledLink>
 				<StyledUser></StyledUser>

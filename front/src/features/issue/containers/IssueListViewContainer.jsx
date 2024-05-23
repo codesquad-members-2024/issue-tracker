@@ -54,6 +54,8 @@ export function IssueListViewContainer() {
 		console.log(queryString);
 	};
 
+	console.log('issueList', issueList);
+
 	// TODO: 검색어를 이용한 이슈 필터링
 	const onSearch = queryString => {
 		navigate(`/issues?search=${queryString}`);

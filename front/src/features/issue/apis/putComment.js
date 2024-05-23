@@ -10,7 +10,7 @@ export async function putComment(id, comment) {
 			body: JSON.stringify({
 				loginId: 'daniel',
 				content: comment,
-				issueId: 1,
+				issueId: id,
 			}),
 		});
 

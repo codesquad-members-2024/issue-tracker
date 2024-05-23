@@ -10,7 +10,7 @@ export async function getUser(id, password) {
 	try {
 		const response = await fetch(`${server}/login`, {
 			method: 'POST',
-			credentials: 'include',
+			// credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},

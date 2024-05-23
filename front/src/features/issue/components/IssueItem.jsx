@@ -24,10 +24,10 @@ export function IssueItem({ issue }) {
 					이 이슈가 {issue.duration} 전, {issue?.writer}님에 의해
 					작성되었습니다.
 				</StyledAuthour>
-				<StyledMilestone>
+				{/* <StyledMilestone>
 					<IconMilestone />
 					<p>{issue?.milestone.name}</p>
-				</StyledMilestone>
+				</StyledMilestone> */}
 			</StyledDetail>
 			<StyledUserImage src={issue?.profileImage} />
 		</StyledWrapper>

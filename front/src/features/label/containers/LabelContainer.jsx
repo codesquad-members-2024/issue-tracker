@@ -11,7 +11,7 @@ import {
 	Button,
 	Loading,
 } from '~/common/components';
-
+import { addLabel } from '~/features/label/apis';
 import { LabelRegister, LabelListItem } from '~/features/label/components';
 
 export function LabelContainer() {

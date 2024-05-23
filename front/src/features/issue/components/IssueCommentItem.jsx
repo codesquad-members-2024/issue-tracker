@@ -21,7 +21,7 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 		setHasChange(comment !== content);
 	}, [comment, content]);
 
-	const putEditCmment = async () => {
+	const putEditComment = async () => {
 		try {
 			await putComment(id, comment);
 			setIsEdit(false);
@@ -92,9 +92,7 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 						// disabled={!hasChange}
 						buttonText='편집 완료 댓글'
 						icon={<IconEdit />}
-						onClick={() => {
-							putEditCmment(id);
-						}}
+						onClick={putEditComment}
 					/>
 				</StyledButtons>
 			)}

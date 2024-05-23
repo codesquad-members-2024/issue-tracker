@@ -204,7 +204,7 @@ export function IssueDetailContainer() {
 									size='small'
 									disabled={!isNewComment}
 									buttonType='container'
-									buttonText='코멘트 작성'
+									buttonText='새로운 코멘트 작성'
 									icon={<IconPlus />}
 									onClick={onPostComment}
 								/>
