@@ -3,16 +3,10 @@ import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.UserIdAlreadyExistException;
 import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
-import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
-import com.CodeSquad.IssueTracker.user.utils.UserValidate;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 
@@ -34,7 +28,7 @@ public class UserService {
     public void save(UserRegisterRequest userRegisterRequest) {
         User user = User.builder()
                 .userId(userRegisterRequest.userId())
-                .userPassword(userRegisterRequest.password())
+                .userPassword(userRegisterRequest.userPassword())
                 .isNew(true)
                 .build();
         verifyUserInfo(user);
