@@ -25,7 +25,6 @@ public class User implements Persistable<String> {
     @Transient
     private boolean isNew = true;
 
-    @Builder
     @PersistenceCreator
     User(String id, String username, String password, Role role, LocalDateTime createdAt,
         boolean isDeleted) {
@@ -35,6 +34,16 @@ public class User implements Persistable<String> {
         this.role = role;
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
+    }
+
+    @Builder
+    public User(String id, String username, String password, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdAt = LocalDateTime.now();
+        this.isDeleted = false;
     }
 
     public static User from(String id, String username, String password, Role role) {
