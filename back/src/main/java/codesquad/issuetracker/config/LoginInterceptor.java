@@ -13,7 +13,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("Login Check Interceptor {}", request.getRequestURI());
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("loginId") == null) {
+        if (session == null || session.getAttribute("LOGIN USER") == null) {
             log.info("미인증 사용자 요청");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;

@@ -36,11 +36,7 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
         }
 
-        String loginId = loginForm.getLoginId();
-        String password = loginForm.getPassword();
-
-        if (loginService.authenticate(loginId, password, session)) {
-            session.setAttribute("loginId", loginId); // 세션에 이메일 저장
+        if (loginService.authenticate(loginForm.getLoginId(), loginForm.getPassword(), session)) {
             session.setMaxInactiveInterval(SESSION_EXPIRATION_TIME); // 세션 유효 시간 1시간
             responseMap.put("message", "로그인 성공");
             return ResponseEntity.ok(responseMap);
