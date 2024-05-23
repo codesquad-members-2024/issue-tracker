@@ -26,8 +26,8 @@ class LabelServiceTest {
 
     @Test
     void testCreateLabel() {
-        LabelCreationRequest labelCreationRequest = new LabelCreationRequest("New Label", "New Description", "#FFFFFF", "#000000");
-        Label expectedLabel = new Label("New Label", "New Description", "#FFFFFF", "#000000");
+        LabelCreationRequest labelCreationRequest = new LabelCreationRequest("New Label", "New Description", "#FFFFFF", true);
+        Label expectedLabel = new Label("New Label", "New Description", "#FFFFFF", true);
 
         when(labelRepository.save(any(Label.class))).thenReturn(expectedLabel);
 
@@ -48,7 +48,7 @@ class LabelServiceTest {
     @Test
     void testDeleteLabel() {
         Long id = 1L;
-        Label labelToDelete = new Label("Name", "Description", "#FFFFFF", "#000000");
+        Label labelToDelete = new Label("Name", "Description", "#FFFFFF", true);
 
         when(labelRepository.findById(id)).thenReturn(Optional.of(labelToDelete));
 
