@@ -107,7 +107,7 @@ const Form = styled.div`
 `;
 
 const FormType = styled.span`
-  width: 6em;
+  width: 7em;
   font-size: 0.75em;
   display: flex;
   align-items: center;

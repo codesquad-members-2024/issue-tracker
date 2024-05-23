@@ -3,8 +3,8 @@ import IssueTab from "./IssueTab";
 import IssueHeadline from "./IssueHeadline";
 import { MutableRefObject } from "react";
 import { Headline } from "../../../hooks/stores/useIssueStore";
-import RefreshRequest from "../../error/RefreshRequest";
 import useIssueListLogic, { IssueType } from "../../../hooks/logics/useIssueListLogic";
+import Loading from "../../login/Loading";
 
 const renderHeadlines = (issues: Headline[], lastIssueRef: MutableRefObject<null>) =>
   issues.map((issue, index) =>
@@ -16,9 +16,16 @@ const renderHeadlines = (issues: Headline[], lastIssueRef: MutableRefObject<null
   );
 
 function IssueList() {
-  const { focusedTab, setFocusedTab, issues, setIssues, lastIssueRef, requestError } = useIssueListLogic();
+  const {
+    focusedTab,
+    setFocusedTab,
+    issues,
+    setIssues,
+    lastIssueRef,
+    filterQuery: { isLoading },
+  } = useIssueListLogic();
 
-  if (requestError) <RefreshRequest />;
+  if (isLoading) return <Loading />;
 
   return (
     <Wrapper>

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import useIssueStore from "../stores/useIssueStore";
 import useIntersectionObserver from "../utils/useIntersectionObserver";
-import { useMutation } from "react-query";
+import { useQuery } from "react-query";
 import { sendIssuesRequest } from "../../api/IssueAPI";
 import { sendFiltersRequest } from "../../api/FilterAPI";
+import { useNavigate } from "react-router";
 
 export type IssueType = "open" | "close";
 
@@ -13,35 +14,36 @@ const LABELS_KEY = "labelListResponse";
 const MILESTONES_KEY = "milestoneListResponse";
 
 const useIssueListLogic = () => {
-  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setLabels, setMilestones } = useIssueStore();
+  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setLabels, setMilestones } =
+    useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
-  const [requestError, setRequestError] = useState(false);
   const [page, setPage] = useState(FIRST_PAGE);
   const lastIssueRef = useRef(null);
+  const navigate = useNavigate();
 
+  const issueQueryKey = ["issues", { issueType: focusedTab, page }];
   const fetchNextIssues = () => {
     const maxIssueCount = focusedTab === "open" ? openIssueCount : closeIssueCount;
     if (maxIssueCount > issues.length) {
       const nextPage = page + 1;
-      fetchIssues({ issueType: focusedTab, page: nextPage });
       setPage(nextPage);
     }
   };
 
-  const { mutateAsync: fetchIssues } = useMutation(sendIssuesRequest, {
-    onSuccess: (data) => {
-      setIssues([...issues, ...data]);
-      setRequestError(false);
-    },
-    onError: () => setRequestError(true),
-  });
-
-  const { mutateAsync: fetchFilters } = useMutation(sendFiltersRequest, {
+  const filterQuery = useQuery("filters", sendFiltersRequest, {
     onSuccess: (data) => {
       setIssueCounts(data[ISSUE_NUMBER_KEY]);
       setLabels(data[LABELS_KEY]);
       setMilestones(data[MILESTONES_KEY]);
     },
+    onError: () => navigate("/login"),
+  });
+
+  useQuery(issueQueryKey, () => sendIssuesRequest({ issueType: focusedTab, page }), {
+    onSuccess: (data) => setIssues([...issues, ...data]),
+    onError: () => navigate("/login"),
+    keepPreviousData: true,
+    enabled: filterQuery.isSuccess,
   });
 
   const { observer } = useIntersectionObserver(fetchNextIssues);
@@ -49,13 +51,7 @@ const useIssueListLogic = () => {
   useEffect(() => () => setIssues([]), []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchFilters();
-      fetchIssues({ issueType: focusedTab, page: FIRST_PAGE });
-    };
-
     if (page !== FIRST_PAGE) setPage(FIRST_PAGE);
-    fetchData();
   }, [focusedTab]);
 
   useEffect(() => {
@@ -73,7 +69,7 @@ const useIssueListLogic = () => {
     issues,
     setIssues,
     lastIssueRef,
-    requestError,
+    filterQuery,
   };
 };
 

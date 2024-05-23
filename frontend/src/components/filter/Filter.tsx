@@ -5,7 +5,7 @@ import labelIcon from "../../img/icon/labelIcon.svg";
 import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import { useNavigate } from "react-router-dom";
-import useFilterLogic from '../../hooks/logics/useFilterLogic';
+import useFilterLogic from "../../hooks/logics/useFilterLogic";
 
 function Filter() {
   const { labels, milestones } = useFilterLogic();

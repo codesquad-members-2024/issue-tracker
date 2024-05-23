@@ -6,15 +6,8 @@ import useLoginLogic from "../../hooks/logics/useLoginLogic";
 import Loading from "./Loading";
 
 function Login() {
-  const {
-    isSubmitable,
-    errorMessage,
-    isLoading,
-    idValueRef,
-    passwordValueRef,
-    handleLoginClick,
-    handleOnChange
-  } = useLoginLogic();
+  const { isSubmitable, errorMessage, isLoading, idValueRef, passwordValueRef, handleLoginClick, handleOnChange } =
+    useLoginLogic();
   const navigate = useNavigate();
 
   return (

@@ -44,7 +44,6 @@ const AuthorizationForm = React.forwardRef<HTMLInputElement, AuthorizationFormPr
   );
 });
 
-
 const Wrapper = styled.div<{ isFocused: boolean }>`
   width: 288px;
   height: 56px;
