@@ -51,22 +51,31 @@ public class IssueService {
     public DetailIssueResponse findDetailIssueById(Long issueId) {
         Issue issue = findById(issueId);
 
-        Set<Label> labels = issue.getLabelRefs().stream()
-            .map(labelRef -> labelService.findById(labelRef.getLabelId()))
-            .collect(Collectors.toSet());
-
-        Set<UserResponse> assignees = issue.getAssigneeIds().stream()
-            .map(assignee -> userService.findById(assignee.getAssigneeId()))
-            .map(UserResponse::of)
-            .collect(Collectors.toSet());
-
-        List<CommentResponse> comments = issue.getComments().stream()
-            .map(CommentResponse::of)
-            .toList();
-
+        Set<Label> labels = getLabels(issue.getLabelRefs());
+        Set<UserResponse> assignees = getUserResponses(issue.getAssigneeIds());
+        List<CommentResponse> comments = getCommentResponses(issue.getComments());
         SimpleMilestoneResponse milestoneResponse = getSimpleMilestone(issue.getMilestoneId());
 
         return DetailIssueResponse.of(issue, labels, assignees, comments, milestoneResponse);
+    }
+
+    private Set<Label> getLabels(Set<IssueAttachedLabel> labelRefs) {
+        return labelRefs.stream()
+            .map(labelRef -> labelService.findById(labelRef.getLabelId()))
+            .collect(Collectors.toSet());
+    }
+
+    private Set<UserResponse> getUserResponses(Set<Assignee> assignees) {
+        return assignees.stream()
+            .map(assignee -> userService.findById(assignee.getAssigneeId()))
+            .map(UserResponse::of)
+            .collect(Collectors.toSet());
+    }
+
+    private static List<CommentResponse> getCommentResponses(List<Comment> comments) {
+        return comments.stream()
+            .map(CommentResponse::of)
+            .toList();
     }
 
     private SimpleMilestoneResponse getSimpleMilestone(AggregateReference<Milestone, Long> milestoneId) {
