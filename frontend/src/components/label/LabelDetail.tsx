@@ -5,8 +5,7 @@ import { LabelDetailType } from "../../contexts/LabelContext";
 import LabelEditBox from "./LabelEditBox";
 import useLabelDetail from "../../hooks/logics/useLabelDetail";
 
-function LabelDetail(props: LabelDetailType) {
-  const { labelId, labelName, description, textColor, bgColor } = props;
+function LabelDetail({ labelId, labelName, description, textColor, bgColor }: LabelDetailType) {
   const { isToEdit, toggleEdit, handleDeleteClick } = useLabelDetail(labelId);
 
   return (

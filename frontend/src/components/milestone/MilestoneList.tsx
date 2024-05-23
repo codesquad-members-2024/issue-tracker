@@ -6,6 +6,7 @@ import { MilestoneType, MilestoneContext, MilestoneDetailType } from "../../cont
 import { useQuery } from "react-query";
 import { sendMilestonesRequest } from "../../api/MilestoneAPI";
 import MilestoneDetail from "./MilestoneDetail";
+import MilestoneEditBox from "./MilestoneEditBox";
 
 function MilestoneList() {
   const {
@@ -21,7 +22,7 @@ function MilestoneList() {
 
   const fetchMilestones = () => Promise.all([sendMilestonesRequest("open"), sendMilestonesRequest("close")]);
 
-  const { data } = useQuery("milestones", fetchMilestones, {
+  useQuery("milestones", fetchMilestones, {
     onSuccess: (data) => {
       setOpenMilestones(data[0]);
       setCloseMilestones(data[1]);
@@ -32,7 +33,11 @@ function MilestoneList() {
     <Wrapper>
       <Header />
       <MilestoneHeader />
-      {isToAdd && <EditBoxWrapper></EditBoxWrapper>}
+      {isToAdd && (
+        <EditBoxWrapper>
+          <MilestoneEditBox type="new" handleCancelClick={() => setIsToAdd(!isToAdd)} />
+        </EditBoxWrapper>
+      )}
       <MilestoneTable>
         <MilestoneTab>
           <MilestoneTypeText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>
@@ -44,8 +49,8 @@ function MilestoneList() {
         </MilestoneTab>
         <ScrollableArea>
           {focusedTab === "open"
-            ? openMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail />)
-            : closeMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail />)}
+            ? openMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail {...milestone} />)
+            : closeMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail {...milestone} />)}
         </ScrollableArea>
       </MilestoneTable>
     </Wrapper>
@@ -58,7 +63,11 @@ const Wrapper = styled.div`
   gap: 2em;
 `;
 
-const EditBoxWrapper = styled.div``;
+const EditBoxWrapper = styled.div`
+  border: 1px solid #d9dbe9;
+  border-radius: 0.75em;
+`;
+
 
 const MilestoneTable = styled.div`
   width: 80em;

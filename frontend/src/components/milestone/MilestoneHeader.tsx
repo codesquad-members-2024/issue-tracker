@@ -4,9 +4,12 @@ import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { MilestoneContext } from "../../contexts/MilestoneContext";
 
 function MilestoneHeader() {
-  const { labels, milestones } = useIssueStore();
+  const { labels } = useIssueStore();
+  const { openMilestones, isToAdd, setIsToAdd } = useContext(MilestoneContext);
   const navigate = useNavigate();
 
   return (
@@ -19,11 +22,11 @@ function MilestoneHeader() {
         <MilestoneBar>
           <SmallIcon src={milestoneIcon} />
           <LargeTitle onClick={() => navigate("/milestones")}>
-            마일스톤({(milestones && milestones.length) || 0})
+            마일스톤({(openMilestones && openMilestones.length) || 0})
           </LargeTitle>
         </MilestoneBar>
       </NavigateBox>
-      <AddButton isAvailable={false}>
+      <AddButton isAvailable={isToAdd} onClick={() => setIsToAdd(!isToAdd)}>
         <img src={plusIcon} />
         마일스톤 추가
       </AddButton>

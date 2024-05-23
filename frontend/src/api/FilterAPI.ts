@@ -4,7 +4,7 @@ const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
 export const sendFiltersRequest = async () => {
   try {
-    const response = await fetch(`${SERVER}/filters`);
+    const response = await fetch(`${SERVER}/filters`, { credentials: "include" });
 
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 

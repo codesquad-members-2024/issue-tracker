@@ -32,7 +32,7 @@ const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
 export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps) => {
   try {
-    const response = await fetch(`${SERVER}/issues/${issueType}?page=${page}`);
+    const response = await fetch(`${SERVER}/issues/${issueType}?page=${page}`, { credentials: "include" });
 
     if (response.status === 400) throw new Error(PAGE_FORMAT_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
