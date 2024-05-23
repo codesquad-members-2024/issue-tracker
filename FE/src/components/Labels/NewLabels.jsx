@@ -3,25 +3,33 @@ import { ContentNavStyles } from "@/styles/commonStyles";
 import { useState, useEffect } from "react";
 import useFetch from "../../hooks/useFetch";
 
-export function NewLabels({ type, closeNewLabels,labelId, initialData }) {
-  const { postData, putData } = useFetch(`${import.meta.env.VITE_SERVER}/labels`);
+const getRandomColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+export function NewLabels({ type, closeNewLabels, labelId, initialData }) {
+  const { postData, putData } = useFetch(
+    `${import.meta.env.VITE_SERVER}/labels`
+  );
   const [labelName, setLabelName] = useState("");
   const [labelColor, setLabelColor] = useState("");
   const [labelDescription, setLabelDescription] = useState("");
-  const [labelFontColor, setLabelFontColor] = useState("white");
+  const [labelFontColor, setLabelFontColor] = useState("black");
 
   useEffect(() => {
     if (type === "edit" && initialData) {
       const { title, color, description, fontColor } = initialData;
-    setLabelName(title);
-    setLabelColor(color);
-    setLabelDescription(description);
-    setLabelFontColor(fontColor);
+      setLabelName(title);
+      setLabelColor(color);
+      setLabelDescription(description);
+      setLabelFontColor(fontColor);
     }
   }, [initialData]);
 
   const toggleFontColor = () => {
-    setLabelFontColor((prev) => (prev === "white" ? "black" : "white"));
+    setLabelFontColor((prev) => (prev === "black" ? "white" : "black"));
+  };
+
+  const toggleBackgroundColor = () => {
+    setLabelColor(getRandomColor);
   };
 
   const handleSubmit = async () => {
@@ -77,7 +85,8 @@ export function NewLabels({ type, closeNewLabels,labelId, initialData }) {
                   onChange={(e) => setLabelColor(e.target.value)}
                 />
               </StyledColor>
-              <button onClick={toggleFontColor}>{labelFontColor}</button>
+              <RandomBtn color={labelColor} onClick={toggleBackgroundColor}></RandomBtn>
+              <button className="font" onClick={toggleFontColor}>{labelFontColor}</button>
             </ColorWraper>
           </LabelDescript>
         </Content>
@@ -91,8 +100,8 @@ export function NewLabels({ type, closeNewLabels,labelId, initialData }) {
 }
 
 const Wrap = styled.div`
-margin: ${(props) => (props.type === 'edit' ? '0' : '20px 100px')};
-border: ${(props) => (props.type === 'edit' ? 'none' : 'solid #dadbef')};
+  margin: ${(props) => (props.type === "edit" ? "0" : "20px 100px")};
+  border: ${(props) => (props.type === "edit" ? "none" : "solid #dadbef")};
   height: 330px;
   display: flex;
   border-radius: 10px;
@@ -126,7 +135,9 @@ const StyledLabel = styled.span`
   border-radius: 20px;
   font-size: 14px;
   border: solid #dadbef;
-  height: 17px;
+  align-content: center;
+  min-width: 20px;
+  height: 20px;
 `;
 
 const LabelDescript = styled.div`
@@ -189,12 +200,20 @@ const CompleteButton = styled.div`
 const ColorWraper = styled.div`
   display: flex;
   button {
-    padding: 0 20px;
     margin: 0.5em;
-    background-color: unset;
-    border: solid #dadbef;
-    border-radius: 20px;
     cursor: pointer;
     font-size: 18px;
+    border-radius: 20px;
+    border: solid #dadbef;
   }
+  .font {
+    background-color: white;
+    padding: 0 20px;
+  }
+`;
+
+const RandomBtn = styled.button`
+  background-color : white;
+  background-${(color) => color};
+  width: 40px;
 `;
