@@ -25,7 +25,7 @@ interface TitleEditProps {
 const ISSUE_ERROR_MESSAGE: { [key: number]: string } = {
   400: "데이터 형식에 오류가 생겼습니다.",
   404: "존재하지 않는 이슈에 접근하였습니다.",
-}
+};
 
 const PAGE_FORMAT_ERROR_MESSAGE = "페이지의 형식이 맞지 않습니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
@@ -46,7 +46,7 @@ export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps)
 
 export const sendIssueRequestById = async (issueId: number) => {
   try {
-    const response = await fetch(`${SERVER}/issue/${issueId}`);
+    const response = await fetch(`${SERVER}/issue/${issueId}`, { credentials: "include" });
 
     if (!response.ok) {
       const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
@@ -67,6 +67,7 @@ export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) =
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ title: title }),
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/title`, request);
@@ -90,6 +91,7 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({
         title: title,
         content: content,
@@ -117,6 +119,7 @@ export const postNewComment = async ({ issueId, author, content }: CommentReques
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ author, content }),
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/comment`, request);
@@ -137,6 +140,7 @@ export const openIssue = async (issueId: number) => {
   try {
     const request = {
       method: "PATCH",
+      credentials: "include" as RequestCredentials,
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/open`, request);
 
@@ -156,6 +160,7 @@ export const closeIssue = async (issueId: number) => {
   try {
     const request = {
       method: "PATCH",
+      credentials: "include" as RequestCredentials,
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/close`, request);
 

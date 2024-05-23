@@ -12,7 +12,7 @@ const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
 export const sendMilestonesRequest = async (milestoneType: MilestoneType) => {
   try {
-    const response = await fetch(`${SERVER}/milestones/${milestoneType}`);
+    const response = await fetch(`${SERVER}/milestones/${milestoneType}`, { credentials: "include" });
 
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
@@ -21,7 +21,7 @@ export const sendMilestonesRequest = async (milestoneType: MilestoneType) => {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const postNewMilestone = async (milestoneContent: MilestoneContent) => {
   try {
@@ -30,7 +30,8 @@ export const postNewMilestone = async (milestoneContent: MilestoneContent) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(milestoneContent)
+      credentials: "include" as RequestCredentials,
+      body: JSON.stringify(milestoneContent),
     };
     const response = await fetch(`${SERVER}/milestone`, request);
 
@@ -41,12 +42,13 @@ export const postNewMilestone = async (milestoneContent: MilestoneContent) => {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const toggleMilestoneState = async (milestoneType: MilestoneType, milestoneId: number) => {
   try {
     const request = {
-      method: "PATCH"
+      method: "PATCH",
+      credentials: "include" as RequestCredentials,
     };
     const response = await fetch(`${SERVER}/milestone/${milestoneId}/${milestoneType}`, request);
 
@@ -57,12 +59,13 @@ export const toggleMilestoneState = async (milestoneType: MilestoneType, milesto
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const deleteMilestone = async (milestoneId: number) => {
   try {
     const request = {
       method: "DELETE",
+      credentials: "include" as RequestCredentials,
     };
     const response = await fetch(`${SERVER}/milestone/${milestoneId}`, request);
 
@@ -73,7 +76,7 @@ export const deleteMilestone = async (milestoneId: number) => {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const sendPutMilestoneRequest = async (milestoneId: number, milestoneContent: MilestoneContent) => {
   try {
@@ -82,7 +85,8 @@ export const sendPutMilestoneRequest = async (milestoneId: number, milestoneCont
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(milestoneContent)
+      credentials: "include" as RequestCredentials,
+      body: JSON.stringify(milestoneContent),
     };
     const response = await fetch(`${SERVER}/milestone/${milestoneId}`, request);
 
@@ -93,4 +97,4 @@ export const sendPutMilestoneRequest = async (milestoneId: number, milestoneCont
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
