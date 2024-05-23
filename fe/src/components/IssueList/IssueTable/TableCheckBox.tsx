@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ReactComponent as CheckBoxActive } from "./CheckBoxActive.svg";
-import { ReactComponent as CheckBoxInitial } from "./CheckBoxInitial.svg";
+import { ReactComponent as CheckBoxActive } from "../../../svg/CheckBoxActive.svg";
+import { ReactComponent as CheckBoxInitial } from "../../../svg/CheckBoxInitial.svg";
 
 interface CheckboxState {
 	activeTotal: boolean;

@@ -24,16 +24,16 @@ const issue: Issue = {
 		{
 			id: 21,
 			name: "옹?",
-			background_color: "#dfdeff",
+			backgroundColor: "#dfdeff",
 			description: "라벨내용",
-			text_bright: false,
+			textBright: false,
 		},
 		{
 			id: 22,
 			name: "documentaion",
-			background_color: "#feff79",
+			backgroundColor: "#feff79",
 			description: "라벨노란색",
-			text_bright: false,
+			textBright: false,
 		},
 	],
 };

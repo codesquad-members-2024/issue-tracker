@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu/ProfileMenu";
-import { ReactComponent as LogoBlack } from "../LogoBlack.svg";
-import { ReactComponent as LogoWhite } from "../LogoWhite.svg";
+import { ReactComponent as LogoBlack } from "../../svg/LogoBlack.svg";
+import { ReactComponent as LogoWhite } from "../../svg/LogoWhite.svg";
 import { useContext, useMemo, useState } from "react";
 import { ThemeContext } from "../../provider/ThemeProvider";
 

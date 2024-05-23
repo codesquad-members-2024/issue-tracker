@@ -1,25 +1,46 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
 import LabelInfo from "./LabelInfo";
 
+interface DataType {
+	name: string;
+	description: string;
+	backgroundColor: string;
+	textBright: boolean;
+}
+
 interface PropsType {
 	label: Label;
 	handleShowEditor: React.MouseEventHandler<HTMLButtonElement>;
+	setShowEditor: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const border = "border-[1px] rounded-2xl component-border dark:component-border--dark";
 
-function LabelEditor({ label, handleShowEditor }: PropsType) {
+function LabelEditor({ label, handleShowEditor, setShowEditor }: PropsType) {
 	const [name, setName] = useState(label.name);
-	// const [explain, setExplain] = useState(label.description);
-	const [textBright, setTextBright] = useState(label.text_bright);
-	const [bgColor, setBgColor] = useState(label.background_color);
+	const [textBright, setTextBright] = useState(label.textBright);
+	const [bgColor, setBgColor] = useState(label.backgroundColor);
+	const $description = useRef<HTMLInputElement>(null);
 	const [disabled, setDisabled] = useState("DISABLED");
 
-	const handleName = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-		setName(target.value);
-		if (target.value) {
+	// const queryClient = useQueryClient();
+	// const { mutate } = useMutation({
+	// 	mutationFn: (data: DataType) =>
+	// 		fetchData(`/label/${label.id}`, { method: "PATCH", body: data }),
+	// 	onSuccess: () => {
+	// 		setShowEditor(false);
+	// 		queryClient.invalidateQueries({ queryKey:["label"]});
+	// 	},
+	// 	onError: (e) => {
+	// 		console.error("업데이트 에러", e);
+	// 	},
+	// });
+
+	const handleName = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+		setName(value);
+		if (value) {
 			setDisabled("DEFAULT");
 			return;
 		}
@@ -34,11 +55,24 @@ function LabelEditor({ label, handleShowEditor }: PropsType) {
 		setDisabled("DEFAULT");
 	};
 
-	//TODO 나중에 추가해야함
-	// const handleExplain = () => {
-	// 	setDisabled("DEFAULT");
-	// };
+	const handleExplain = () => {
+		if ($description.current?.value) {
+			setDisabled("DEFAULT");
+			return;
+		}
+		setDisabled("DISABLED");
+	};
 
+	const handleUpdateData = () => {
+		const data: DataType = {
+			name: name || label.name,
+			backgroundColor: bgColor || label.backgroundColor,
+			description: $description.current?.value || label.description,
+			textBright: textBright || label.textBright,
+		};
+		console.log("바디", data); //DELETE
+		// 	mutate(data);
+	};
 	return (
 		<div className="w-full h-full flex flex-col justify-evenly">
 			<h2 className="font-bold text-xl mx-8">레이블 편집</h2>
@@ -55,14 +89,22 @@ function LabelEditor({ label, handleShowEditor }: PropsType) {
 					<LabelInfo
 						handleName={handleName}
 						handleBgColor={handleBgColor}
-						bgColor={bgColor}
 						handleTextBright={handleTextBright}
-						// handleExplain={handleExplain}
+						handleExplain={handleExplain}
+						bgColor={bgColor}
 						textBright={textBright}
 						label={label}
+						$description={$description}
 					/>
 					<div className="flex flex-row-reverse mt-2">
-						<Button size="S" type="CONTAINED" icon="PEN" text="편집 완료" state={disabled} />
+						<Button
+							onClick={handleUpdateData}
+							size="S"
+							type="CONTAINED"
+							icon="PEN"
+							text="편집 완료"
+							state={disabled}
+						/>
 						<div className="mr-5">
 							<Button
 								onClick={handleShowEditor}

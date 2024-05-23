@@ -8,7 +8,8 @@ interface PropsType {
 	handleBgColor?: (color: string) => void;
 	handler?: React.ChangeEventHandler<HTMLInputElement>;
 	value?: string;
-} 
+	$ref?: React.RefObject<HTMLInputElement>; // TODO ?지워도됨
+}
 
 const getRandomColor = () => {
 	const colors = [
@@ -25,7 +26,7 @@ const getRandomColor = () => {
 	return colors[~~(Math.random() * colors.length)];
 };
 
-function InputText({ lable, placeholder, w, icon, handler, handleBgColor, value }: PropsType) {
+function InputText({ lable, placeholder, w, icon, handler, handleBgColor, value, $ref }: PropsType) {
 	return (
 		<div
 			className={`${w} relative flex items-center h-[40px] bg-grayscale.200 dark:bg-grayscale.700 rounded-xl text-grayscale.700 dark:text-grayscale.400`}
@@ -43,6 +44,7 @@ function InputText({ lable, placeholder, w, icon, handler, handleBgColor, value 
 				value={value && value}
 				onChange={handler && handler}
 				maxLength={16}
+				ref={$ref}
 			/>
 			{icon && (
 				<RefreshCcw

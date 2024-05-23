@@ -1,72 +1,58 @@
-import { useState } from "react";
 import TabButton from "../common/TabButton";
 import Milestone from "./Milestone";
-import Alert from "../common/Alert";
+import { useQuery } from "@tanstack/react-query";
+import fetchData from "../../API/fetchData";
+
+interface PropsType {
+	queryParam: null | string;
+	queryKey: string;
+}
+
+interface MilestonesDataType {
+	milestones: Milestone[];
+	milestoneCounts: MilestoneCounts;
+}
 
 const border = "component-border dark:component-border--dark";
 
-// DELETE
-const milestones = [
-	{
-		id: 1,
-		is_open: true,
-		open: 3,
-		closed: 6,
-		name: "마일스톤이름",
-		description: "마일스톤 설명",
-		complete_date: "2024/05/14",
-	},
-	{
-		id: 2,
-		is_open: false,
-		open: 2,
-		closed: 1,
-		name: "테스트",
-		description: "테스트마일스톤",
-		complete_date: "",
-	},
-	{
-		id: 3,
-		is_open: false,
-		open: 4,
-		closed: 1,
-		name: "음",
-		description: "",
-		complete_date: "2024/06/14",
-	},
-];
+function MilestonesTable({ queryParam, queryKey }: PropsType) {
+	const api = `${queryParam ? `/milestone?state=${queryParam}` : "/milestone"}`;
+	const { data, error, isLoading } = useQuery({
+		queryKey: [queryKey],
+		queryFn: () => fetchData(api),
+	});
+	if (isLoading) return <div>로딩</div>;
+	if (error) return <div>에러 {error.message}</div>;
 
-function MilestonesTable() {
-	const [showAlert, setShowAlert] = useState(false);
-	const length = milestones.length;
+	const { milestones, milestoneCounts }: MilestonesDataType = data;
+
 	return (
-		<>
-			<div className={`mt-5 w-full border-[1px] rounded-2xl ${border} min-w-[425px]`}>
-				<header className={`h-[64px] flex items-center mx-7`}>
-					{/* TODO 수정예정 */}
-					<TabButton position="MILESTONE" />
-				</header>
-				<ul>
-					{milestones.map((milestone, i) => (
+		<div className={`mt-5 w-full border-[1px] rounded-2xl ${border} min-w-[425px]`}>
+			<header className={`h-[64px] flex items-center mx-7`}>
+				<TabButton
+					position="MILESTONE"
+					leftCount={milestoneCounts.openedCount}
+					rightCount={milestoneCounts.closedCount}
+				/>
+			</header>
+			<ul>
+				{milestones.length ? (
+					milestones.map((milestone, i) => (
 						<Milestone
 							key={milestone.id}
 							milestone={milestone}
 							i={i}
-							length={length}
-							setShowAlert={setShowAlert}
+							length={milestones.length}
+							queryKey={queryKey}
 						/>
-					))}
-				</ul>
-			</div>
-			{showAlert && (
-				<Alert
-					showAlert={showAlert}
-					setShowAlert={setShowAlert}
-					text="해당 마일 스톤을 삭제하시겠습니까?"
-					danger={true}
-				/>
-			)}
-		</>
+					))
+				) : (
+					<li className="bg-grayscale.50 dark:bg-grayscale.800 h-[96px] rounded-b-2xl border-t-[1px] flex justify-center items-center component-border dark:component-border--dark ">
+						<span className="animate-bounce">마일스톤 없성ㅠㅠ</span>
+					</li>
+				)}
+			</ul>
+		</div>
 	);
 }
 

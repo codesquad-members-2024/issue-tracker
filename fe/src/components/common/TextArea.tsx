@@ -1,5 +1,5 @@
 import { ChangeEvent, useState, useEffect, useMemo } from "react";
-import { ReactComponent as Grip } from "./Grip.svg";
+import { ReactComponent as Grip } from "../../svg/Grip.svg";
 
 import Button from "./Button";
 

@@ -91,6 +91,11 @@ function Login({ setIsLogin }: Props) {
 					회원가입
 				</button>
 			</div>
+			{error && (
+				<div className="absolute top-1/2 z-20 w-[350px] h-[280px] text-bold text-2xl shadow-modal bg-grayscale.50 rounded-2xl flex justify-center items-center">
+					서버점검 중ㅠ.ㅠ
+				</div>
+			)}
 		</div>
 	);
 }

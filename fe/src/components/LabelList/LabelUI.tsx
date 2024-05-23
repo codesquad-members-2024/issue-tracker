@@ -5,14 +5,14 @@ import NewLabel from "./LabelCRUD/NewLabel";
 
 function LabelUI() {
 	const [newLabel, setNewLabel] = useState(false);
-	const onClick = () => setNewLabel(!newLabel);
+	const handleShowNewLabel = () => setNewLabel(!newLabel);
 
 	return (
 		<>
 			<div className="mt-10 flex justify-between min-w-[425px]">
 				<TabButton position="UI_BAR" click="left" />
 				<Button
-					onClick={newLabel ? () => {} : onClick}
+					onClick={newLabel ? () => {} : handleShowNewLabel}
 					size="S"
 					type="CONTAINED"
 					icon="PLUS"
@@ -21,7 +21,7 @@ function LabelUI() {
 				/>
 			</div>
 			<div className={`transition-[height] ${newLabel ? "lg:h-[360px] h-[480px]" : "h-0"}`}>
-				{newLabel && <NewLabel onClick={onClick} />}
+				{newLabel && <NewLabel handleShowNewLabel={handleShowNewLabel} setNewLabel={setNewLabel}/>}
 			</div>
 		</>
 	);

@@ -1,12 +1,12 @@
-//w-[5%] w-[10%] w-[15%] w-[20%] w-[25%] w-[30%] w-[35%] w-[40%] w-[45%] w-[50%] w-[55%] w-[60%] w-[65%] w-[70%] w-[75%] w-[80%] w-[85%] w-[90%] w-[95%] w-[100%]
+//w-[0%] w-[5%] w-[10%] w-[15%] w-[20%] w-[25%] w-[30%] w-[35%] w-[40%] w-[45%] w-[50%] w-[55%] w-[60%] w-[65%] w-[70%] w-[75%] w-[80%] w-[85%] w-[90%] w-[95%] w-[100%]
 
 interface PercentType {
-	percent: string | undefined;
+	percent: number;
 }
 interface ProgressWithInfoProps {
-	open: number;
-	closed: number;
-	percent: string;
+	openedIssueCount: number;
+	closedIssueCount: number;
+	percent: number;
 }
 
 // const ProgressWithLabel = withLabel(ProgressBar); //<ProgressWithLabel>"그룹프로젝트:이슈트래커"</ProgressWithLabel>
@@ -17,8 +17,8 @@ const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 		<>
 			<div className="w-[224px] h-[8px] bg-grayscale.200 rounded-xl">
 				<div
-					className={`transition-[width] h-full w-[${percent}] bg-accent.blue ${
-						percent === "100%" ? "rounded-xl" : "rounded-l-xl"
+					className={`transition-[width] h-full w-[${percent}%] bg-accent.blue ${
+						percent === 100 ? "rounded-xl" : "rounded-l-xl"
 					} `}
 				></div>
 			</div>
@@ -39,7 +39,7 @@ const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 
 function withInfo(
 	Component: React.FC<PercentType>,
-	{ open, closed, percent }: ProgressWithInfoProps
+	{ openedIssueCount, closedIssueCount, percent }: ProgressWithInfoProps
 ) {
 	return (
 		<>
@@ -47,8 +47,8 @@ function withInfo(
 			<div className="text-xs text-grayscale.600 dark:text-grayscale.500 flex justify-between mt-2">
 				<span>{percent}</span>
 				<div>
-					<span className="mr-2">열린 이슈 {open}</span>
-					<span>닫힌 이슈 {closed}</span>
+					<span className="mr-2">열린 이슈 {openedIssueCount}</span>
+					<span>닫힌 이슈 {closedIssueCount}</span>
 				</div>
 			</div>
 		</>

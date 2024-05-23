@@ -5,18 +5,8 @@ interface Label {
 	id: number;
 	name: string;
 	description: string;
-	background_color: string;
-	text_bright: boolean;
-}
-
-interface Milestone {
-	id: number;
-	is_open: boolean;
-	open: number;
-	closed: number;
-	name: string;
-	description: string;
-	complete_date: string;
+	backgroundColor: string;
+	textBright: boolean;
 }
 
 interface Issue {
@@ -36,4 +26,21 @@ interface IssueComment {
 	writer: string;
 	timestamp: string;
 	content: string;
+}
+
+interface Milestone {
+	id: number;
+	state: boolean;
+	name: string;
+	description: string;
+	completeDate: string;
+	openedIssueCount: number;
+	closedIssueCount: number;
+	milestoneProgress: number;
+}
+
+interface MilestoneCounts {
+	closedCount: number;
+	openedCount: number;
+	totalCount: number;
 }
