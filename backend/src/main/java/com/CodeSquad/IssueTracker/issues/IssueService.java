@@ -15,7 +15,6 @@ import com.CodeSquad.IssueTracker.issues.issueLabel.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.Label;
 import com.CodeSquad.IssueTracker.labels.LabelRepository;
-import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
 import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -36,17 +35,15 @@ public class IssueService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final MilestoneService milestoneService;
-    private final MilestoneRepository milestoneRepository;
     private final LabelRepository labelRepository;
     private final IssueLabelRepository issueLabelRepository;
+
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
-                        UserRepository userRepository, MilestoneRepository milestoneRepository,
-                        LabelRepository labelRepository, IssueLabelRepository issueLabelRepository,
-                       MilestoneService milestoneService) {
+                        UserRepository userRepository, LabelRepository labelRepository,
+                        IssueLabelRepository issueLabelRepository, MilestoneService milestoneService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        this.milestoneRepository = milestoneRepository;
         this.labelRepository = labelRepository;
         this.issueLabelRepository = issueLabelRepository;
         this.milestoneService = milestoneService;
