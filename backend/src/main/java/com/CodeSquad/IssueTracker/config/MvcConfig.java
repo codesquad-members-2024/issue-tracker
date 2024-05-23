@@ -28,7 +28,7 @@ public class MvcConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "https://localhost:3000"
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
