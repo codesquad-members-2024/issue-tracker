@@ -52,4 +52,22 @@ public class IssueService {
         savedIssue.setIssueAttachedLabels(issueAttachedLabels);
         log.info("SAVED ISSUE : {}", savedIssue);
     }
+
+    public Issue updateIssueStateToOpen(Long id) {
+        Issue issue = issueRepository.findById(id)
+                .orElseThrow();
+
+        issue.open();
+
+        return issueRepository.save(issue);
+    }
+
+    public Issue updateIssueStateToClose(Long id) {
+        Issue issue = issueRepository.findById(id)
+                .orElseThrow();
+
+        issue.close();
+
+        return issueRepository.save(issue);
+    }
 }

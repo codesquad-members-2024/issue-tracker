@@ -53,4 +53,12 @@ public class Issue {
     public void setIssueAttachedLabels(Set<IssueAttachedLabel> issueAttachedLabels) {
         this.issueAttachedLabels = issueAttachedLabels;
     }
+
+    public void open() {
+        this.isOpen = true;
+    }
+
+    public void close() {
+        this.isOpen = false;
+    }
 }
