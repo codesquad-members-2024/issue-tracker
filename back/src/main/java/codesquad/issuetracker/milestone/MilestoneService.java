@@ -16,7 +16,7 @@ public class MilestoneService {
     }
 
     public List<Milestone> getAllMilestones() {
-        return (List<Milestone>) milestoneRepository.findAll();
+        return milestoneRepository.findAll();
     }
 
     public MilestoneShowDto getMilestoneById(Long milestoneId) {
