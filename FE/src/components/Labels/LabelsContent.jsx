@@ -133,4 +133,5 @@ const Button = styled.div`
   padding-left: 5px;
   align-items: center;
   cursor: pointer;
+  gap: 5px;
 `;
