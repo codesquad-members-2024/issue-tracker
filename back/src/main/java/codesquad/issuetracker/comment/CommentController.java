@@ -1,5 +1,6 @@
 package codesquad.issuetracker.comment;
 
+import codesquad.issuetracker.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +11,11 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comments")
-    public void createComment(@RequestBody Comment comment) {
+    public void createComment(
+            @RequestBody Comment comment,
+            @SessionAttribute(name = "LOGIN USER", required = false) User user
+    ) {
+        comment.setLoginId(user.getLoginId());
         commentService.createComment(comment);
     }
 
