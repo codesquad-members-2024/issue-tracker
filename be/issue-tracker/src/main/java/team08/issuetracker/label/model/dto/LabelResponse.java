@@ -9,13 +9,13 @@ public class LabelResponse {
     private String name;
     private String description;
     private String backgroundColor;
-    private String textColor;
+    private Boolean textBright;
 
     public LabelResponse(Label label) {
         this.id = label.getId();
         this.name = label.getName();
         this.description = (label.getDescription() != null) ? label.getDescription() : "";
         this.backgroundColor = label.getBackgroundColor();
-        this.textColor = label.getTextColor();
+        this.textBright = label.getTextBright();
     }
 }
