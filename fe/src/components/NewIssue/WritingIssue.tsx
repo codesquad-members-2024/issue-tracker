@@ -2,13 +2,22 @@ import { Link } from "react-router-dom";
 import Button from "../common/Button";
 import SideBar from "../common/SideBar";
 import TextArea from "../common/TextArea";
-import TextInput from "../common/TextInput";
-import { useState } from "react";
+import IssueInput from "../common/IssueInput";
+import { useState,useRef } from "react";
 
 const border = "component-border dark:component-border--dark";
 
 function WritingIssue() {
-	const [titleValue, setTitleValue] = useState("");
+	const $title = useRef<HTMLInputElement>(null);
+	const [disabled, setDisabled] = useState("DISABLED");
+
+	const handleTitle= () => {
+		if ($title.current?.value) {
+			setDisabled("DEFAULT");
+			return;
+		}
+		setDisabled("DISABLED");
+	};
 
 	return (
 		<div className="h-[90%]">
@@ -26,12 +35,12 @@ function WritingIssue() {
 					/>
 				</div>
 				<div className="flex flex-col justify-center w-full h-full">
-					<TextInput
+					<IssueInput
 						h="h-[56px]"
 						w="w-full"
 						label="제목"
-						titleValue={titleValue}
-						setTitleValue={setTitleValue}
+						$title={$title}
+						handler={handleTitle}
 					/>
 					<TextArea h="h-[480px]" />
 				</div>
@@ -45,7 +54,7 @@ function WritingIssue() {
 					type="CONTAINED"
 					icon={null}
 					text="완료"
-					state={titleValue ? "DEFAULT" : "DISABLED"}
+					state={disabled}
 				/>
 				<Link to="/">
 					<Button size="M" type="GHOST" icon="X" text="작성 취소" state="DEFAULT" />
