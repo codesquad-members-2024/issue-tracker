@@ -1,18 +1,50 @@
 import styled from "styled-components";
 import { ContentNavStyles } from "@/styles/commonStyles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useFetch from "../../hooks/useFetch";
 
-export function NewLabels({ closeNewLabels }) {
+export function NewLabels({ type, closeNewLabels,labelId, initialData }) {
+  const { postData, putData } = useFetch(`${import.meta.env.VITE_SERVER}/labels`);
   const [labelName, setLabelName] = useState("");
   const [labelColor, setLabelColor] = useState("");
+  const [labelDescription, setLabelDescription] = useState("");
+  const [labelFontColor, setLabelFontColor] = useState("white");
+
+  useEffect(() => {
+    if (type === "edit" && initialData) {
+      const { title, color, description, fontColor } = initialData;
+    setLabelName(title);
+    setLabelColor(color);
+    setLabelDescription(description);
+    setLabelFontColor(fontColor);
+    }
+  }, [initialData]);
+
+  const toggleFontColor = () => {
+    setLabelFontColor((prev) => (prev === "white" ? "black" : "white"));
+  };
+
+  const handleSubmit = async () => {
+    const newLabel = {
+      title: labelName,
+      description: labelDescription,
+      color: labelColor,
+      fontColor: labelFontColor,
+    };
+
+    type == "new" ? await postData(newLabel) : await putData(labelId, newLabel);
+    closeNewLabels();
+  };
 
   return (
     <>
-      <Wrap>
-        <h3>새로운 레이블 추가</h3>
+      <Wrap type={type}>
+        <h3>{type === "new" ? "새로운 레이블 추가" : "레이블 편집"}</h3>
         <Content>
           <Preview>
-            <StyledLabel $backgroundColor={labelColor}>{labelName}</StyledLabel>
+            <StyledLabel $backgroundColor={labelColor} color={labelFontColor}>
+              {labelName}
+            </StyledLabel>
           </Preview>
           <LabelDescript>
             <LabelWrapper>
@@ -30,23 +62,28 @@ export function NewLabels({ closeNewLabels }) {
               <input
                 type="text"
                 id="description"
+                value={labelDescription}
                 placeholder="레이블에 대한 설명을 입력하세요"
+                onChange={(e) => setLabelDescription(e.target.value)}
               />
             </LabelWrapper>
-            <ColorWrapper>
-              <label htmlFor="backgroundcolor">색상</label>
-              <input
-                type="text"
-                id="backgroundcolor"
-                value={labelColor}
-                onChange={(e) => setLabelColor(e.target.value)}
-              />
-            </ColorWrapper>
+            <ColorWraper>
+              <StyledColor>
+                <label htmlFor="backgroundcolor">색상</label>
+                <input
+                  type="text"
+                  id="backgroundcolor"
+                  value={labelColor}
+                  onChange={(e) => setLabelColor(e.target.value)}
+                />
+              </StyledColor>
+              <button onClick={toggleFontColor}>{labelFontColor}</button>
+            </ColorWraper>
           </LabelDescript>
         </Content>
         <Buttons>
           <CancelButton onClick={closeNewLabels}>x 취소</CancelButton>
-          <CompleteButton>+ 완료</CompleteButton>
+          <CompleteButton onClick={handleSubmit}>+ 완료</CompleteButton>
         </Buttons>
       </Wrap>
     </>
@@ -54,10 +91,10 @@ export function NewLabels({ closeNewLabels }) {
 }
 
 const Wrap = styled.div`
+margin: ${(props) => (props.type === 'edit' ? '0' : '20px 100px')};
+border: ${(props) => (props.type === 'edit' ? 'none' : 'solid #dadbef')};
   height: 330px;
   display: flex;
-  margin: 20px 100px;
-  border: solid #dadbef;
   border-radius: 10px;
   overflow: hidden;
   background-color: white;
@@ -84,22 +121,24 @@ const Preview = styled.div`
 
 const StyledLabel = styled.span`
   background-color: ${(props) => props.$backgroundColor || "white"};
+  color: ${({ color }) => color};
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 14px;
   border: solid #dadbef;
-  color: black;
   height: 17px;
 `;
 
 const LabelDescript = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 75%;
 `;
 
 const LabelWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 10px 0 10px 20px;
+  margin: 0.5em;
   border-radius: 10px;
   padding: 10px;
   background-color: #eff0f6;
@@ -115,7 +154,7 @@ const LabelWrapper = styled.div`
   }
 `;
 
-const ColorWrapper = styled(LabelWrapper)`
+const StyledColor = styled(LabelWrapper)`
   width: 250px;
   input {
     width: 65%;
@@ -145,4 +184,17 @@ const CompleteButton = styled.div`
   border-radius: 10px;
   width: 120px;
   height: 40px;
+`;
+
+const ColorWraper = styled.div`
+  display: flex;
+  button {
+    padding: 0 20px;
+    margin: 0.5em;
+    background-color: unset;
+    border: solid #dadbef;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+  }
 `;

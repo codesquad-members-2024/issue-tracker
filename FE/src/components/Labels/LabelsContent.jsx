@@ -1,20 +1,53 @@
 import styled from "styled-components";
 import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
-import { labelsList } from "@/test.json";
+import useFetch from "../../hooks/useFetch";
+import { useState } from "react";
+import { NewLabels } from "./NewLabels";
 
 export function LabelsContent() {
+  const { state: data, loading, error, fetchData, deleteData } = useFetch(`${import.meta.env.VITE_SERVER}/labels`);
+
+  const [onEdit, setOnEdit] = useState(false);
+  const [selectedLabel, setSelectedLabel] = useState(null);
+
+  if (loading) return <h1>LOADING...</h1>;
+  if (error) console.log(error);
+
+  const handleDelete = async (labelId) => {
+    await deleteData(labelId);
+    fetchData(); 
+  };
+
+  const handleEdit = (label) => {
+    setSelectedLabel(label);
+    setOnEdit(true);
+  };
+
+  const closeNewLabels = () => {
+    setOnEdit(false);
+    setSelectedLabel(null);
+  };
+
   return (
     <Wrap>
-      <LabelsHeader>{labelsList.length}개의 레이블</LabelsHeader>
+      <LabelsHeader>{data?.countsOfLabels}개의 레이블</LabelsHeader>
+      {onEdit && (
+        <NewLabels
+          type="edit"
+          closeNewLabels={closeNewLabels}
+          labelId={selectedLabel?.id}
+          initialData={selectedLabel}
+        />
+      )}
       <LabelsList>
-        {labelsList.length === 0 ? (
+        {data?.countsOfLabels === 0 ? (
           <Content />
         ) : (
-          labelsList.map((label) => (
+          data?.labelList.map((label) => (
             <Content key={label.id}>
               <div className="label">
-                <StyledLabel $backcolor={label.color} color={label.font_color}>
+                <StyledLabel $backcolor={label.color} color={label.fontColor}>
                   {label.title}
                 </StyledLabel>
               </div>
@@ -22,11 +55,11 @@ export function LabelsContent() {
                 <div>{label.description}</div>
               </div>
               <Buttons>
-                <Button>
+                <Button onClick={() => handleEdit(label)}>
                   <EditIcon />
                   <div>편집</div>
                 </Button>
-                <Button className="delete">
+                <Button className="delete" onClick={() => handleDelete(label.id)}>
                   <TrashIcon />
                   <div>삭제</div>
                 </Button>
