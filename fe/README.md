@@ -35,22 +35,88 @@
 로컬스토리지(=개인에 관련된) - 최근검색어, 다크모드, 토큰 등등
 
 ```
-const json = await (await fetch('http://15.164.94.205:8080/member',{
+fetch('https://issue-tracker-team08.site/xxx',{
 method: "POST",
+credentials: "include",
 headers: {
 "Content-Type": "application/json",
 },
 body: '{"memberId" : "sdasdasd2123", "password" : "mime2221234"}',
-})).json();
+}).then(console.log)
 ```
-날짜 데이터 저장객체
 ```
-new Intl.DateTimeFormat("ja-JP", {
-	year: "numeric",
-	month: "numeric",
-	day: "numeric",
-	hour: "numeric",
-	minute: "numeric",
-	second: "numeric",
-}).format(new Date());
-```
+망고 로컬 서버
+
+CREATE
+fetch('http://192.168.1.38:8080/label',{
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body:`{"backgroundColor": "#dfdeff", "description": "ss", "name": "미메가 생성", "textBright": "false"}`
+}).then(res=>res.json()).then(console.log)
+
+
+READ
+fetch('http://192.168.1.38:8080/label',{
+method: "GET",
+headers: {
+"Content-Type": "application/json",
+},
+}).then(res=>res.json()).then(console.log)
+
+UPDATE
+fetch('http://192.168.1.38:8080/label/3',{
+method: "PATCH",
+headers: {
+"Content-Type": "application/json",
+},
+    body:`{"backgroundColor": "#dfdeff", "description": "ss", "name": "미메가 수정", "textBright": "false"}`
+}).then(res=>res.json()).then(console.log)
+
+DELETE
+fetch('http://192.168.1.38:8080/label/8',{
+method: "DELETE",
+headers: {
+"Content-Type": "application/json",
+},
+}).then(res=>res.json()).then(console.log)
+
+---
+심바 CRUD
+
+GET
+fetch('http://192.168.1.32:8080/issue',{
+method: "GET",
+headers: {
+"Content-Type": "application/json",
+},
+}).then(res=>res.json()).then(console.log)
+
+POST(생성)
+fetch('http://192.168.1.32:8080/issue',{
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+}, 
+body:JSON.stringify({
+  "title": "sdas",
+  "writer": "asddsa",
+  "content": "첫줄\n둘째줄",
+  "labelIds": [1, 2, 3, 4],
+  "assigneeIds": ["abc", "def"],
+  "file": "abcd.img",
+  "milestoneId": 1
+  })
+}).then(res=>res.json()).then(console.log)
+
+---
+
+문제상황
+겹치는 컴포넌트가 많다 중복되는 건 어떻게 합칠까?
+처음에는 props로 다 넘겨줬는데 그랬더니 props도 많아지고 조건절 렌더링을 하니까 코드도 더러워짐
+-> HOC 활용
+
+에러 바운더리 사용해보자
+로그인 / 마일스톤
+
