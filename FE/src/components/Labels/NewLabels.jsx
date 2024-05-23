@@ -1,20 +1,45 @@
 import styled from "styled-components";
 import { ContentNavStyles } from "@/styles/commonStyles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useFetch from "../../hooks/useFetch";
 
-export function NewLabels({ closeNewLabels }) {
+export function NewLabels({ type, closeNewLabels,labelId, initialData }) {
+  const { postData, putData } = useFetch(`${import.meta.env.VITE_SERVER}/labels`);
   const [labelName, setLabelName] = useState("");
   const [labelColor, setLabelColor] = useState("");
+  const [labelDescription, setLabelDescription] = useState("");
   const [labelFontColor, setLabelFontColor] = useState("white");
+
+  useEffect(() => {
+    if (type === "edit" && initialData) {
+      const { title, color, description, fontColor } = initialData;
+    setLabelName(title);
+    setLabelColor(color);
+    setLabelDescription(description);
+    setLabelFontColor(fontColor);
+    }
+  }, [initialData]);
 
   const toggleFontColor = () => {
     setLabelFontColor((prev) => (prev === "white" ? "black" : "white"));
   };
 
+  const handleSubmit = async () => {
+    const newLabel = {
+      title: labelName,
+      description: labelDescription,
+      color: labelColor,
+      fontColor: labelFontColor,
+    };
+
+    type == "new" ? await postData(newLabel) : await putData(labelId, newLabel);
+    closeNewLabels();
+  };
+
   return (
     <>
-      <Wrap>
-        <h3>새로운 레이블 추가</h3>
+      <Wrap type={type}>
+        <h3>{type === "new" ? "새로운 레이블 추가" : "레이블 편집"}</h3>
         <Content>
           <Preview>
             <StyledLabel $backgroundColor={labelColor} color={labelFontColor}>
@@ -37,7 +62,9 @@ export function NewLabels({ closeNewLabels }) {
               <input
                 type="text"
                 id="description"
+                value={labelDescription}
                 placeholder="레이블에 대한 설명을 입력하세요"
+                onChange={(e) => setLabelDescription(e.target.value)}
               />
             </LabelWrapper>
             <ColorWraper>
@@ -56,7 +83,7 @@ export function NewLabels({ closeNewLabels }) {
         </Content>
         <Buttons>
           <CancelButton onClick={closeNewLabels}>x 취소</CancelButton>
-          <CompleteButton>+ 완료</CompleteButton>
+          <CompleteButton onClick={handleSubmit}>+ 완료</CompleteButton>
         </Buttons>
       </Wrap>
     </>
@@ -64,10 +91,10 @@ export function NewLabels({ closeNewLabels }) {
 }
 
 const Wrap = styled.div`
+margin: ${(props) => (props.type === 'edit' ? '0' : '20px 100px')};
+border: ${(props) => (props.type === 'edit' ? 'none' : 'solid #dadbef')};
   height: 330px;
   display: flex;
-  margin: 20px 100px;
-  border: solid #dadbef;
   border-radius: 10px;
   overflow: hidden;
   background-color: white;

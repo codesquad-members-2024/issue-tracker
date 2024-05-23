@@ -26,7 +26,7 @@ export function Labels() {
           <div>+ 레이블 추가</div>
         </LabelsBtn>
       </Nav>
-      {showNewLabels && <NewLabels closeNewLabels={closeNewLabels}/>}
+      {showNewLabels && <NewLabels type="new" closeNewLabels={closeNewLabels}/>}
       <LabelsContent />
     </>
   );
