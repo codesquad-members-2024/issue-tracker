@@ -33,7 +33,7 @@ public class MilestoneController {
         @RequestBody MilestoneRequest milestoneRequest) {
         Milestone newMilestone = milestoneService.createNewMilestone(milestoneRequest);
         return ResponseEntity.created(URI.create("/api/milestones/" + newMilestone.getId()))
-            .body(newMilestone);
+            .build();
     }
 
     @GetMapping
