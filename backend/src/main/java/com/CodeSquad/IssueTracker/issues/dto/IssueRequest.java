@@ -3,7 +3,6 @@ package com.CodeSquad.IssueTracker.issues.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,5 +15,15 @@ public record IssueRequest(
         String author,
         Set<String> assignees,
         Set<Long> labels,
-        Long milestoneId
-) {}
+        Long milestone
+) {
+        public IssueRequest {
+        // null인 경우 빈 컬렉션으로 초기화
+        // milestoneId가 null인 경우는 서비스에 처리
+        if (assignees == null) {
+                assignees = Set.of();
+        }
+        if (labels == null) {
+                labels = Set.of();
+        }
+}}

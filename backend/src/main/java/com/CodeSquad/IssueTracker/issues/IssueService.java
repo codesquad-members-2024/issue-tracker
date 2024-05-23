@@ -73,8 +73,10 @@ public class IssueService {
 
     public Long createIssue(IssueRequest issueRequest) {
         validateIssueRequest(issueRequest);
-         assigneeService.validateNewAssigneeIds(issueRequest.assignees());
-         labelService.validateNewLabels(issueRequest.labels());
+        assigneeService.validateAssigneeIds(issueRequest.assignees());
+        labelService.validateLabels(issueRequest.labels());
+        if (issueRequest.milestone() != null)
+            milestoneService.validateMilestoneId(issueRequest.milestone());
 
         log.info("Creating issue: {}", issueRequest);
         Set<AssigneeId> assigneeIds = issueRequest.assignees().stream()
@@ -93,7 +95,7 @@ public class IssueService {
                 .author(issueRequest.author())
                 .publishedAt(LocalDateTime.now())
                 .isClosed(false)
-                .milestoneId(issueRequest.milestoneId())
+                .milestoneId(issueRequest.milestone())
                 .assignees(assigneeIds)
                 .labels(labelIds)
                 .build();
@@ -190,7 +192,7 @@ public class IssueService {
     @Transactional
     public void updateAssignees(Long issueId, Set<String> newAssignees) {
         Issue issue = findIssueById(issueId);
-        assigneeService.validateNewAssigneeIds(newAssignees);
+        assigneeService.validateAssigneeIds(newAssignees);
 
         Set<AssigneeId> assigneeIds = newAssignees.stream()
                 .map(AssigneeId::new)
@@ -203,7 +205,7 @@ public class IssueService {
 
     @Transactional
     public void updateLabels(Long issueId, Set<Long> newLabels) {
-        labelService.validateNewLabels(newLabels);
+        labelService.validateLabels(newLabels);
 
         Issue issue = findIssueById(issueId);
 
