@@ -40,7 +40,7 @@ public class LabelController {
     @PostMapping("/new")
     public ResponseEntity<Label> createLabel(@RequestBody LabelRequest labelRequest) {
         Label labelResponse = labelService.createLabel(labelRequest);
-        return ResponseEntity.created(URI.create("/api/labels/" + labelResponse.getId())).build();
+        return ResponseEntity.created(URI.create("/api/labels/" + labelResponse.getId())).body(labelResponse);
     }
 
     @PutMapping("/{labelId}")
