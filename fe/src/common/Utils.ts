@@ -1,16 +1,25 @@
 import { FormState } from "../components/LabelsMilestones/Milestones/MilestoneEditUI";
 import { ChangeColorProps } from "../components/LabelsMilestones/Labels/LabelEditUI";
-
+import { LabelFormState } from "../components/LabelsMilestones/Labels/LabelEditUI";
 const serverURL = import.meta.env.VITE_API_URL;
 
 export const APiUtil = {
     async getData(tableName: string) {
-        const response = await fetch(serverURL + tableName);
-        const data = await response.json();
-        return data;
+        try {
+            const response = await fetch(serverURL + tableName);
+            if (!response.ok) {
+                throw new Error(`API 호출 실패 - HTTP 상태 코드: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`${error.message}`);
+            }
+        }
     },
 
-    async createData(tableName: string, createData: FormState) {
+    async createData(tableName: string, createData: FormState | LabelFormState) {
         await fetch(serverURL + tableName, {
             method: "POST",
             headers: {
@@ -20,13 +29,13 @@ export const APiUtil = {
         });
     },
 
-    async modifyData(tableName: string, createData: FormState, id: number) {
+    async modifyData(tableName: string, modifyData: FormState | LabelFormState, id: number) {
         await fetch(serverURL + `${tableName}/${id}`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
             },
-            body: JSON.stringify(createData),
+            body: JSON.stringify(modifyData),
         });
     },
 
@@ -56,7 +65,7 @@ export const changeColor = ({ setColor, setFormData }: ChangeColorProps) => {
     setColor(newColor);
     setFormData((prevState) => ({
         ...prevState,
-        color: newColor,
+        backgroundColor: newColor,
     }));
 };
 

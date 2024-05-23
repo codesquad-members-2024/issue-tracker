@@ -5,6 +5,7 @@ import LabelsPage from "./pages/LabelsPage";
 import MilestonesPage from "./pages/MilestonesPage";
 import NewPage from "./pages/NewPage";
 import IssueProduct from "./pages/IssueDetail";
+import SignUp from "./pages/SignUp";
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Navigate to="/Login" />} />
                 <Route path="/Login" element={<LoginPage />}></Route>
+                <Route path="/signUp" element={<SignUp />}></Route>
                 <Route path="/issue" element={<IssuePage />}></Route>
                 <Route
                     path="/issue/:productId"

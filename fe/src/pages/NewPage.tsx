@@ -20,14 +20,14 @@ const NewPage = () => {
         description: "",
         assigneeIds: [],
         labelIds: [],
-        milestoneId: 0
-    })
+        milestoneId: 0,
+    });
 
     const handleCreate = () => {
         // 이슈 생성 post 보낸 후 파일 업로드
         // navigator로 "/issue"로 이동
         // 파일 state를 어디서 처리할지 고민
-    }
+    };
 
     return (
         <main className="w-[1280px] mx-auto">
@@ -37,19 +37,25 @@ const NewPage = () => {
             </h1>
             <section className="flex gap-2 justify-between mt-4 py-6 border-t-2 border-b-2">
                 <div className="items-center">
-                    <img
-                        src="/public/img/UserImage.png"
-                        alt="User Image"
-                    />
+                    <img src="/public/img/UserImage.png" alt="User Image" />
                 </div>
                 <div className="w-[912px]">
-                    <NewIssue issueData={issueData} setIssueData={setIssueData}/>
+                    <NewIssue
+                        issueData={issueData}
+                        setIssueData={setIssueData}
+                    />
                 </div>
                 <Sidebar />
             </section>
             <div className="flex justify-end gap-6 mt-4 items-center">
                 <Link to="/issue">X 작성 취소</Link>
-                <button onClick={handleCreate} className="flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px]">완료</button>
+                <button
+                    onClick={handleCreate}
+                    disabled={issueData.title === ""}
+                    className={`${issueData.title === "" && "bg-gray-200"} flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px]`}
+                >
+                    완료
+                </button>
             </div>
         </main>
     );

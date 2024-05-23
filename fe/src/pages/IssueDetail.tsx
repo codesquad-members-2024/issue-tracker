@@ -1,11 +1,8 @@
-import { useLocation, useParams } from "react-router-dom";
 import { Header } from "../common/UtilUI";
-import TitleContainer from "../components/IssueDetail/TitleContainer";
 import Sidebar from "../common/Sidebar";
-import { CommentCard } from "../components/IssueDetail/CommentCard";
 import { DeleteOutlined } from "@ant-design/icons";
-import FileUploader from "../common/FileUploader";
 import CommentArea from "../components/IssueDetail/CommentArea";
+import TitleContainer from "../components/IssueDetail/TitleContainer";
 
 const mockData = {
     id: 1,
@@ -34,7 +31,7 @@ const mockData = {
 };
 
 const IssueProduct = () => {
-    const { productId } = useParams();
+    // const { productId } = useParams();
     // productId로 get 요청
     // const location = useLocation();
     // const issueInfo = location.state;

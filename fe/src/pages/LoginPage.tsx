@@ -34,7 +34,7 @@ const LoginPage = () => {
                         value="아이디로 로그인"
                     />
                 </form>
-                <button className="p-5">회원가입</button>
+                <button onClick={() => navigate("/SignUp")} className="p-5">회원가입</button>
             </div>
         </main>
     );

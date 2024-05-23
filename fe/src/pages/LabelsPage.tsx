@@ -5,16 +5,16 @@ import { LabelFeed } from "../components/LabelsMilestones/Labels/LabelFeed";
 import LabelEditUI from "../components/LabelsMilestones/Labels/LabelEditUI";
 import { useQuery } from "@tanstack/react-query";
 import { APiUtil } from "../common/Utils";
+import { Loading } from "../common/NotFound";
 
 const LabelsPage = () => {
     const { data, error, isLoading } = useQuery({
         queryKey: ["labels"],
         queryFn: () => APiUtil.getData("labels"),
     });
-    // 에러 로딩 처리 따로
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><Loading/></div>;
     if (error) return <div>error...</div>;
-    console.log(data)
+    
     return (
         <main className="w-[1280px] mx-auto">
             <Header />

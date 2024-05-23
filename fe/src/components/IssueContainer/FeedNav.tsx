@@ -3,6 +3,7 @@ import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
 import { Issue } from "./IssueFeed";
 import FilterUI from "../../common/FilterUI";
 import { Filter } from "../../common/FilterUI";
+import IssueStatusFilter from "./IssueStatusFilter";
 
 type TaskTable = Record<string, Filter[]>;
 
@@ -53,7 +54,8 @@ const FeedNav = ({
 }: FeedNavProps) => {
     const issuesLength = {
         open: issueInfo.filter((curIssue) => curIssue.state === "OPEN").length,
-        closed: issueInfo.filter((curIssue) => curIssue.state === "CLOSED").length,
+        closed: issueInfo.filter((curIssue) => curIssue.state === "CLOSED")
+            .length,
     };
 
     return (
@@ -87,16 +89,17 @@ const FeedNav = ({
                 )}
             </div>
             <div className="flex h-full w-[30%] items-center z-10">
-                {checkedItem.length ? "" : Object.keys(taskTable).map((key) => (
-                    <FilterUI
-                        key={key}
-                        filterInfo={taskTable[key]}
-                        filterType={key}
-                        resetFilterUI={resetFilterUI}
-                        setResetFilterUI={setResetFilterUI}
-                    />
-                ))}
-                
+                {checkedItem.length
+                    ? <IssueStatusFilter checkedItem={checkedItem}/>
+                    : Object.keys(taskTable).map((key) => (
+                          <FilterUI
+                              key={key}
+                              filterInfo={taskTable[key]}
+                              filterType={key}
+                              resetFilterUI={resetFilterUI}
+                              setResetFilterUI={setResetFilterUI}
+                          />
+                      ))}
             </div>
         </div>
     );

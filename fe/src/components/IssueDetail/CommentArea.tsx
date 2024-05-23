@@ -29,3 +29,5 @@ const CommentArea = ({commentData}: CommentAreaProps) => {
 };
 
 export default CommentArea;
+
+

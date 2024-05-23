@@ -5,7 +5,7 @@ import ModifyDeleteProvider from "../Providers/ModifyDeleteProvider";
 import { APiUtil } from "../common/Utils";
 import { MilestoneFeed } from "../components/LabelsMilestones/Milestones/MilestoneFeed";
 import { useQuery } from "@tanstack/react-query";
-
+import { Loading } from "../common/NotFound";
 
 const MilestonesPage = () => {
     const { data, error, isLoading } = useQuery({
@@ -13,7 +13,7 @@ const MilestonesPage = () => {
         queryFn: () => APiUtil.getData("milestones"),
     });
     // 에러 로딩 처리 따로
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><Loading/></div>;
     if (error) return <div>error...</div>;
 
     return (
