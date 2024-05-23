@@ -34,7 +34,7 @@ public class IssueService {
     }
 
     @Transactional
-    public void createNewIssue(IssueCreationRequest issueCreationRequest) {
+    public Issue createNewIssue(IssueCreationRequest issueCreationRequest) {
 
         // 다대다 관계를 갖는 assignee 를 제외한 값으로 issue 생성
         Issue issue = issueCreationRequest.createIssue();
@@ -51,6 +51,8 @@ public class IssueService {
         savedIssue.setAssignees(assignees);
         savedIssue.setIssueAttachedLabels(issueAttachedLabels);
         log.info("SAVED ISSUE : {}", savedIssue);
+
+        return savedIssue;
     }
 
     public Issue updateIssueStateToOpen(Long id) {

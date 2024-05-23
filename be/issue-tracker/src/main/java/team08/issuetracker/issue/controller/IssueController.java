@@ -3,7 +3,9 @@ package team08.issuetracker.issue.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
+import team08.issuetracker.issue.model.dto.IssueCreationResponse;
 import team08.issuetracker.issue.model.dto.IssueListResponse;
 import team08.issuetracker.issue.model.dto.IssueUpdateResponse;
 import team08.issuetracker.issue.service.IssueService;
@@ -21,6 +24,7 @@ import team08.issuetracker.issue.service.IssueService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/issue")
+@CrossOrigin("*")
 public class IssueController {
     private final IssueService issueService;
 
@@ -32,11 +36,12 @@ public class IssueController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> createIssue(@RequestBody IssueCreationRequest issueCreationRequest) {
+    public ResponseEntity<IssueCreationResponse> createIssue(@RequestBody IssueCreationRequest issueCreationRequest) {
 
-        issueService.createNewIssue(issueCreationRequest);
+        Issue issue = issueService.createNewIssue(issueCreationRequest);
 
-        return ResponseEntity.ok("이슈 생성 성공");
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(IssueCreationResponse.from(issue));
     }
 
     @PatchMapping("/{id}/open")
