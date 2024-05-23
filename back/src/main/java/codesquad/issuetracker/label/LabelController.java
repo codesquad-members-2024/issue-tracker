@@ -1,10 +1,11 @@
 package codesquad.issuetracker.label;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,11 +16,14 @@ public class LabelController {
     private final LabelService labelService;
 
     @PostMapping("/labels")
-    public ResponseEntity<Void> createLabel(@RequestBody Label label) {
-        labelService.createLabel(label);
+    public ResponseEntity<Label> createLabel(@RequestBody Label label, UriComponentsBuilder uriComponentsBuilder) {
+        Label createdLabel = labelService.createLabel(label);
+        URI location = uriComponentsBuilder.path("/labels/{id}")
+                .buildAndExpand(createdLabel.getId())
+                .toUri();
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
+                .created(location)
+                .body(createdLabel);
     }
 
     @GetMapping("/labels")
@@ -40,9 +44,9 @@ public class LabelController {
 
     @PutMapping("/labels/{labelId}")
     public ResponseEntity<Void> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
-        labelService.updateLabelById(labelId, labelUpdateDto.getName(), labelUpdateDto.getDescription(), labelUpdateDto.getBackgroundColor(), labelUpdateDto.getTextColor());
+        labelService.updateLabelById(labelUpdateDto.toEntity(labelId));
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .noContent()
                 .build();
     }
 
@@ -50,7 +54,7 @@ public class LabelController {
     public ResponseEntity<Void> deleteLabel(@PathVariable Long labelId) {
         labelService.deleteLabelById(labelId);
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .noContent()
                 .build();
     }
 }

@@ -11,8 +11,8 @@ public class LabelService {
 
     private final LabelRepository labelRepository;
 
-    public void createLabel(Label label) {
-        labelRepository.save(label);
+    public Label createLabel(Label label) {
+        return labelRepository.save(label);
     }
 
     public List<Label> getAllLabels() {
@@ -23,8 +23,8 @@ public class LabelService {
         return labelRepository.findById(labelId).orElseThrow(RuntimeException::new);
     }
 
-    public void updateLabelById(Long labelId, String name, String description, String backgroundColor, String textColor) {
-        labelRepository.updateById(labelId, name, description, backgroundColor, textColor);
+    public void updateLabelById(Label updatedLabel) {
+        labelRepository.save(updatedLabel);
     }
 
     public void deleteLabelById(Long labelId) {
