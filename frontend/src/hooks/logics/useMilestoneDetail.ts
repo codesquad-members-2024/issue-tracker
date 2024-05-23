@@ -13,7 +13,7 @@ const useMilestoneDetail = (milestoneId: number) => {
   });
 
   const { mutate: fetchDeleteMilestone } = useMutation(deleteMilestone, {
-    onSuccess: () => client.invalidateQueries("milestons"),
+    onSuccess: () => client.invalidateQueries("milestones"),
   });
 
   const handleOpenButtonClick = () => fetchMilestoneState({ milestoneType: "open", milestoneId });
