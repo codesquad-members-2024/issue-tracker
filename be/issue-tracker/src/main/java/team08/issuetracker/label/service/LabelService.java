@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 public class LabelService {
     private final LabelRepository labelRepository;
 
-    public LabelOverviewResponse getLabelsWithCount() {
-        LabelCountResponse labelCount = getLabelCountDto();
+    public LabelListWithCountResponse getLabelsWithCount() {
+        LabelCountResponse labelCount = fetchLabelCount();
 
         List<LabelResponse> labels = labelRepository.getAllLabels().stream()
                 .map(LabelResponse::new)
                 .collect(Collectors.toList());
 
-        return new LabelOverviewResponse(labelCount, labels);
+        return new LabelListWithCountResponse(labelCount, labels);
     }
 
 
@@ -38,13 +38,15 @@ public class LabelService {
 
 
     public Label getLabel(Long id) {
-        return labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
+        return labelRepository.findById(id)
+                .orElseThrow(LabelNotFoundException::new);
     }
 
 
     public Label updateLabel(Long id, LabelUpdateRequest labelUpdateRequest) {
         // 1) 주어진 id에 해당하는 라벨 찾기. 없으면 예외 발생
-        Label label = labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
+        Label label = labelRepository.findById(id)
+                .orElseThrow(LabelNotFoundException::new);
 
         // 2) 찾은 라벨을 업데이트 데이터로 갱신
         label.update(labelUpdateRequest);
@@ -55,13 +57,14 @@ public class LabelService {
 
 
     public void deleteLabel(Long id) {
-        Label label = labelRepository.findById(id).orElseThrow(LabelNotFoundException::new);
+        Label label = labelRepository.findById(id)
+                .orElseThrow(LabelNotFoundException::new);
 
         labelRepository.delete(label);
     }
 
 
-    private LabelCountResponse getLabelCountDto() {
+    private LabelCountResponse fetchLabelCount() {
         return new LabelCountResponse(labelRepository.countLabels());
     }
 }
