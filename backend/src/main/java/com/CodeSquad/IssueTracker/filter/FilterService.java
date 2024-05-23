@@ -1,17 +1,12 @@
 package com.CodeSquad.IssueTracker.filter;
 
+import com.CodeSquad.IssueTracker.assignee.AssigneeService;
 import com.CodeSquad.IssueTracker.filter.dto.FilterListResponse;
-import com.CodeSquad.IssueTracker.issues.IssueRepository;
 import com.CodeSquad.IssueTracker.issues.IssueService;
 import com.CodeSquad.IssueTracker.labels.LabelService;
-import com.CodeSquad.IssueTracker.milestone.Milestone;
-import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import com.CodeSquad.IssueTracker.user.UserService;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class FilterService {
@@ -19,11 +14,14 @@ public class FilterService {
     IssueService issueService;
     LabelService labelService;
     MilestoneService milestoneService;
+    UserService userService;
 
-    public FilterService(IssueService issueService, LabelService labelService, MilestoneService milestoneService) {
+    public FilterService(IssueService issueService, LabelService labelService,
+                         MilestoneService milestoneService, UserService userService) {
         this.issueService = issueService;
         this.labelService = labelService;
         this.milestoneService = milestoneService;
+        this.userService = userService;
     }
 
     public FilterListResponse getFilterListResponse() {
@@ -31,7 +29,7 @@ public class FilterService {
                 .issueNumberResponse(issueService.getIssueNumber())
                 .labelListResponse(labelService.getLabelList())
                 .milestoneListResponse(milestoneService.getOpenMilestoneList())
-                .authorListResponse(issueService.getAuthorList())
+                .userListResponse(userService.getAllUserIds())
                 .build();
     }
 }
