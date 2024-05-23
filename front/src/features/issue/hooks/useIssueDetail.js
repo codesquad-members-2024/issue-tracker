@@ -6,19 +6,19 @@ export const useIssueDetail = id => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	const fetchIssueDetail = async () => {
+		try {
+			const data = await getIssueDetail(id);
+			setIssueDetail(data);
+		} catch (error) {
+			setError(error);
+		} finally {
+			setLoading(false);
+		}
+	};
 	useEffect(() => {
-		const fetchIssueDetail = async () => {
-			try {
-				const data = await getIssueDetail(id);
-				setIssueDetail(data);
-			} catch (error) {
-				setError(error);
-			} finally {
-				setLoading(false);
-			}
-		};
 		fetchIssueDetail();
 	}, [id]);
 
-	return { issueDetail, loading, error };
+	return { issueDetail, loading, error, fetchIssueDetail };
 };

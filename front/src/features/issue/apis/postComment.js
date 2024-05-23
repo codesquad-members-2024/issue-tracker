@@ -1,10 +1,11 @@
-import { server, devServer } from '~/apis/baseApi';
+import { server } from '~/apis/baseApi';
 
 /**
  * @method POST
  */
-export async function postComment(id, comment) {
-	console.log(id, comment);
+
+export async function postComment(issueId, comment) {
+	// 📍POST 성공 이후 서버에서 반환되는 데이터 필요
 	try {
 		const response = await fetch(`${server}/comments`, {
 			method: 'POST',
@@ -14,19 +15,12 @@ export async function postComment(id, comment) {
 			},
 			body: JSON.stringify({
 				loginId: 'daniel',
-				content: 'comment',
-				issueId: 1,
+				content: comment,
+				issueId: issueId,
 			}),
 		});
-
 		const data = await response.json();
-
-		if (response.status === 200) {
-			console.log('🚀 ~ getUser ~ data:', data);
-			return data;
-		} else {
-			return { error: data };
-		}
+		return data;
 	} catch (error) {
 		console.error('Error:', error);
 		return { error: error.message };

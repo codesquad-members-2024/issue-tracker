@@ -50,7 +50,7 @@ import {
 export function IssueDetailContainer() {
 	const { id } = useParams();
 
-	const { issueDetail, loading, error } = useIssueDetail(id);
+	const { issueDetail, loading, error, fetchIssueDetail } = useIssueDetail(id);
 
 	const [detailState, setDateilState] = useState({
 		title: issueDetail?.title,
@@ -88,6 +88,11 @@ export function IssueDetailContainer() {
 	const onPostComment = async () => {
 		try {
 			await postComment(issueDetail.id, detailState.newComment);
+			await fetchIssueDetail();
+			setDateilState(prevState => ({
+				...prevState,
+				newComment: '',
+			}));
 		} catch (error) {
 			console.error('Error posting comment:', error);
 		}
@@ -175,8 +180,9 @@ export function IssueDetailContainer() {
 				</StyledDetailHeader>
 				<StyledContents>
 					<section>
+						{/* 원작자  */}
 						<IssueCommentItem
-							// id={issueDetail.id}
+							id={issueDetail.id}
 							content={issueDetail.content}
 							writer={issueDetail.writer}
 							isWriter={true}
@@ -185,10 +191,12 @@ export function IssueDetailContainer() {
 							issueDetail.comments.map(item => (
 								<IssueCommentItem
 									key={item.id + 1}
-									id={item.id}
+									issueId={issueDetail.id}
+									commeneId={item.id}
 									content={item.content}
 									writer={item.writer}
 									isWriter={issueDetail.writer === item.writer}
+									fetchIssueDetail={fetchIssueDetail}
 								/>
 							))}
 						<StyledNewComment>

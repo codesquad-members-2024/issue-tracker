@@ -5,7 +5,14 @@ import { IconEdit, IconSmile, IconXsquare } from '~/common/icons';
 import { IssueCommentEdit } from '~/features/issue/components';
 import { putComment } from '../apis/putComment';
 
-export function IssueCommentItem({ id, content, writer, isWriter }) {
+export function IssueCommentItem({
+	commeneId,
+	content,
+	writer,
+	isWriter,
+	issueId,
+	fetchIssueDetail,
+}) {
 	const [comment, setComment] = useState(content);
 	const [isEdit, setIsEdit] = useState(false);
 	const [hasChange, setHasChange] = useState(false);
@@ -23,8 +30,9 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 
 	const putEditComment = async () => {
 		try {
-			await putComment(id, comment);
+			await putComment(commeneId, comment, issueId);
 			setIsEdit(false);
+			fetchIssueDetail(issueId);
 		} catch (error) {
 			console.error('Error putting comment:', error);
 		}

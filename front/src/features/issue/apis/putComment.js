@@ -1,28 +1,21 @@
 import { server } from '~/apis/baseApi';
 
-export async function putComment(id, comment) {
+export async function putComment(commentId, comment, issueId) {
+	// 📍POST 성공 이후 서버에서 반환되는 데이터 필요
 	try {
-		const response = await fetch(`${server}/comments/${id}`, {
+		const response = await fetch(`${server}/comments/${commentId}`, {
 			method: 'PUT',
+			// credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				loginId: 'daniel',
 				content: comment,
-				issueId: id,
+				issueId: issueId,
 			}),
 		});
-
-		const text = await response.text();
-		const data = text ? JSON.parse(text) : {};
-
-		if (!response.ok) {
-			console.error('Response status:', response.status, response.statusText);
-			console.error('Response data:', data);
-			throw new Error(data.message || '수정요청');
-		}
-
+		const data = await response.json();
 		return data;
 	} catch (error) {
 		console.error('Error:', error);
