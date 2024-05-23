@@ -1,5 +1,5 @@
 const FIRST_ELEMENT = 0;
-const THRESHOLD_NUMBER = 1.0;
+const THRESHOLD_NUMBER = 0.01;
 
 const useIntersectionObserver = (callback: Function) => {
   const observer = new IntersectionObserver(

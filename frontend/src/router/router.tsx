@@ -10,26 +10,22 @@ import MilestoneList from "../components/milestone/MilestoneList";
 import { LabelProvider } from "../contexts/LabelContext";
 import { MilestoneProvider } from "../contexts/MilestoneContext";
 
-interface AuthRouteProps {
-  children: React.ReactNode;
-}
+// interface AuthRouteProps {
+//   children: React.ReactNode;
+// }
 
-export const AuthRoute = ({ children }: AuthRouteProps) => {
-  const { isLoggedIn } = useUserStore();
+// export const AuthRoute = ({ children }: AuthRouteProps) => {
+//   const { isLoggedIn } = useUserStore();
 
-  if (!isLoggedIn) return <Navigate to="/login" />;
+//   if (!isLoggedIn) return <Navigate to="/login" />;
 
-  return <>{children}</>;
-};
+//   return <>{children}</>;
+// };
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <AuthRoute>
-        <Main />
-      </AuthRoute>
-    ),
+    element: <Main />,
   },
   {
     path: "/login",

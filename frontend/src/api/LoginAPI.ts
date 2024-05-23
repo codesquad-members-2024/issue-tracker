@@ -35,6 +35,7 @@ export const sendLoginRequest: (loginState: LoginState) => Promise<Response> = a
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify(loginState),
     };
     const response = await fetch(`${SERVER}/login`, request);
