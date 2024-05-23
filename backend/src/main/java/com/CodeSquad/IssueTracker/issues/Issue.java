@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 @Table("issues")
 public class Issue {
     @Id
