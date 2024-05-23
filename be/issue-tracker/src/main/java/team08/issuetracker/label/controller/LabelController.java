@@ -17,10 +17,10 @@ public class LabelController {
     private final LabelService labelService;
 
     @GetMapping
-    public ResponseEntity<LabelOverviewResponse> getLabelsWithCount() {
-        LabelOverviewResponse labelOverviewResponse = labelService.getLabelsWithCount();
+    public ResponseEntity<LabelListWithCountResponse> getLabelsWithCount() {
+        LabelListWithCountResponse labelListWithCountResponse = labelService.getLabelsWithCount();
 
-        return ResponseEntity.ok(labelOverviewResponse);
+        return ResponseEntity.ok(labelListWithCountResponse);
     }
 
 
@@ -58,7 +58,7 @@ public class LabelController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<LabelDeleteResponse> deleteLabel(@PathVariable long id) {
         labelService.deleteLabel(id);
 

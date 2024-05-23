@@ -5,11 +5,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class LabelOverviewResponse {
+public class LabelListWithCountResponse {
     private LabelCountResponse labelCount;
     private List<LabelResponse> labels;
 
-    public LabelOverviewResponse(LabelCountResponse labelCount, List<LabelResponse> labels) {
+    public LabelListWithCountResponse(LabelCountResponse labelCount, List<LabelResponse> labels) {
         this.labelCount = labelCount;
         this.labels = labels;
     }
