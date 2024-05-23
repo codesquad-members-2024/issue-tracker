@@ -2,6 +2,7 @@ package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.comment.Comment;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 
@@ -21,6 +22,7 @@ public class Issue {
     private Long milestoneId;
     @MappedCollection(idColumn = "issue_id")
     private Set<IssueAssignee> issueAssignees;
+    @Setter
     private String writer;
     private LocalDateTime createTime;
     private boolean isClosed; // 기본 값 false
