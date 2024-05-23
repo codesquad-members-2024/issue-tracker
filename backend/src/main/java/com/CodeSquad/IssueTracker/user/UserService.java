@@ -98,32 +98,4 @@ public class UserService {
     public Set<User> findAllByIds(Set<String> newAssigneeIds) {
         return userRepository.findAllById(newAssigneeIds);
     }
-
-    public void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-//        ResponseCookie cookie = ResponseCookie.from(name, value)
-//                .path("/")
-//                .sameSite("None")
-//                .httpOnly(true)
-//                .secure(true)
-//                .maxAge(maxAge)
-//                .build();
-
-
-
-        //response.addHeader("Set-Cookie", cookieHeader);
-    }
-    public void customizeSessionCookie(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-
-        Cookie cookie = new Cookie("JSESSIONID", sessionId);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setMaxAge(3600);
-        //response.addCookie(cookie);
-        String cookieHeader = String.format("%s=%s; Path=/; HttpOnly; Secure; SameSite=None", cookie.getName(), cookie.getValue());
-        response.addHeader("Set-Cookie", cookieHeader);
-
-    }
 }

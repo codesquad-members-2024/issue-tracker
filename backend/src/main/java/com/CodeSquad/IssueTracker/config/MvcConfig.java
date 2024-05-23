@@ -19,11 +19,6 @@ public class MvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login", "/registration");
     }
 
-    @Bean
-    public CookieSameSiteSupplier applicationCookieSameSiteSupplier() {
-        return CookieSameSiteSupplier.ofNone();
-    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
