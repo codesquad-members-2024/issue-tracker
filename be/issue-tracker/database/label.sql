@@ -3,5 +3,5 @@ CREATE TABLE label (
                        name VARCHAR(255),
                        description VARCHAR(255),
                        background_color VARCHAR(16),
-                       text_color VARCHAR(16)
+                       text_bright BOOLEAN
 );
