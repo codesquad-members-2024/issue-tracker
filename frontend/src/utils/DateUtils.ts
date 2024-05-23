@@ -24,6 +24,12 @@ const dateUtils = {
 
     return `${time.getFullYear()}. ${time.getMonth() + 1}. ${time.getDate()}`;
   },
+
+  parseDateText(dateText: string) {
+    const deadline = new Date(dateText);
+
+    return deadline.toISOString();
+  }
 };
 
 export default dateUtils;
