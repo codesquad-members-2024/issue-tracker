@@ -54,6 +54,12 @@ public class MilestoneService {
         log.info("마일스톤 삭제 완료: {}", milestone);
     }
 
+    public void validateMilestoneId(Long milestoneId) {
+        milestoneRepository.findById(milestoneId)
+                .orElseThrow(() ->
+                        new MilestoneNotFoundException("존재하지 않는 마일스톤입니다."));
+    }
+
     public Milestone getMilestoneById(Long milestoneId) {
         log.info("마일스톤 조회 요청: {}", milestoneId);
         return milestoneRepository.findById(milestoneId)

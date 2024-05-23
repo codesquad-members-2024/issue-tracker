@@ -36,9 +36,9 @@ public class LabelService {
         return labelRepository.findAllById(ids);
     }
 
-    public void validateNewLabels(Set<Long> newLabels) {
-        Set<Label> labels = findAllByIds(newLabels);
-        if (labels.size() != newLabels.size())
+    public void validateLabels(Set<Long> labels) {
+        Set<Label> allByIds = findAllByIds(labels);
+        if (allByIds.size() != labels.size())
             throw new LabelNotFoundException("존재하지 않는 라벨이 포함되어 있습니다.");
     }
 
