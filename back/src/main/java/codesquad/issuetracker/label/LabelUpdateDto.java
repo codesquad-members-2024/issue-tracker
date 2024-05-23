@@ -14,7 +14,7 @@ public class LabelUpdateDto {
     private String description;
     private String backgroundColor;
     private String textColor;
-
+  
     public Label toEntity(Long id) {
         return new Label(id, name, description, backgroundColor, textColor);
     }
