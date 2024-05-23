@@ -11,7 +11,7 @@ import java.util.List;
 public interface IssueRepository extends OpenCloseCrudRepository<Issue, Integer> {
 
     @Query("select * from Issue where milestone_id =:milestoneId")
-    List<Issue> getIssueListByMilestoneId(@Param("milestoneId") Integer milestoneId);
+    List<Issue> getIssuesByMilestoneId(@Param("milestoneId") Integer milestoneId);
 
 
     @Override
@@ -19,5 +19,4 @@ public interface IssueRepository extends OpenCloseCrudRepository<Issue, Integer>
         return Issue.class;
     }
 
-    //mappedcoolection
 }
