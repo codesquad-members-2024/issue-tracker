@@ -5,6 +5,7 @@ import FilterProvider from "../Providers/FilterProvider";
 import { Header } from "../common/UtilUI";
 import { APiUtil } from "../common/Utils";
 import { useQuery } from "@tanstack/react-query";
+import { Loading } from "../common/NotFound";
 
 const IssuePage = () => {
     const [isOpen, setOpen] = useState<string>("OPEN");
@@ -17,8 +18,8 @@ const IssuePage = () => {
         queryFn: () => APiUtil.getData("issues?state=OPEN"),
     });
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>error...</div>;
+    if (isLoading) return <div><Loading/></div>;
+    if (error) return <div>error...{error.message}</div>;
 
     return (
         <main className="w-[1280px] mx-auto">

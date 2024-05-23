@@ -31,7 +31,7 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(["milestones"]);
+            queryClient.invalidateQueries({queryKey: ["milestones"]});
         },
     });
     

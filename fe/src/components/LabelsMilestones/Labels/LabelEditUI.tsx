@@ -2,7 +2,8 @@ import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from
 import { Label } from "./LabelFeed";
 import { ModifyDeleteContext } from "../../../Providers/ModifyDeleteProvider";
 import { RedoOutlined, DownOutlined } from "@ant-design/icons";
-import { changeColor } from "../../../common/Utils";
+import { APiUtil, changeColor } from "../../../common/Utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface ChangeColorProps {
     setColor: Dispatch<SetStateAction<string>>;
@@ -19,11 +20,30 @@ export interface LabelFormState {
     textColor: string;
 }
 
+interface MutationPayload {
+    formData: LabelFormState;
+    type: "createData" | "modifyData";
+    id?: number;
+}
+
 const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
+    const queryClient = useQueryClient();
     const [isOpen, setIsOpen] = useState(false);
     const [color, setColor] = useState("#ffffff");
-    const [ModifyDeleteState, ModifyDeleteDispatch] =
-        useContext(ModifyDeleteContext);
+    const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
+
+    const { mutate } = useMutation({
+        mutationFn: async ({ formData, type, id }: MutationPayload) => {
+            if (type === "createData") {
+                await APiUtil.createData("labels/new", formData);
+            } else if (type === "modifyData" && id !== undefined) {
+                await APiUtil.modifyData("labels", formData, id);
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["labels"]});
+        },
+    });
 
     const [formData, setFormData]: [
         LabelFormState,
@@ -31,8 +51,8 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
     ] = useState({
         name: "",
         description: "",
-        backgroundColor: "",
         textColor: "",
+        backgroundColor: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +69,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                 ...prevState,
                 name: curLabel?.name ?? "",
                 description: curLabel?.description ?? "",
-                color: curLabel?.backgroundColor ?? "",
+                backgroundColor: curLabel?.backgroundColor ?? "",
                 textColor: curLabel?.textColor ?? "",
             }));
             setColor(curLabel?.backgroundColor ?? "");
@@ -58,20 +78,20 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                 ...prevState,
                 name: "label",
                 description: "",
-                color: "",
+                backgroundColor: "",
                 textColor: "",
             }));
         }
     }, [ModifyDeleteState.state, curLabel]);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>, id?: number) => {
+        const type = ModifyDeleteState.state === "create" ? "createData" : "modifyData"
         e.preventDefault();
-        // post 보내기
+        mutate({formData, type, id})
+        ModifyDeleteDispatch({ type: "SET_INIT", Payload: ""})
     };
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    };
+    const toggleDropdown = () => setIsOpen(!isOpen);
 
     return (
         <div
@@ -88,7 +108,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                         ? "레이블 편집"
                         : "새로운 레이블 추가"}
                 </h3>
-                <form onSubmit={handleSubmit} className="flex flex-col">
+                <form onSubmit={(e) => handleSubmit(e, curLabel?.id)} className="flex flex-col">
                     <div className="flex gap-4">
                         <div className="w-[288px] h-[143px] border-2 border-gray-200 rounded-xl flex items-center justify-center">
                             <div
@@ -126,13 +146,13 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                                 />
                             </div>
                             <div className="flex w-[50%]">
-                                <div className="flex flex-grow h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100">
+                                <div className="flex flex-grow h-[40px] px-3 py-2 text-gray-500 border rounded-xl bg-gray-100 mr-4">
                                     <div className="w-[100px] text-sm my-auto">
                                         배경 색상
                                     </div>
                                     <input
                                         type="text"
-                                        name="color"
+                                        name="backgroundColor"
                                         className="bg-gray-100 w-[80%] h-full outline-none"
                                         placeholder={color}
                                         value={color}
@@ -140,7 +160,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                                     />
                                     <RedoOutlined onClick={() => changeColor({setColor, setFormData})} />
                                 </div>
-                                <button
+                                <div
                                     className="w-[50%] m-auto relative"
                                     onClick={toggleDropdown}
                                 >
@@ -154,7 +174,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                                                     setFormData(
                                                         (prevState) => ({
                                                             ...prevState,
-                                                            textColor: "white",
+                                                            textColor: "WHITE",
                                                         })
                                                     )
                                                 }
@@ -167,7 +187,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                                                     setFormData(
                                                         (prevState) => ({
                                                             ...prevState,
-                                                            textColor: "black",
+                                                            textColor: "BLACK",
                                                         })
                                                     )
                                                 }
@@ -177,7 +197,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
                                             </div>
                                         </div>
                                     )}
-                                </button>
+                                </div>
                             </div>
                         </div>
                     </div>

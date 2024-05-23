@@ -32,7 +32,7 @@ const TitleContainer = ({issueData}: TitleContainerProps) => {
     return (
         <>
         <div>
-            <TitleView issueData={issueData}/>
+            <TitleView issueData={issueData} editState={editState} setEditState={setEditState}/>
             <TitleInfo issueData={issueData}/>
         </div>
         <div className="border-[1px] my-6"/>

@@ -26,7 +26,7 @@ const FilterUI: React.FC<FilterProps> = ({
     resetFilterUI,
     setResetFilterUI,
 }) => {
-    const [FilterState, FilterDispatch] = useContext(FilterContext);
+    const [, FilterDispatch] = useContext(FilterContext);
     const [isOpen, setIsOpen] = useState(false);
     const [selectItem, setSelectItem] = useState<Filter>(filterInfo[0]);
     const dropdownRef = useRef<HTMLButtonElement | null>(null);

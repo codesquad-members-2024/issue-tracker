@@ -8,7 +8,7 @@ const TitleInfo = ({ issueData }: TitleContainerProps) => {
                 <InfoCircleOutlined className="mr-1"/>{" "}
                 {issueData.state === "OPEN" ? "열린" : "닫힌"} 이슈
             </div>
-            <p className="flex items-center ml-2">이 이슈가 {getDateDifference(issueData.closedAt)} {issueData.authorId}님에 의해 열렸습니다</p>
+            <p className="flex items-center ml-2">이 이슈가 {getDateDifference(issueData.openAt)} {issueData.authorId}님에 의해 열렸습니다</p>
             <div className="flex items-center mx-2"> ∙ </div>
             <div className="flex items-center">코맨트 {issueData.comments.length}개</div>
         </div>
