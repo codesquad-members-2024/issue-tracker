@@ -9,8 +9,9 @@ import {
 } from '~/common/icons';
 import { Input } from 'antd';
 import { Button, Label, InputRadio } from '~/common/components';
-import { putLabel } from '~/features/label/apis';
+import { putLabel, addLabel } from '~/features/label/apis';
 import { colorGenerator } from '~/utils/util';
+import { useLabelList } from '~/features/issue/hooks';
 
 export function LabelRegister({
 	isEdit,
@@ -19,15 +20,29 @@ export function LabelRegister({
 	newLabel,
 	setNewLabel,
 }) {
+	const { fetchLabelList } = useLabelList();
 	const [preview, setPreview] = useState({
 		name: '',
 		description: '',
-		textColor: '',
 		backgroundColor: '',
+		textColor: '',
 	});
 
-	const handleEditLabel = () => {
-		putLabel(label.id, label);
+	const handleEditLabel = async () => {
+		try {
+			await putLabel(label.id, preview);
+		} catch (error) {
+			console.error('Error adding label');
+		}
+	};
+
+	const handleAddLabel = async () => {
+		try {
+			await addLabel(preview);
+			fetchLabelList();
+		} catch (error) {
+			console.error('Error adding label');
+		}
 	};
 
 	useEffect(() => {
@@ -168,8 +183,9 @@ export function LabelRegister({
 						<Button
 							type='button'
 							size='small'
-							buttonText='완료'
+							buttonText='작성완료'
 							disabled={!isFormFilled()}
+							onClick={handleAddLabel}
 							icon={<IconPlus />}
 						/>
 					</>

@@ -16,7 +16,7 @@ import { LabelRegister, LabelListItem } from '~/features/label/components';
 
 export function LabelContainer() {
 	const [newLabel, setNewLabel] = useState(false);
-	const { labelList, loading } = useLabelList();
+	const { labelList, loading, fetchLabelList } = useLabelList();
 
 	return (
 		<>
