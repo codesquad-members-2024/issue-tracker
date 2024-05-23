@@ -25,12 +25,14 @@ public class LabelController {
 
 
     @PostMapping
-    public ResponseEntity<String> createLabel(@RequestBody LabelCreationRequest labelCreationRequest) {
+    public ResponseEntity<LabelCreationResponse> createLabel(@RequestBody LabelCreationRequest labelCreationRequest) {
         Label label = labelService.createLabel(labelCreationRequest);
 
-        log.info("라벨 생성 성공 : {}", label.toString());
+        LabelCreationResponse response = LabelCreationResponse.from(label);
 
-        return ResponseEntity.ok(String.format("라벨생성 성공! 라벨 #%d 라벨 이름 : %s", label.getId(), label.getName()));
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 
 
@@ -45,17 +47,25 @@ public class LabelController {
 
 
     @PatchMapping("{id}")
-    public ResponseEntity<String> updateLabel(@PathVariable long id, @RequestBody LabelUpdateRequest labelUpdateRequest) {
+    public ResponseEntity<LabelUpdateResponse> updateLabel(@PathVariable long id, @RequestBody LabelUpdateRequest labelUpdateRequest) {
         Label label = labelService.updateLabel(id, labelUpdateRequest);
 
-        return ResponseEntity.ok(String.format("라벨수정 성공! 라벨 #%d 라벨 이름 : %s", label.getId(), label.getName()));
+        LabelUpdateResponse response = LabelUpdateResponse.from(label);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteLabel(@PathVariable long id) {
+    public ResponseEntity<LabelDeleteResponse> deleteLabel(@PathVariable long id) {
         labelService.deleteLabel(id);
 
-        return ResponseEntity.ok("라벨 삭제 성공!");
+        LabelDeleteResponse response = LabelDeleteResponse.from(id);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 }
