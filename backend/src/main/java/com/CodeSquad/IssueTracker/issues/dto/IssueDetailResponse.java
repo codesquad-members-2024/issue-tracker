@@ -20,4 +20,5 @@ public class IssueDetailResponse {
     private List<CommentResponse> comments;
     private List<LabelRequest> labels;
     private List<String> assignees;
+    private Long milestone;
 }

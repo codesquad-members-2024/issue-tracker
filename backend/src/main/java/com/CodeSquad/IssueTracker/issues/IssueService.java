@@ -153,6 +153,7 @@ public class IssueService {
                 .comments(comments)
                 .assignees(assignees)
                 .labels(labels)
+                .milestone(issue.getMilestoneId())
                 .build();
     }
     public void validateIssueListPage(long page) {
