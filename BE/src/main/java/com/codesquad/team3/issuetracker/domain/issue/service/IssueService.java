@@ -1,7 +1,8 @@
 package com.codesquad.team3.issuetracker.domain.issue.service;
 
 import com.codesquad.team3.issuetracker.domain.issue.dto.request.CreateIssue;
-import com.codesquad.team3.issuetracker.domain.issue.dto.response.IssuseResponse;
+import com.codesquad.team3.issuetracker.domain.issue.dto.response.IssueInfo;
+import com.codesquad.team3.issuetracker.domain.issue.dto.response.IssueResponse;
 import com.codesquad.team3.issuetracker.domain.issue.entity.Issue;
 import com.codesquad.team3.issuetracker.global.exceptions.NoSuchRecordException;
 import com.codesquad.team3.issuetracker.support.enums.OpenCloseSearchFlags;
@@ -10,23 +11,36 @@ import java.util.List;
 
 public interface IssueService {
 
-    void createIssue(CreateIssue createIssue);
+    void create(CreateIssue createIssue);
 
-    void close(Integer id);
 
-    void open(Integer id);
+    List<IssueInfo> getOpenIssues();
 
-    List<Issue> getAllIssues(int loadCount);
+    List<IssueInfo> getClosedIssues();
 
     int getIssueCount(OpenCloseSearchFlags flags);
 
-    void openIssue(List<Integer> issueIds) throws NoSuchRecordException;
+    void open(List<Integer> issueIds) throws NoSuchRecordException;
 
-    void closeIssue(List<Integer> issueIds) throws NoSuchRecordException;
+    public void close(List<Integer> issueIds) throws NoSuchRecordException;
 
     List<Issue> getIssueByMilestoneId(Integer milestoneId);
 
-    IssuseResponse getIssue(Integer id);
+    IssueResponse getIssue(Integer id);
 
-    void putLabel(Integer LabelId);
+    void putAssigneeLater(List<Integer> index, Integer id);
+
+    void putLabelLater(List<Integer> index, Integer id);
+
+    void putMilestone(Integer id, Integer milestone);
+
+    void deleteAssignee(Integer id, Integer assignee);
+
+    void deleteLabel(Integer id, Integer label);
+
+    void deleteMilestone(Integer id);
+
+    void updateTitle(Integer id, String newTitle);
+
+    void updateContents(Integer id, String newContents);
 }
