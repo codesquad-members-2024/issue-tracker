@@ -18,7 +18,7 @@ public interface LabelRepository extends CrudRepository<Label, Long>, LabelCusto
     Optional<Label> findById(Long id);
 
     @Query("SELECT COUNT(*) FROM LABEL WHERE IS_DELETED = FALSE")
-    Long countLabels();
+    int countLabels();
 
     @Modifying
     @Query("UPDATE LABEL SET IS_DELETED = TRUE WHERE ID = :labelId")

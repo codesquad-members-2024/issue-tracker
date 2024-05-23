@@ -1,12 +1,12 @@
 package codesquad.issuetracker.milestone;
 
-import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface MilestoneCustomRepository {
 
-    List<Milestone> findFilteredMilestones(MilestoneQueryInfo milestoneQueryInfo);
+    Page<Milestone> findAll(Pageable pageable);
 
-    void softDeleteByMilestoneId(Long milestoneId);
+//    void softDeleteByMilestoneId(Long milestoneId);
 
 }

@@ -1,41 +1,35 @@
 package codesquad.issuetracker.milestone;
 
 import codesquad.issuetracker.base.State;
-import codesquad.issuetracker.issue.IssueService;
+import codesquad.issuetracker.count.service.CountService;
+import codesquad.issuetracker.milestone.dto.MilestoneListResponse;
 import codesquad.issuetracker.milestone.dto.MilestoneRequest;
-import codesquad.issuetracker.milestone.dto.MilestoneQueryInfo;
 import codesquad.issuetracker.milestone.dto.MilestoneResponse;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MilestoneService {
 
-    private final MilestoneCustomRepository milestoneCustomRepository;
     private final MilestoneRepository milestoneRepository;
-    private final IssueService issueService;
-
-    public MilestoneService(MilestoneCustomRepository milestoneCustomRepository,
-        MilestoneRepository milestoneRepository, IssueService issueService) {
-        this.milestoneCustomRepository = milestoneCustomRepository;
-        this.milestoneRepository = milestoneRepository;
-        this.issueService = issueService;
-    }
+    private final CountService countService;
 
     public Milestone createNewMilestone(MilestoneRequest milestoneRequest) {
         return milestoneRepository.save(milestoneRequest.toEntity());
     }
 
-    public List<MilestoneResponse> fetchFilteredMilestones(MilestoneQueryInfo milestoneQueryInfo) {
-        List<Milestone> milestones = milestoneCustomRepository.findFilteredMilestones(
-            milestoneQueryInfo);
-        return milestones.stream()
-            .map(milestone -> MilestoneResponse.of(milestone,
-                issueService.findByMilestoneId(milestone.getId())))
-            .toList();
+    public MilestoneListResponse fetchFilteredMilestones(Pageable pageable) {
+        Page<Milestone> filteredMilestones = milestoneRepository.findAll(pageable);
+        List<Milestone> milestones = filteredMilestones.getContent();
+        return MilestoneListResponse.of(milestones.stream()
+            .map(milestone -> MilestoneResponse.of(
+                milestone, countService.fetchIssueCount(milestone.getId()))).toList(), countService.fetchLabelMilestoneCount());
+
     }
 
     public Milestone findById(Long id) {
@@ -60,16 +54,16 @@ public class MilestoneService {
         return findById(milestoneId);
     }
 
-    public ResponseEntity<String> softDeleteByMilestoneId(Long milestoneId) {
-        Optional<Milestone> milestone = milestoneRepository.findById(milestoneId);
-        if (milestone.isEmpty()) {
-            return new ResponseEntity<>("Milestone not found", HttpStatus.NOT_FOUND);
-        }
-        milestoneCustomRepository.softDeleteByMilestoneId(milestoneId);
-        return new ResponseEntity<>("Milestone is successfully deleted", HttpStatus.OK);
-    }
+//    public ResponseEntity<String> softDeleteByMilestoneId(Long milestoneId) {
+//        Optional<Milestone> milestone = milestoneRepository.findById(milestoneId);
+//        if (milestone.isEmpty()) {
+//            return new ResponseEntity<>("Milestone not found", HttpStatus.NOT_FOUND);
+//        }
+//        milestoneCustomRepository.softDeleteByMilestoneId(milestoneId);
+//        return new ResponseEntity<>("Milestone is successfully deleted", HttpStatus.OK);
+//    }
 
-    public Long countOpenMilestones() {
+    public int countOpenMilestones() {
         return milestoneRepository.countOpenMilestones();
     }
 }

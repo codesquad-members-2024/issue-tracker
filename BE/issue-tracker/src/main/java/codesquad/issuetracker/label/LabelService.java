@@ -1,7 +1,6 @@
 package codesquad.issuetracker.label;
 
 import codesquad.issuetracker.label.dto.LabelRequest;
-import codesquad.issuetracker.label.dto.LabelResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,7 +29,7 @@ public class LabelService {
         return optionalLabel.orElseThrow(NoSuchElementException::new);
     }
 
-    public Long countLabels() {
+    public int countLabels() {
         return labelRepository.countLabels();
     }
 

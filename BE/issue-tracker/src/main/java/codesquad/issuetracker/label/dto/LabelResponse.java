@@ -14,10 +14,10 @@ public class LabelResponse {
     String description;
     TextColor textColor;
     String backgroundColor;
-    Long labelCount;
-    Long milestoneCount;
+    int labelCount;
+    int milestoneCount;
 
-    public static LabelResponse of(Label label, Long labelCount, Long milestoneCount) {
+    public static LabelResponse of(Label label, int labelCount, int milestoneCount) {
         return LabelResponse.builder()
             .id(label.getId())
             .name(label.getName())
