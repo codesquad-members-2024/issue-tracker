@@ -77,4 +77,11 @@ public class IssueController {
         issueService.updateLabels(issueId, labelIdsRequest.labels());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{issueId}/assignees")
+    public ResponseEntity<Void> updateAssigneesToIssue(@PathVariable("issueId") Long issueId,
+                                                       @RequestBody IssueAssigneeIdsRequest assigneeIdsRequest) {
+        issueService.updateAssignees(issueId, assigneeIdsRequest.assignees());
+        return ResponseEntity.ok().build();
+    }
 }

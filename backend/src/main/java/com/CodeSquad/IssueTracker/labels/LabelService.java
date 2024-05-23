@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.CodeSquad.IssueTracker.labels.utils.ColorValidator.isValidColor;
-
 @Slf4j
 @Service
 public class LabelService {
@@ -38,6 +36,11 @@ public class LabelService {
         return labelRepository.findAllById(ids);
     }
 
+    public void validateNewLabels(Set<Long> newLabels) {
+        Set<Label> labels = findAllByIds(newLabels);
+        if (labels.size() != newLabels.size())
+            throw new LabelNotFoundException("존재하지 않는 라벨이 포함되어 있습니다.");
+    }
 
     public Label createLabel(Label label) {
         log.info("새 라벨 생성 요청: {}", label);

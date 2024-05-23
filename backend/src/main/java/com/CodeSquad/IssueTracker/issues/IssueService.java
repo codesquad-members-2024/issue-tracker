@@ -5,6 +5,7 @@ import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
 import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
 import com.CodeSquad.IssueTracker.assignee.AssigneeRepository;
+import com.CodeSquad.IssueTracker.assignee.AssigneeService;
 import com.CodeSquad.IssueTracker.assignee.dto.AssigneeId;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
@@ -45,10 +46,12 @@ public class IssueService {
     private final IssueLabelRepository issueLabelRepository;
     private final AssigneeRepository assigneeRepository;
     private final LabelService labelService;
+    private final AssigneeService assigneeService;
+
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
                         UserRepository userRepository, MilestoneRepository milestoneRepository,
                         LabelRepository labelRepository, IssueLabelRepository issueLabelRepository,
-                        MilestoneService milestoneService, AssigneeRepository assigneeRepository, LabelService labelService) {
+                        MilestoneService milestoneService, AssigneeRepository assigneeRepository, LabelService labelService, AssigneeService assigneeService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
@@ -58,6 +61,7 @@ public class IssueService {
         this.milestoneService = milestoneService;
         this.assigneeRepository = assigneeRepository;
         this.labelService = labelService;
+        this.assigneeService = assigneeService;
     }
 
 
@@ -69,6 +73,8 @@ public class IssueService {
 
     public Long createIssue(IssueRequest issueRequest) {
         validateIssueRequest(issueRequest);
+         assigneeService.validateNewAssigneeIds(issueRequest.assignees());
+         labelService.validateNewLabels(issueRequest.labels());
 
         log.info("Creating issue: {}", issueRequest);
         Set<AssigneeId> assigneeIds = issueRequest.assignees().stream()
@@ -78,6 +84,8 @@ public class IssueService {
         Set<LabelId> labelIds = issueRequest.labels().stream()
                                             .map(LabelId::new)
                                             .collect(Collectors.toSet());
+
+
 
         // 이슈 저장을 위한 객체 생성
         Issue issue = Issue.builder()
@@ -181,6 +189,7 @@ public class IssueService {
     @Transactional
     public void updateAssignees(Long issueId, Set<String> newAssignees) {
         Issue issue = findIssueById(issueId);
+        assigneeService.validateNewAssigneeIds(newAssignees);
 
         Set<AssigneeId> assigneeIds = newAssignees.stream()
                 .map(AssigneeId::new)
@@ -193,9 +202,7 @@ public class IssueService {
 
     @Transactional
     public void updateLabels(Long issueId, Set<Long> newLabels) {
-        Set<Label> labels = labelService.findAllByIds(newLabels);
-        if (labels.size() != newLabels.size())
-            throw new LabelNotFoundException("존재하지 않는 라벨이 포함되어 있습니다.");
+        labelService.validateNewLabels(newLabels);
 
         Issue issue = findIssueById(issueId);
 
@@ -207,6 +214,8 @@ public class IssueService {
 
         issueRepository.save(issue);
     }
+
+
 
     private void validateIssueRequest(IssueRequest issueRequest) {
         Optional<User> user = userRepository.findById(issueRequest.author());

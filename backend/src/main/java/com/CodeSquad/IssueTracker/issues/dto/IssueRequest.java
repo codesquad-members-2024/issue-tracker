@@ -16,6 +16,5 @@ public record IssueRequest(
         String author,
         Set<String> assignees,
         Set<Long> labels,
-        String milestone,
         Long milestoneId
 ) {}
