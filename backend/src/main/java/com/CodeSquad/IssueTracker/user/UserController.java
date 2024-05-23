@@ -25,13 +25,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
-                                       HttpServletRequest request,
-                                       HttpServletResponse response) {
+                                       HttpServletRequest request) {
         userService.isLoginRequestNotExists(loginRequest);
         userService.authenticate(loginRequest);
         userService.addLoginSession(loginRequest, request.getSession());
-
-        userService.customizeSessionCookie(request, response);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

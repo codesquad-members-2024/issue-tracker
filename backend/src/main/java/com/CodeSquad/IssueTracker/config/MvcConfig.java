@@ -19,11 +19,6 @@ public class MvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login", "/registration");
     }
 
-    @Bean
-    public CookieSameSiteSupplier applicationCookieSameSiteSupplier() {
-        return CookieSameSiteSupplier.ofNone();
-    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -33,7 +28,7 @@ public class MvcConfig implements WebMvcConfigurer {
                         "http://localhost:3000",
                         "https://localhost:3000"
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
