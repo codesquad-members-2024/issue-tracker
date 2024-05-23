@@ -17,7 +17,13 @@ const dateUtils = {
     const currentDate = new Date(currentTime);
 
     return this.calculateTimeDifference(previousDate, currentDate);
-  }
-}
+  },
+
+  parseTimestampText(timestamp: string) {
+    const time = new Date(timestamp);
+
+    return `${time.getFullYear()}. ${time.getMonth() + 1}. ${time.getDate()}`;
+  },
+};
 
 export default dateUtils;

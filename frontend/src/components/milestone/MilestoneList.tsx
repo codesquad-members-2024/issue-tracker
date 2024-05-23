@@ -21,7 +21,7 @@ function MilestoneList() {
 
   const fetchMilestones = () => Promise.all([sendMilestonesRequest("open"), sendMilestonesRequest("close")]);
 
-  const { data } = useQuery("milestones", fetchMilestones, {
+  useQuery("milestones", fetchMilestones, {
     onSuccess: (data) => {
       setOpenMilestones(data[0]);
       setCloseMilestones(data[1]);
@@ -44,8 +44,8 @@ function MilestoneList() {
         </MilestoneTab>
         <ScrollableArea>
           {focusedTab === "open"
-            ? openMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail />)
-            : closeMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail />)}
+            ? openMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail {...milestone} />)
+            : closeMilestones.map((milestone: MilestoneDetailType) => <MilestoneDetail {...milestone} />)}
         </ScrollableArea>
       </MilestoneTable>
     </Wrapper>
