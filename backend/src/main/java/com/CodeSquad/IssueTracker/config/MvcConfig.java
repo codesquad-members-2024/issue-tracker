@@ -9,13 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new CheckLoginInterceptor())
-//                .order(1)
-//                .addPathPatterns("/issue/**", "/issues")
-//                .excludePathPatterns("/login", "/registration");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new CheckLoginInterceptor())
+                .order(1).addPathPatterns("/issue/**", "/issues")
+                .excludePathPatterns("/login", "/registration");
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
