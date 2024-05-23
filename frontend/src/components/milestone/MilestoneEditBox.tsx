@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import styled from "styled-components";
 import { MilestoneContext, MilestoneDetailType } from "../../contexts/MilestoneContext";
+import { postNewMilestone } from "../../api/MilestoneAPI";
 
 type EditType = "new" | "edit";
 
@@ -27,6 +28,10 @@ function MilestoneEditBox({
   content = defaultContent,
   handleCancelClick,
 }: MilestoneEditBoxProps) {
+  const titleRef = useRef<HTMLInputElement>(null);
+  const deadlineRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLInputElement>(null);
+
   return (
     <Wrapper type={type}>
       <Title>{type === "new" ? "새로운 마일스톤 추가" : "마일스톤 편집"}</Title>
@@ -34,17 +39,17 @@ function MilestoneEditBox({
         <FormWrapper>
           <Form>
             <FormType>이름</FormType>
-            <FormInput></FormInput>
+            <FormInput ref={titleRef}></FormInput>
           </Form>
           <Form>
             <FormType>완료일(선택)</FormType>
-            <FormInput></FormInput>
+            <FormInput ref={deadlineRef}></FormInput>
           </Form>
         </FormWrapper>
         <FormWrapper>
           <DescriptionForm>
             <FormType>설명(선택)</FormType>
-            <FormInput></FormInput>
+            <FormInput ref={descriptionRef}></FormInput>
           </DescriptionForm>
         </FormWrapper>
       </Content>

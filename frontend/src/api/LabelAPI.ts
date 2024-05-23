@@ -20,7 +20,7 @@ export const sendLabelsRequest = async () => {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const postNewLabel = async (labelContent: LabelContent) => {
   try {
@@ -40,7 +40,7 @@ export const postNewLabel = async (labelContent: LabelContent) => {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const sendPutLabelRequest = async (labelId: number, labelContent: LabelContent) => {
   try {
@@ -49,7 +49,8 @@ export const sendPutLabelRequest = async (labelId: number, labelContent: LabelCo
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(labelContent)
+      credentials: "include" as RequestCredentials,
+      body: JSON.stringify(labelContent),
     };
     const response = await fetch(`${SERVER}/label/${labelId}`, request);
 
@@ -60,12 +61,13 @@ export const sendPutLabelRequest = async (labelId: number, labelContent: LabelCo
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const sendDeleteLabelRequest = async (labelId: number) => {
   try {
     const request = {
       method: "DELETE",
+      credentials: "include" as RequestCredentials,
     };
     const response = await fetch(`${SERVER}/label/${labelId}`, request);
 
@@ -76,4 +78,4 @@ export const sendDeleteLabelRequest = async (labelId: number) => {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
