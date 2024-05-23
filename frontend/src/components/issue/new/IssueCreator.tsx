@@ -21,14 +21,22 @@ function IssueCreator() {
         <UserIcon src={userIcon} />
         <FormWrapper>
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
-          <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" onChange={handleOnChange} />
-          <ExtensionWrapper>
-            <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
-            <DashedLine />
-            <FileImageButton>
-              <img /> 파일 첨부하기
-            </FileImageButton>
-          </ExtensionWrapper>
+
+          <CommentWrapper>
+            <CreatorForm
+              ref={commentRef}
+              labelText="코멘트를 입력하세요."
+              height="calc(100% - 8em)"
+              onChange={handleOnChange}
+            />
+            <ExtensionWrapper>
+              <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
+              <DashedLine />
+              <FileImageButton>
+                <img /> 파일 첨부하기
+              </FileImageButton>
+            </ExtensionWrapper>
+          </CommentWrapper>
         </FormWrapper>
         <Sidebar />
       </BodyWrapper>
@@ -100,7 +108,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 const CancelWrapper = styled.div`
-  width: 5em;
+  width: 7em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,7 +121,7 @@ const CancelIcon = styled.img`
 `;
 
 const CancelText = styled.span`
-  width: 11em;
+  width: 16em;
   color: #4e4b66;
 `;
 
@@ -135,10 +143,16 @@ const SubmitButton = styled.button<{ isSubmitable: boolean }>`
   transition: all 0.5s ease;
 `;
 
+const CommentWrapper = styled.div`
+  height: 100%;
+  background-color: #eceef5;
+  border: 1px solid transparent;
+  border-radius: 12px;
+`;
+
 const ExtensionWrapper = styled.div`
-  position: fixed;
-  width: 910px;
-  top: 46em;
+  width: 100%;
+  height: 8em;
   display: flex;
   flex-direction: column;
 `;

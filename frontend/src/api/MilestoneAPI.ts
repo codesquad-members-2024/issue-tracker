@@ -1,9 +1,18 @@
 import { MilestoneType } from "../contexts/MilestoneContext";
 
+interface MilestoneStateParams {
+  milestoneType: MilestoneType;
+  milestoneId: number;
+}
+
 interface MilestoneContent {
   title: string;
-  description: string;
-  deadline: string;
+  deadline: string | undefined;
+  description: string | undefined;
+}
+
+interface Milestone extends MilestoneContent {
+  milestoneId: number;
 }
 
 const SERVER = process.env.REACT_APP_SERVER;
@@ -44,7 +53,7 @@ export const postNewMilestone = async (milestoneContent: MilestoneContent) => {
   }
 };
 
-export const toggleMilestoneState = async (milestoneType: MilestoneType, milestoneId: number) => {
+export const toggleMilestoneState = async ({ milestoneType, milestoneId }: MilestoneStateParams) => {
   try {
     const request = {
       method: "PATCH",
@@ -78,10 +87,12 @@ export const deleteMilestone = async (milestoneId: number) => {
   }
 };
 
-export const sendPutMilestoneRequest = async (milestoneId: number, milestoneContent: MilestoneContent) => {
+export const sendPutMilestoneRequest = async (milestone: Milestone) => {
   try {
+    const { milestoneId, title, deadline, description } = milestone;
+    const milestoneContent = { title, deadline, description };
     const request = {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },

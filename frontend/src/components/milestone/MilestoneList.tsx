@@ -2,11 +2,14 @@ import styled from "styled-components";
 import Header from "../header/Header";
 import MilestoneHeader from "./MilestoneHeader";
 import { useContext } from "react";
-import { MilestoneType, MilestoneContext, MilestoneDetailType } from "../../contexts/MilestoneContext";
+import { MilestoneContext, MilestoneDetailType } from "../../contexts/MilestoneContext";
 import { useQuery } from "react-query";
 import { sendMilestonesRequest } from "../../api/MilestoneAPI";
 import MilestoneDetail from "./MilestoneDetail";
 import MilestoneEditBox from "./MilestoneEditBox";
+
+const OPEN_MILESTONES_INDEX = 0;
+const CLOSE_MILESTONES_INDEX = 1;
 
 function MilestoneList() {
   const {
@@ -24,8 +27,8 @@ function MilestoneList() {
 
   useQuery("milestones", fetchMilestones, {
     onSuccess: (data) => {
-      setOpenMilestones(data[0]);
-      setCloseMilestones(data[1]);
+      setOpenMilestones(data[OPEN_MILESTONES_INDEX]);
+      setCloseMilestones(data[CLOSE_MILESTONES_INDEX]);
     },
   });
 
@@ -35,7 +38,7 @@ function MilestoneList() {
       <MilestoneHeader />
       {isToAdd && (
         <EditBoxWrapper>
-          <MilestoneEditBox type="new" handleCancelClick={() => setIsToAdd(!isToAdd)} />
+          <MilestoneEditBox type="new" closeEditBox={() => setIsToAdd(!isToAdd)} />
         </EditBoxWrapper>
       )}
       <MilestoneTable>
@@ -67,7 +70,6 @@ const EditBoxWrapper = styled.div`
   border: 1px solid #d9dbe9;
   border-radius: 0.75em;
 `;
-
 
 const MilestoneTable = styled.div`
   width: 80em;

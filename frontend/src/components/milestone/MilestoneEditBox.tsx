@@ -1,36 +1,11 @@
-import { useContext, useRef } from "react";
 import styled from "styled-components";
-import { MilestoneContext, MilestoneDetailType } from "../../contexts/MilestoneContext";
-import { postNewMilestone } from "../../api/MilestoneAPI";
+import useMilestoneEdit, { MilestoneEditBoxProps } from "../../hooks/logics/useMilestoneEdit";
 
 type EditType = "new" | "edit";
 
-interface MilestoneEditBoxProps {
-  type: EditType;
-  milestoneId?: number;
-  content?: MilestoneDetailType;
-  handleCancelClick: () => void;
-}
-
-const defaultContent = {
-  milestoneId: 0,
-  title: "",
-  description: "",
-  deadline: "",
-  totalIssue: 0,
-  closedIssue: 0,
-  isClosed: false,
-};
-
-function MilestoneEditBox({
-  type,
-  milestoneId = 0,
-  content = defaultContent,
-  handleCancelClick,
-}: MilestoneEditBoxProps) {
-  const titleRef = useRef<HTMLInputElement>(null);
-  const deadlineRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLInputElement>(null);
+function MilestoneEditBox(props: MilestoneEditBoxProps) {
+  const { type, titleRef, deadlineRef, descriptionRef, errorMessage, closeEditBox, handleSubmitClick } =
+    useMilestoneEdit(props);
 
   return (
     <Wrapper type={type}>
@@ -39,30 +14,33 @@ function MilestoneEditBox({
         <FormWrapper>
           <Form>
             <FormType>이름</FormType>
-            <FormInput ref={titleRef}></FormInput>
+            <FormInput ref={titleRef} required />
           </Form>
           <Form>
             <FormType>완료일(선택)</FormType>
-            <FormInput ref={deadlineRef}></FormInput>
+            <FormInput ref={deadlineRef} required />
           </Form>
         </FormWrapper>
         <FormWrapper>
           <DescriptionForm>
             <FormType>설명(선택)</FormType>
-            <FormInput ref={descriptionRef}></FormInput>
+            <FormInput ref={descriptionRef} required />
           </DescriptionForm>
         </FormWrapper>
       </Content>
-      <ButtonWrapper>
-        <CancelButton onClick={handleCancelClick}>
-          <CancelImage />
-          취소
-        </CancelButton>
-        <SubmitButton>
-          <img />
-          완료
-        </SubmitButton>
-      </ButtonWrapper>
+      <BottomWrapper>
+        <ErrorMessage>{errorMessage && errorMessage}</ErrorMessage>
+        <ButtonWrapper>
+          <CancelButton onClick={closeEditBox}>
+            <CancelImage />
+            취소
+          </CancelButton>
+          <SubmitButton onClick={handleSubmitClick}>
+            <img />
+            완료
+          </SubmitButton>
+        </ButtonWrapper>
+      </BottomWrapper>
     </Wrapper>
   );
 }
@@ -107,7 +85,7 @@ const Form = styled.div`
 `;
 
 const FormType = styled.span`
-  width: 6em;
+  width: 7em;
   font-size: 0.75em;
   display: flex;
   align-items: center;
@@ -132,9 +110,20 @@ const DescriptionForm = styled.div`
   border-radius: 12px;
 `;
 
+const BottomWrapper = styled.div`
+  box-sizing: border-box;
+  padding-left: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ErrorMessage = styled.span`
+  color: red;
+`;
+
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: end;
   gap: 1em;
 `;
 
