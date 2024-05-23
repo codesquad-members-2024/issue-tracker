@@ -5,12 +5,13 @@ import Button from "./Button";
 
 interface PropsType {
 	h: string;
+	$ref?: React.RefObject<HTMLTextAreaElement>; //DELETE  옵셔널
 }
 
 const moving = "scale-75 top-2 left-0";
 const DELAY = 2000;
 
-function TextArea({ h }: PropsType) {
+function TextArea({ h, $ref }: PropsType) {
 	const [value, setValue] = useState("");
 	const [isVisible, setIsVisible] = useState(true);
 	const ButtonMemo = useMemo(
@@ -22,7 +23,7 @@ function TextArea({ h }: PropsType) {
 		[]
 	);
 
-	const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => setValue(e.target.value);
+	const onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => setValue(value);
 
 	useEffect(() => {
 		setIsVisible(true);
@@ -32,7 +33,7 @@ function TextArea({ h }: PropsType) {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [value]);
+	}, [$ref?.current?.value]);
 
 	return (
 		<div className={`relative mt-2 ${h}`}>
@@ -40,6 +41,7 @@ function TextArea({ h }: PropsType) {
 				id="textarea"
 				onChange={onChange}
 				value={value}
+				ref={$ref}
 				className="py-8 px-4 resize-none w-full h-full bg-grayscale.200 dark:bg-grayscale.700 rounded-2xl text-grayscale.700 dark:text-grayscale.400 focus:input-text--focus"
 			></textarea>
 			<label

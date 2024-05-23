@@ -3,20 +3,35 @@ import Button from "../common/Button";
 import SideBar from "../common/SideBar";
 import TextArea from "../common/TextArea";
 import IssueInput from "../common/IssueInput";
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
+import getNowTime from "../../utility/getNowTime";
 
 const border = "component-border dark:component-border--dark";
 
 function WritingIssue() {
 	const $title = useRef<HTMLInputElement>(null);
+	const $content = useRef<HTMLTextAreaElement>(null);
 	const [disabled, setDisabled] = useState("DISABLED");
 
-	const handleTitle= () => {
+	const handleTitle = () => {
 		if ($title.current?.value) {
 			setDisabled("DEFAULT");
 			return;
 		}
 		setDisabled("DISABLED");
+	};
+
+	const handleAddData = () => {
+		const data = {
+			title: $title.current?.value,
+			content: $content.current?.value,
+			createdAt: getNowTime(),
+			file: null,
+			milestoneId: 1,
+			labelIds: [],
+			assigneeIds: [],
+		};
+		console.log(data);
 	};
 
 	return (
@@ -35,14 +50,8 @@ function WritingIssue() {
 					/>
 				</div>
 				<div className="flex flex-col justify-center w-full h-full">
-					<IssueInput
-						h="h-[56px]"
-						w="w-full"
-						label="제목"
-						$title={$title}
-						handler={handleTitle}
-					/>
-					<TextArea h="h-[480px]" />
+					<IssueInput h="h-[56px]" w="w-full" label="제목" $title={$title} handler={handleTitle} />
+					<TextArea h="h-[480px]" $ref={$content} />
 				</div>
 				<div className="my-5 ml-5">
 					<SideBar />
@@ -50,6 +59,7 @@ function WritingIssue() {
 			</div>
 			<div className="my-5 flex flex-row-reverse">
 				<Button
+					onClick={handleAddData}
 					size="L"
 					type="CONTAINED"
 					icon={null}

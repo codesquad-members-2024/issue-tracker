@@ -1,14 +1,6 @@
 /// <reference types="react-scripts" />
 
 //DB DATA TYPE
-interface Label {
-	id: number;
-	name: string;
-	description: string;
-	backgroundColor: string;
-	textBright: boolean;
-}
-
 interface Issue {
 	id: number;
 	title: string;
@@ -44,3 +36,21 @@ interface MilestoneCounts {
 	openedCount: number;
 	totalCount: number;
 }
+
+// interface MilestoneData { 추가 안해도 될것같은 느낌
+// 	milestoneCounts: MilestoneCounts;
+// 	milestones: Milestone[];
+// }
+
+interface Label {
+	id: number;
+	name: string;
+	description: string;
+	backgroundColor: string;
+	textBright: boolean;
+}
+
+// interface LabelData {
+// 	labelCount: { totalCount: number };
+// 	labels: Label[];
+// }

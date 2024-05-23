@@ -8,6 +8,7 @@ interface PropsType {
 	label: string;
 	icon: string;
 	top: string;
+	data: Milestone[] | Label[] | Object[]; //TODO member[] type 추가
 }
 interface IconType {
 	[key: string]: IconProp;
@@ -19,7 +20,7 @@ const ICON: IconType = {
 
 const textColor = "text-grayscale.700 dark:text-grayscale.400";
 
-function DropdownIndicators({ label, icon, top }: PropsType) {
+function DropdownIndicators({ label, icon, top, data }: PropsType) {
 	const [open, setOpen] = useState(false);
 
 	const onToggle = (event: React.MouseEvent) => {
@@ -37,7 +38,7 @@ function DropdownIndicators({ label, icon, top }: PropsType) {
 					{label}
 					<FontAwesomeIcon icon={ICON[icon]} className="" />
 				</summary>
-				<DropdownPanel top={top} title={label} />
+				<DropdownPanel top={top} title={label} data={data} />
 			</details>
 
 			{open && (

@@ -4,8 +4,10 @@ const borderBottom = `border-b-[1px] ${border}`;
 interface PropsType {
 	top: string;
 	title: string;
+	data?: Milestone[] | Label[] | Object[]; //TODO member[] type 추가 옵셔널 변경
 }
-function DropdownPanel({ top, title }: PropsType) {
+function DropdownPanel({ top, title, data }: PropsType) {
+	console.log(data); //DELETE
 	//TODO : 이하 변수들은 차후 props로 변경 예정
 	const imgs: any = [
 		// "https://s3-alpha-sig.figma.com/img/bfa1/72b0/77fbdbfc84f8ad555402b23fb6c7a0ed?Expires=1716163200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=eI0HusP8AQJhfrYkbdft4etLT-322gDp7B7Px-jCgKq9YxT-2fFKD4o6AhzmnVaFjLWGiHP0xS~kATP~GzdJOyVdsfc4UEryn1QuF2T9PmoEdt0ZnUR7bqsSHuOReoVWy67p4Drl~meTCSGbWn8amC1-vFCT23Coy9HLU9fkNA0r3uh47-NMSV-Wx7IwUF202FHxOo027XQFyYGP9Xu56j19~mvu0d9TAlW~oHGscTheXQL5afzDdwBFrEGbMgU2Lli2QKdpkrDnjUKb0mRtqWOAVPU45~RZnFemwVP2UKq~e9Q68Q5u4zzvqrlcXbcTyHjkgYGiD6vSTPX-AlMiHA__",

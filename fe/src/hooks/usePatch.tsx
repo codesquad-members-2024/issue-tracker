@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import fetchData from "../API/fetchData";
+import fetchData from "../utility/fetchData";
 
 interface MilestoneDataType {
 	name: string;

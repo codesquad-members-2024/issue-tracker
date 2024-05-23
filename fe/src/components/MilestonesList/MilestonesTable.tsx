@@ -1,7 +1,7 @@
 import TabButton from "../common/TabButton";
 import Milestone from "./Milestone";
 import { useQuery } from "@tanstack/react-query";
-import fetchData from "../../API/fetchData";
+import fetchData from "../../utility/fetchData";
 
 interface PropsType {
 	queryParam: null | string;
