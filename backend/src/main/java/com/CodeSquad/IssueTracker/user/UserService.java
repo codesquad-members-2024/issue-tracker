@@ -6,9 +6,13 @@ import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import com.CodeSquad.IssueTracker.user.utils.UserValidate;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 
@@ -93,5 +97,33 @@ public class UserService {
 
     public Set<User> findAllByIds(Set<String> newAssigneeIds) {
         return userRepository.findAllById(newAssigneeIds);
+    }
+
+    public void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+//        ResponseCookie cookie = ResponseCookie.from(name, value)
+//                .path("/")
+//                .sameSite("None")
+//                .httpOnly(true)
+//                .secure(true)
+//                .maxAge(maxAge)
+//                .build();
+
+
+
+        //response.addHeader("Set-Cookie", cookieHeader);
+    }
+    public void customizeSessionCookie(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String sessionId = session.getId();
+
+        Cookie cookie = new Cookie("JSESSIONID", sessionId);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setMaxAge(3600);
+        //response.addCookie(cookie);
+        String cookieHeader = String.format("%s=%s; Path=/; HttpOnly; Secure; SameSite=None", cookie.getName(), cookie.getValue());
+        response.addHeader("Set-Cookie", cookieHeader);
+
     }
 }

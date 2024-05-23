@@ -3,6 +3,7 @@ package com.CodeSquad.IssueTracker.user;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,13 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
-                                       HttpServletRequest request) {
+                                       HttpServletRequest request,
+                                       HttpServletResponse response) {
         userService.isLoginRequestNotExists(loginRequest);
         userService.authenticate(loginRequest);
         userService.addLoginSession(loginRequest, request.getSession());
+
+        userService.customizeSessionCookie(request, response);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

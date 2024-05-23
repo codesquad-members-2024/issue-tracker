@@ -2,6 +2,7 @@ package com.CodeSquad.IssueTracker.config;
 
 import com.CodeSquad.IssueTracker.interceptor.CheckLoginInterceptor;
 import org.springframework.boot.web.servlet.server.CookieSameSiteSupplier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -18,6 +19,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login", "/registration");
     }
 
+    @Bean
     public CookieSameSiteSupplier applicationCookieSameSiteSupplier() {
         return CookieSameSiteSupplier.ofNone();
     }
