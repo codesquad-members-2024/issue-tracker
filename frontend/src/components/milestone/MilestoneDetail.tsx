@@ -4,13 +4,11 @@ import calendarIcon from "../../img/icon/calendarIcon.svg";
 import archieveIcon from "../../img/icon/archieveIcon.svg";
 import editIcon from "../../img/icon/editIcon_gray.svg";
 import deleteIcon from "../../img/icon/deleteIcon.svg";
-import { MilestoneContext, MilestoneDetailType } from "../../contexts/MilestoneContext";
+import { MilestoneDetailType } from "../../contexts/MilestoneContext";
 import numberUtils from "../../utils/NumberUtils";
 import dateUtils from "../../utils/DateUtils";
-import { deleteMilestone, sendMilestonesRequest, toggleMilestoneState } from "../../api/MilestoneAPI";
-import { useCallback, useContext, useState } from "react";
-import { useQuery } from "react-query";
 import MilestoneEditBox from "./MilestoneEditBox";
+import useMilestoneDetail from "../../hooks/logics/useMilestoneDetail";
 
 function MilestoneDetail({
   milestoneId,
@@ -21,45 +19,8 @@ function MilestoneDetail({
   closedIssue,
   isClosed,
 }: MilestoneDetailType) {
-  const { setOpenMilestones, setCloseMilestones } = useContext(MilestoneContext);
-  const [isToEdit, setIsToEdit] = useState(false);
-
-  const toggleEdit = useCallback(() => {
-    setIsToEdit((prev) => !prev);
-  }, []);
-
-  const handleDeleteClick = useCallback(async () => {
-    await deleteMilestone(milestoneId);
-    const updatedMilestones = await fetchMilestones();
-    setOpenMilestones(updatedMilestones[0]);
-    setCloseMilestones(updatedMilestones[1]);
-  }, []);
-
-  const fetchMilestones = () => Promise.all([sendMilestonesRequest("open"), sendMilestonesRequest("close")]);
-
-  const { refetch } = useQuery("milestones", fetchMilestones);
-
-  const handleOpenButtonClick = () => {
-    toggleMilestoneState("open", milestoneId).then(() => {
-      refetch().then(({ data }) => {
-        if (data) {
-          setOpenMilestones(data[0]);
-          setCloseMilestones(data[1]);
-        }
-      });
-    });
-  };
-
-  const handleCloseButtonClick = () => {
-    toggleMilestoneState("close", milestoneId).then(() => {
-      refetch().then(({ data }) => {
-        if (data) {
-          setOpenMilestones(data[0]);
-          setCloseMilestones(data[1]);
-        }
-      });
-    });
-  };
+  const { isToEdit, toggleEdit, handleOpenButtonClick, handleCloseButtonClick, handleDeleteClick } =
+    useMilestoneDetail(milestoneId);
 
   return (
     <>
@@ -68,7 +29,7 @@ function MilestoneDetail({
           type="edit"
           milestoneId={milestoneId}
           content={{ milestoneId, title, description, deadline, totalIssue, closedIssue, isClosed }}
-          handleCancelClick={toggleEdit}
+          closeEditBox={toggleEdit}
         />
       ) : (
         <Wrapper>

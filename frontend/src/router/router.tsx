@@ -1,5 +1,4 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-import useUserStore from "../hooks/stores/useUserStore";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "../components/login/Login";
 import Registration from "../components/registration/Registration";
 import Main from "../components/Main";
@@ -9,18 +8,6 @@ import LabelList from "../components/label/LabelList";
 import MilestoneList from "../components/milestone/MilestoneList";
 import { LabelProvider } from "../contexts/LabelContext";
 import { MilestoneProvider } from "../contexts/MilestoneContext";
-
-// interface AuthRouteProps {
-//   children: React.ReactNode;
-// }
-
-// export const AuthRoute = ({ children }: AuthRouteProps) => {
-//   const { isLoggedIn } = useUserStore();
-
-//   if (!isLoggedIn) return <Navigate to="/login" />;
-
-//   return <>{children}</>;
-// };
 
 export const router = createBrowserRouter([
   {

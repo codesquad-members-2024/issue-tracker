@@ -25,11 +25,19 @@ const dateUtils = {
     return `${time.getFullYear()}. ${time.getMonth() + 1}. ${time.getDate()}`;
   },
 
-  parseDateText(dateText: string) {
-    const deadline = new Date(dateText);
+  isValidDateText(dateText: string | undefined) {
+    const date = new Date(dateText || "");
 
-    return deadline.toISOString();
-  }
+    return !isNaN(date.getTime());
+  },
+
+  parseDateText(dateText: string | undefined) {
+    const date = new Date(dateText || "");
+    const timezoneOffset = date.getTimezoneOffset() * 60000; // 분을 밀리초로 변환
+    const convertedDate = new Date(date.getTime() - timezoneOffset);
+
+    return convertedDate.toISOString();
+  },
 };
 
 export default dateUtils;
