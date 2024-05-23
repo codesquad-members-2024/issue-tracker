@@ -43,9 +43,8 @@ public class MilestoneController {
     @PutMapping("/{milestoneId}")
     public ResponseEntity<Milestone> updateMilestone(@PathVariable Long milestoneId,
         @RequestBody MilestoneRequest milestoneRequest) {
-        Milestone updatedMilestone = milestoneService.updateMilestone(milestoneId,
-            milestoneRequest);
-        return ResponseEntity.ok().body(updatedMilestone);
+        milestoneService.updateMilestone(milestoneId, milestoneRequest);
+        return ResponseEntity.created(URI.create("api/milestones/" + milestoneId)).build();
     }
 
 //    @DeleteMapping("/{milestoneId}")

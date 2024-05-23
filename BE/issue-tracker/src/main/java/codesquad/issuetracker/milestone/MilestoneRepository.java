@@ -1,7 +1,6 @@
 package codesquad.issuetracker.milestone;
 
-import codesquad.issuetracker.label.Label;
-import java.time.LocalDateTime;
+import codesquad.issuetracker.global.repository.CustomCrudRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Modifying;
@@ -11,14 +10,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MilestoneRepository extends CrudRepository<Milestone, Long>, MilestoneCustomRepository {
+public interface MilestoneRepository extends CrudRepository<Milestone, Long>, MilestoneCustomRepository,
+    CustomCrudRepository<Milestone, Long> {
 
     Page<Milestone> findAll(Pageable pageable);
-
-    @Modifying
-    @Query("UPDATE MILESTONE m SET m.title = :title, m.description = :description, m.DUE_DATE = :dueDate WHERE m.id = :id")
-    int updateMilestone(@Param("id") Long id, @Param("title") String title,
-        @Param("description") String description, @Param("dueDate") LocalDateTime dueDate);
 
     @Modifying
     @Query("UPDATE MILESTONE m SET m.state = :state WHERE m.id = :id")

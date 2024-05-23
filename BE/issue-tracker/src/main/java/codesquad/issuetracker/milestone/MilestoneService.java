@@ -38,15 +38,8 @@ public class MilestoneService {
 
     }
 
-    public Milestone updateMilestone(Long milestoneId,
-        MilestoneRequest milestoneRequest) {
-        int affectedRow = milestoneRepository.updateMilestone(milestoneId,
-            milestoneRequest.getTitle(),
-            milestoneRequest.getDescription(), milestoneRequest.getDueDate());
-        if (affectedRow == 0) {
-            throw new IllegalArgumentException("Milestone not found");
-        }
-        return findById(milestoneId);
+    public void updateMilestone(Long milestoneId, MilestoneRequest milestoneRequest) {
+        milestoneRepository.update(milestoneId, milestoneRequest.toEntity());
     }
 
     public Milestone closeMilestone(Long milestoneId) {
