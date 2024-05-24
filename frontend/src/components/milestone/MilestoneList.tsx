@@ -38,7 +38,7 @@ function MilestoneList() {
       <MilestoneHeader />
       {isToAdd && (
         <EditBoxWrapper>
-          <MilestoneEditBox type="new" closeEditBox={() => setIsToAdd(!isToAdd)} />
+          <MilestoneEditBox editType="new" closeEditBox={() => setIsToAdd(!isToAdd)} />
         </EditBoxWrapper>
       )}
       <MilestoneTable>

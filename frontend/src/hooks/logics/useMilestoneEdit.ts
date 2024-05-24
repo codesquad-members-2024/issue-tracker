@@ -7,7 +7,7 @@ import { MilestoneDetailType } from "../../contexts/MilestoneContext";
 type EditType = "new" | "edit";
 
 export interface MilestoneEditBoxProps {
-  type: EditType;
+  editType: EditType;
   milestoneId?: number;
   content?: MilestoneDetailType;
   closeEditBox: () => void;
@@ -23,7 +23,7 @@ const defaultContent = {
   isClosed: false,
 };
 
-const useMilestoneEdit = ({ type, milestoneId = 0, content = defaultContent, closeEditBox }: MilestoneEditBoxProps) => {
+const useMilestoneEdit = ({ editType, milestoneId = 0, content = defaultContent, closeEditBox }: MilestoneEditBoxProps) => {
   const client = useQueryClient();
   const titleRef = useRef<HTMLInputElement>(null);
   const deadlineRef = useRef<HTMLInputElement>(null);
@@ -61,7 +61,7 @@ const useMilestoneEdit = ({ type, milestoneId = 0, content = defaultContent, clo
 
     const parsedDeadline = dateUtils.parseDateText(deadline);
 
-    type === "new"
+    editType === "new"
       ? fetchNewMilestone({ title, deadline: parsedDeadline, description })
       : fetchPutMilestone({ milestoneId, title, deadline: parsedDeadline, description });
   };
@@ -75,7 +75,7 @@ const useMilestoneEdit = ({ type, milestoneId = 0, content = defaultContent, clo
     if (descriptionRef.current) descriptionRef.current.value = description;
   }, [content]);
 
-  return { type, titleRef, deadlineRef, descriptionRef, errorMessage, closeEditBox, handleSubmitClick };
+  return { editType, titleRef, deadlineRef, descriptionRef, errorMessage, closeEditBox, handleSubmitClick };
 };
 
 export default useMilestoneEdit;

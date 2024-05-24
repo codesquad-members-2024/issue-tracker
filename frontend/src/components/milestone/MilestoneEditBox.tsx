@@ -4,12 +4,12 @@ import useMilestoneEdit, { MilestoneEditBoxProps } from "../../hooks/logics/useM
 type EditType = "new" | "edit";
 
 function MilestoneEditBox(props: MilestoneEditBoxProps) {
-  const { type, titleRef, deadlineRef, descriptionRef, errorMessage, closeEditBox, handleSubmitClick } =
+  const { editType, titleRef, deadlineRef, descriptionRef, errorMessage, closeEditBox, handleSubmitClick } =
     useMilestoneEdit(props);
 
   return (
-    <Wrapper type={type}>
-      <Title>{type === "new" ? "새로운 마일스톤 추가" : "마일스톤 편집"}</Title>
+    <Wrapper type={editType}>
+      <Title>{editType === "new" ? "새로운 마일스톤 추가" : "마일스톤 편집"}</Title>
       <Content>
         <FormWrapper>
           <Form>

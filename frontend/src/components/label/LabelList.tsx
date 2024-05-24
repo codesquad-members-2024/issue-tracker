@@ -22,7 +22,7 @@ function LabelList() {
       <LabelHeader />
       {isToAdd && (
         <EditBoxWrapper>
-          <LabelEditBox type="new" handleCancelClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} />
+          <LabelEditBox editType="new" closeEditBox={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} />
         </EditBoxWrapper>
       )}
       <LabelTable>
