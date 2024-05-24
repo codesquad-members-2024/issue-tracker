@@ -55,6 +55,9 @@ export function LabelRegister({
 			});
 		}
 	}, [isEdit, label]);
+
+	//todo: post, put 이후에 목록 조회 다시
+
 	const handleTextColor = e => {
 		switch (e.target.value) {
 			case '밝은 색상':

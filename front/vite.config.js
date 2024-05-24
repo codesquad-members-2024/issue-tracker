@@ -8,9 +8,8 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
 	plugins: [react()],
 	server: {
-		// host: '192.168.45.216', //home
-		host: '192.168.1.25', //office
-		port: 5173,
+		host: 'localhost',
+		port: 8080,
 		open: true,
 	},
 	resolve: {

@@ -18,15 +18,13 @@ export function LabelListItem({ label }) {
 				<LabelRegister isEdit={isEdit} setIsEdit={setIsEdit} label={label} />
 			) : (
 				<>
-					<StyledLabelInfo>
-						<Label
-							className='label'
-							name={label.name}
-							textColor={label.textColor}
-							backgroundColor={label.backgroundColor}
-						/>
-						<p>{label.description}</p>
-					</StyledLabelInfo>
+					<Label
+						className='label'
+						name={label.name}
+						textColor={label.textColor}
+						backgroundColor={label.backgroundColor}
+					/>
+					<StyledLabelInfo>{label.description}</StyledLabelInfo>
 					<div className='button-list'>
 						<Button
 							type='button'
@@ -50,10 +48,11 @@ export function LabelListItem({ label }) {
 	);
 }
 const StyledListItem = styled.div`
+	width: 100%;
+	justify-content: space-between;
 	padding: 32px;
 	display: flex;
 	align-items: center;
-	column-gap: 32px;
 	border-bottom: 1px solid ${({ theme }) => theme.color.neutral.border.default};
 	&:last-child {
 		border-bottom: none;
@@ -74,11 +73,9 @@ const StyledListItem = styled.div`
 `;
 
 const StyledLabelInfo = styled.span`
-	width: 100%;
-	display: flex;
-	column-gap: 32px;
-	align-items: center;
-	p {
-		flex: 1 1 100%;
-	}
+	max-width: 870px;
+
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 `;

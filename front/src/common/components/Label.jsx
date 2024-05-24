@@ -16,7 +16,7 @@ const StyledWrapper = styled.div`
 	padding: 4px 12px;
 	border-radius: ${({ theme }) => theme.radius.large};
 	background: ${({ $backgroundColor }) => $backgroundColor};
-
+	flex-shrink: 0;
 	color: ${({ $textColor }) => $textColor};
 
 	${({ theme }) => theme.typography.medium[12]};
