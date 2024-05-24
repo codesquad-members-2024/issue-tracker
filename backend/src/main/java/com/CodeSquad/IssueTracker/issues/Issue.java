@@ -2,6 +2,7 @@ package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.assignee.dto.AssigneeId;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelId;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,4 +37,12 @@ public class Issue {
     @MappedCollection(idColumn = "issue_id")
     private Set<LabelId> labels;
 
+    public Issue(Long issueId, String title, String author, LocalDateTime publishedAt, Boolean isClosed, Long milestoneId) {
+        this.issueId = issueId;
+        this.title = title;
+        this.author = author;
+        this.publishedAt = publishedAt;
+        this.isClosed = isClosed;
+        this.milestoneId = milestoneId;
+    }
 }
