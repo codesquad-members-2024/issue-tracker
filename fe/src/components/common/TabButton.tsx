@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 
@@ -71,11 +71,12 @@ function TabButton({ position, leftCount, rightCount, click }: PropsType) {
 	const [left, setLeft] = useState("DEFAULT");
 	const [right, setRight] = useState("DEFAULT");
 
-	// useEffect(() => { //DELETE
-	if (click === "left") setLeft("SELECTED");
-	if (click === "right") setRight("SELECTED");
-	if (position === "MILESTONE" || position === "ISSUE") setLeft("SELECTED");
-	// }, []);
+	useEffect(() => {
+		//DELETE
+		if (click === "left") setLeft("SELECTED");
+		if (click === "right") setRight("SELECTED");
+		if (position === "MILESTONE" || position === "ISSUE") setLeft("SELECTED");
+	}, []);
 
 	const onLeftClick = () => {
 		setLeft("SELECTED");
