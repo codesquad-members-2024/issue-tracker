@@ -20,6 +20,7 @@ public class CommentController {
             UriComponentsBuilder uriComponentsBuilder,
             @SessionAttribute(name = "LOGIN USER", required = false) User user
     ) {
+        comment.setLoginId(user.getLoginId());
         Comment createdComment = commentService.createComment(comment);
         URI location = uriComponentsBuilder.path("/comments/{id}")
                 .buildAndExpand(createdComment.getId())
