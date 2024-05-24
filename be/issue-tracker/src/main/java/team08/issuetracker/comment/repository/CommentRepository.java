@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface CommentRepository extends CrudRepository<Comment, Long> {
     List<Comment> findByIssueId(Long issueId);
     Optional<Comment> findByIdAndIssueId(Long id, Long issueId);
-    void deleteByIdAndIssueId(Long id, Long issueId);
 }
