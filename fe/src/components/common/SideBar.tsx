@@ -8,12 +8,12 @@ const borderBottom = `border-b-[1px] ${border}`;
 
 function SideBar() {
 	const { data: milestone, refetch: milestoneRefetch } = useGet("milestone", "/milestone");
-	const { data: label, refetch: lableRefetch } = useGet("label", "/label");
-	const { data: member, refetch: memberRefetch } = useGet("member", "/member");
+	// const { data: label, refetch: lableRefetch } = useGet("label", "/label");
+	// const { data: member, refetch: memberRefetch } = useGet("member", "/member");
 	const sideBarItems = [
 		// { title: "담당자", data: member, fetch: () => milestoneRefetch() }, //TODO 데이터나오면 변경예정
 		// { title: "레이블", data: label.labels, fetch: () => lableRefetch() },
-		{ title: "마일스톤", data: milestone && milestone.milestones, fetch: () => memberRefetch() },
+		{ title: "마일스톤", data: milestone && milestone.milestones, fetch: () => milestoneRefetch() },
 	];
 
 	const handleFetch = (fetchedData: FetchedDataType, fetch: () => void) => {

@@ -1,5 +1,4 @@
 import Label from "./Label";
-import { useQuery } from "@tanstack/react-query";
 
 const border = "component-border dark:component-border--dark";
 

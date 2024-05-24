@@ -22,7 +22,7 @@ function Login({ setIsLogin }: Props) {
 
 	useEffect(() => {
 		if (data) setIsLogin(true);
-	}, [data]);
+	}, [data, setIsLogin]);
 
 	const onIdBlur = () => {
 		const { validity, value } = idRef.current as HTMLInputElement;
