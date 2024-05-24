@@ -57,9 +57,9 @@ public class MemberController {
     }
 
     /* TODO : validate url 삭제하기
-    *   - intercepter 사용하여 로그인 쿠키 토큰 검증하기
-    *   - jwtService의 validate 분리하기
-    * */
+     *   - intercepter 사용하여 로그인 쿠키 토큰 검증하기
+     *   - jwtService의 validate 분리하기
+     * */
     @GetMapping("/validate")
     public ResponseEntity<?> validateToken(@CookieValue(name = TOKEN_NAME) String jwtToken) {
         if (!jwtService.parseJwtToken(jwtToken)) {
