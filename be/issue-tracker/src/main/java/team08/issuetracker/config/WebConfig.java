@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "https://issue-tracker-team08.site",    // 배포 Domain 주소
                         "http://192.168.1.18:3000")             // 개발용 Domain 주소
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization", "Set-Cookie")
                 .allowCredentials(true); // 자격 증명 허용
