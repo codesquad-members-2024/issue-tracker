@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
-import useFetch from "../../hooks/useFetch";
 import { useState } from "react";
 import { NewLabels } from "./NewLabels";
 
-export function LabelsContent() {
-  const { state: data, loading, error, fetchData, deleteData } = useFetch(`${import.meta.env.VITE_SERVER}/labels`);
+export function LabelsContent(props) {
+  const { labels, loading, error, fetchData, putData, deleteData } = props;
 
   const [onEdit, setOnEdit] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(null);
@@ -31,20 +30,20 @@ export function LabelsContent() {
 
   return (
     <Wrap>
-      <LabelsHeader>{data?.countsOfLabels}개의 레이블</LabelsHeader>
+      <LabelsHeader>{labels?.countsOfLabels}개의 레이블</LabelsHeader>
       {onEdit && (
         <NewLabels
           type="edit"
-          closeNewLabels={closeNewLabels}
           labelId={selectedLabel?.id}
           initialData={selectedLabel}
+          {...{ closeNewLabels, fetchData, putData, deleteData }}
         />
       )}
       <LabelsList>
-        {data?.countsOfLabels === 0 ? (
+        {labels?.countsOfLabels === 0 ? (
           <Content />
         ) : (
-          data?.labelList.map((label) => (
+          labels?.labelList.map((label) => (
             <Content key={label.id}>
               <div className="label">
                 <StyledLabel $backcolor={label.color} color={label.fontColor}>
@@ -133,4 +132,5 @@ const Button = styled.div`
   padding-left: 5px;
   align-items: center;
   cursor: pointer;
+  gap: 5px;
 `;

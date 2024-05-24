@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { ContentNavStyles } from "@/styles/commonStyles";
 import { useState, useEffect } from "react";
-import useFetch from "../../hooks/useFetch";
+import { DropdownIcon } from "@/icons/DropdownIcon";
 
 const getRandomColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
 
-export function NewLabels({ type, closeNewLabels, labelId, initialData }) {
-  const { postData, putData } = useFetch(
-    `${import.meta.env.VITE_SERVER}/labels`
-  );
+export function NewLabels(props) {
+  const { postData, fetchData, putData, type, closeNewLabels, labelId, initialData } = props;
+
   const [labelName, setLabelName] = useState("");
   const [labelColor, setLabelColor] = useState("");
   const [labelDescription, setLabelDescription] = useState("");
@@ -24,13 +23,10 @@ export function NewLabels({ type, closeNewLabels, labelId, initialData }) {
     }
   }, [initialData]);
 
-  const toggleFontColor = () => {
-    setLabelFontColor((prev) => (prev === "black" ? "white" : "black"));
-  };
+  const toggleFontColor = () => setLabelFontColor((prev) => (prev === "black" ? "white" : "black"));
+  const toggleBackgroundColor = () => setLabelColor(getRandomColor);
 
-  const toggleBackgroundColor = () => {
-    setLabelColor(getRandomColor);
-  };
+  const fontColor = labelFontColor === "black" ? "어두운 글자색" : "밝은 글자색";
 
   const handleSubmit = async () => {
     const newLabel = {
@@ -42,6 +38,7 @@ export function NewLabels({ type, closeNewLabels, labelId, initialData }) {
 
     type == "new" ? await postData(newLabel) : await putData(labelId, newLabel);
     closeNewLabels();
+    fetchData();
   };
 
   return (
@@ -86,7 +83,7 @@ export function NewLabels({ type, closeNewLabels, labelId, initialData }) {
                 />
               </StyledColor>
               <RandomBtn color={labelColor} onClick={toggleBackgroundColor}></RandomBtn>
-              <button className="font" onClick={toggleFontColor}>{labelFontColor}</button>
+              <button className="font" onClick={toggleFontColor}>{fontColor}<DropdownIcon /></button>
             </ColorWraper>
           </LabelDescript>
         </Content>
@@ -204,16 +201,17 @@ const ColorWraper = styled.div`
     cursor: pointer;
     font-size: 18px;
     border-radius: 20px;
-    border: solid #dadbef;
   }
   .font {
     background-color: white;
     padding: 0 20px;
+    border: none;
   }
 `;
 
 const RandomBtn = styled.button`
   background-color : white;
   background-${(color) => color};
+  border: solid #dadbef;
   width: 40px;
 `;
