@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import team08.issuetracker.jwt.JwtService;
 import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.model.dto.MemberCreationResponse;
-import team08.issuetracker.member.model.dto.MemberResponse;
 import team08.issuetracker.member.model.dto.MemberCreationRequest;
 import team08.issuetracker.member.model.dto.MemberLoginRequest;
 import team08.issuetracker.member.service.MemberService;
