@@ -41,7 +41,6 @@ public class IssueService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final MilestoneService milestoneService;
-    private final MilestoneRepository milestoneRepository;
     private final LabelRepository labelRepository;
     private final IssueLabelRepository issueLabelRepository;
     private final AssigneeRepository assigneeRepository;
@@ -49,13 +48,13 @@ public class IssueService {
     private final AssigneeService assigneeService;
 
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
-                        UserRepository userRepository, MilestoneRepository milestoneRepository,
-                        LabelRepository labelRepository, IssueLabelRepository issueLabelRepository,
-                        MilestoneService milestoneService, AssigneeRepository assigneeRepository, LabelService labelService, AssigneeService assigneeService) {
+                        UserRepository userRepository,LabelRepository labelRepository, 
+                        IssueLabelRepository issueLabelRepository,MilestoneService milestoneService, 
+                        AssigneeRepository assigneeRepository, LabelService labelService, 
+                        AssigneeService assigneeService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        this.milestoneRepository = milestoneRepository;
         this.labelRepository = labelRepository;
         this.issueLabelRepository = issueLabelRepository;
         this.milestoneService = milestoneService;

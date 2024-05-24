@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Getter
 @Builder
+@AllArgsConstructor
 @Table("issues")
 public class Issue {
     @Id
