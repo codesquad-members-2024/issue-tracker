@@ -20,7 +20,7 @@ jobs:
         working-directory: ./fe #디렉토리명
 
       - name: Build
-        run: npm run builds
+        run: npm run build
         working-directory: ./fe
 
       - name: SHOW AWS CLI VERSION
