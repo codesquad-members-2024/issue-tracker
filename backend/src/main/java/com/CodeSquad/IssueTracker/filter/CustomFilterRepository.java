@@ -22,6 +22,10 @@ public class CustomFilterRepository {
     public List<Issue> findFilteredIssues(Boolean isClosed, String assignee, List<String> labels, String milestone, String author) {
         StringBuilder sql = new StringBuilder("SELECT i.* FROM issues i ");
 
+        if(assignee != null && !assignee.isEmpty()) {
+            sql.append("JOIN assignees a ON i.issue_id = a.issue_id ");
+        }
+
         if (labels != null && !labels.isEmpty()) {
             sql.append("JOIN issueLabel il ON i.issue_id = il.issue_id ")
                     .append("JOIN labels l ON il.label_id = l.label_id ");
@@ -37,7 +41,7 @@ public class CustomFilterRepository {
         params.add(isClosed);
 
         if (assignee != null && !assignee.isEmpty()) {
-            sql.append("AND i.assignee = ? ");
+            sql.append("AND a.user_id = ? ");
             params.add(assignee);
         }
 
