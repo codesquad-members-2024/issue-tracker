@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team08.issuetracker.label.model.Label;
-import team08.issuetracker.label.model.dto.LabelCountDto;
-import team08.issuetracker.label.model.dto.LabelCreationDto;
+import team08.issuetracker.label.model.dto.*;
 import team08.issuetracker.label.service.LabelService;
 
 @RestController
@@ -17,20 +16,56 @@ import team08.issuetracker.label.service.LabelService;
 public class LabelController {
     private final LabelService labelService;
 
-    // Create
-    @PostMapping
-    public ResponseEntity<String> createLabel(@RequestBody LabelCreationDto labelCreationDto) {
-        Label label = labelService.createLabel(labelCreationDto);
+    @GetMapping
+    public ResponseEntity<LabelListWithCountResponse> getLabelsWithCount() {
+        LabelListWithCountResponse labelListWithCountResponse = labelService.getLabelsWithCount();
 
-        log.info("라벨 생성 성공 : {}", label.toString());
-
-        return ResponseEntity.ok("라벨생성 성공! 라벨 #" + label.getId() + " 라벨 이름 : " + label.getName());
+        return ResponseEntity.ok(labelListWithCountResponse);
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<LabelCountDto> getLabelCount() {
-        LabelCountDto labelCountDto = labelService.getLabelCount();
 
-        return ResponseEntity.ok(labelCountDto);
+    @PostMapping
+    public ResponseEntity<LabelCreationResponse> createLabel(@RequestBody LabelCreationRequest labelCreationRequest) {
+        Label label = labelService.createLabel(labelCreationRequest);
+
+        LabelCreationResponse response = LabelCreationResponse.from(label);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("{id}")
+    public ResponseEntity<LabelResponse> getLabel(@PathVariable long id) {
+        Label label = labelService.getLabel(id);
+
+        LabelResponse labelResponse = new LabelResponse(label);
+
+        return ResponseEntity.ok(labelResponse);
+    }
+
+
+    @PatchMapping("{id}")
+    public ResponseEntity<LabelUpdateResponse> updateLabel(@PathVariable long id, @RequestBody LabelUpdateRequest labelUpdateRequest) {
+        Label label = labelService.updateLabel(id, labelUpdateRequest);
+
+        LabelUpdateResponse response = LabelUpdateResponse.from(label);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<LabelDeleteResponse> deleteLabel(@PathVariable long id) {
+        labelService.deleteLabel(id);
+
+        LabelDeleteResponse response = LabelDeleteResponse.from(id);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 }
