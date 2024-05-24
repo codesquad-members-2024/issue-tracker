@@ -10,9 +10,9 @@ public class Member {
     private final String password;
     private final String profileImage;
 
-    public Member(String memberId, String password) {
+    public Member(String memberId, String password, String profileImage) {
         this.memberId = memberId;
         this.password = password;
-        this.profileImage = "https://issue-tracker-storage.s3.ap-northeast-2.amazonaws.com/profiles/kirby.webp";    // default
+        this.profileImage = profileImage;    // default
     }
 }

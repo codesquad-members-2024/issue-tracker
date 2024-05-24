@@ -26,7 +26,6 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<MemberCreationResponse> registerMember(@RequestBody MemberCreationRequest memberCreationRequest) {
-
         Member member = memberService.registerMember(memberCreationRequest);
 
         MemberCreationResponse response = MemberCreationResponse.from(member);

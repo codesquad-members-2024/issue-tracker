@@ -29,7 +29,7 @@ public class MemberService {
     public Member registerMember(MemberCreationRequest memberCreationRequest) {
         validateMemberForm(memberCreationRequest.memberId(), memberCreationRequest.password());
 
-        Member member = new Member(memberCreationRequest.memberId(), memberCreationRequest.password());
+        Member member = memberCreationRequest.toEntity();
 
         try {
             return memberRepository.insert(member);
