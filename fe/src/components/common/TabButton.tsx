@@ -72,11 +72,10 @@ function TabButton({ position, leftCount, rightCount, click }: PropsType) {
 	const [right, setRight] = useState("DEFAULT");
 
 	useEffect(() => {
-		//DELETE
 		if (click === "left") setLeft("SELECTED");
 		if (click === "right") setRight("SELECTED");
 		if (position === "MILESTONE" || position === "ISSUE") setLeft("SELECTED");
-	}, []);
+	}, [click, position]);
 
 	const onLeftClick = () => {
 		setLeft("SELECTED");
