@@ -1,11 +1,14 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/icons/LogoIcon";
 
 export function Header() {
+  const navigate = useNavigate();
+  const navigateHome = () => navigate("/");
+
   return (
     <StyledHeader>
-      <StyledLogo />
+      <StyledLogo onClick={navigateHome}/>
       <Link to={"/login"}>
         <img src="/img/frog.png" />
       </Link>
