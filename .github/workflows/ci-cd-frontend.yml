@@ -23,7 +23,7 @@ jobs:
       - name: Build
         run: |
           cd frontend
-          yarn build
+          REACT_APP_SERVER=${{ secrets.REACT_APP_SERVER }} yarn build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
