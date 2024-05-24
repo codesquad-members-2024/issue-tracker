@@ -1,33 +1,39 @@
-import FileUploader from "../../common/FileUploader";
+import { useState } from "react";
+import CommentBox from "../../common/CommentBox";
 import { CommentCard } from "./CommentCard";
 import { Comment } from "./TitleContainer";
 
 interface CommentAreaProps {
-    commentData: Comment[]
+    commentData: Comment[];
 }
-const CommentArea = ({commentData}: CommentAreaProps) => {
+const CommentArea = ({ commentData }: CommentAreaProps) => {
+    const [comment, setComment] = useState({ description: "" });
+
+    const handleCreate = () => {
+        // 코멘트 생성 보내기
+    }
+
     return (
         <div className="h-full">
-            
             {commentData.map((curData, idx) => (
                 <CommentCard commentInfo={curData} key={idx} />
             ))}
-            <div
-                className={`w-full bg-gray-200 dark:bg-darkModeBorderBG rounded-xl p-1 pl-2 h-[186px] flex flex-col justify-between`}
+            <CommentBox
+                height="h-[200px]"
+                issueData={comment}
+                setIssueData={setComment}
+            />
+            <button
+                onClick={handleCreate}
+                disabled={comment.description === ""}
+                className={`${
+                    comment.description === "" && "bg-gray-200"
+                } flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px] ml-auto mt-4`}
             >
-                <div className="font-normal opacity-60">
-                    코맨트를 입력하세요.
-                </div>
-                <textarea
-                    name="description"
-                    className={`h-full bg-gray-200 dark:bg-darkModeBorderBG w-full outline-none rounded-xl`}
-                />
-                <FileUploader />
-            </div>
+                완료
+            </button>
         </div>
     );
 };
 
 export default CommentArea;
-
-

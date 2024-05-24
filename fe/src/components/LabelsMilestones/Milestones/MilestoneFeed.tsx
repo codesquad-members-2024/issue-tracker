@@ -34,14 +34,14 @@ export const MilestoneFeed = ({ milestoneData }: MilestoneFeedProps) => {
             <div className="h-[45px] bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG flex text-sm rounded-t-lg">
                 <div className="flex items-center gap-4 text-sm ml-4">
                     <button
-                        className={`${isOpen ? "font-bold" : ""}`}
+                        className={`${isOpen === "OPEN" ? "font-bold" : ""}`}
                         onClick={() => setOpen("OPEN")}
                     >
                         <InfoCircleOutlined /> 열린 마일스톤(
                         {MilestoneLength.open})
                     </button>
                     <button
-                        className={`${!isOpen ? "font-bold" : ""}`}
+                        className={`${isOpen !== "OPEN" ? "font-bold" : ""}`}
                         onClick={() => setOpen("CLOSED")}
                     >
                         <CreditCardOutlined /> 닫힌 마일스톤(

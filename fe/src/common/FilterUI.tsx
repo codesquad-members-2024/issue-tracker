@@ -92,13 +92,7 @@ const FilterUI: React.FC<FilterProps> = ({
                             className="flex-grow border-b-2 border-gray-200 px-6 flex items-center justify-between h-10"
                             key={idx}
                         >
-                            <div
-                                className={
-                                    selectItem?.value === type.value
-                                        ? "font-bold"
-                                        : ""
-                                }
-                            >
+                            <div className={`${selectItem?.value === type.value && "font-bold"}`}>
                                 {type.value}
                             </div>
                             {selectItem?.value === type.value ? (

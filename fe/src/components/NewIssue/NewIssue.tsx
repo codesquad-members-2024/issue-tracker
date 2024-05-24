@@ -40,7 +40,7 @@ const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
                 </div>
             </div>
             <div>
-                <CommentBox height={"400"} issueData={issueData} setIssueData={setIssueData}/>
+                <CommentBox height={"h-[400px]"} issueData={issueData} setIssueData={setIssueData}/>
             </div>
         </div>
     );

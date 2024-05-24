@@ -83,9 +83,9 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
             className={`${
                 ModifyDeleteState.state === "create" ||
                 ModifyDeleteState.id === curMilestone?.id
-                    ? ""
+                    ? "my-4"
                     : "hidden"
-            } w-full h-72 border-2 border-gray-300 mt-4 rounded-xl bg-white dark:bg-darkModeBorderBG`}
+            } w-full h-72 border-2 border-gray-300  rounded-xl bg-white dark:bg-darkModeBorderBG`}
         >
             <div className="p-6 gap-2 flex flex-col h-full">
                 <h3 className="font-medium text-xl mb-4">

@@ -2,9 +2,10 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { PaperClipOutlined } from "@ant-design/icons";
 import { IssueData } from "../pages/NewPage";
 import AWS from "aws-sdk";
+import { SignUpForm } from "../pages/SignUp";
 
 interface FileUploaderProps {
-    setIssueData:React.Dispatch<React.SetStateAction<IssueData>>
+    setIssueData:React.Dispatch<React.SetStateAction<IssueData | SignUpForm |{description: string;}>>
 }
 
 const FileUploader = ({setIssueData}:FileUploaderProps) => {

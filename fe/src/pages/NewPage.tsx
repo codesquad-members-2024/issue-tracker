@@ -23,11 +23,7 @@ const NewPage = () => {
         milestoneId: 0,
     });
 
-    const handleCreate = () => {
-        // 이슈 생성 post 보낸 후 파일 업로드
-        // navigator로 "/issue"로 이동
-        // 파일 state를 어디서 처리할지 고민
-    };
+    const handleCreate = () => {};
 
     return (
         <main className="w-[1280px] mx-auto">
@@ -45,14 +41,16 @@ const NewPage = () => {
                         setIssueData={setIssueData}
                     />
                 </div>
-                <Sidebar />
+                <Sidebar setIssueData={setIssueData} />
             </section>
             <div className="flex justify-end gap-6 mt-4 items-center">
                 <Link to="/issue">X 작성 취소</Link>
                 <button
                     onClick={handleCreate}
                     disabled={issueData.title === ""}
-                    className={`${issueData.title === "" && "bg-gray-200"} flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px]`}
+                    className={`${
+                        issueData.title === "" && "bg-gray-200"
+                    } flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px]`}
                 >
                     완료
                 </button>
