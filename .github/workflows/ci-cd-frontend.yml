@@ -1,14 +1,11 @@
 name: frontend deployment
 
 on:
-  pull_request:
-    branches:
-      - fe-dev
-    types: [closed]
+  push:
+    branches: [ "fe-dev" ]
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     strategy:
       matrix:
