@@ -58,19 +58,15 @@ public class IssueController {
     }
 
     @PutMapping("/issues/{issueId}/title")
-    public ResponseEntity<Void> updateIssueTitleById(@PathVariable Long issueId, @RequestBody IssueTitleUpdateDto issueTitleUpdateDto) {
-        issueService.updateIssueTitleById(issueId, issueTitleUpdateDto.getTitle());
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<Issue> updateIssueTitleById(@PathVariable Long issueId, @RequestBody IssueTitleUpdateDto issueTitleUpdateDto) {
+        Issue updatedIssue = issueService.updateIssueTitleById(issueId, issueTitleUpdateDto.getTitle());
+        return ResponseEntity.ok(updatedIssue);
     }
 
     @PutMapping("/issues/{issueId}/content")
-    public ResponseEntity<Void> updateIssueContentById(@PathVariable Long issueId, @RequestBody IssueContentUpdateDto issueContentUpdateDto) {
-        issueService.updateIssueContentById(issueId, issueContentUpdateDto.getContent());
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<Issue> updateIssueContentById(@PathVariable Long issueId, @RequestBody IssueContentUpdateDto issueContentUpdateDto) {
+        Issue updatedIssue = issueService.updateIssueContentById(issueId, issueContentUpdateDto.getContent());
+        return ResponseEntity.ok(updatedIssue);
     }
 
     @DeleteMapping("/issues/{issueId}")
@@ -82,43 +78,33 @@ public class IssueController {
     }
 
     @PutMapping("/issues/open")
-    public ResponseEntity<Void> openIssuesById(@RequestBody List<Long> issueIds) {
-        issueService.openIssuesById(issueIds);
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<List<Issue>> openIssuesById(@RequestBody List<Long> issueIds) {
+        List<Issue> openedIssues = issueService.openIssuesById(issueIds);
+        return ResponseEntity.ok(openedIssues);
     }
 
     @PutMapping("/issues/close")
-    public ResponseEntity<Void> closeIssuesById(@RequestBody List<Long> issueIds) {
-        issueService.closeIssuesById(issueIds);
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<List<Issue>> closeIssuesById(@RequestBody List<Long> issueIds) {
+        List<Issue> closedIssues = issueService.closeIssuesById(issueIds);
+        return ResponseEntity.ok(closedIssues);
     }
 
     @PutMapping("/issues/{issueId}/assignee")
-    public ResponseEntity<Void> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
-        issueService.addAssigneesById(issueId, userLoginIds);
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<Issue> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
+        Issue updatedIssue = issueService.addAssigneesById(issueId, userLoginIds);
+        return ResponseEntity.ok(updatedIssue);
     }
 
     @PutMapping("/issues/{issueId}/label")
-    public ResponseEntity<Void> addLabelsById(@PathVariable Long issueId, @RequestBody List<Long> labelIds) {
-        issueService.addLabelsById(issueId, labelIds);
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<Issue> addLabelsById(@PathVariable Long issueId, @RequestBody List<Long> labelIds) {
+        Issue updatedIssue = issueService.addLabelsById(issueId, labelIds);
+        return ResponseEntity.ok(updatedIssue);
     }
 
     @PutMapping("/issues/{issueId}/milestone")
-    public ResponseEntity<Void> addMilestoneById(@PathVariable Long issueId, @RequestBody Long milestoneId) {
-        issueService.addMilestoneById(issueId, milestoneId);
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<Issue> addMilestoneById(@PathVariable Long issueId, @RequestBody Long milestoneId) {
+        Issue updatedIssue = issueService.addMilestoneById(issueId, milestoneId);
+        return ResponseEntity.ok(updatedIssue);
     }
 
     @DeleteMapping("/issues/{issueId}/assignee")

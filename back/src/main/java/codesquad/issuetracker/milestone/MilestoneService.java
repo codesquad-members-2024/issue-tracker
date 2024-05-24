@@ -24,8 +24,8 @@ public class MilestoneService {
         return new MilestoneShowDto(milestone);
     }
 
-    public void updateMilestoneById(Milestone milestone) {
-        milestoneRepository.save(milestone);
+    public Milestone updateMilestoneById(Milestone milestone) {
+        return milestoneRepository.save(milestone);
     }
 
     public void deleteMilestoneById(Long milestoneId) {
