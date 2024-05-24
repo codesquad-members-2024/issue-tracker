@@ -45,7 +45,6 @@ const Comment = styled.div`
   flex-direction: column;
   width: 70%;
   height: 600px;
-  overflow: hidden;
 `;
 
 const StyledInput = styled.input`

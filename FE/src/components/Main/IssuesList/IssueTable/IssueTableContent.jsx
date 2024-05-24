@@ -82,6 +82,7 @@ const Label = styled.span`
   border-radius: 20px;
   font-size: 14px;
   color: white;
+  margin-right: 5px;
 `;
 
 const Bottom = styled.div`
