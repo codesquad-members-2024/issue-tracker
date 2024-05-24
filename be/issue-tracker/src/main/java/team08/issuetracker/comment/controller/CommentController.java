@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import team08.issuetracker.comment.model.Comment;
 import team08.issuetracker.comment.model.dto.CommentCreationRequest;
 import team08.issuetracker.comment.model.dto.CommentCreationResponse;
+import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
 import team08.issuetracker.comment.model.dto.CommentUpdateResponse;
 import team08.issuetracker.comment.service.CommentService;
 
 @RestController // ResponseBody + Controller
 @RequestMapping("/issue/{issueId}/comment")
-// 📌 comment 는 특정 이슈 안에서만 존재할 수 있는데, URL path 는 /issue/{issueId} 여야 하나...? */comment 붙여야 하나...?
 @Slf4j
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -22,7 +22,7 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<CommentCreationResponse> createComment(@PathVariable long issueId, @RequestBody CommentCreationRequest commentCreationRequest) {
-        commentCreationRequest.setIssueId(issueId);
+        commentCreationRequest.setIssueId(issueId); // url 경로서 이슈 아이디 떼어와 세팅하기
         Comment createdComment = commentService.createComment(commentCreationRequest); // DTO -> Entity 변환해서 Repository 에 저장하는 건 service 레이어에서
 
         CommentCreationResponse response = CommentCreationResponse.from(createdComment);
@@ -34,13 +34,19 @@ public class CommentController {
 
     @PatchMapping("{id}")
     public ResponseEntity<CommentUpdateResponse> updateComment(@PathVariable long issueId, @PathVariable long id, @RequestBody CommentUpdateRequest commentUpdateRequest) {
+        Comment updatedComment = commentService.updateComment(issueId, id, commentUpdateRequest);
 
+        CommentUpdateResponse response = CommentUpdateResponse.from(updatedComment);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 
     /*
-     * 📌 조회 : 개별 이슈 조회 시 코멘트 조회 . . . => 이슈에서 구현
+     * 📌 조회 : 개별 이슈 조회 시 코멘트 조회 . . . => 리스트로 이슈에 넘겨주기
      * 📌 삭제 : 개별 이슈 삭제 시 종속된 코멘트도 함께 삭제 . . . => 이슈에서 구현
-     * 📌 코멘트 삭제 기능은 기획안에 없는듯?
+     * 📌 개별 코멘트 삭제 기능은 기획안에 존재하지 않음
      * */
 
 
