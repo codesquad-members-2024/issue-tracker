@@ -7,10 +7,12 @@ import team08.issuetracker.member.model.Member;
 public class MemberCreationResponse {
     private final String memberId;
     private final String message;
+    private final String profileImage;
 
     public MemberCreationResponse(Member member) {
         this.memberId = member.getMemberId();
         this.message = String.format("회원가입 성공! Id : %s", memberId);
+        this.profileImage = member.getProfileImage();
     }
 
     public static MemberCreationResponse from(Member member) {

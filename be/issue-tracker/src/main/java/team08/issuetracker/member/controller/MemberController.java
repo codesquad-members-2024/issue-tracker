@@ -23,8 +23,10 @@ public class MemberController {
     private static final String TOKEN_NAME = "jwt-token";
     private static final String TOKEN_HEADER_VALUE = "Bearer ";
 
+
     @PostMapping
     public ResponseEntity<MemberCreationResponse> registerMember(@RequestBody MemberCreationRequest memberCreationRequest) {
+
         Member member = memberService.registerMember(memberCreationRequest);
 
         MemberCreationResponse response = MemberCreationResponse.from(member);
