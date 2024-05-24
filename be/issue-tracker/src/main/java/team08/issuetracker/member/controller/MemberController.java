@@ -16,7 +16,6 @@ import team08.issuetracker.member.service.MemberService;
 @Slf4j
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class MemberController {
     private final MemberService memberService;
     private final JwtService jwtService;
@@ -36,6 +35,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+    @CrossOrigin(exposedHeaders = {"Authorization", "Set-Cookie"})
     @PostMapping("/login")
     public ResponseEntity<?> loginMember(@RequestBody MemberLoginRequest memberLoginRequest) {
         Member member = memberService.loginMember(memberLoginRequest);
@@ -46,6 +46,7 @@ public class MemberController {
                 .maxAge(TOKEN_DURATION_90DAYS)
                 .httpOnly(true)
                 .secure(true)
+                .sameSite("None")
                 .path("/")
                 .build();
 

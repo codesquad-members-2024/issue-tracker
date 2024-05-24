@@ -17,7 +17,6 @@ import team08.issuetracker.milestone.service.MilestoneService;
 @Slf4j
 @RequestMapping("/milestone")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class MilestoneController {
     private final MilestoneService milestoneService;
 
@@ -38,7 +37,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<MilestoneUpdateResponse> updateMilestone(@PathVariable long id, @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
         Milestone milestone = milestoneService.updateMilestone(id, milestoneUpdateRequest);
 
@@ -49,7 +48,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}/open")
+    @PatchMapping("{id}/open")
     public ResponseEntity<MilestoneUpdateResponse> openMilestone(@PathVariable long id) {
         Milestone milestone = milestoneService.updateMilestoneStateToOpen(id);
 
@@ -60,7 +59,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}/close")
+    @PatchMapping("{id}/close")
     public ResponseEntity<MilestoneUpdateResponse> closeMilestone(@PathVariable long id) {
         Milestone milestone = milestoneService.updateMilestoneStateToClose(id);
 
@@ -71,7 +70,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<MilestoneDeleteResponse> deleteMilestone(@PathVariable long id) {
         milestoneService.deleteMilestone(id);
 

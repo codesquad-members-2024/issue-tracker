@@ -12,7 +12,6 @@ import team08.issuetracker.label.service.LabelService;
 @Slf4j
 @RequestMapping("/label")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class LabelController {
     private final LabelService labelService;
 
