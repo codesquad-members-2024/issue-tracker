@@ -33,7 +33,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/validation/{id}")
+    @GetMapping("/registration/validate/{id}")
     public ResponseEntity<?> getValidationId(@PathVariable("id") String id) {
         if (userService.isUserIdDuplicated(id)) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
