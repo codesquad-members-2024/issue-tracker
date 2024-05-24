@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team08.issuetracker.comment.model.Comment;
-import team08.issuetracker.comment.model.dto.CommentCreationRequest;
-import team08.issuetracker.comment.model.dto.CommentCreationResponse;
-import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
-import team08.issuetracker.comment.model.dto.CommentUpdateResponse;
+import team08.issuetracker.comment.model.dto.*;
 import team08.issuetracker.comment.service.CommentService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController // ResponseBody + Controller
 @RequestMapping("/issue/{issueId}/comment")

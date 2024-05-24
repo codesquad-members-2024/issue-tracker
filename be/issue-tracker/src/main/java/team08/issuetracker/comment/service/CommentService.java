@@ -2,11 +2,17 @@ package team08.issuetracker.comment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import team08.issuetracker.comment.model.Comment;
 import team08.issuetracker.comment.model.dto.CommentCreationRequest;
+import team08.issuetracker.comment.model.dto.CommentResponse;
 import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
 import team08.issuetracker.comment.repository.CommentRepository;
 import team08.issuetracker.exception.comment.CommentNotFoundException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +38,18 @@ public class CommentService {
 
         // 3) 업데이트 내용 저장 및 반환
         return commentRepository.save(comment);
+    }
+
+    public List<Comment> getCommentsByIssueId(long issueId) {
+        return commentRepository.findByIssueId(issueId);
+    }
+
+    // 이슈에서 사용
+    public List<CommentResponse> getCommentByIssueId(@PathVariable long issueId) {
+        List<Comment> comments = getCommentsByIssueId(issueId);
+
+        return comments.stream()
+                .map(CommentResponse::from)
+                .collect(Collectors.toList());
     }
 }
