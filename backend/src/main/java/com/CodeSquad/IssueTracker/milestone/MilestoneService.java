@@ -24,7 +24,7 @@ public class MilestoneService {
 
     public void createMilestone(MilestoneRequest milestoneRequest) {
         log.info("마일스톤 생성 요청: {}", milestoneRequest);
-        validateMilestoneRequest(milestoneRequest);
+        validateMilestoneRequest(milestoneRequest, true);
 
         LocalDateTime localDateTime;
         try {
@@ -79,18 +79,25 @@ public class MilestoneService {
         return milestoneRepository.findAllCloseMilestones();
     }
 
-    private void validateMilestoneRequest(MilestoneRequest milestoneRequest) {
+    private void validateMilestoneRequest(MilestoneRequest milestoneRequest, Boolean checkSameTitle) {
         if (milestoneRequest.title().isEmpty()) {
             log.error("제목이 비어있습니다: {}", milestoneRequest);
             throw new InvalidMilestoneRequestException("제목이 비어있습니다.");
         }
-        if (milestoneRepository.findByTitle(milestoneRequest.title())!= null){
-            throw new InvalidMilestoneRequestException("같은 제목의 마일스톤이 존재합니다.");
+        if (checkSameTitle){
+            if (milestoneRepository.findByTitle(milestoneRequest.title())!= null){
+                throw new InvalidMilestoneRequestException("같은 제목의 마일스톤이 존재합니다.");
+            }
         }
     }
 
     public void editMilestone(Long milestoneId, MilestoneRequest milestoneRequest) {
-        validateMilestoneRequest(milestoneRequest);
+        if (getMilestoneById(milestoneId).getTitle().equals(milestoneRequest.title())){
+            validateMilestoneRequest(milestoneRequest, false);
+        }else{
+            validateMilestoneRequest(milestoneRequest, true);
+        }
+
         Milestone milestone = getMilestoneById(milestoneId);
 
         log.info("마일스톤 편집 milestone: {}", milestoneId);
