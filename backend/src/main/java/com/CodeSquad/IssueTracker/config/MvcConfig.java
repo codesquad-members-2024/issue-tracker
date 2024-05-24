@@ -15,7 +15,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new CheckLoginInterceptor())
                 .order(1)
-                .addPathPatterns("/issue/**", "/issues/**", "/filters")
+                .addPathPatterns("/**")
                 .excludePathPatterns("/login", "/registration");
     }
 
