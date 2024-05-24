@@ -11,15 +11,20 @@ public class MilestoneDetailResponse {
     private String name;
     private LocalDate completeDate;
     private String description;
+    private boolean state;
     private long openedIssueCount;
     private long closedIssueCount;
     private double milestoneProgress;
 
-    public MilestoneDetailResponse(Long id, String name, LocalDate completeDate, String description) {
+    public MilestoneDetailResponse(Long id, String name, LocalDate completeDate, String description, boolean state) {
         this.id = id;
         this.name = name;
         this.completeDate = completeDate;
         this.description = description;
+        this.state = state;
+        this.openedIssueCount = 10;
+        this.closedIssueCount = 10;
+        this.milestoneProgress = 50.0;
     }
 
     public static MilestoneDetailResponse from(Milestone milestone) {
@@ -27,7 +32,8 @@ public class MilestoneDetailResponse {
                 milestone.getId(),
                 milestone.getName(),
                 milestone.getCompleteDate(),
-                milestone.getDescription()
+                milestone.getDescription(),
+                milestone.isOpen()
         );
     }
 
