@@ -1,18 +1,6 @@
 package com.CodeSquad.IssueTracker.milestone.dto;
 
-import lombok.Getter;
-
-@Getter
-public class MilestoneRequest {
-    private Long milestoneId;
-
-    private String title;
-
-    private String description;
-
-    private String deadline;
-
-    private Integer totalIssue;
-
-    private Integer closedIssue;
-}
+public record MilestoneRequest(Long milestoneId, String title,
+                               String description, String deadline,
+                               Integer totalIssue, Integer closedIssue)
+{ }

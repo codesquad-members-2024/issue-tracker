@@ -1,15 +1,16 @@
 package com.CodeSquad.IssueTracker.labels;
 
 import com.CodeSquad.IssueTracker.Exception.label.*;
+import com.CodeSquad.IssueTracker.labels.dto.LabelListResponse;
 import com.CodeSquad.IssueTracker.labels.utils.ColorValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.CodeSquad.IssueTracker.labels.utils.ColorValidator.isValidColor;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -31,6 +32,15 @@ public class LabelService {
         return labelRepository.findById(id);
     }
 
+    public Set<Label> findAllByIds(Set<Long> ids) {
+        return labelRepository.findAllById(ids);
+    }
+
+    public void validateLabels(Set<Long> labels) {
+        Set<Label> allByIds = findAllByIds(labels);
+        if (allByIds.size() != labels.size())
+            throw new LabelNotFoundException("존재하지 않는 라벨이 포함되어 있습니다.");
+    }
 
     public Label createLabel(Label label) {
         log.info("새 라벨 생성 요청: {}", label);
@@ -68,5 +78,20 @@ public class LabelService {
             throw new LabelNotFoundException("라벨 id: " + id + " 삭제 실패, 해당 라벨이 존재하지 않습니다.");
         }
         labelRepository.deleteById(id);
+    }
+
+    public List<LabelListResponse> getLabelList() {
+        List<Label> labels = getAllLabels();
+        List<LabelListResponse> labelListResponses = new ArrayList<>();
+
+        for (Label label : labels) {
+            labelListResponses.add(LabelListResponse.builder()
+                    .labelId(label.getLabelId())
+                    .labelName(label.getLabelName())
+                    .labelBgColor(label.getBgColor())
+                    .build());
+        }
+
+        return labelListResponses;
     }
 }
