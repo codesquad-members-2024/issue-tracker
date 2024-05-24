@@ -98,7 +98,7 @@ const LabelEditUI = ({ curLabel }: LabelEditUIProps) => {
             className={`${
                 ModifyDeleteState.state === "create" ||
                 ModifyDeleteState.id === curLabel?.id
-                    ? ""
+                    ? "my-4"
                     : "hidden"
             } w-full h-72 border-2 border-gray-300 mt-4 rounded-xl bg-white dark:bg-darkModeBorderBG`}
         >

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import TitleInfo from "./TitleInfo";
 import TitleView from "./TitleView";
 
 export interface Comment {
@@ -26,18 +25,21 @@ export interface TitleContainerProps {
     issueData: Issue;
 }
 
-const TitleContainer = ({issueData}: TitleContainerProps) => {
+const TitleContainer = ({ issueData }: TitleContainerProps) => {
     const [editState, setEditState] = useState(false);
 
     return (
         <>
-        <div>
-            <TitleView issueData={issueData} editState={editState} setEditState={setEditState}/>
-            <TitleInfo issueData={issueData}/>
-        </div>
-        <div className="border-[1px] my-6"/>
+            <div>
+                <TitleView
+                    issueData={issueData}
+                    editState={editState}
+                    setEditState={setEditState}
+                />
+            </div>
+            <div className="border-[1px] my-6" />
         </>
-    )
+    );
 };
 
 export default TitleContainer;

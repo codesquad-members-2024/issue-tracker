@@ -3,8 +3,12 @@ import { IssueData } from "../pages/NewPage";
 import FileUploader from "./FileUploader";
 interface CommentBoxProps {
     height: string;
-    issueData: IssueData;
-    setIssueData: React.Dispatch<React.SetStateAction<IssueData>>;
+    issueData: IssueData | {
+        description: string;
+    };
+    setIssueData: React.Dispatch<React.SetStateAction<IssueData | {
+        description: string;
+    }>>;
 }
 
 const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
@@ -17,7 +21,7 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
         <div
             className={`${
                 isActive && "bg-white border-black border-2"
-            } w-full bg-gray-200 dark:bg-darkModeBorderBG rounded-xl p-1 pl-2 h-[${height}px] flex flex-col justify-between`}
+            } ${height} w-full bg-gray-200 dark:bg-darkModeBorderBG rounded-xl p-1 pl-2 flex flex-col justify-between`}
         >
             <div className="text-sm font-normal opacity-60">
                 코맨트를 입력하세요.

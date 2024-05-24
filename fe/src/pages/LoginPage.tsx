@@ -1,5 +1,5 @@
 import { SyntheticEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const LoginPage = () => {
     const navigate = useNavigate();
 
@@ -10,9 +10,9 @@ const LoginPage = () => {
     return (
         <main className="h-full flex justify-center items-center">
             <div className="flex flex-col items-center">
-                <h1 className="text-5xl font-style: italic font-extralight p-10">
+                <Link to="/Login" className="text-5xl font-style: italic font-extralight p-10">
                     Issue Tracker
-                </h1>
+                </Link>
                 <button className="px-10 py-2 font-normal border-solid border-2 text-blue-500 border-blue-500 rounded-xl">
                     GitHub 계정으로 로그인
                 </button>

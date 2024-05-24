@@ -22,7 +22,7 @@ export const CommentCard = ({ commentInfo }: CommentProps) => {
                 </div>
             </div>
             {commentInfo && 
-            <div className="h-full bg-white rounded-b-xl">
+            <div className="h-full bg-white rounded-b-xl dark:bg-darkModeBorderBG">
                 <ReactMarkdown className="m-4" remarkPlugins={[remarkGfm]}>
                     {commentInfo.contents}
                 </ReactMarkdown>

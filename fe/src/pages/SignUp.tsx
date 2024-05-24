@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
+import FileUploader from "../common/FileUploader";
+import { UserImgBox } from "../common/UserImgBox";
+import { Link } from "react-router-dom";
 
+
+export interface SignUpForm {
+    name: string;
+    id: string;
+    passWard: string;
+    description: string;
+}
 const SignUp = () => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [isIdAvailable, setIsIdAvailable] = useState(false);
-    const [signUpForm, serSignUpForm] = useState({
+    const [signUpForm, setSignUpForm] = useState<SignUpForm>({
         name: "",
         id: "",
         passWard: "",
+        description: "",
     });
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        serSignUpForm((prevState) => ({
+        setSignUpForm((prevState) => ({
             ...prevState,
             [name]: value,
         }));
     };
 
-    const handleIsIdAvailable = () => {
-        
-    }
+    const handleIsIdAvailable = () => {};
 
     const checkValue = () => {
         const { name, id, passWard } = signUpForm;
@@ -30,7 +39,12 @@ const SignUp = () => {
     }, [signUpForm]);
 
     return (
-        <main className="h-full flex justify-center items-center">
+        <main className="h-full flex justify-center items-center flex-col">
+            <Link to="/Login" className="text-5xl font-style: italic font-extralight p-10">
+                Issue Tracker
+            </Link>
+            <UserImgBox imgURL={signUpForm.description}/>
+            <FileUploader setIssueData={setSignUpForm}/>
             <div className="flex flex-col items-center">
                 <form className="flex flex-col gap-2">
                     <input
@@ -50,7 +64,12 @@ const SignUp = () => {
                             onChange={handleChange}
                             placeholder="아이디"
                         />
-                        <div onClick={handleIsIdAvailable} className="m-auto text-sm bg-blue-500 rounded-xl text-white py-1 px-2">중복 확인</div>
+                        <div
+                            onClick={handleIsIdAvailable}
+                            className="m-auto text-sm bg-blue-500 rounded-xl text-white py-1 px-2"
+                        >
+                            중복 확인
+                        </div>
                     </div>
                     <input
                         name="passWard"
