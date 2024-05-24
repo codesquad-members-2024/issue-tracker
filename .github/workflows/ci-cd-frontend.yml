@@ -24,6 +24,8 @@ jobs:
         run: |
           cd frontend
           REACT_APP_SERVER=${{ secrets.REACT_APP_SERVER }} yarn build
+        env:
+          REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
