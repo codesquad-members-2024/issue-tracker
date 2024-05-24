@@ -29,6 +29,7 @@ export const postNewLabel = async (labelContent: LabelContent) => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify(labelContent),
     };
     const response = await fetch(`${SERVER}/label`, request);
