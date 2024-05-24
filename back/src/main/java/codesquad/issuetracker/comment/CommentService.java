@@ -9,11 +9,12 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public void createComment(Comment comment) {
-        commentRepository.save(comment);
+    public Comment createComment(Comment comment) {
+        return commentRepository.save(comment);
     }
 
-    public void updateCommentById(Long commentId, String newContent) {
+    public Comment updateCommentById(Long commentId, String newContent) {
         commentRepository.updateById(commentId, newContent);
+        return commentRepository.findById(commentId).get();
     }
 }

@@ -43,11 +43,9 @@ public class LabelController {
     }
 
     @PutMapping("/labels/{labelId}")
-    public ResponseEntity<Void> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
-        labelService.updateLabelById(labelUpdateDto.toEntity(labelId));
-        return ResponseEntity
-                .noContent()
-                .build();
+    public ResponseEntity<Label> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
+        Label updatedLabel = labelService.updateLabelById(labelUpdateDto.toEntity(labelId));
+        return ResponseEntity.ok(updatedLabel);
     }
 
     @DeleteMapping("/labels/{labelId}")

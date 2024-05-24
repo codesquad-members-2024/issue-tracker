@@ -51,48 +51,50 @@ public class IssueService {
         return issueRepository.findById(issueId).get();
     }
 
-    public void updateIssueTitleById(Long issueId, String newTitle) {
+    public Issue updateIssueTitleById(Long issueId, String newTitle) {
         issueRepository.updateTitleById(issueId, newTitle);
+        return issueRepository.findById(issueId).get();
     }
 
-    public void updateIssueContentById(Long issueId, String newContent) {
+    public Issue updateIssueContentById(Long issueId, String newContent) {
         issueRepository.updateContentById(issueId, newContent);
+        return issueRepository.findById(issueId).get();
     }
 
     public void deleteIssueById(Long issueId) {
         issueRepository.deleteById(issueId);
     }
 
-    public void openIssuesById(List<Long> ids) {
+    public List<Issue> openIssuesById(List<Long> ids) {
         List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
-        issueRepository.saveAll(issues.stream()
+        return (List<Issue>) issueRepository.saveAll(issues.stream()
                 .peek(Issue::open)
                 .collect(Collectors.toList()));
     }
 
-    public void closeIssuesById(List<Long> ids) {
+    public List<Issue> closeIssuesById(List<Long> ids) {
         List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
-        issueRepository.saveAll(issues.stream()
+        return (List<Issue>) issueRepository.saveAll(issues.stream()
                 .peek(Issue::close)
                 .collect(Collectors.toList()));
     }
 
-    public void addAssigneesById(Long issueId, List<String> userLoginIds) {
+    public Issue addAssigneesById(Long issueId, List<String> userLoginIds) {
         Issue issue = issueRepository.findById(issueId).get();
         issue.addAssignee(userLoginIds);
-        issueRepository.save(issue);
+        return issueRepository.save(issue);
     }
 
-    public void addLabelsById(Long issueId, List<Long> labelIds) {
+    public Issue addLabelsById(Long issueId, List<Long> labelIds) {
         Issue issue = issueRepository.findById(issueId).get();
         issue.addLabel(labelIds);
-        issueRepository.save(issue);
+        return issueRepository.save(issue);
     }
 
-    public void addMilestoneById(Long issueId, Long milestoneId) {
+    public Issue addMilestoneById(Long issueId, Long milestoneId) {
         Issue issue = issueRepository.findById(issueId).get();
         issue.addMilestone(milestoneId);
-        issueRepository.save(issue);
+        return issueRepository.save(issue);
     }
 
     public void deleteAssigneesById(Long issueId, List<String> userLoginIds) {

@@ -23,8 +23,8 @@ public class LabelService {
         return labelRepository.findById(labelId).orElseThrow(RuntimeException::new);
     }
 
-    public void updateLabelById(Label updatedLabel) {
-        labelRepository.save(updatedLabel);
+    public Label updateLabelById(Label updatedLabel) {
+        return labelRepository.save(updatedLabel);
     }
 
     public void deleteLabelById(Long labelId) {
