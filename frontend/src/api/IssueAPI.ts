@@ -44,7 +44,7 @@ export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps)
   }
 };
 
-export const sendIssueRequestById = async (issueId: number) => {
+export const sendIssueRequestById = async (issueId: number | string) => {
   try {
     const response = await fetch(`${SERVER}/issue/${issueId}`, { credentials: "include" });
 
