@@ -1,11 +1,10 @@
 package team08.issuetracker.milestone.model.dto;
 
-import lombok.Getter;
 import team08.issuetracker.milestone.model.Milestone;
 
 import java.time.LocalDate;
 
-public record MilestoneCreationDto(
+public record MilestoneCreationRequest(
         String name,
         String description,
         LocalDate completeDate

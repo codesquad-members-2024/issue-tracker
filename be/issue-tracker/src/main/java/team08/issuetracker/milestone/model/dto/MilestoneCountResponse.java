@@ -1,6 +1,6 @@
 package team08.issuetracker.milestone.model.dto;
 
-public record MilestoneCountDto(
+public record MilestoneCountResponse(
         long totalCount,
         long openedCount,
         long closedCount
