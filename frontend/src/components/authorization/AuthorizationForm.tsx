@@ -1,9 +1,17 @@
+<<<<<<< be-dev
 import { useState } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> team-05
 import styled, { css } from "styled-components";
 
 export interface AuthorizationFormProps {
   type: "id" | "password" | "password-validation" | "nickname";
+<<<<<<< be-dev
   onInputChange: (value: string) => void;
+=======
+  onChange: () => void;
+>>>>>>> team-05
 }
 
 const MAX_LENGTH = {
@@ -19,6 +27,7 @@ const LABEL_TEXT = {
   nickname: "닉네임",
 };
 
+<<<<<<< be-dev
 function AuthorizationForm({ type, onInputChange }: AuthorizationFormProps) {
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -29,10 +38,18 @@ function AuthorizationForm({ type, onInputChange }: AuthorizationFormProps) {
     onInputChange(value);
   };
 
+=======
+const AuthorizationForm = React.forwardRef<HTMLInputElement, AuthorizationFormProps>((props, ref) => {
+  const { type, onChange } = props;
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const inputType = type === "password" || type === "password-validation" ? "password" : "text";
+
+>>>>>>> team-05
   return (
     <Wrapper isFocused={isFocused}>
       <FormParagraph>
         <FormInput
+<<<<<<< be-dev
           type={inputType}
           value={inputValue}
           maxLength={MAX_LENGTH[type]}
@@ -40,6 +57,15 @@ function AuthorizationForm({ type, onInputChange }: AuthorizationFormProps) {
           required
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+=======
+          ref={ref}
+          type={inputType}
+          maxLength={MAX_LENGTH[type]}
+          required
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onChange={onChange}
+>>>>>>> team-05
         />
         <FormInputLabel>
           <span>{LABEL_TEXT[type]}</span>
@@ -47,7 +73,12 @@ function AuthorizationForm({ type, onInputChange }: AuthorizationFormProps) {
       </FormParagraph>
     </Wrapper>
   );
+<<<<<<< be-dev
 }
+=======
+});
+
+>>>>>>> team-05
 
 const Wrapper = styled.div<{ isFocused: boolean }>`
   width: 288px;

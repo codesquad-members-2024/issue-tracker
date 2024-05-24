@@ -11,6 +11,10 @@ interface IssuesRequestProps {
   page: number;
 }
 
+<<<<<<< be-dev
+=======
+const PAGE_FORMAT_ERROR_MESSAGE = "페이지의 형식이 맞지 않습니다.";
+>>>>>>> team-05
 const DATA_FORMAT_ERROR_MESSAGE = "데이터 형식에 오류가 생겼습니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
@@ -18,11 +22,20 @@ export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps)
   try {
     const response = await fetch(`${SERVER}/issues/${issueType}?page=${page}`);
 
+<<<<<<< be-dev
+=======
+    if (response.status === 400) throw new Error(PAGE_FORMAT_ERROR_MESSAGE);
+>>>>>>> team-05
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE); 
 
     return response.json();
   } catch (error) {
+<<<<<<< be-dev
     throw new Error(SERVER_ERROR_MESSAGE);
+=======
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+>>>>>>> team-05
   }
 }
 
@@ -46,6 +59,11 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
 
     return response;
   } catch (error) {
+<<<<<<< be-dev
     throw new Error(SERVER_ERROR_MESSAGE);
+=======
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+>>>>>>> team-05
   }
 }

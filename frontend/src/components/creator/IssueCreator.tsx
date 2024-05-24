@@ -4,6 +4,7 @@ import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import Sidebar from "../issue/Sidebar";
+<<<<<<< be-dev
 import { useEffect, useRef, useState } from "react";
 import useUserStore from "../../hooks/useUserStore";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +47,13 @@ function IssueCreator() {
       commentElement?.removeEventListener("input", handleCommentChange);
     };
   }, []);
+=======
+import useIssueCreatorLogic from "../../hooks/logics/useIssueCreatorLogic";
+
+function IssueCreator() {
+  const { titleRef, commentRef, commentCount, isSubmitable, handleOnChange, handleCancel, handleSubmit } =
+    useIssueCreatorLogic();
+>>>>>>> team-05
 
   return (
     <Wrapper>
@@ -60,9 +68,17 @@ function IssueCreator() {
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
           <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" onChange={handleOnChange} />
           <ExtensionWrapper>
+<<<<<<< be-dev
           <ContentWordCount key={`word-count-${commentLength}`}>띄어쓰기 포함 {commentLength}자</ContentWordCount>
           <DashedLine />
           <FileImageButton><img /> 파일 첨부하기</FileImageButton>
+=======
+            <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
+            <DashedLine />
+            <FileImageButton>
+              <img /> 파일 첨부하기
+            </FileImageButton>
+>>>>>>> team-05
           </ExtensionWrapper>
         </FormWrapper>
         <Sidebar />
@@ -87,7 +103,11 @@ const FadeOut = keyframes`
   } to {
     opacity: 0;
   }
+<<<<<<< be-dev
 `
+=======
+`;
+>>>>>>> team-05
 
 const Wrapper = styled.div`
   position: block;
@@ -186,7 +206,11 @@ const ContentWordCount = styled.span`
 `;
 
 const DashedLine = styled.hr`
+<<<<<<< be-dev
   border-top: 1px dashed #D9DBE9;
+=======
+  border-top: 1px dashed #d9dbe9;
+>>>>>>> team-05
   border-bottom: none;
   margin: 1.5em;
 `;
@@ -196,6 +220,10 @@ const FileImageButton = styled.button`
   background-color: transparent;
   border: none;
   text-align: left;
+<<<<<<< be-dev
 `
+=======
+`;
+>>>>>>> team-05
 
 export default IssueCreator;

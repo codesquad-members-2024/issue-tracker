@@ -10,6 +10,11 @@ export const sendFiltersRequest = async () => {
 
     return response.json();
   } catch (error) {
+<<<<<<< be-dev
     throw new Error(SERVER_ERROR_MESSAGE);
+=======
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+>>>>>>> team-05
   }
 }

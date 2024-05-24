@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import IssueTab from "./IssueTab";
+<<<<<<< be-dev
 import IssueHeadline, { IssueHeadlineProps } from "./IssueHeadline";
 import { useMutation } from "react-query";
 import { sendIssuesRequest } from "../../api/IssueAPI";
@@ -76,16 +77,42 @@ function IssueList() {
   }, [issues]);
 
   if (requestError) return <RefreshRequest />;
+=======
+import IssueHeadline from "./IssueHeadline";
+import { MutableRefObject } from "react";
+import { Headline } from "../../hooks/stores/useIssueStore";
+import RefreshRequest from "../error/RefreshRequest";
+import useIssueListLogic, { IssueType } from "../../hooks/logics/useIssueListLogic";
+
+const renderHeadlines = (issues: Headline[], lastIssueRef: MutableRefObject<null>) =>
+  issues.map((issue, index) =>
+    index === issues.length - 1 ? (
+      <IssueHeadline ref={lastIssueRef} key={`issue-headline-${issue.issueId}`} {...issue} />
+    ) : (
+      <IssueHeadline key={`issue-headline-${issue.issueId}`} {...issue} />
+    )
+  );
+
+function IssueList() {
+  const { focusedTab, setFocusedTab, issues, setIssues, lastIssueRef, requestError } = useIssueListLogic();
+
+  if (requestError) <RefreshRequest />;
+>>>>>>> team-05
 
   return (
     <Wrapper>
       <IssueTab
         focusedTab={focusedTab}
+<<<<<<< be-dev
         setFocusedTab={(tabDescription: IssueType) => {
+=======
+        handleFocusedTabClick={(tabDescription: IssueType) => {
+>>>>>>> team-05
           setFocusedTab(tabDescription);
           if (tabDescription !== focusedTab) setIssues([]);
         }}
       />
+<<<<<<< be-dev
       <ScrollableArea>
         {issues
           .filter(({ isClosed }) => (focusedTab === "open" ? !isClosed : isClosed))
@@ -95,6 +122,9 @@ function IssueList() {
               : renderIssueHeadline(issue)
           )}
       </ScrollableArea>
+=======
+      <ScrollableArea>{renderHeadlines(issues, lastIssueRef)}</ScrollableArea>
+>>>>>>> team-05
     </Wrapper>
   );
 }

@@ -1,5 +1,9 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
+<<<<<<< be-dev
 import useUserStore from "../hooks/useUserStore";
+=======
+import useUserStore from "../hooks/stores/useUserStore";
+>>>>>>> team-05
 import Login from "../components/login/Login";
 import Registration from "../components/registration/Registration";
 import Main from "../components/Main";
