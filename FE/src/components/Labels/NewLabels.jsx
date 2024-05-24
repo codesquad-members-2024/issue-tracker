@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { ContentNavStyles } from "@/styles/commonStyles";
 import { useState, useEffect } from "react";
-import useFetch from "../../hooks/useFetch";
 import { DropdownIcon } from "@/icons/DropdownIcon";
 
 const getRandomColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
 
-export function NewLabels({ type, closeNewLabels, labelId, initialData }) {
-  const { postData, putData } = useFetch(`${import.meta.env.VITE_SERVER}/labels`);
+export function NewLabels(props) {
+  const { postData, fetchData, putData, type, closeNewLabels, labelId, initialData } = props;
 
   const [labelName, setLabelName] = useState("");
   const [labelColor, setLabelColor] = useState("");
@@ -39,6 +38,7 @@ export function NewLabels({ type, closeNewLabels, labelId, initialData }) {
 
     type == "new" ? await postData(newLabel) : await putData(labelId, newLabel);
     closeNewLabels();
+    fetchData();
   };
 
   return (
