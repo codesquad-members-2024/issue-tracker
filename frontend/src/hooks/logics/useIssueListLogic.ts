@@ -12,9 +12,10 @@ const FIRST_PAGE = 1;
 const ISSUE_NUMBER_KEY = "issueNumberResponse";
 const LABELS_KEY = "labelListResponse";
 const MILESTONES_KEY = "milestoneListResponse";
+const USERS_KEY = "userListResponse";
 
 const useIssueListLogic = () => {
-  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setLabels, setMilestones } =
+  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setLabels, setMilestones, setUsers } =
     useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const [page, setPage] = useState(FIRST_PAGE);
@@ -35,6 +36,7 @@ const useIssueListLogic = () => {
       setIssueCounts(data[ISSUE_NUMBER_KEY]);
       setLabels(data[LABELS_KEY]);
       setMilestones(data[MILESTONES_KEY]);
+      setUsers(data[USERS_KEY]);
     },
     onError: () => navigate("/login"),
   });

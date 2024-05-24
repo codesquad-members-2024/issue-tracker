@@ -6,17 +6,31 @@ import milestoneIcon from "../../../img/icon/milestoneIcon.svg";
 import dateUtils from "../../../utils/DateUtils";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import useIssueStore, { Headline, Label, LabelResponse, Milestone } from "../../../hooks/stores/useIssueStore";
 
-export interface IssueHeadlineProps {
-  issueId: number;
-  title: string;
-  author: string;
-  publishedAt: string;
-  isClosed: boolean;
-}
+const matchedLabels = (labels: Label[], labelResponses: LabelResponse[]) =>
+  labels.filter((label) => labelResponses.some((response) => response.labelId === label.labelId));
 
-const IssueHeadline = React.forwardRef<HTMLDivElement, IssueHeadlineProps>((props, ref) => {
-  const { issueId, title, author, publishedAt, isClosed } = props;
+const renderLabels = (labels: Label[], labelResponses: LabelResponse[]) =>
+  matchedLabels(labels, labelResponses).map(({ labelName, labelBgColor, labelTextColor }) => (
+    <LabelBox labelBgColor={labelBgColor} labelTextColor={labelTextColor}>
+      {labelName}
+    </LabelBox>
+  ));
+
+const renderMilestone = (milestones: Milestone[], milestoneId: number) => {
+  const milestone = milestones.find((milestone) => milestoneId === milestone.milestoneId);
+  return milestone ? (
+    <>
+      <img src={milestoneIcon} />
+      <span>{milestone.title}</span>
+    </>
+  ) : null;
+};
+
+const IssueHeadline = React.forwardRef<HTMLDivElement, Headline>((props, ref) => {
+  const { issueId, title, author, publishedAt, isClosed, labels: labelResponses, milestoneId } = props;
+  const { labels, milestones } = useIssueStore();
   const navigate = useNavigate();
 
   return (
@@ -26,13 +40,12 @@ const IssueHeadline = React.forwardRef<HTMLDivElement, IssueHeadlineProps>((prop
         <IssueTitleDescription>
           <img src={isClosed ? violetClosedIssueIcon : blueOpenedIssueIcon} />
           <TitleText onClick={() => navigate(`/issue/${issueId}`)}>{title}</TitleText>
-          <LabelBox>Label</LabelBox>
+          {renderLabels(labels, labelResponses)}
         </IssueTitleDescription>
         <IssueInfo>
           <span>#{issueId}</span>
           <span>{`이 이슈가 ${dateUtils.parseTimeDifference(publishedAt)}, ${author}님에 의해 작성되었습니다.`}</span>
-          <img src={milestoneIcon} />
-          <span>마일스톤</span>
+          {milestoneId && renderMilestone(milestones, milestoneId)}
         </IssueInfo>
       </IssueDescriptions>
       <UserIconContainer>
@@ -78,16 +91,16 @@ const TitleText = styled.a`
   cursor: pointer;
 `;
 
-const LabelBox = styled.div`
+const LabelBox = styled.div<{ labelBgColor: string; labelTextColor: string }>`
   height: 1.5em;
   padding: 0 0.75em;
   font-size: 0.75em;
   display: flex;
   align-items: center;
-  border: 1px solid #d9dbe9;
+  border: 1px solid ${({ labelBgColor }) => labelBgColor};
   border-radius: 1em;
-  background-color: #fefefe;
-  color: #6e7191;
+  background-color: ${({ labelBgColor }) => labelBgColor};
+  color: ${({ labelTextColor }) => labelTextColor};
 `;
 
 const IssueInfo = styled.div`
