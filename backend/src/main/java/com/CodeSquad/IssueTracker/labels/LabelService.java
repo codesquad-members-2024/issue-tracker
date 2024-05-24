@@ -89,6 +89,7 @@ public class LabelService {
                     .labelId(label.getLabelId())
                     .labelName(label.getLabelName())
                     .labelBgColor(label.getBgColor())
+                    .labelTextColor(label.getTextColor())
                     .build());
         }
 

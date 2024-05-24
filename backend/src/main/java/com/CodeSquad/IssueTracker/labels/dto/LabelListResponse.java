@@ -9,4 +9,5 @@ public class LabelListResponse {
     private Long labelId;
     private String labelName;
     private String labelBgColor;
+    private String labelTextColor;
 }
