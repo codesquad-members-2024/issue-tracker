@@ -1,9 +1,8 @@
-import { sendLoginRequest } from "../api/LoginAPI";
-import useUserStore from "./useUserStore";
+import { sendLoginRequest } from "../../api/LoginAPI";
+import useUserStore from "../stores/useUserStore";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
-import useLoginStore from "./useLoginStore";
-import { useEffect } from "react";
+import { useRef, useState } from "react";
 
 const MIN_LENGTH = 6;
 const INPUT_REGEX = /^[A-Za-z0-9]+$/;
@@ -12,18 +11,16 @@ const INPUT_LENGTH_ERROR_MESSAGE = "ID와 비밀번호는 최소 6자이여야 �
 const UNKNOWN_ERROR_MESSAGE = "알 수 없는 에러가 발생하였습니다.";
 
 const useLoginLogic = () => {
-  const loginStore = useLoginStore();
-  const {
-    state: { idValue, passwordValue, allFilled },
-    setErrorMessage,
-    checkAllFilled,
-  } = loginStore;
   const { setUserId, setIsLoggedIn } = useUserStore();
+  const idValueRef = useRef<HTMLInputElement>(null);
+  const passwordValueRef = useRef<HTMLInputElement>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitable, setIsSubmitable] = useState(false);
   const navigate = useNavigate();
 
   const { mutate: login, isLoading } = useMutation(sendLoginRequest, {
     onSuccess: () => {
-      setUserId(idValue);
+      setUserId(idValueRef.current?.value || "");
       setIsLoggedIn(true);
       navigate("/");
     },
@@ -34,7 +31,10 @@ const useLoginLogic = () => {
   });
 
   const handleLoginClick = async () => {
-    if (!allFilled) return;
+    const idValue = idValueRef.current?.value || "";
+    const passwordValue = passwordValueRef.current?.value || "";
+
+    if (!isSubmitable) return;
 
     if (!INPUT_REGEX.test(idValue) || !INPUT_REGEX.test(passwordValue)) {
       setErrorMessage(INPUT_REGEX_ERROR_MESSAGE);
@@ -50,9 +50,15 @@ const useLoginLogic = () => {
     login({ userId: idValue, userPassword: passwordValue });
   };
 
-  useEffect(checkAllFilled, [idValue, passwordValue]);
+  const handleOnChange = () => {
+    const idValue = idValueRef.current?.value;
+    const passwordValue = passwordValueRef.current?.value;
+    const currentIsSubmitable = !!(idValue && passwordValue);
 
-  return { ...loginStore, isLoading, handleLoginClick };
+    if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
+  };
+
+  return { isSubmitable, isLoading, errorMessage, idValueRef, passwordValueRef, handleLoginClick, handleOnChange };
 };
 
 export default useLoginLogic;

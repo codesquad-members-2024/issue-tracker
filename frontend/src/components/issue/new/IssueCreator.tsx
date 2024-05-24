@@ -1,51 +1,14 @@
 import styled, { keyframes } from "styled-components";
-import Header from "../header/Header";
+import Header from "../../header/Header";
 import CreatorForm from "./CreatorForm";
-import userIcon from "../../img/icon/userIcon.png";
-import plusIcon from "../../img/icon/plusIcon_dark.svg";
-import Sidebar from "../issue/Sidebar";
-import { useEffect, useRef, useState } from "react";
-import useUserStore from "../../hooks/useUserStore";
-import { useNavigate } from "react-router-dom";
-import { postNewIssue } from "../../api/IssueAPI";
+import userIcon from "../../../img/icon/userIcon.png";
+import plusIcon from "../../../img/icon/plusIcon_dark.svg";
+import Sidebar from "../Sidebar";
+import useIssueCreatorLogic from "../../../hooks/logics/useIssueCreatorLogic";
 
 function IssueCreator() {
-  const { userId } = useUserStore();
-  const titleRef = useRef<HTMLTextAreaElement>(null);
-  const commentRef = useRef<HTMLTextAreaElement>(null);
-  const [commentLength, setCommentLength] = useState(0);
-  const [isSubmitable, setIsSubmitable] = useState(false);
-  const navigate = useNavigate();
-
-  const handleOnChange = () => {
-    const title = titleRef.current?.value;
-    const content = commentRef.current?.value;
-    const currentIsSubmitable = !!(title && content);
-
-    if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
-  };
-  const handleCancel = () => navigate("/");
-  const handleSubmit = () => {
-    const title = titleRef.current?.value;
-    const content = commentRef.current?.value;
-
-    // 추후 /issue/{issueId} 로 라우팅 예정
-    if (title && content) postNewIssue({ title, content, userId }).then(() => navigate("/"));
-  };
-
-  useEffect(() => {
-    const handleCommentChange = () => {
-      const length = commentRef.current?.value.length || 0;
-      setCommentLength(length);
-      handleOnChange();
-    };
-    const commentElement = commentRef.current;
-    commentElement?.addEventListener("input", handleCommentChange);
-
-    return () => {
-      commentElement?.removeEventListener("input", handleCommentChange);
-    };
-  }, []);
+  const { titleRef, commentRef, commentCount, isSubmitable, handleOnChange, handleCancel, handleSubmit } =
+    useIssueCreatorLogic();
 
   return (
     <Wrapper>
@@ -58,12 +21,22 @@ function IssueCreator() {
         <UserIcon src={userIcon} />
         <FormWrapper>
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
-          <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" onChange={handleOnChange} />
-          <ExtensionWrapper>
-          <ContentWordCount key={`word-count-${commentLength}`}>띄어쓰기 포함 {commentLength}자</ContentWordCount>
-          <DashedLine />
-          <FileImageButton><img /> 파일 첨부하기</FileImageButton>
-          </ExtensionWrapper>
+
+          <CommentWrapper>
+            <CreatorForm
+              ref={commentRef}
+              labelText="코멘트를 입력하세요."
+              height="calc(100% - 8em)"
+              onChange={handleOnChange}
+            />
+            <ExtensionWrapper>
+              <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
+              <DashedLine />
+              <FileImageButton>
+                <img /> 파일 첨부하기
+              </FileImageButton>
+            </ExtensionWrapper>
+          </CommentWrapper>
         </FormWrapper>
         <Sidebar />
       </BodyWrapper>
@@ -87,7 +60,7 @@ const FadeOut = keyframes`
   } to {
     opacity: 0;
   }
-`
+`;
 
 const Wrapper = styled.div`
   position: block;
@@ -135,7 +108,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 const CancelWrapper = styled.div`
-  width: 5em;
+  width: 7em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,7 +121,7 @@ const CancelIcon = styled.img`
 `;
 
 const CancelText = styled.span`
-  width: 11em;
+  width: 16em;
   color: #4e4b66;
 `;
 
@@ -162,7 +135,7 @@ const SubmitButton = styled.button<{ isSubmitable: boolean }>`
   align-items: center;
   gap: 0.5em;
   color: white;
-  background-color: #007aff;
+  background-color: #595959;
   border: 0;
   border-radius: 0.725em;
   cursor: pointer;
@@ -170,10 +143,16 @@ const SubmitButton = styled.button<{ isSubmitable: boolean }>`
   transition: all 0.5s ease;
 `;
 
+const CommentWrapper = styled.div`
+  height: 100%;
+  background-color: #eceef5;
+  border: 1px solid transparent;
+  border-radius: 12px;
+`;
+
 const ExtensionWrapper = styled.div`
-  position: fixed;
-  width: 910px;
-  top: 46em;
+  width: 100%;
+  height: 8em;
   display: flex;
   flex-direction: column;
 `;
@@ -186,7 +165,7 @@ const ContentWordCount = styled.span`
 `;
 
 const DashedLine = styled.hr`
-  border-top: 1px dashed #D9DBE9;
+  border-top: 1px dashed #d9dbe9;
   border-bottom: none;
   margin: 1.5em;
 `;
@@ -196,6 +175,6 @@ const FileImageButton = styled.button`
   background-color: transparent;
   border: none;
   text-align: left;
-`
+`;
 
 export default IssueCreator;

@@ -17,7 +17,27 @@ const dateUtils = {
     const currentDate = new Date(currentTime);
 
     return this.calculateTimeDifference(previousDate, currentDate);
-  }
-}
+  },
+
+  parseTimestampText(timestamp: string) {
+    const time = new Date(timestamp);
+
+    return `${time.getFullYear()}. ${time.getMonth() + 1}. ${time.getDate()}`;
+  },
+
+  isValidDateText(dateText: string | undefined) {
+    const date = new Date(dateText || "");
+
+    return !isNaN(date.getTime());
+  },
+
+  parseDateText(dateText: string | undefined) {
+    const date = new Date(dateText || "");
+    const timezoneOffset = date.getTimezoneOffset() * 60000; // 분을 밀리초로 변환
+    const convertedDate = new Date(date.getTime() - timezoneOffset);
+
+    return convertedDate.toISOString();
+  },
+};
 
 export default dateUtils;

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import userIcon from "../../img/icon/userIcon.png";
-import blueOpenedIssueIcon from "../../img/icon/blueOpenedIssueIcon.svg";
-import violetClosedIssueIcon from "../../img/icon/violetClosedIssueIcon.svg";
-import milestoneIcon from "../../img/icon/milestoneIcon.svg";
-import dateUtils from "../../utils/DateUtils";
+import userIcon from "../../../img/icon/userIcon.png";
+import blueOpenedIssueIcon from "../../../img/icon/blueOpenedIssueIcon.svg";
+import violetClosedIssueIcon from "../../../img/icon/violetClosedIssueIcon.svg";
+import milestoneIcon from "../../../img/icon/milestoneIcon.svg";
+import dateUtils from "../../../utils/DateUtils";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 
@@ -25,8 +25,7 @@ const IssueHeadline = React.forwardRef<HTMLDivElement, IssueHeadlineProps>((prop
       <IssueDescriptions>
         <IssueTitleDescription>
           <img src={isClosed ? violetClosedIssueIcon : blueOpenedIssueIcon} />
-          <TitleText onClick={() => navigate("/issue-detail")}>{title}</TitleText>
-          {/* get /issues/{issueId} 구현 완료 시 수정 */}
+          <TitleText onClick={() => navigate(`/issue/${issueId}`)}>{title}</TitleText>
           <LabelBox>Label</LabelBox>
         </IssueTitleDescription>
         <IssueInfo>

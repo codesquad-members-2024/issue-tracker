@@ -1,12 +1,18 @@
 import React from "react";
-import IssueHeadline, { IssueHeadlineProps } from "../components/issue/IssueHeadline";
-import { MemoryRouter } from 'react-router-dom';
+import IssueHeadline, { IssueHeadlineProps } from "../components/issue/list/IssueHeadline";
+import { MemoryRouter } from "react-router-dom";
 import { StoryFn } from "@storybook/react";
 
 export default {
   title: "Issue/IssueHeadline",
   component: IssueHeadline,
-  decorators: [(Story: StoryFn) => <MemoryRouter><Story /></MemoryRouter>]
+  decorators: [
+    (Story: StoryFn) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 };
 
 interface ReturnType extends React.FC<IssueHeadlineProps> {
