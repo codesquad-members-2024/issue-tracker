@@ -18,12 +18,12 @@ jobs:
       - name: Install Dependencies
         run: |
           cd frontend
-          yarn
+          npm install
 
       - name: Build
         run: |
           cd frontend
-          REACT_APP_SERVER=${{ secrets.REACT_APP_SERVER }} yarn build
+          REACT_APP_SERVER=${{ secrets.REACT_APP_SERVER }} npm run build
         env:
           REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
 
