@@ -16,10 +16,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Dependencies
-        run: yarn
+        run: |
+          cd frontend
+          yarn
 
       - name: Build
-        run: yarn build
+        run: |
+          cd frontend
+          yarn build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -29,7 +33,7 @@ jobs:
           aws-region: ${{ secrets.S3_REGION }}
 
       - name: Deploy to S3
-        run: aws s3 sync build/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+        run: aws s3 sync frontend/build/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation \
