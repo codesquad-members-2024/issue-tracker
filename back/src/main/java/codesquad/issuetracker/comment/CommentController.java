@@ -1,5 +1,6 @@
 package codesquad.issuetracker.comment;
 
+import codesquad.issuetracker.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comments")
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Comment> createComment(
+            @RequestBody Comment comment,
+            @SessionAttribute(name = "LOGIN USER", required = false) User user
+    ) {
         Comment createdComment = commentService.createComment(comment);
         URI location = uriComponentsBuilder.path("/comments/{id}")
                 .buildAndExpand(createdComment.getId())
