@@ -17,6 +17,7 @@ public class CommentController {
     @PostMapping("/comments")
     public ResponseEntity<Comment> createComment(
             @RequestBody Comment comment,
+            UriComponentsBuilder uriComponentsBuilder,
             @SessionAttribute(name = "LOGIN USER", required = false) User user
     ) {
         Comment createdComment = commentService.createComment(comment);
