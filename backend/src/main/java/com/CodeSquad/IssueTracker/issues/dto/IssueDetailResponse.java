@@ -19,4 +19,6 @@ public class IssueDetailResponse {
     private boolean isClosed;
     private List<CommentResponse> comments;
     private List<LabelRequest> labels;
+    private List<String> assignees;
+    private Long milestone;
 }

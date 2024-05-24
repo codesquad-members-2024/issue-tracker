@@ -3,16 +3,17 @@ import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.UserIdAlreadyExistException;
 import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
-import com.CodeSquad.IssueTracker.Exception.user.InvalidUserFormatException;
-import com.CodeSquad.IssueTracker.user.utils.UserValidate;
+import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -24,24 +25,19 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void save(User user) {
-        log.info("사용자 저장 시도: {}", user.getUserId());
+    public void save(UserRegisterRequest userRegisterRequest) {
+        User user = User.builder()
+                .userId(userRegisterRequest.userId())
+                .userPassword(userRegisterRequest.userPassword())
+                .isNew(true)
+                .build();
         verifyUserInfo(user);
         userRepository.save(user);
-        log.info("사용자 저장 성공: {}", user.getUserId());
     }
 
     public void verifyUserInfo(User user) {
-        if (!UserValidate.isUserIdValid(user.getUserId())) {
-            log.error("사용자 ID 유효성 검증 실패: {}", user.getUserId());
-            throw new InvalidUserFormatException("ID가 형식에 맞지 않습니다.");
-        }
-        if (!UserValidate.isUserPasswordValid(user.getUserPassword())) {
-            log.error("사용자 비밀번호 유효성 검증 실패: {}", user.getUserId());
-            throw new InvalidUserFormatException("비밀번호가 형식에 맞지 않습니다.");
-        }
         if (isUserIdDuplicated(user.getUserId())) {
-            log.error("사용자 ID 중복 : {}", user.getUserId());
+            log.error("회원가입 사용자 ID 중복 : {}", user.getUserId());
             throw new UserIdAlreadyExistException("이미 존재하는 ID입니다.");
         }
     }
@@ -80,5 +76,20 @@ public class UserService {
         log.info("로그인 시도");
     }
 
+    public void validateExistUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.info("인증 실패 : 존재하지 않는 유저입니다. userId : {}", userId);
+                    return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
+                });
+    }
 
+
+    public List<String> getAllUserIds() {
+        return userRepository.getAllUserIds();
+    }
+
+    public Set<User> findAllByIds(Set<String> newAssigneeIds) {
+        return userRepository.findAllById(newAssigneeIds);
+    }
 }

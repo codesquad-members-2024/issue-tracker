@@ -1,15 +1,14 @@
 package com.CodeSquad.IssueTracker.filter;
 
+import com.CodeSquad.IssueTracker.assignee.AssigneeService;
 import com.CodeSquad.IssueTracker.filter.dto.FilterListResponse;
 import com.CodeSquad.IssueTracker.issues.Issue;
 import com.CodeSquad.IssueTracker.issues.IssueService;
 import com.CodeSquad.IssueTracker.labels.LabelService;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 public class FilterService {
     private final CustomFilterRepository customFilterRepository;
     IssueService issueService;
@@ -29,7 +28,7 @@ public class FilterService {
                 .issueNumberResponse(issueService.getIssueNumber())
                 .labelListResponse(labelService.getLabelList())
                 .milestoneListResponse(milestoneService.getOpenMilestoneList())
-                .authorListResponse(issueService.getAuthorList())
+                .userListResponse(userService.getAllUserIds())
                 .build();
     }
 

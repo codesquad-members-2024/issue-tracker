@@ -1,7 +1,10 @@
 package com.CodeSquad.IssueTracker.user;
 
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
+import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +18,8 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerNewUser(@RequestBody User user) {
-        userService.save(user);
+    public ResponseEntity<?> registerNewUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        userService.save(userRegisterRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
