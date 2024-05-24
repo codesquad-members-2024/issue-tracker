@@ -10,27 +10,15 @@ import dateUtils from "../../utils/DateUtils";
 import MilestoneEditBox from "./MilestoneEditBox";
 import useMilestoneDetail from "../../hooks/logics/useMilestoneDetail";
 
-function MilestoneDetail({
-  milestoneId,
-  title,
-  description,
-  deadline,
-  totalIssue,
-  closedIssue,
-  isClosed,
-}: MilestoneDetailType) {
+function MilestoneDetail(props: MilestoneDetailType) {
+  const { milestoneId, title, description, deadline, totalIssue, closedIssue, isClosed } = props;
   const { isToEdit, toggleEdit, handleOpenButtonClick, handleCloseButtonClick, handleDeleteClick } =
     useMilestoneDetail(milestoneId);
 
   return (
     <>
       {isToEdit ? (
-        <MilestoneEditBox
-          type="edit"
-          milestoneId={milestoneId}
-          content={{ milestoneId, title, description, deadline, totalIssue, closedIssue, isClosed }}
-          closeEditBox={toggleEdit}
-        />
+        <MilestoneEditBox type="edit" milestoneId={milestoneId} content={props} closeEditBox={toggleEdit} />
       ) : (
         <Wrapper>
           <MilestoneBody>

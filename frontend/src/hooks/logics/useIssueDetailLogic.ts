@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { closeIssue, openIssue, postNewComment, sendIssueRequestById, sendTitleEditRequest } from "../../api/IssueAPI";
 import { useParams } from "react-router-dom";
 import useUserStore from "../stores/useUserStore";
@@ -20,6 +20,7 @@ interface IssueContent {
 }
 
 const useIssueDetailLogic = () => {
+  const client = useQueryClient();
   const { userId } = useUserStore();
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const [isCommentSubmitable, setIsCommentSubmitable] = useState(false);
@@ -30,32 +31,28 @@ const useIssueDetailLogic = () => {
   const { issueId } = useParams();
   const numericIssueId = Number(issueId);
 
-  const fetchIssueContent = () => {
-    if (issueId && !isNaN(numericIssueId)) fetchIssue(numericIssueId);
-  };
-
-  const { mutate: fetchIssue } = useMutation(sendIssueRequestById, {
+  useQuery([`issue-${numericIssueId}`, issueId], () => sendIssueRequestById(numericIssueId), {
     onSuccess: (data) => setIssueContent(data),
   });
 
   const { mutate: fetchOpenIssue } = useMutation(openIssue, {
-    onSuccess: () => fetchIssueContent(),
+    onSuccess: () => client.invalidateQueries(`issue-${issueId}`),
   });
 
   const { mutate: fetchCloseIssue } = useMutation(closeIssue, {
-    onSuccess: () => fetchIssueContent(),
+    onSuccess: () => client.invalidateQueries(`issue-${issueId}`),
   });
 
   const { mutate: fetchTitleEdit } = useMutation(sendTitleEditRequest, {
     onSuccess: () => {
-      fetchIssueContent();
+      client.invalidateQueries(`issue-${issueId}`);
       setIsTitleEditable(false);
     },
-    onError: () => fetchIssueContent(),
+    onError: () => setIsTitleEditable(false),
   });
 
   const { mutate: fetchNewComment } = useMutation(postNewComment, {
-    onSuccess: () => fetchIssueContent(),
+    onSuccess: () => client.invalidateQueries(`issue-${issueId}`),
   });
 
   const handleStateToggleClick = () => {
@@ -92,8 +89,6 @@ const useIssueDetailLogic = () => {
       titleInputRef.current.value = "";
     }
   };
-
-  useEffect(() => fetchIssueContent(), []);
 
   useEffect(() => setIsTitleSubmitable(false), [isTitleEditable]);
 
