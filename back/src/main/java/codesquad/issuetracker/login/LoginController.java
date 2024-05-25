@@ -1,6 +1,5 @@
 package codesquad.issuetracker.login;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -20,7 +19,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginForm loginForm, BindingResult bindingResult, HttpSession session) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginForm loginForm, BindingResult bindingResult) {
         // 유효성 검사 오류 처리
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().stream()
