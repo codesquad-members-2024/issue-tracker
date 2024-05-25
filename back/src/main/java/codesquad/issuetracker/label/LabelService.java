@@ -11,20 +11,20 @@ public class LabelService {
 
     private final LabelRepository labelRepository;
 
-    public void createLabel(Label label) {
-        labelRepository.save(label);
+    public Label createLabel(Label label) {
+        return labelRepository.save(label);
     }
 
     public List<Label> getAllLabels() {
-        return (List<Label>) labelRepository.findAll();
+        return labelRepository.findAll();
     }
 
     public Label getLabelById(Long labelId) {
         return labelRepository.findById(labelId).orElseThrow(RuntimeException::new);
     }
 
-    public void updateLabelById(Label updatedLabel) {
-        labelRepository.save(updatedLabel);
+    public Label updateLabelById(Label updatedLabel) {
+        return labelRepository.save(updatedLabel);
     }
 
     public void deleteLabelById(Long labelId) {

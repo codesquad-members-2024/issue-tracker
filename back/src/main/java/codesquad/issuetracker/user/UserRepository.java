@@ -2,6 +2,10 @@ package codesquad.issuetracker.user;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<User, String> {
+import java.util.List;
 
+public interface UserRepository extends CrudRepository<User, String> {
+    User findByLoginId(String loginId);
+
+    List<User> findAll();
 }
