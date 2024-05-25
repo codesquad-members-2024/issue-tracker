@@ -47,14 +47,9 @@ public class MilestoneService {
         return findById(milestoneId);
     }
 
-//    public ResponseEntity<String> softDeleteByMilestoneId(Long milestoneId) {
-//        Optional<Milestone> milestone = milestoneRepository.findById(milestoneId);
-//        if (milestone.isEmpty()) {
-//            return new ResponseEntity<>("Milestone not found", HttpStatus.NOT_FOUND);
-//        }
-//        milestoneCustomRepository.softDeleteByMilestoneId(milestoneId);
-//        return new ResponseEntity<>("Milestone is successfully deleted", HttpStatus.OK);
-//    }
+    public void softDeleteById(Long milestoneId) {
+        milestoneRepository.softDeleteById(milestoneId);
+    }
 
     public int countOpenMilestones() {
         return milestoneRepository.countOpenMilestones();

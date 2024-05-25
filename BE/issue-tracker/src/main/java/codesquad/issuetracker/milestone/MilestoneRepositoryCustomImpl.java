@@ -12,13 +12,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MilestoneCustomRepositoryImpl implements MilestoneCustomRepository {
+public class MilestoneRepositoryCustomImpl implements MilestoneRepositoryCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final MapSqlParameterSource parameters = new MapSqlParameterSource();
 
     @Autowired
-    public MilestoneCustomRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public MilestoneRepositoryCustomImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -34,13 +33,17 @@ public class MilestoneCustomRepositoryImpl implements MilestoneCustomRepository 
 
     @Override
     public Page<Milestone> findAll(Pageable pageable) {
-        String query = "SELECT * FROM MILESTONE WHERE IS_DELETED = FALSE LIMIT :limit OFFSET :offset";
+        String tableName = "MILESTONE";
+        String sql = "SELECT * FROM " + tableName + " WHERE IS_DELETED = FALSE LIMIT :limit OFFSET :offset";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("limit", pageable.getPageSize());
         parameters.addValue("offset", pageable.getOffset());
-        List<Milestone> milestones = jdbcTemplate.query(query, parameters, milestoneRowMapper);
 
-        String countQuery = "SELECT COUNT(*) FROM LABEL WHERE IS_DELETED = FALSE";
-        Long total = jdbcTemplate.queryForObject(countQuery, parameters, Long.class);
-        return new PageImpl<>(milestones, pageable, total);
+        List<Milestone> results = jdbcTemplate.query(sql, parameters, milestoneRowMapper);
+        String countSql = "SELECT COUNT(*) FROM " + tableName + " WHERE IS_DELETED = FALSE";
+        Long total = jdbcTemplate.queryForObject(countSql, parameters, Long.class);
+
+        return new PageImpl<>(results, pageable, total);
+
     }
 }

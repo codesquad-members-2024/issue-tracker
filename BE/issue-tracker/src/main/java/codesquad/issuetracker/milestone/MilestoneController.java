@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,10 +48,11 @@ public class MilestoneController {
         return ResponseEntity.created(URI.create("api/milestones/" + milestoneId)).build();
     }
 
-//    @DeleteMapping("/{milestoneId}")
-//    public ResponseEntity<String> deleteMilestone(@PathVariable Long milestoneId) {
-//        return milestoneService.softDeleteByMilestoneId(milestoneId);
-//    }
+    @DeleteMapping("/{milestoneId}")
+    public ResponseEntity<String> deleteMilestone(@PathVariable Long milestoneId) {
+        milestoneService.softDeleteById(milestoneId);
+        return ResponseEntity.noContent().build();
+    }
 
     @PatchMapping("/{milestoneId}/close")
     public ResponseEntity<Milestone> closeMilestone(@PathVariable Long milestoneId) {

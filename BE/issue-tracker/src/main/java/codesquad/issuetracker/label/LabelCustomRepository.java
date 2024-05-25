@@ -7,5 +7,4 @@ public interface LabelCustomRepository<T> {
 
     Page<Label> findAll(Pageable pageable);
 
-    void update(Long id, T model);
 }

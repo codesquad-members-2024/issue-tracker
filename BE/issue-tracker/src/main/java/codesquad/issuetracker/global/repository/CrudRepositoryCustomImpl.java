@@ -6,27 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 @Slf4j
-@Repository
-public class CustomCrudRepositoryImpl implements CustomCrudRepository {
+public class CrudRepositoryCustomImpl<T, ID> implements CrudRepositoryCustom<T, ID> {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public CustomCrudRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public CrudRepositoryCustomImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
+
     public void update(Object id, Object entity) {
         try {
             Map<String, Object> fieldsToUpdate = new HashMap<>();
             Field[] fields = entity.getClass().getDeclaredFields();
+            entity.getClass().getSuperclass().getDeclaredFields();
 
             for (Field field : fields) {
                 field.setAccessible(true);
@@ -59,4 +56,5 @@ public class CustomCrudRepositoryImpl implements CustomCrudRepository {
             throw new RuntimeException("업데이트 과정에서 필드 접근에 실패했습니다.", e);
         }
     }
+
 }
