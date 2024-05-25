@@ -1,9 +1,7 @@
 package com.CodeSquad.IssueTracker.issues;
 
-import com.CodeSquad.IssueTracker.Exception.issue.AuthorNotFoundException;
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
-import com.CodeSquad.IssueTracker.Exception.label.LabelNotFoundException;
 import com.CodeSquad.IssueTracker.assignee.AssigneeRepository;
 import com.CodeSquad.IssueTracker.assignee.AssigneeService;
 import com.CodeSquad.IssueTracker.assignee.dto.AssigneeId;
@@ -15,14 +13,11 @@ import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelRepository;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.IssueLabelRequest;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelId;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
-import com.CodeSquad.IssueTracker.labels.Label;
 import com.CodeSquad.IssueTracker.labels.LabelRepository;
 import com.CodeSquad.IssueTracker.labels.LabelService;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
-import com.CodeSquad.IssueTracker.milestone.MilestoneRepository;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
-import com.CodeSquad.IssueTracker.user.User;
-import com.CodeSquad.IssueTracker.user.UserRepository;
+import com.CodeSquad.IssueTracker.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,23 +33,21 @@ import java.util.stream.Collectors;
 public class IssueService {
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final MilestoneService milestoneService;
-    private final LabelRepository labelRepository;
     private final IssueLabelRepository issueLabelRepository;
     private final AssigneeRepository assigneeRepository;
     private final LabelService labelService;
     private final AssigneeService assigneeService;
+    private final UserService userService;
 
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
-                        UserRepository userRepository,LabelRepository labelRepository, 
-                        IssueLabelRepository issueLabelRepository,MilestoneService milestoneService, 
-                        AssigneeRepository assigneeRepository, LabelService labelService, 
+                        UserService userService,
+                        IssueLabelRepository issueLabelRepository, MilestoneService milestoneService,
+                        AssigneeRepository assigneeRepository, LabelService labelService,
                         AssigneeService assigneeService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
-        this.labelRepository = labelRepository;
+        this.userService = userService;
         this.issueLabelRepository = issueLabelRepository;
         this.milestoneService = milestoneService;
         this.assigneeRepository = assigneeRepository;
@@ -220,10 +212,7 @@ public class IssueService {
 
 
     private void validateIssueRequest(IssueRequest issueRequest) {
-        Optional<User> user = userRepository.findById(issueRequest.author());
-        if (user.isEmpty()) {
-            throw new AuthorNotFoundException("작성자가 유효하지 않습니다. : " + issueRequest.author());
-        }
+        userService.validateExistUser(issueRequest.author());
     }
 
     @Transactional
@@ -265,21 +254,15 @@ public class IssueService {
         }
     }
     public void addLabelToIssue(Long issueId, Long labelId) {
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new IssueNotExistException("해당 이슈가 존재하지 않습니다. issueId=" + issueId));
-
-        Label label = labelRepository.findById(labelId)
-                .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다. labelId=" + labelId));
+        validateExistIssue(issueId);
+        labelService.validateLabelId(labelId);
 
         issueLabelRepository.addLabelToIssue(issueId, labelId);
     }
 
     public void removeLabelFromIssue(Long issueId, Long labelId) {
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new IssueNotExistException("해당 이슈가 존재하지 않습니다. issueId=" + issueId));
-
-        Label label = labelRepository.findById(labelId)
-                .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다. labelId=" + labelId));
+        validateExistIssue(issueId);
+        labelService.validateLabelId(labelId);
 
         issueLabelRepository.removeLabelFromIssue(issueId, labelId);
     }
@@ -307,8 +290,8 @@ public class IssueService {
                 .build();
     }
 
-    public Issue validateExistIssue(Long issueId) {
-        return issueRepository.findById(issueId)
+    public void validateExistIssue(Long issueId) {
+        issueRepository.findById(issueId)
                 .orElseThrow(() -> new IssueNotExistException("이슈가 존재하지 않습니다."));
     }
 

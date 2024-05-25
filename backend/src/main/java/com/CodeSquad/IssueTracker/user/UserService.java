@@ -77,7 +77,7 @@ public class UserService {
     }
 
     public void validateExistUser(String userId) {
-        User user = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> {
                     log.info("인증 실패 : 존재하지 않는 유저입니다. userId : {}", userId);
                     return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
