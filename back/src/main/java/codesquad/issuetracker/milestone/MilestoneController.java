@@ -16,14 +16,14 @@ public class MilestoneController {
     private final MilestoneService milestoneService;
 
     @PostMapping("/milestones")
-    public ResponseEntity<Milestone> createMilestone(@RequestBody MilestoneSaveDto milestoneSaveDto, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<MilestoneShowDto> createMilestone(@RequestBody MilestoneSaveDto milestoneSaveDto, UriComponentsBuilder uriComponentsBuilder) {
         Milestone createdMilestone = milestoneService.createMilestone(milestoneSaveDto.toEntity());
         URI location = uriComponentsBuilder.path("/milestones/{id}")
                 .buildAndExpand(createdMilestone.getId())
                 .toUri();
         return ResponseEntity
                 .created(location)
-                .body(createdMilestone);
+                .body(new MilestoneShowDto(createdMilestone));
     }
 
     @GetMapping("/milestones")
@@ -43,9 +43,9 @@ public class MilestoneController {
     }
 
     @PutMapping("/milestones/{milestoneId}")
-    public ResponseEntity<Milestone> updateMilestoneById(@PathVariable Long milestoneId, @RequestBody MilestoneUpdateDto milestoneUpdateDto) {
+    public ResponseEntity<MilestoneShowDto> updateMilestoneById(@PathVariable Long milestoneId, @RequestBody MilestoneUpdateDto milestoneUpdateDto) {
         Milestone updatedMilestone = milestoneService.updateMilestoneById(milestoneUpdateDto.toEntity(milestoneId));
-        return ResponseEntity.ok(updatedMilestone);
+        return ResponseEntity.ok(new MilestoneShowDto(updatedMilestone));
     }
 
     @DeleteMapping("/milestones/{milestoneId}")
