@@ -2,7 +2,6 @@ package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssuePageException;
 import com.CodeSquad.IssueTracker.Exception.issue.IssueNotExistException;
-import com.CodeSquad.IssueTracker.assignee.AssigneeRepository;
 import com.CodeSquad.IssueTracker.assignee.AssigneeService;
 import com.CodeSquad.IssueTracker.assignee.dto.AssigneeId;
 import com.CodeSquad.IssueTracker.issues.comment.Comment;

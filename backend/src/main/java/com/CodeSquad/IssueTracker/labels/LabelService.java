@@ -69,7 +69,7 @@ public class LabelService {
 
     public Label updateLabel(Long id, LabelRequest updatedLabel) {
         log.info("라벨 id: {} 업데이트 요청: {}", id, updatedLabel);
-        Label oldLabel = labelRepository.findById(id)
+        labelRepository.findById(id)
                 .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다."));
         validateLabelRequest(updatedLabel, true);
 
@@ -106,10 +106,5 @@ public class LabelService {
         }
 
         return labelListResponses;
-    }
-
-    public void validateLabelId(Long labelId) {
-        labelRepository.findById(labelId)
-                .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다."));
     }
 }
