@@ -8,9 +8,11 @@ public class Member {
     @Id
     private final String memberId;
     private final String password;
+    private final String profileImage;
 
-    public Member(String memberId, String password) {
+    public Member(String memberId, String password, String profileImage) {
         this.memberId = memberId;
         this.password = password;
+        this.profileImage = profileImage;    // default
     }
 }

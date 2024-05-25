@@ -11,10 +11,14 @@ import team08.issuetracker.exception.member.MemberPasswordMismatchException;
 import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.model.dto.MemberCreationRequest;
 import team08.issuetracker.member.model.dto.MemberLoginRequest;
+import team08.issuetracker.member.model.dto.MemberOverviewResponse;
+import team08.issuetracker.member.model.dto.MemberPreviewResponse;
 import team08.issuetracker.member.repository.MemberRepository;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -26,10 +30,19 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    public MemberOverviewResponse findAllMembers() {
+        List<MemberPreviewResponse> members = memberRepository.findAll()
+                .stream()
+                .map(MemberPreviewResponse::from)
+                .toList();
+
+        return MemberOverviewResponse.from(members);
+    }
+
     public Member registerMember(MemberCreationRequest memberCreationRequest) {
         validateMemberForm(memberCreationRequest.memberId(), memberCreationRequest.password());
 
-        Member member = new Member(memberCreationRequest.memberId(), memberCreationRequest.password());
+        Member member = memberCreationRequest.toEntity();
 
         try {
             return memberRepository.insert(member);

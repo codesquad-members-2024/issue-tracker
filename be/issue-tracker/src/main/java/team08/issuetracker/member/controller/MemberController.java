@@ -9,6 +9,7 @@ import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.model.dto.MemberCreationResponse;
 import team08.issuetracker.member.model.dto.MemberCreationRequest;
 import team08.issuetracker.member.model.dto.MemberLoginRequest;
+import team08.issuetracker.member.model.dto.MemberOverviewResponse;
 import team08.issuetracker.member.service.MemberService;
 
 @RestController
@@ -23,8 +24,15 @@ public class MemberController {
     private static final String TOKEN_NAME = "jwt-token";
     private static final String TOKEN_HEADER_VALUE = "Bearer ";
 
+    @GetMapping("/list")
+    public ResponseEntity<MemberOverviewResponse> getAllMembers() {
+        MemberOverviewResponse memberOverviewResponse = memberService.findAllMembers();
+        return ResponseEntity.ok(memberOverviewResponse);
+    }
+
     @PostMapping
     public ResponseEntity<MemberCreationResponse> registerMember(@RequestBody MemberCreationRequest memberCreationRequest) {
+
         Member member = memberService.registerMember(memberCreationRequest);
 
         MemberCreationResponse response = MemberCreationResponse.from(member);
