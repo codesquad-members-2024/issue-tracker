@@ -40,7 +40,7 @@ public class LoginServiceTest {
         when(userRepository.findByLoginId(email)).thenReturn(user);
 
         // when
-        boolean result = loginService.authenticate(email, password, session);
+        boolean result = loginService.authenticate(email, password);
 
         // then
         assertTrue(result);
@@ -55,7 +55,7 @@ public class LoginServiceTest {
         when(userRepository.findByLoginId(email)).thenReturn(null);
 
         // when
-        boolean result = loginService.authenticate(email, password, session);
+        boolean result = loginService.authenticate(email, password);
 
         // then
         assertFalse(result);
