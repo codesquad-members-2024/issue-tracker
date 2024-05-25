@@ -24,8 +24,8 @@ public class MilestoneService {
         return milestoneRepository.findById(milestoneId).orElseThrow(() -> new MilestoneNotFoundException("존재하지 않는 마일스톤 입니다."));
     }
 
-    public void updateMilestoneById(Milestone milestone) {
-        milestoneRepository.save(milestone);
+    public Milestone updateMilestoneById(Milestone milestone) {
+        return milestoneRepository.save(milestone);
     }
 
     public void deleteMilestoneById(Long milestoneId) {

@@ -24,8 +24,8 @@ public class LabelService {
         return labelRepository.findById(labelId).orElseThrow(() -> new LabelNotFoundException("존재하지 않는 라벨 입니다."));
     }
 
-    public void updateLabelById(Label updatedLabel) {
-        labelRepository.save(updatedLabel);
+    public Label updateLabelById(Label updatedLabel) {
+        return labelRepository.save(updatedLabel);
     }
 
     public void deleteLabelById(Long labelId) {
