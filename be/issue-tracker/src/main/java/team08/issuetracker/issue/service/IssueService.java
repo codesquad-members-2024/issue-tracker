@@ -2,35 +2,77 @@ package team08.issuetracker.issue.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
+import team08.issuetracker.issue.model.dto.IssueResponse;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
 import team08.issuetracker.issue.repository.AssigneeRepository;
 import team08.issuetracker.issue.repository.IssueAttachedLabelRepository;
 import team08.issuetracker.issue.repository.IssueRepository;
+import team08.issuetracker.label.model.dto.LabelResponse;
+import team08.issuetracker.label.repository.LabelRepository;
+import team08.issuetracker.milestone.repository.MilestoneRepository;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class IssueService {
-
     private final IssueRepository issueRepository;
+    private final LabelRepository labelRepository;
+    private final MilestoneRepository milestoneRepository;
     private final AssigneeRepository assigneeRepository;
     private final IssueAttachedLabelRepository issueAttachedLabelRepository;
 
-    public List<Issue> issues() {
-        List<Issue> issues = new ArrayList<>();
+    public List<IssueResponse> getIssueListResponse() {
+        List<IssueResponse> issueResponses = new ArrayList<>();
+
         for (Issue issue : issueRepository.findAll()) {
-            issues.add(issue);
+
+            Long milestoneId = issue.getMilestoneId();
+            String milestoneName = getMilestoneName(milestoneId);
+
+            //특정 이슈의 담당자 아이디를 모두 찾는 기능
+            List<String> assigneeIds = getAssigneeIds(issue);
+
+            //특정 이슈의 모든 라벨을 (dto로) 찾는 기능
+            List<LabelResponse> labelResponses = getLabelResponses(issue);
+
+            issueResponses.add(
+                    IssueResponse.of(
+                    issue.getId(), issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
+            ));
         }
 
-        return issues;
+        return issueResponses;
+    }
+
+    private String getMilestoneName(Long milestoneId) {
+        return milestoneRepository.findById(milestoneId)
+                .orElseThrow(MilestoneIdNotFoundException::new)
+                .getName();
+    }
+
+    private List<String> getAssigneeIds(Issue issue) {
+        return issue.getAssignees().stream()
+                .map(Assignee::getMemberId)
+                .toList();
+    }
+
+    private List<LabelResponse> getLabelResponses(Issue issue) {
+        return issue.getIssueAttachedLabels().stream()
+                .map(IssueAttachedLabel::getLabelId)
+                .map(labelRepository::findById)
+                .filter(Optional::isPresent)
+                .map(label -> new LabelResponse(label.get()))
+                .toList();
     }
 
     @Transactional

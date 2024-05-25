@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
-import team08.issuetracker.issue.model.dto.IssueListResponse;
+import team08.issuetracker.issue.model.dto.IssueResponse;
 import team08.issuetracker.issue.model.dto.IssueUpdateResponse;
 import team08.issuetracker.issue.service.IssueService;
 
@@ -29,10 +29,9 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping()
-    public ResponseEntity<IssueListResponse> issues() {
-        List<Issue> issues = issueService.issues();
-        IssueListResponse issueListResponse = new IssueListResponse(issues);
-        return ResponseEntity.ok(issueListResponse);
+    public ResponseEntity<List<IssueResponse>> issues() {
+        List<IssueResponse> issues = issueService.getIssueListResponse();
+        return ResponseEntity.ok(issues);
     }
 
     @PostMapping()
