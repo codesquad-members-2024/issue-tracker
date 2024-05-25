@@ -3,36 +3,44 @@ import styled from 'styled-components';
 import { Button } from '~/common/components/Button';
 import { IconEdit, IconSmile, IconXsquare } from '~/common/icons';
 import { IssueCommentEdit } from '~/features/issue/components';
-import { putComment } from '../apis/putComment';
+import { putComment, editIssueContent } from '~/features/issue/apis';
 
 export function IssueCommentItem({
-	commeneId,
 	content,
 	writer,
 	isWriter,
 	issueId,
 	fetchIssueDetail,
+	duration,
+	commentId,
 }) {
 	const [comment, setComment] = useState(content);
 	const [isEdit, setIsEdit] = useState(false);
-	const [hasChange, setHasChange] = useState(false);
+	// const [hasChange, setHasChange] = useState(false);
 
-	useEffect(() => {
-		setComment(content);
-	}, [content]);
 	const handleCommentEdit = () => {
 		//TODO: 계정정보와 작성자 정보가 일치해야 수정 가능하도록
 		setIsEdit(!isEdit);
 	};
-	useEffect(() => {
-		setHasChange(comment !== content);
-	}, [comment, content]);
+	// useEffect(() => {
+	// 	setHasChange(comment !== content);
+	// }, [comment, content]);
+
+	const editContent = async () => {
+		try {
+			await editIssueContent(issueId, comment);
+			await fetchIssueDetail(issueId);
+			setIsEdit(prev => !prev);
+		} catch (error) {
+			console.error('Error putting comment:', error);
+		}
+	};
 
 	const putEditComment = async () => {
 		try {
-			await putComment(commeneId, comment, issueId);
-			setIsEdit(false);
-			fetchIssueDetail(issueId);
+			await putComment(commentId, comment);
+			await fetchIssueDetail(issueId);
+			setIsEdit(prev => !prev);
 		} catch (error) {
 			console.error('Error putting comment:', error);
 		}
@@ -47,7 +55,7 @@ export function IssueCommentItem({
 							alt='양시미'
 						/>
 						<h3>{writer}</h3>
-						<p>3분 전</p>
+						<p>{duration} 전</p>
 					</span>
 					<span className='action'>
 						{isWriter && <p className='badge'>작성자</p>}
@@ -58,9 +66,7 @@ export function IssueCommentItem({
 							buttonType='ghost'
 							buttonText='편집'
 							icon={<IconEdit />}
-							onClick={() => {
-								handleCommentEdit();
-							}}
+							onClick={handleCommentEdit}
 						/>
 						<Button
 							type='button'
@@ -100,7 +106,7 @@ export function IssueCommentItem({
 						// disabled={!hasChange}
 						buttonText='편집 완료 댓글'
 						icon={<IconEdit />}
-						onClick={putEditComment}
+						onClick={isWriter ? editContent : putEditComment}
 					/>
 				</StyledButtons>
 			)}

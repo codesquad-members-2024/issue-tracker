@@ -13,39 +13,13 @@ import {
 	IconPlus,
 } from '~/common/icons';
 
-import { postComment } from '../apis/postComment';
+import { postComment, editIssueTitle } from '~/features/issue/apis/';
 
 import {
 	IssueCommentItem,
 	IssueSidebar,
 	IssueCommentEdit,
 } from '~/features/issue/components';
-
-// const issueData = [
-// 	{
-// 		id: 1,
-// 		title: 'title1',
-// 		content: 'my name is daniel',
-// 		milestoneId: 'm1',
-// 		assignees: [
-// 			{
-// 				loginId: 'mellisa',
-// 				profileImage:
-// 					'https://avatars.githubusercontent.com/u/140429591?s=40&v=4',
-// 			},
-// 		],
-// 		writer: 'daniel',
-// 		createTime: '2024-05-14T04:41:45.318597316',
-// 		labels: [
-// 			{
-// 				name: 'bug',
-// 				description: 'bug',
-// 				color: '#0075ca',
-// 			},
-// 		],
-// 		closed: false,
-// 	},
-// ];
 
 export function IssueDetailContainer() {
 	const { id } = useParams();
@@ -97,6 +71,19 @@ export function IssueDetailContainer() {
 			console.error('Error posting comment:', error);
 		}
 	};
+
+	const editTitle = async () => {
+		try {
+			await editIssueTitle(issueDetail.id, detailState.title);
+			await fetchIssueDetail();
+			setDateilState(prevState => ({
+				...prevState,
+				isEdit: false,
+			}));
+		} catch (error) {
+			console.error('Error editing title:', error);
+		}
+	};
 	const isNewComment = detailState.newComment !== '';
 	const hasChanged = detailState.title !== issueDetail?.title;
 
@@ -145,9 +132,9 @@ export function IssueDetailContainer() {
 									size='small'
 									// disabled={!hasChanged}
 									buttonType='outline'
-									buttonText='편집 완료 제목'
+									buttonText='제목 편집 완료'
 									icon={<IconEdit />}
-									onClick={() => {}}
+									onClick={editTitle}
 								/>
 							) : (
 								<Button
@@ -182,18 +169,20 @@ export function IssueDetailContainer() {
 					<section>
 						{/* 원작자  */}
 						<IssueCommentItem
-							id={issueDetail.id}
+							issueId={id}
 							content={issueDetail.content}
 							writer={issueDetail.writer}
+							duration={issueDetail.duration}
 							isWriter={true}
+							fetchIssueDetail={fetchIssueDetail}
 						/>
 						{issueDetail?.comments &&
 							issueDetail.comments.map(item => (
 								<IssueCommentItem
 									key={item.id + 1}
-									issueId={issueDetail.id}
-									commeneId={item.id}
+									commentId={item.id}
 									content={item.content}
+									duration={item.duration}
 									writer={item.writer}
 									isWriter={issueDetail.writer === item.writer}
 									fetchIssueDetail={fetchIssueDetail}

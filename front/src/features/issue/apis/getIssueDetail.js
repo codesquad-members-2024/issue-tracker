@@ -21,38 +21,52 @@ export async function getIssueDetail(id) {
 	}
 }
 
-/**
- * Response Example
-{
-  "id": 1,
-  "title": "title1",
-  "content": "my name is daniel",
-  "milestoneId": "m1",
-  "assignees": [
-    {
-      "loginId": "mellisa",
-      "profileImage": "https://avatars.githubusercontent.com/u/140429591?s=40&v=4"
-    },
-    {
-      "loginId": "wade",
-      "profileImage": "https://avatars.githubusercontent.com/u/126778700?s=40&v=4"
-    }
-  ],
-  "writer": "daniel",
-  "createTime": "2024-05-14T04:41:45.318597316",
-  "labels": [
-    {
-      "name": "bug",
-      "description": "bug",
-      "color": "#0075ca"
-    },
-    {
-      "name": "documentation",
-      "description": "documentation",
-      "color": "#008672"
-    }
-  ],
-  "closed": false
+export async function editIssueTitle(issueId, issueTitle) {
+	console.log(issueId, issueTitle);
+	try {
+		const requestOptions = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ title: issueTitle }),
+		};
+		const response = await fetch(
+			`${server}/issues/${issueId}/title`,
+			requestOptions
+		);
+		if (response.status === 200) {
+			return { success: true };
+		} else {
+			console.error('Error:', response);
+		}
+	} catch (e) {
+		console.error('Error:', e);
+	}
 }
 
-*/
+export async function editIssueContent(issueId, content) {
+	console.log(issueId, content);
+	try {
+		const requestOptions = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ content: content }),
+		};
+		const response = await fetch(
+			`${server}/issues/${issueId}/content`,
+			requestOptions
+		);
+		if (response.status === 200) {
+			return { success: true };
+		} else {
+			console.error('Error:', response);
+			return { error: response.statusText };
+		}
+	} catch (error) {
+		console.error('Error:', error);
+		return { error: error.message };
+	}
+}
