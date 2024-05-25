@@ -37,7 +37,6 @@ class UserControllerTest {
             .id("123")
             .password("1234")
             .username("user")
-            .role(Role.USER)
             .build();
         String json = objectMapper.writeValueAsString(userCreateRequest);
 

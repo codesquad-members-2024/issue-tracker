@@ -20,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<?> register(@RequestBody UserCreateRequest request) {
         String userId = userService.register(request);
         return ResponseEntity.created(URI.create("/api/users/" + userId)).build();
