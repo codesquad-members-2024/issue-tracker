@@ -3,6 +3,7 @@ package com.CodeSquad.IssueTracker.labels;
 import com.CodeSquad.IssueTracker.Exception.label.DuplicateLabelNameException;
 import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelColorException;
 import com.CodeSquad.IssueTracker.Exception.label.InvalidLabelNameException;
+import com.CodeSquad.IssueTracker.labels.dto.LabelRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,9 @@ public class LabelController {
     }
 
     @PostMapping("/label")
-    public ResponseEntity<Label> createLabel(@RequestBody Label label) {
+    public ResponseEntity<Label> createLabel(@RequestBody LabelRequest labelRequest) {
         try {
-            Label createdLabel = labelService.createLabel(label);
+            Label createdLabel = labelService.createLabel(labelRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdLabel);
         } catch (InvalidLabelNameException | InvalidLabelColorException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -42,7 +43,7 @@ public class LabelController {
     }
 
     @PutMapping("/label/{id}")
-    public ResponseEntity<Label> updateLabel(@PathVariable Long id, @RequestBody Label updatedLabel) {
+    public ResponseEntity<Label> updateLabel(@PathVariable Long id, @RequestBody LabelRequest updatedLabel) {
         Label updatedLabelResponse = labelService.updateLabel(id, updatedLabel);
         return updatedLabelResponse != null ? ResponseEntity.ok(updatedLabelResponse) : ResponseEntity.notFound().build();
     }
