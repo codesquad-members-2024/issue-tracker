@@ -3,12 +3,23 @@ import Header from "../../header/Header";
 import CreatorForm from "./CreatorForm";
 import userIcon from "../../../img/icon/userIcon.png";
 import plusIcon from "../../../img/icon/plusIcon_dark.svg";
+import uploadIcon from "../../../img/icon/uploadIcon.svg";
 import Sidebar from "../Sidebar";
 import useIssueCreatorLogic from "../../../hooks/logics/useIssueCreatorLogic";
 
 function IssueCreator() {
-  const { titleRef, commentRef, commentCount, isSubmitable, handleOnChange, handleCancel, handleSubmit } =
-    useIssueCreatorLogic();
+  const {
+    titleRef,
+    commentRef,
+    fileInputRef,
+    commentCount,
+    isSubmitable,
+    handleOnChange,
+    handleUploadClick,
+    handleFileChange,
+    handleCancel,
+    handleSubmit,
+  } = useIssueCreatorLogic();
 
   return (
     <Wrapper>
@@ -31,9 +42,11 @@ function IssueCreator() {
             <ExtensionWrapper>
               <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
               <DashedLine />
-              <FileImageButton>
-                <img /> 파일 첨부하기
-              </FileImageButton>
+              <FileUploadWrapper>
+                <img src={uploadIcon} />
+                <FileUploadInput type="file" ref={fileInputRef} onChange={handleFileChange} />
+                <FileUploadButton onClick={handleUploadClick}>파일 첨부하기</FileUploadButton>
+              </FileUploadWrapper>
             </ExtensionWrapper>
           </CommentWrapper>
         </FormWrapper>
@@ -165,12 +178,21 @@ const ContentWordCount = styled.span`
 const DashedLine = styled.hr`
   border-top: 1px dashed #d9dbe9;
   border-bottom: none;
-  margin: 1.5em;
+  margin: 1.5em 0;
 `;
 
-const FileImageButton = styled.button`
+const FileUploadWrapper = styled.div`
+  display: flex;
+  padding: 0 1em;
+  gap: 0.5em;
+`;
+
+const FileUploadInput = styled.input`
+  display: none;
+`;
+
+const FileUploadButton = styled.button`
   width: fit-content;
-  padding: 0 2em;
   background-color: transparent;
   border: none;
   text-align: left;

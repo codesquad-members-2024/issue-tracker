@@ -2,7 +2,7 @@ name: frontend deployment
 
 on:
   push:
-    branches: [ "fe-dev" ]
+    branches: [ "fe-dev", "fe-new-issue" ]
 
 jobs:
   build:
