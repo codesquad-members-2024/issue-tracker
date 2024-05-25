@@ -22,7 +22,6 @@ export async function getIssueDetail(id) {
 }
 
 export async function editIssueTitle(issueId, issueTitle) {
-	console.log(issueId, issueTitle);
 	try {
 		const requestOptions = {
 			method: 'PUT',
@@ -46,7 +45,6 @@ export async function editIssueTitle(issueId, issueTitle) {
 }
 
 export async function editIssueContent(issueId, content) {
-	console.log(issueId, content);
 	try {
 		const requestOptions = {
 			method: 'PUT',

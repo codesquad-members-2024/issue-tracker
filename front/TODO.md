@@ -24,24 +24,7 @@
 ### 개인 백로그
 
 - [ ] 리액트 라우터의 라우터 형식 변경 및 레이아웃 쪼개기 [참고](https://be-a-weapon.tistory.com/entry/React-%EB%9D%BC%EC%9A%B0%ED%84%B0Router%EC%99%80-%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83Layout-%EC%AA%BC%EA%B0%9C%EA%B8%B0)
-  - Routes 형태 참고
-  ```
-      const router = createBrowserRouter([
-      {
-          path: "/",
-          element: (
-          <div>
-              <h1>Hello World</h1>
-              <Link to="about">About Us</Link>
-          </div>
-          ),
-      },
-      {
-          path: "about",
-          element: <div>About</div>,
-      },
-      ]);
-  ```
+
 - [ ] NavLink 공부하기 [참고](https://reactrouter.com/en/main/components/nav-link#navlink)
 - [ ] 체크박스 전체 선택/해지 기능 구현
 - [ ] react lazy 공부 [참고](https://itprogramming119.tistory.com/entry/React-Reactlazy%EB%9E%80)
