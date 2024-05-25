@@ -11,7 +11,7 @@ export function SignInPage() {
 }
 const StyledFormWrapper = styled.form`
 	width: 100%;
-	height: 100vh;
+	// height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;

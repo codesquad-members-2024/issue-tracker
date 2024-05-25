@@ -11,12 +11,12 @@ import {
 	Button,
 	Loading,
 } from '~/common/components';
-import { addLabel } from '~/features/label/apis';
+
 import { LabelRegister, LabelListItem } from '~/features/label/components';
 
 export function LabelContainer() {
 	const [newLabel, setNewLabel] = useState(false);
-	const { labelList, loading, fetchLabelList } = useLabelList();
+	const { labelList, loading } = useLabelList();
 
 	return (
 		<>

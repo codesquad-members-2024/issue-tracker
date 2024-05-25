@@ -23,5 +23,5 @@ export const useLabelList = () => {
 		fetchLabelList();
 	}, []);
 
-	return { labelList, loading, error, fetching: fetchLabelList };
+	return { labelList, loading, error };
 };

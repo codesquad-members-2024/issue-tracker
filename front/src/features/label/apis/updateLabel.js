@@ -3,16 +3,17 @@ import { server } from '~/apis/baseApi';
 export async function putLabel(labelId, label) {
 	console.log('putlabel', label);
 	try {
-		const response = await fetch(`${server}/labels/${labelId}`, {
+		const requestOptions = {
 			method: 'PUT',
-			// credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(label),
-		});
-		const data = await response.json();
-		return data;
+		};
+		const response = await fetch(`${server}/labels/${labelId}`, requestOptions);
+		if (response.status === 204) {
+			return { success: true };
+		}
 	} catch (error) {
 		console.error('Error:', error);
 		return { error: error.message };

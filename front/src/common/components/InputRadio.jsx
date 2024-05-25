@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { IconCheckCircle, IconCheckOff, IconChecks } from '~/common/icons';
+
 /**
  * listName = assignees, labels, milestones, writers
  * value = [] or [id1, id2, id3, ...]
@@ -13,7 +13,7 @@ export function InputRadio({
 	bgColor,
 	fontColor,
 	onChange,
-
+	defaultChecked,
 	...props
 }) {
 	const radio = useRef(null);
@@ -25,7 +25,6 @@ export function InputRadio({
 				{bgColor && <StyledCircle $bgColor={bgColor} className='aaa' />}
 				<StyledValue $fontColor={fontColor}>{value}</StyledValue>
 			</span>
-			{/* {checked ? <IconCheckCircle /> : <IconCheckOff />} */}
 			<input
 				id={id}
 				name={listName}
@@ -33,6 +32,7 @@ export function InputRadio({
 				type='radio'
 				ref={radio}
 				onChange={onChange}
+				defaultChecked={defaultChecked}
 			/>
 		</StyledLabel>
 	);

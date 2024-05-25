@@ -17,7 +17,10 @@ export function GlobalHeader({ ...props }) {
 	);
 }
 const StyledHeader = styled.header`
+	margin-bottom: 32px;
 	height: 94px;
+	display: flex;
+	align-items: center;
 	& > div {
 		height: 100%;
 	}
@@ -26,6 +29,7 @@ const StyledInnerLayout = styled(InnerLayout)`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding-bottom: 0;
 `;
 const StyledLink = styled(Link)`
 	display: block;

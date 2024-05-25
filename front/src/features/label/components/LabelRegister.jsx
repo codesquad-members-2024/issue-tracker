@@ -11,7 +11,6 @@ import { Input } from 'antd';
 import { Button, Label, InputRadio } from '~/common/components';
 import { putLabel, addLabel } from '~/features/label/apis';
 import { colorGenerator } from '~/utils/util';
-import { useLabelList } from '~/features/issue/hooks';
 
 export function LabelRegister({
 	isEdit,
@@ -20,17 +19,17 @@ export function LabelRegister({
 	newLabel,
 	setNewLabel,
 }) {
-	const { fetchLabelList } = useLabelList();
 	const [preview, setPreview] = useState({
 		name: '',
 		description: '',
 		backgroundColor: '',
-		textColor: '',
+		textColor: '#6E7191',
 	});
 
 	const handleEditLabel = async () => {
 		try {
 			await putLabel(label.id, preview);
+			await setIsEdit(prev => !prev);
 		} catch (error) {
 			console.error('Error adding label');
 		}
@@ -39,7 +38,6 @@ export function LabelRegister({
 	const handleAddLabel = async () => {
 		try {
 			await addLabel(preview);
-			fetchLabelList();
 		} catch (error) {
 			console.error('Error adding label');
 		}
@@ -131,7 +129,6 @@ export function LabelRegister({
 								<IconRefresh />
 							</button>
 						</span>
-						{/* setIsEdit 다시 해야함 */}
 						<details>
 							<summary>
 								텍스트 색상 <IconChevronDown />
@@ -146,6 +143,7 @@ export function LabelRegister({
 									value='어두운 색상'
 									listName='textColor'
 									onChange={e => handleTextColor(e)}
+									defaultChecked={true}
 								/>
 							</span>
 						</details>

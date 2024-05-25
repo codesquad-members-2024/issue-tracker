@@ -21,6 +21,5 @@ export function Layout() {
 	);
 }
 const StyledWrapper = styled.div`
-	height: 100vh;
 	background: ${({ theme }) => theme.color.neutral.surface.default};
 `;

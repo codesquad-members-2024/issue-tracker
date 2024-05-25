@@ -2,15 +2,10 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { IconEdit, IconTrash } from '~/common/icons';
 import { Button, Label } from '~/common/components';
-import { putLabel } from '~/features/label/apis';
 import { LabelRegister } from '~/features/label/components';
 
 export function LabelListItem({ label }) {
 	const [isEdit, setIsEdit] = useState(false);
-
-	const handleEditLabel = () => {
-		putLabel(label.id, label);
-	};
 
 	return (
 		<StyledListItem key={label.id}>
