@@ -1,5 +1,6 @@
 package codesquad.issuetracker.label;
 
+import codesquad.issuetracker.exception.LabelNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class LabelService {
     }
 
     public Label getLabelById(Long labelId) {
-        return labelRepository.findById(labelId).orElseThrow(RuntimeException::new);
+        return labelRepository.findById(labelId).orElseThrow(() -> new LabelNotFoundException("존재하지 않는 라벨 입니다."));
     }
 
     public Label updateLabelById(Label updatedLabel) {

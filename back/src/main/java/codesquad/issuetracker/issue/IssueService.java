@@ -1,5 +1,7 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.exception.IssueNotFoundException;
+import codesquad.issuetracker.exception.MilestoneNotFoundException;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelRepository;
 import codesquad.issuetracker.milestone.Milestone;
@@ -44,11 +46,11 @@ public class IssueService {
     }
 
     public Milestone getMilestoneForIssue(Issue issue) {
-        return milestoneRepository.findById(issue.getMilestoneId()).get();
+        return milestoneRepository.findById(issue.getMilestoneId()).orElseThrow(() -> new MilestoneNotFoundException("존재하지 않는 마일스톤 입니다."));
     }
 
     public Issue getIssue(Long issueId) {
-        return issueRepository.findById(issueId).get();
+        return getIssueById(issueId);
     }
 
     public Issue updateIssueTitleById(Long issueId, String newTitle) {
@@ -80,37 +82,37 @@ public class IssueService {
     }
 
     public Issue addAssigneesById(Long issueId, List<String> userLoginIds) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.addAssignee(userLoginIds);
         return issueRepository.save(issue);
     }
 
     public Issue addLabelsById(Long issueId, List<Long> labelIds) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.addLabel(labelIds);
         return issueRepository.save(issue);
     }
 
     public Issue addMilestoneById(Long issueId, Long milestoneId) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.addMilestone(milestoneId);
         return issueRepository.save(issue);
     }
 
     public void deleteAssigneesById(Long issueId, List<String> userLoginIds) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.deleteAssignee(userLoginIds);
         issueRepository.save(issue);
     }
 
     public void deleteLabelsById(Long issueId, List<Long> labelIds) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.deleteLabel(labelIds);
         issueRepository.save(issue);
     }
 
     public void deleteMilestoneById(Long issueId) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.deleteMilestone();
         issueRepository.save(issue);
     }
@@ -118,5 +120,9 @@ public class IssueService {
     public List<Issue> getFilteredIssues(List<String> assigneeIds, List<Long> labelIds, Long milestoneId, String writer) {
         List<Issue> issues = (List<Issue>) issueRepository.findAll();
         return issues.stream().filter(issue -> issue.checkFilter(assigneeIds, labelIds, milestoneId, writer)).collect(Collectors.toList());
+    }
+
+    private Issue getIssueById(Long issueId) {
+        return issueRepository.findById(issueId).orElseThrow(() -> new IssueNotFoundException("존재하지 않는 이슈입니다."));
     }
 }

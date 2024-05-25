@@ -1,5 +1,6 @@
 package codesquad.issuetracker.milestone;
 
+import codesquad.issuetracker.exception.MilestoneNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,8 @@ public class MilestoneService {
         return milestoneRepository.findAll();
     }
 
-    public MilestoneShowDto getMilestoneById(Long milestoneId) {
-        Milestone milestone = milestoneRepository.findById(milestoneId).orElseThrow(RuntimeException::new);
-        return new MilestoneShowDto(milestone);
+    public Milestone getMilestoneById(Long milestoneId) {
+        return milestoneRepository.findById(milestoneId).orElseThrow(() -> new MilestoneNotFoundException("존재하지 않는 마일스톤 입니다."));
     }
 
     public Milestone updateMilestoneById(Milestone milestone) {

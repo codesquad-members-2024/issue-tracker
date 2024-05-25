@@ -35,6 +35,13 @@ public class MilestoneController {
         return ResponseEntity.ok(allMilestoneShowDto);
     }
 
+    @GetMapping("/milestones/{milestoneId}")
+    public ResponseEntity<MilestoneShowDto> milestoneDetail(@PathVariable Long milestoneId) {
+        Milestone milestone = milestoneService.getMilestoneById(milestoneId);
+        return ResponseEntity
+                .ok(new MilestoneShowDto(milestone));
+    }
+
     @PutMapping("/milestones/{milestoneId}")
     public ResponseEntity<Milestone> updateMilestoneById(@PathVariable Long milestoneId, @RequestBody MilestoneUpdateDto milestoneUpdateDto) {
         Milestone updatedMilestone = milestoneService.updateMilestoneById(milestoneUpdateDto.toEntity(milestoneId));
