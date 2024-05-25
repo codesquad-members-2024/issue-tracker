@@ -8,20 +8,19 @@ const secretAccessKey = process.env.REACT_APP_SECRET_ACCESS_KEY;
 const useFileUpload = () => {
   AWS.config.update({ region, accessKeyId, secretAccessKey });
 
-  const upload = (file: File) => {
+  const upload = (file: File, directory: string = "") => {
+    const Key = directory ? `${directory}/${file.name}` : file.name;
+
     const manager = new AWS.S3.ManagedUpload({
       params: {
         Bucket: albumBucketName,
-        Key: file.name,
+        Key,
         Body: file,
         ACL: "public-read",
       },
     });
 
-    manager
-      .promise()
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
+    return manager.promise();
   };
 
   return { upload };

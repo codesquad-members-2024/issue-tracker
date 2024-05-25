@@ -12,13 +12,26 @@ export interface CommentProps {
   publishedAt: string;
 }
 
+const IMAGE_REGEX = /<img src="(.*?)" \/>/g;
+
+const parseContent = (content: string) =>
+  content.split("\n").map((line) => {
+    const images = Array.from(line.matchAll(IMAGE_REGEX));
+    let textWithoutImages = line.replace(IMAGE_REGEX, "");
+
+    return (
+      <span>
+        {textWithoutImages}
+        {images.map((imgMatch) => (
+          <ContentImage src={imgMatch[1]} />
+        ))}
+        <br />
+      </span>
+    );
+  });
+
 function Comment({ commentId, author: commentor, isAuthor, content, publishedAt }: CommentProps) {
-  const contentTexts = content.split("\n").map((line, index) => (
-    <span>
-      {line}
-      <br />
-    </span>
-  ));
+  const contentTexts = parseContent(content);
 
   return (
     <CommentTable>
@@ -117,6 +130,11 @@ const Content = styled.div`
   min-height: 4em;
   border-top: 1px solid #d9dbe9;
   background-color: #fff;
+`;
+
+const ContentImage = styled.img`
+  width: fit-content;
+  max-height: 16em;
 `;
 
 export default Comment;
