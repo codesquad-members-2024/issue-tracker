@@ -3,7 +3,6 @@ package com.CodeSquad.IssueTracker.labels;
 import com.CodeSquad.IssueTracker.Exception.label.*;
 import com.CodeSquad.IssueTracker.labels.dto.LabelListResponse;
 import com.CodeSquad.IssueTracker.labels.dto.LabelRequest;
-import com.CodeSquad.IssueTracker.labels.utils.ColorValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class LabelService {
 
     public Label createLabel(LabelRequest labelRequest) {
         log.info("새 라벨 생성 요청: {}", labelRequest);
-        validateLabel(labelRequest, false);
+        validateLabelRequest(labelRequest, false);
         Label label = Label.builder()
                 .labelName(labelRequest.labelName())
                 .description(labelRequest.description())
@@ -56,7 +55,7 @@ public class LabelService {
         return labelRepository.save(label);
     }
 
-    public void validateLabel(LabelRequest newLabel, boolean isUpdate) {
+    public void validateLabelRequest(LabelRequest newLabel, boolean isUpdate) {
         if (labelRepository.findByLabelName(newLabel.labelName()).isPresent()) {
             throw new DuplicateLabelNameException("이미 존재하는 라벨 이름입니다: " + newLabel.labelName());
         }
@@ -72,7 +71,7 @@ public class LabelService {
         log.info("라벨 id: {} 업데이트 요청: {}", id, updatedLabel);
         Label oldLabel = labelRepository.findById(id)
                 .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다."));
-        validateLabel(updatedLabel, true);
+        validateLabelRequest(updatedLabel, true);
 
 
 
@@ -107,5 +106,10 @@ public class LabelService {
         }
 
         return labelListResponses;
+    }
+
+    public void validateLabelId(Long labelId) {
+        labelRepository.findById(labelId)
+                .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다."));
     }
 }

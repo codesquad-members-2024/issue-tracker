@@ -10,10 +10,9 @@ import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.*;
 import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelRepository;
-import com.CodeSquad.IssueTracker.issues.issueLabel.dto.IssueLabelRequest;
+import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelService;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelId;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
-import com.CodeSquad.IssueTracker.labels.LabelRepository;
 import com.CodeSquad.IssueTracker.labels.LabelService;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,25 +32,24 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
     private final MilestoneService milestoneService;
-    private final IssueLabelRepository issueLabelRepository;
     private final AssigneeRepository assigneeRepository;
     private final LabelService labelService;
     private final AssigneeService assigneeService;
     private final UserService userService;
+    private final IssueLabelService issueLabelService;
 
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
-                        UserService userService,
-                        IssueLabelRepository issueLabelRepository, MilestoneService milestoneService,
+                        UserService userService, MilestoneService milestoneService,
                         AssigneeRepository assigneeRepository, LabelService labelService,
-                        AssigneeService assigneeService) {
+                        AssigneeService assigneeService, IssueLabelService issueLabelService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userService = userService;
-        this.issueLabelRepository = issueLabelRepository;
         this.milestoneService = milestoneService;
         this.assigneeRepository = assigneeRepository;
         this.labelService = labelService;
         this.assigneeService = assigneeService;
+        this.issueLabelService = issueLabelService;
     }
 
 
@@ -135,7 +132,7 @@ public class IssueService {
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
         List<String> assignees = assigneeRepository.findUsersByIssueId(issueId);
-        List<LabelRequest> labels = issueLabelRepository.getLabelRequestByIssueId(issueId);
+        List<LabelRequest> labels = issueLabelService.getLabelsByIssueId(issueId);
 
         return IssueDetailResponse.builder()
                 .issueId(issue.getIssueId())
@@ -253,19 +250,6 @@ public class IssueService {
             return null;
         }
     }
-    public void addLabelToIssue(Long issueId, Long labelId) {
-        validateExistIssue(issueId);
-        labelService.validateLabelId(labelId);
-
-        issueLabelRepository.addLabelToIssue(issueId, labelId);
-    }
-
-    public void removeLabelFromIssue(Long issueId, Long labelId) {
-        validateExistIssue(issueId);
-        labelService.validateLabelId(labelId);
-
-        issueLabelRepository.removeLabelFromIssue(issueId, labelId);
-    }
 
     @Transactional
     public void openIssues(IssueIds issueIds) {
@@ -293,22 +277,5 @@ public class IssueService {
     public void validateExistIssue(Long issueId) {
         issueRepository.findById(issueId)
                 .orElseThrow(() -> new IssueNotExistException("이슈가 존재하지 않습니다."));
-    }
-
-    @Transactional
-    public void updateLabelsToIssue(Long issueId, IssueLabelRequest issueLabelRequest) {
-        Set<Long> oldLabelIds = issueLabelRepository.findLabelIdsByIssueId(issueId);
-        Set<Long> newLabelIds = issueLabelRequest.labelIds();
-
-        Set<Long> labelIdsToDelete = new HashSet<>(oldLabelIds);
-        labelIdsToDelete.removeAll(newLabelIds);
-        if (!labelIdsToDelete.isEmpty())
-            issueLabelRepository.deleteByIssueIdAndLabelIds(issueId, labelIdsToDelete);
-
-        Set<Long> labelIdsToInsert = new HashSet<>(newLabelIds);
-        labelIdsToInsert.removeAll(oldLabelIds);
-        for (Long labelId : labelIdsToInsert) {
-            issueLabelRepository.addLabelToIssue(issueId, labelId);
-        }
     }
 }
