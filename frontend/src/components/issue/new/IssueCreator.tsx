@@ -3,12 +3,23 @@ import Header from "../../header/Header";
 import CreatorForm from "./CreatorForm";
 import userIcon from "../../../img/icon/userIcon.png";
 import plusIcon from "../../../img/icon/plusIcon_dark.svg";
+import uploadIcon from "../../../img/icon/uploadIcon.svg";
 import Sidebar from "../Sidebar";
 import useIssueCreatorLogic from "../../../hooks/logics/useIssueCreatorLogic";
 
 function IssueCreator() {
-  const { titleRef, commentRef, commentCount, isSubmitable, handleOnChange, handleCancel, handleSubmit } =
-    useIssueCreatorLogic();
+  const {
+    titleRef,
+    commentRef,
+    fileInputRef,
+    commentCount,
+    isSubmitable,
+    handleOnChange,
+    handleUploadClick,
+    handleFileChange,
+    handleCancel,
+    handleSubmit,
+  } = useIssueCreatorLogic();
 
   return (
     <Wrapper>
@@ -21,7 +32,6 @@ function IssueCreator() {
         <UserIcon src={userIcon} />
         <FormWrapper>
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
-
           <CommentWrapper>
             <CreatorForm
               ref={commentRef}
@@ -32,9 +42,11 @@ function IssueCreator() {
             <ExtensionWrapper>
               <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
               <DashedLine />
-              <FileImageButton>
-                <img /> 파일 첨부하기
-              </FileImageButton>
+              <FileUploadWrapper>
+                <img src={uploadIcon} />
+                <FileUploadInput type="file" ref={fileInputRef} onChange={handleFileChange} />
+                <FileUploadButton onClick={handleUploadClick}>파일 첨부하기</FileUploadButton>
+              </FileUploadWrapper>
             </ExtensionWrapper>
           </CommentWrapper>
         </FormWrapper>
@@ -82,8 +94,8 @@ const BodyBoundary = styled.hr`
 `;
 
 const BodyWrapper = styled.div`
-  width: 1280px;
-  height: 616px;
+  width: 80em;
+  height: 38em;
   display: flex;
   gap: 1.5em;
 `;
@@ -94,7 +106,7 @@ const UserIcon = styled.img`
 `;
 
 const FormWrapper = styled.div`
-  width: 912px;
+  width: 57em;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -104,15 +116,15 @@ const FormWrapper = styled.div`
 const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row-reverse;
-  gap: 2em;
+  gap: 4em;
 `;
 
 const CancelWrapper = styled.div`
-  width: 7em;
+  width: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.25em;
+  gap: 0.5em;
   cursor: pointer;
 `;
 
@@ -121,7 +133,6 @@ const CancelIcon = styled.img`
 `;
 
 const CancelText = styled.span`
-  width: 16em;
   color: #4e4b66;
 `;
 
@@ -147,7 +158,7 @@ const CommentWrapper = styled.div`
   height: 100%;
   background-color: #eceef5;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 0.75em;
 `;
 
 const ExtensionWrapper = styled.div`
@@ -167,11 +178,21 @@ const ContentWordCount = styled.span`
 const DashedLine = styled.hr`
   border-top: 1px dashed #d9dbe9;
   border-bottom: none;
-  margin: 1.5em;
+  margin: 1.5em 0;
 `;
 
-const FileImageButton = styled.button`
-  padding: 0 2em;
+const FileUploadWrapper = styled.div`
+  display: flex;
+  padding: 0 1em;
+  gap: 0.5em;
+`;
+
+const FileUploadInput = styled.input`
+  display: none;
+`;
+
+const FileUploadButton = styled.button`
+  width: fit-content;
   background-color: transparent;
   border: none;
   text-align: left;
