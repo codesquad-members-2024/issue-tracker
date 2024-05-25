@@ -9,7 +9,6 @@ import com.CodeSquad.IssueTracker.issues.comment.Comment;
 import com.CodeSquad.IssueTracker.issues.comment.CommentRepository;
 import com.CodeSquad.IssueTracker.issues.comment.dto.CommentResponse;
 import com.CodeSquad.IssueTracker.issues.dto.*;
-import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelRepository;
 import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelService;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelId;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
@@ -32,7 +31,6 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
     private final MilestoneService milestoneService;
-    private final AssigneeRepository assigneeRepository;
     private final LabelService labelService;
     private final AssigneeService assigneeService;
     private final UserService userService;
@@ -40,13 +38,12 @@ public class IssueService {
 
     public IssueService(IssueRepository issueRepository, CommentRepository commentRepository,
                         UserService userService, MilestoneService milestoneService,
-                        AssigneeRepository assigneeRepository, LabelService labelService,
-                        AssigneeService assigneeService, IssueLabelService issueLabelService) {
+                        LabelService labelService, AssigneeService assigneeService,
+                        IssueLabelService issueLabelService) {
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.milestoneService = milestoneService;
-        this.assigneeRepository = assigneeRepository;
         this.labelService = labelService;
         this.assigneeService = assigneeService;
         this.issueLabelService = issueLabelService;
@@ -131,7 +128,8 @@ public class IssueService {
         Issue issue = findIssueById(issueId);
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
-        List<String> assignees = assigneeRepository.findUsersByIssueId(issueId);
+
+        List<String> assignees = assigneeService.findUsersByIssueId(issueId);
         List<LabelRequest> labels = issueLabelService.getLabelsByIssueId(issueId);
 
         return IssueDetailResponse.builder()
