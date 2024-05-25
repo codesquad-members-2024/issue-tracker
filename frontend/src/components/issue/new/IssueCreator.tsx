@@ -21,7 +21,6 @@ function IssueCreator() {
         <UserIcon src={userIcon} />
         <FormWrapper>
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
-
           <CommentWrapper>
             <CreatorForm
               ref={commentRef}
@@ -82,8 +81,8 @@ const BodyBoundary = styled.hr`
 `;
 
 const BodyWrapper = styled.div`
-  width: 1280px;
-  height: 616px;
+  width: 80em;
+  height: 38em;
   display: flex;
   gap: 1.5em;
 `;
@@ -94,7 +93,7 @@ const UserIcon = styled.img`
 `;
 
 const FormWrapper = styled.div`
-  width: 912px;
+  width: 57em;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -104,15 +103,15 @@ const FormWrapper = styled.div`
 const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row-reverse;
-  gap: 2em;
+  gap: 4em;
 `;
 
 const CancelWrapper = styled.div`
-  width: 7em;
+  width: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.25em;
+  gap: 0.5em;
   cursor: pointer;
 `;
 
@@ -121,7 +120,6 @@ const CancelIcon = styled.img`
 `;
 
 const CancelText = styled.span`
-  width: 16em;
   color: #4e4b66;
 `;
 
@@ -147,7 +145,7 @@ const CommentWrapper = styled.div`
   height: 100%;
   background-color: #eceef5;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 0.75em;
 `;
 
 const ExtensionWrapper = styled.div`
@@ -171,6 +169,7 @@ const DashedLine = styled.hr`
 `;
 
 const FileImageButton = styled.button`
+  width: fit-content;
   padding: 0 2em;
   background-color: transparent;
   border: none;
