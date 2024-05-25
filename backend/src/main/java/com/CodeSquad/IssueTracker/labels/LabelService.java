@@ -57,10 +57,6 @@ public class LabelService {
     }
 
     public void validateLabel(LabelRequest newLabel, boolean isUpdate) {
-        if (newLabel.labelName() == null || newLabel.labelName().isBlank()) {
-            throw new InvalidLabelNameException("라벨 이름이 없습니다.");
-        }
-
         if (labelRepository.findByLabelName(newLabel.labelName()).isPresent()) {
             throw new DuplicateLabelNameException("이미 존재하는 라벨 이름입니다: " + newLabel.labelName());
         }
@@ -68,10 +64,6 @@ public class LabelService {
         if (isUpdate) {
             if (labelRepository.findByLabelName(newLabel.labelName()).isPresent())
                 throw new DuplicateLabelNameException("이미 존재하는 라벨 이름입니다: " + newLabel.labelName());
-        }
-
-        if (!ColorValidator.isValidColor(newLabel.textColor()) || !ColorValidator.isValidColor(newLabel.bgColor())) {
-            throw new InvalidLabelColorException("유효하지 않은 색상 코드입니다.");
         }
     }
 
