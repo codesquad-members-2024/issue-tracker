@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
 import styled from 'styled-components';
 import { IconEdit, IconTrash } from '~/common/icons';
 import { Button, Label } from '~/common/components';
 import { LabelRegister } from '~/features/label/components';
-
+import { LabelContext } from '~/features/label/context/LabelContext';
+import { deleteLabel } from '~/features/label/apis';
 export function LabelListItem({ label }) {
 	const [isEdit, setIsEdit] = useState(false);
+	const { fetchLabelList } = useContext(LabelContext);
 
+	const handleDeleteLabel = async () => {
+		try {
+			await deleteLabel(label.id, label.name);
+			await fetchLabelList();
+		} catch (error) {
+			console.error('Error deleting label');
+		}
+	};
 	return (
 		<StyledListItem key={label.id}>
 			{isEdit ? (
@@ -35,6 +46,7 @@ export function LabelListItem({ label }) {
 							size='small'
 							buttonText='삭제'
 							icon={<IconTrash />}
+							onClick={handleDeleteLabel}
 						/>
 					</div>
 				</>

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import {
 	IconPlus,
 	IconXsquare,
@@ -11,6 +11,7 @@ import { Input } from 'antd';
 import { Button, Label, InputRadio } from '~/common/components';
 import { putLabel, addLabel } from '~/features/label/apis';
 import { colorGenerator } from '~/utils/util';
+import { LabelContext } from '../context/LabelContext';
 
 export function LabelRegister({
 	isEdit,
@@ -25,10 +26,11 @@ export function LabelRegister({
 		backgroundColor: '',
 		textColor: '#6E7191',
 	});
-
+	const { fetchLabelList } = useContext(LabelContext);
 	const handleEditLabel = async () => {
 		try {
 			await putLabel(label.id, preview);
+			await fetchLabelList();
 			await setIsEdit(prev => !prev);
 		} catch (error) {
 			console.error('Error adding label');
@@ -38,6 +40,8 @@ export function LabelRegister({
 	const handleAddLabel = async () => {
 		try {
 			await addLabel(preview);
+			await fetchLabelList();
+			await setNewLabel(prev => !prev);
 		} catch (error) {
 			console.error('Error adding label');
 		}
@@ -53,8 +57,6 @@ export function LabelRegister({
 			});
 		}
 	}, [isEdit, label]);
-
-	//todo: post, put 이후에 목록 조회 다시
 
 	const handleTextColor = e => {
 		switch (e.target.value) {

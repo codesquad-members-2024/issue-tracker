@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import { IconPlus } from '~/common/icons';
 import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
-import { useLabelList } from '~/features/issue/hooks';
+
 import {
 	Tabs,
 	ListHeader,
@@ -13,10 +13,11 @@ import {
 } from '~/common/components';
 
 import { LabelRegister, LabelListItem } from '~/features/label/components';
+import { LabelContext } from '../context/LabelContext';
 
 export function LabelContainer() {
 	const [newLabel, setNewLabel] = useState(false);
-	const { labelList, loading } = useLabelList();
+	const { labelList, loading, fetchLabelList } = useContext(LabelContext);
 
 	return (
 		<>
@@ -40,13 +41,18 @@ export function LabelContainer() {
 				{newLabel && (
 					<LabelRegister newLabel={newLabel} setNewLabel={setNewLabel} />
 				)}
+
 				<StyledListHeader>
-					<StyledLabeCount>{3}개의 레이블</StyledLabeCount>
+					<StyledLabeCount>{labelList.length}개의 레이블</StyledLabeCount>
 				</StyledListHeader>
 				<ListBody>
 					{loading && <Loading size='big' />}
 					{labelList?.map(label => (
-						<LabelListItem key={label.id} label={label} />
+						<LabelListItem
+							key={label.id}
+							label={label}
+							fetchLabelList={fetchLabelList}
+						/>
 					))}
 				</ListBody>
 			</StyledWrapper>

@@ -7,9 +7,7 @@ export const useLabelList = () => {
 	const [error, setError] = useState(null);
 
 	const fetchLabelList = async () => {
-		// setLoading(true);
 		try {
-			// await new Promise(resolve => setTimeout(resolve, 2000)); // API 호출을 2초로 가정
 			const response = await getLabels();
 			setLabelList(response);
 		} catch (error) {
@@ -23,5 +21,5 @@ export const useLabelList = () => {
 		fetchLabelList();
 	}, []);
 
-	return { labelList, loading, error };
+	return { labelList, loading, error, fetchLabelList };
 };

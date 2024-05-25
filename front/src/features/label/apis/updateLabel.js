@@ -1,7 +1,6 @@
 import { server } from '~/apis/baseApi';
 
 export async function putLabel(labelId, label) {
-	console.log('putlabel', label);
 	try {
 		const requestOptions = {
 			method: 'PUT',
