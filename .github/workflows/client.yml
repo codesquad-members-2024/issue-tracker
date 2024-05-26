@@ -19,13 +19,20 @@ jobs:
         run: npm install
         working-directory: ./fe #디렉토리명
 
+      - name: Cache node modules
+              uses: actions/cache@v3
+              with:
+                path: ./frontend/node_modules
+                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                  ${{ runner.os }}-node-
+                  ${{ runner.OS }}-
+
       - name: Build
         run: npm run build
         working-directory: ./fe
-
-      - name: .env setting
-        run: |
-          echo "REACT_APP_EC2_SERVER=${{ secrets.REACT_APP_EC2_SERVER }}" >> .env
+        env:
+          REACT_APP_EC2_SERVER: ${{ secrets.REACT_APP_EC2_SERVER }}
 
       - name: SHOW AWS CLI VERSION
         env:
