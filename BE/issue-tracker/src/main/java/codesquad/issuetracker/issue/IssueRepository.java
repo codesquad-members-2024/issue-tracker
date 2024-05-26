@@ -26,4 +26,6 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
     @Query("SELECT COUNT(*) FROM ISSUE  WHERE MILESTONE_ID = :milestoneId AND IS_DELETED = FALSE AND STATE = :state")
     int countIssueByMilestoneId(Long milestoneId, State state);
 
+    @Query("SELECT COUNT(*) FROM ISSUE WHERE IS_DELETED = FALSE AND STATE = :state")
+    int countIssueByState(State state);
 }

@@ -4,12 +4,15 @@ import codesquad.issuetracker.base.State;
 import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.comment.CommentCreateRequest;
 import codesquad.issuetracker.comment.CommentResponse;
+import codesquad.issuetracker.count.service.CountService;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.issue.dto.IssueCreateRequest;
+import codesquad.issuetracker.issue.dto.IssueListResponse;
+import codesquad.issuetracker.issue.dto.IssueResponse;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
 import codesquad.issuetracker.milestone.Milestone;
-import codesquad.issuetracker.milestone.MilestoneRepository;
+import codesquad.issuetracker.milestone.MilestoneService;
 import codesquad.issuetracker.milestone.dto.SimpleMilestoneResponse;
 import codesquad.issuetracker.user.UserService;
 import codesquad.issuetracker.user.dto.UserResponse;
@@ -18,29 +21,27 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class IssueService {
 
     private final IssueRepository issueRepository;
     private final LabelService labelService;
     private final UserService userService;
-    private final MilestoneRepository milestoneRepository;
+    private final MilestoneService milestoneService;
+    private final CountService countService;
 
-    @Autowired
-    public IssueService(IssueRepository issueRepository, LabelService labelService,
-        UserService userService, MilestoneRepository milestoneRepository) {
-        this.issueRepository = issueRepository;
-        this.labelService = labelService;
-        this.userService = userService;
-        this.milestoneRepository = milestoneRepository;
-    }
 
-    public List<Issue> findIssuesByState(State state) {
-        return issueRepository.findAllByState(state);
+    public IssueListResponse findIssuesByState(State state) {
+        List<Issue> issues = issueRepository.findAllByState(state);
+        return IssueListResponse.of(issues.stream()
+                .map(issue -> IssueResponse.of(issue, findLabelNameByIssueId(issue.getId()),
+                    milestoneService.findById(issue.getMilestoneId().getId()))).toList(),
+            countService.fetchLabelMilestoneCount(), countService.fetchIssueCount());
     }
 
     public Issue create(IssueCreateRequest issueCreateRequest) {
@@ -79,8 +80,7 @@ public class IssueService {
     }
 
     private SimpleMilestoneResponse getSimpleMilestone(AggregateReference<Milestone, Long> milestoneId) {
-        Optional<Milestone> optionalMilestone = milestoneRepository.findById(milestoneId.getId());
-        Milestone milestone = optionalMilestone.orElseThrow(NoSuchElementException::new);
+        Milestone milestone = milestoneService.findById(milestoneId.getId());
         return SimpleMilestoneResponse.of(milestone);
     }
 
@@ -114,5 +114,14 @@ public class IssueService {
         issue.addComment(comment);
         issueRepository.save(issue);
         return comment;
+    }
+
+    public List<String> findLabelNameByIssueId(Long issueId) {
+        Issue issue = findById(issueId);
+        return issue.getLabelRefs().stream()
+            .map(IssueAttachedLabel::getLabelId)
+            .map(labelService::findById)
+            .map(Label::getName)
+            .toList();
     }
 }

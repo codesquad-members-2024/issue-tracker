@@ -6,8 +6,8 @@ import codesquad.issuetracker.comment.CommentCreateRequest;
 import codesquad.issuetracker.comment.CommentService;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.issue.dto.IssueCreateRequest;
+import codesquad.issuetracker.issue.dto.IssueListResponse;
 import java.net.URI;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +34,7 @@ public class IssueController {
     }
 
     @GetMapping
-    public List<Issue> getIssues(@RequestParam State state) {
+    public IssueListResponse getIssues(@RequestParam State state) {
         return issueService.findIssuesByState(state);
     }
 
