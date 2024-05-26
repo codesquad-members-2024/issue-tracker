@@ -1,15 +1,5 @@
 package codesquad.issuetracker.user.dto;
 
-import lombok.Getter;
+public record LoginResponse (String token, SimpleUserResponse userResponse) {
 
-@Getter
-public class LoginResponse {
-
-    private final String token;
-    private final String id;
-
-    public LoginResponse(String token, String id) {
-        this.token = token;
-        this.id = id;
-    }
 }

@@ -20,6 +20,7 @@ public class User implements Persistable<String> {
     private String id;
     private String username;
     private String password;
+    private String imgUrl;
     private Role role;
     private LocalDateTime createdAt;
     private boolean isDeleted;
@@ -27,11 +28,12 @@ public class User implements Persistable<String> {
     private boolean isNew;
 
     @PersistenceCreator
-    User(String id, String username, String password, Role role, LocalDateTime createdAt,
+    User(String id, String username, String password, String imgUrl, Role role, LocalDateTime createdAt,
         boolean isDeleted) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.imgUrl = imgUrl;
         this.role = role;
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
@@ -39,10 +41,11 @@ public class User implements Persistable<String> {
     }
 
     @Builder
-    public User(String id, String username, String password, Role role) {
+    public User(String id, String username, String password, String imgUrl, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.imgUrl = imgUrl;
         this.role = role;
         this.createdAt = LocalDateTime.now();
         this.isDeleted = false;

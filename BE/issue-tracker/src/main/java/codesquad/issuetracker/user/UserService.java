@@ -5,8 +5,10 @@ import codesquad.issuetracker.exception.UserNotFoundException;
 import codesquad.issuetracker.user.auth.JwtTokenProvider;
 import codesquad.issuetracker.user.dto.UserCreateRequest;
 import codesquad.issuetracker.user.dto.UserLoginRequest;
+import codesquad.issuetracker.user.dto.UserResponse;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,7 @@ public class UserService {
             .id(request.getId())
             .username(request.getUsername())
             .password(hashedPassword)
+            .imgUrl(request.getImgUrl())
             .role(request.getRole())
             .build();
 
@@ -79,5 +82,13 @@ public class UserService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error hashing password", e);
         }
+    }
+
+    public List<UserResponse> findAllUser() {
+        List<User> users = (List<User>) userRepository.findAll();
+
+        return users.stream()
+            .map(UserResponse::of)
+            .toList();
     }
 }
