@@ -2,8 +2,11 @@ package codesquad.issuetracker.exception;
 
 import static codesquad.issuetracker.exception.ErrorCode.NOT_FOUND;
 import static codesquad.issuetracker.exception.ErrorCode.PASSWORD_MISMATCH;
+import static codesquad.issuetracker.exception.ErrorCode.TOKEN_EXPIRED;
+import static codesquad.issuetracker.exception.ErrorCode.TOKEN_INVALID;
 import static codesquad.issuetracker.exception.ErrorCode.USER_ALREADY_EXIST;
 
+import java.security.SignatureException;
 import java.util.NoSuchElementException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +34,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(PasswordMismatch.class)
     public ResponseEntity<String> handlePasswordDoesNotMatch() {
         return ResponseEntity.status(PASSWORD_MISMATCH.getStatus()).body(PASSWORD_MISMATCH.getMessage());
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<String> handleSignatureException() {
+        return ResponseEntity.status(TOKEN_INVALID.getStatus()).body(TOKEN_INVALID.getMessage());
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<String> handleTokenExpiredException() {
+        return ResponseEntity.status(TOKEN_EXPIRED.getStatus()).body(TOKEN_EXPIRED.getMessage());
     }
 
 }

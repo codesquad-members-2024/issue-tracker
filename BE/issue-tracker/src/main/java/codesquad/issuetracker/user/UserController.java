@@ -1,5 +1,6 @@
 package codesquad.issuetracker.user;
 
+import codesquad.issuetracker.user.dto.LoginResponse;
 import codesquad.issuetracker.user.dto.UserCreateRequest;
 import codesquad.issuetracker.user.dto.UserLoginRequest;
 import java.net.URI;
@@ -34,8 +35,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) {
-        String jwt = userService.login(userLoginRequest);
-        return ResponseEntity.ok().body(jwt);
+    public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
+        String token = userService.login(userLoginRequest);
+        LoginResponse loginResponse = new LoginResponse(token, userLoginRequest.getId());
+        return ResponseEntity.ok().body(loginResponse);
     }
 }

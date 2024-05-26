@@ -2,6 +2,7 @@ package codesquad.issuetracker.user;
 
 import codesquad.issuetracker.exception.UserAlreadyExist;
 import codesquad.issuetracker.exception.UserNotFoundException;
+import codesquad.issuetracker.user.auth.JwtTokenProvider;
 import codesquad.issuetracker.user.dto.UserCreateRequest;
 import codesquad.issuetracker.user.dto.UserLoginRequest;
 import java.security.MessageDigest;
