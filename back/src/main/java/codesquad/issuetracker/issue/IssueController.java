@@ -1,6 +1,5 @@
 package codesquad.issuetracker.issue;
 
-import codesquad.issuetracker.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +20,8 @@ public class IssueController {
     @PostMapping("/issues")
     public ResponseEntity<IssueShowDto> createIssue(
             @RequestBody Issue issue,
-            UriComponentsBuilder uriComponentsBuilder,
-            @SessionAttribute(name = "LOGIN USER", required = false) User user
+            UriComponentsBuilder uriComponentsBuilder
     ) {
-        issue.setWriter(user.getLoginId());
         Issue createdIssue = issueService.createIssue(issue);
         URI location = uriComponentsBuilder.path("/issues/{id}")
                 .buildAndExpand(createdIssue.getId())
