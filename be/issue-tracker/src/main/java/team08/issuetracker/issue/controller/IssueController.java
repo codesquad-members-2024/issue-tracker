@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
+import team08.issuetracker.issue.model.dto.IssueDeleteResponse;
 import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
@@ -121,5 +123,16 @@ public class IssueController {
         Issue issue = issueService.updateIssueStateToClose(id);
 
         return ResponseEntity.ok(IssueUpdateResponse.from(issue));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<IssueDeleteResponse> deleteIssue(@PathVariable long id) {
+        issueService.deleteIssue(id);
+
+        IssueDeleteResponse response = IssueDeleteResponse.from(id);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 }

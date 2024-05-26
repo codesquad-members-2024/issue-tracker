@@ -105,7 +105,7 @@ public class IssueService {
     }
 
     public Issue updateIssueTitle(Long id, IssueTitleUpdateRequest issueTitleUpdateRequest) {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
 
         issue.updateTitle(issueTitleUpdateRequest);
 
@@ -113,7 +113,7 @@ public class IssueService {
     }
 
     public Issue updateIssueContent(Long id, IssueContentUpdateRequest issueContentUpdateRequest) {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
 
         issue.updateContent(issueContentUpdateRequest);
 
@@ -121,7 +121,7 @@ public class IssueService {
     }
 
     public Issue updateIssueAssignee(Long id, IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
 
         issue.updateAssignee(issueAssigneeUpdateRequest);
 
@@ -129,7 +129,7 @@ public class IssueService {
     }
 
     public Issue updateIssueLabel(Long id, IssueLabelUpdateRequest issueLabelUpdateRequest) {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
 
         validateLabelIds(issueLabelUpdateRequest);
 
@@ -139,7 +139,7 @@ public class IssueService {
     }
 
     public Issue updateIssueMilestone(Long id, IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
 
         Long milestoneId = issueMilestoneUpdateRequest.milestoneId();
 
@@ -153,7 +153,7 @@ public class IssueService {
     }
 
     public Issue updateIssueStateToOpen(Long id) {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
 
         issue.open();
 
@@ -161,14 +161,19 @@ public class IssueService {
     }
 
     public Issue updateIssueStateToClose(Long id) {
-        Issue issue = getIssue(id);
+        Issue issue = getIssueById(id);
 
         issue.close();
 
         return issueRepository.save(issue);
     }
 
-    private Issue getIssue(Long id) {
+    public void deleteIssue(Long id) {
+        Issue issue = getIssueById(id);
+        issueRepository.delete(issue);
+    }
+
+    private Issue getIssueById(Long id) {
         return issueRepository
                 .findById(id)
                 .orElseThrow(IssueIdNotFoundException::new);
