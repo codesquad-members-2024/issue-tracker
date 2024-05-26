@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import useUserStore from "../stores/useUserStore";
 import { useNavigate } from "react-router-dom";
 import { postNewIssue } from "../../api/IssueAPI";
-import useFileUpload from "../utils/useFileUpload";
+import useFileUpload from "@schnee/s3-file-upload";
 
 const IMAGE_DIRECTORY = process.env.REACT_APP_IMG_DIRECTORY;
 

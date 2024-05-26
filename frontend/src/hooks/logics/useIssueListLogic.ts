@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import useIssueStore from "../stores/useIssueStore";
-import useIntersectionObserver from "../utils/useIntersectionObserver";
+import useInfiniteScroll from "@schnee/react-infinite-scroll";
 import { useQuery } from "react-query";
 import { sendIssuesRequest } from "../../api/IssueAPI";
 import { sendFiltersRequest } from "../../api/FilterAPI";
@@ -48,7 +48,7 @@ const useIssueListLogic = () => {
     enabled: filterQuery.isSuccess,
   });
 
-  const { observer } = useIntersectionObserver(fetchNextIssues);
+  const { observe } = useInfiniteScroll(fetchNextIssues);
 
   useEffect(() => () => setIssues([]), []);
 
@@ -59,10 +59,7 @@ const useIssueListLogic = () => {
   useEffect(() => {
     const lastIssue = lastIssueRef.current;
 
-    if (lastIssue) observer.observe(lastIssue);
-    return () => {
-      if (lastIssue) observer.unobserve(lastIssue);
-    };
+    if (lastIssue) observe(lastIssue);
   }, [lastIssueRef.current]);
 
   return {
