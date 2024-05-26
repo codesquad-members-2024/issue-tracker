@@ -146,11 +146,7 @@ public class IssueService {
     public Issue updateIssueMilestone(Long id, IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
         Issue issue = getIssueById(id);
 
-        Long milestoneId = issueMilestoneUpdateRequest.milestoneId();
-
-        if (!milestoneRepository.existsById(milestoneId)) {
-            throw new MilestoneIdNotFoundException();
-        }
+        validateMilestoneId(issueMilestoneUpdateRequest);
 
         issue.updateMilestone(issueMilestoneUpdateRequest);
 
@@ -199,6 +195,14 @@ public class IssueService {
 
         if (labelNotFound) {
             throw new LabelNotFoundException();
+        }
+    }
+
+    private void validateMilestoneId(IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
+        Long milestoneId = issueMilestoneUpdateRequest.milestoneId();
+
+        if (!milestoneRepository.existsById(milestoneId)) {
+            throw new MilestoneIdNotFoundException();
         }
     }
 }
