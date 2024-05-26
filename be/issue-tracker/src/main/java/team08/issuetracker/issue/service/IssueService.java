@@ -181,7 +181,7 @@ public class IssueService {
 
     private void validateLabelIds(IssueLabelUpdateRequest issueLabelUpdateRequest) {
         boolean labelNotFound = issueLabelUpdateRequest.labelIds().stream()
-                .anyMatch(labelId -> !issueRepository.existsById(labelId));
+                .anyMatch(labelId -> !labelRepository.existsById(labelId));
 
         if (labelNotFound) {
             throw new LabelNotFoundException();
