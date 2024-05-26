@@ -22,21 +22,21 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Set up Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '18' # Node.js 18 버전으로 업데이트
 
       - name: Install dependencies
         run: |
           cd front
           npm install
 
-          - name: Build
-          run: |
-            cd front
-            npm run build
-            echo "Build completed. Listing contents of the build directory:"
-            ls -al ./front/build/
+      - name: Build
+        run: |
+          cd front
+          npm run build
+          echo "Build completed. Listing contents of the build directory:"
+          ls -al ./front/build/
 
       - name: List build directory contents
         run: |
