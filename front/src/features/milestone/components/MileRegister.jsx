@@ -3,6 +3,8 @@ import { useState, useEffect, useReducer } from 'react';
 import { IconPlus, IconXsquare, IconEdit } from '~/common/icons';
 import { Input } from 'antd';
 import { Button } from '~/common/components';
+import { useMilestoneList } from '~/features/issue/hooks';
+import { postMilestone, putMilestone } from '~/features/milestone/apis';
 
 function milestoneReducer(state, action) {
 	switch (action.type) {
@@ -25,10 +27,26 @@ export function MileRegister({
 }) {
 	const initialMilestone = {
 		name: milestone?.name || '',
-		dueDate: milestone?.dueDate || '',
 		description: milestone?.description || '',
+		dueDate: milestone?.dueDate || '',
 	};
 	const [state, dispatch] = useReducer(milestoneReducer, initialMilestone);
+	const { fetchMilestoneList } = useMilestoneList();
+
+	const addMilestone = async () => {
+		try {
+			console.log('Milestone Data:', state);
+			const result = await postMilestone(state);
+			if (result.error) {
+				console.error('Server Error:', result.error); // 서버 에러 출력
+			} else {
+				await fetchMilestoneList();
+				setNewMilestone(!newMilestone);
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	};
 
 	return (
 		<StyledRegister>
@@ -99,7 +117,8 @@ export function MileRegister({
 							type='button'
 							size='small'
 							buttonText='완료'
-							disabled={true}
+							disabled={false}
+							onClick={addMilestone}
 							icon={<IconPlus />}
 						/>
 					</>

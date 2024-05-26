@@ -30,15 +30,11 @@ export function IssueListViewContainer() {
 
 	const [issue, setIssue] = useState([]);
 
-	const {
-		labelList,
-		loading: labelLoading,
-		fetching: fetchLabelList,
-	} = useLabelList();
+	const { labelList, loading: labelLoading, fetchLabelList } = useLabelList();
 	const {
 		milestoneList,
 		loading: mileLoading,
-		fetching: fetchMilestoneList,
+		fetchMilestoneList,
 	} = useMilestoneList();
 
 	const [searchValue, setSearchValue] = useState('');

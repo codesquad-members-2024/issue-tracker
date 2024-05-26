@@ -20,5 +20,5 @@ export const useMilestoneList = () => {
 	useEffect(() => {
 		fetchMilestoneList();
 	}, []);
-	return { milestoneList, loading, error, fetching: fetchMilestoneList };
+	return { milestoneList, loading, error, fetchMilestoneList };
 };

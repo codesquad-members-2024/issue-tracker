@@ -8,7 +8,7 @@ import { MileRegister, MileListItem } from '~/features/milestone/components';
 import { useMilestoneList } from '~/features/issue/hooks';
 
 export function MilestoneContainer() {
-	const { milestoneList, loading, error, fetching } = useMilestoneList();
+	const { milestoneList } = useMilestoneList();
 	const [newMilestone, setNewMilestone] = useState(false);
 	const statusCount = milestoneList.reduce(
 		(acc, milestone) => {
