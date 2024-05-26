@@ -5,7 +5,7 @@ interface MilestoneStateParams {
   milestoneId: number;
 }
 
-interface MilestoneContent {
+export interface MilestoneContent {
   title: string;
   deadline: string | undefined;
   description: string | undefined;

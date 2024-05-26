@@ -30,7 +30,7 @@ const useLabelEdit = (
       setter(value);
 
   const fetchOnSubmit = async (labelData: LabelContent) =>
-    type === "new" ? await postNewLabel(labelData) : await sendPutLabelRequest(labelId, labelData);
+    type === "new" ? postNewLabel(labelData) : sendPutLabelRequest(labelId, labelData);
 
   const updateLabels = async () => {
     const data = await sendLabelsRequest();
