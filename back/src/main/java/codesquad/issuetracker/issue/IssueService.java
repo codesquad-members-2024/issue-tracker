@@ -55,12 +55,12 @@ public class IssueService {
 
     public Issue updateIssueTitleById(Long issueId, String newTitle) {
         issueRepository.updateTitleById(issueId, newTitle);
-        return issueRepository.findById(issueId).get();
+        return getIssueById(issueId);
     }
 
     public Issue updateIssueContentById(Long issueId, String newContent) {
         issueRepository.updateContentById(issueId, newContent);
-        return issueRepository.findById(issueId).get();
+        return getIssueById(issueId);
     }
 
     public void deleteIssueById(Long issueId) {

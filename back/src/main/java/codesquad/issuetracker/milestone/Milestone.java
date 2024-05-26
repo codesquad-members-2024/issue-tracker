@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -25,19 +26,23 @@ public class Milestone {
     private Set<Issue> issues;
 
     public Long countOpenIssue() {
-        return issues.stream()
-                .filter(issue -> !issue.isClosed())
-                .count();
+        return Optional.ofNullable(issues)
+                .map(issues -> issues.stream()
+                        .filter(issue -> !issue.isClosed())
+                        .count())
+                .orElse(0L);
     }
 
     public Long countCloseIssue() {
-        return issues.stream()
-                .filter(issue -> issue.isClosed())
-                .count();
+        return Optional.ofNullable(issues)
+                .map(issues -> issues.stream()
+                        .filter(Issue::isClosed)
+                        .count())
+                .orElse(0L);
     }
 
     public int calculateProgress() {
-        if (issues.isEmpty()) {
+        if (issues == null || issues.isEmpty()) {
             return 0;
         }
         return (int) ((double) countCloseIssue() / issues.size() * 100);
