@@ -14,18 +14,14 @@ public class LabelResponse {
     String description;
     TextColor textColor;
     String backgroundColor;
-    int labelCount;
-    int milestoneCount;
 
-    public static LabelResponse of(Label label, int labelCount, int milestoneCount) {
+    public static LabelResponse of(Label label) {
         return LabelResponse.builder()
             .id(label.getId())
             .name(label.getName())
             .description(label.getDescription())
             .backgroundColor(label.getBackgroundColor())
             .textColor(label.getTextColor())
-            .labelCount(labelCount)
-            .milestoneCount(milestoneCount)
             .build();
     }
 }

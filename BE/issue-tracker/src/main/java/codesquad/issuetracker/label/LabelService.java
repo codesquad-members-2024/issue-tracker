@@ -1,13 +1,15 @@
 package codesquad.issuetracker.label;
 
+import codesquad.issuetracker.count.service.CountService;
+import codesquad.issuetracker.label.dto.LabelListResponse;
 import codesquad.issuetracker.label.dto.LabelRequest;
+import codesquad.issuetracker.label.dto.LabelResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,13 @@ public class LabelService {
 
     private static final Logger log = LoggerFactory.getLogger(LabelService.class);
     private final LabelRepository labelRepository;
+    private final CountService countService;
 
-    public List<Label> fetchFilteredLabels(Pageable pageable) {
-        Page<Label> filteredLabels = labelRepository.findAll(pageable);
-        return filteredLabels.getContent();
+    public LabelListResponse fetchFilteredLabels(Pageable pageable) {
+        List<Label> filteredLabels = labelRepository.findAll(pageable).getContent();
+
+        return LabelListResponse.of(filteredLabels.stream()
+            .map(LabelResponse::of).toList(), countService.fetchLabelMilestoneCount());
 
     }
 
