@@ -46,5 +46,5 @@ jobs:
             --delete
         working-directory: ./fe
 
-      - name: Invalidate CloudFront Cache # 클라우드 프론트 무효화 (캐시 무효 설정)
+      - name: Invalidate CloudFront Cache # 클라우드 프론트 무효화 캐시 무효 설정
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
