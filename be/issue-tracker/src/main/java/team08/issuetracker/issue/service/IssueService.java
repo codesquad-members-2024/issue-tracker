@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.issue.IssueIdNotFoundException;
+import team08.issuetracker.exception.label.LabelNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
@@ -121,6 +122,8 @@ public class IssueService {
     public Issue updateIssueLabel(Long id, IssueLabelUpdateRequest issueLabelUpdateRequest) {
         Issue issue = getIssue(id);
 
+        validateLabelIds(issueLabelUpdateRequest);
+
         issue.updateIssueAttachedLabel(issueLabelUpdateRequest);
 
         return issueRepository.save(issue);
@@ -160,5 +163,14 @@ public class IssueService {
         return issueRepository
                 .findById(id)
                 .orElseThrow(IssueIdNotFoundException::new);
+    }
+
+    private void validateLabelIds(IssueLabelUpdateRequest issueLabelUpdateRequest) {
+        boolean labelNotFound = issueLabelUpdateRequest.labelIds().stream()
+                .anyMatch(labelId -> !issueRepository.existsById(labelId));
+
+        if (labelNotFound) {
+            throw new LabelNotFoundException();
+        }
     }
 }
