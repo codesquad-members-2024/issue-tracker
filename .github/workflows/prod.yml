@@ -35,6 +35,8 @@ jobs:
         run: |
           cd front
           npm run build
+          echo "Build completed. Listing contents of the build directory:"
+          ls -al ./build/
 
       - name: List build directory contents
         run: |
