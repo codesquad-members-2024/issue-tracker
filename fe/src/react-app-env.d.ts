@@ -37,10 +37,10 @@ interface MilestoneCounts {
 	totalCount: number;
 }
 
-// interface MilestoneData { 추가 안해도 될것같은 느낌
-// 	milestoneCounts: MilestoneCounts;
-// 	milestones: Milestone[];
-// }
+interface MilestonesDataType { 
+	milestoneCounts: MilestoneCounts;
+	milestones: Milestone[];
+}
 
 interface Label {
 	id: number;
@@ -50,7 +50,7 @@ interface Label {
 	textBright: boolean;
 }
 
-// interface LabelData {
-// 	labelCount: { totalCount: number };
-// 	labels: Label[];
-// }
+interface LabelDataType {
+	labelCount: { totalCount: number };
+	labels: Label[];
+}

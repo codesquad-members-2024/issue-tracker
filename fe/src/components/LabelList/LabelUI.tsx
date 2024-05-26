@@ -21,7 +21,7 @@ function LabelUI() {
 				/>
 			</div>
 			<div className={`transition-[height] ${newLabel ? "lg:h-[360px] h-[480px]" : "h-0"}`}>
-				{newLabel && <NewLabel handleShowNewLabel={handleShowNewLabel} setNewLabel={setNewLabel}/>}
+				{newLabel && <NewLabel handleShowNewLabel={handleShowNewLabel} />}
 			</div>
 		</>
 	);

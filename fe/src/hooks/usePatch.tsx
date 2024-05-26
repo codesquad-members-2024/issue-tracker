@@ -1,18 +1,26 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetchData from "../utility/fetchData";
 
-interface MilestoneDataType {
+interface MilestonePatchDataType {
 	name: string;
 	description: string;
 	completeDate: string;
 }
 
-type MutateType = (data?: MilestoneDataType) => void;
+interface LabelPatchDataType {
+	name: string;
+	description: string;
+	backgroundColor: string;
+	textBright: boolean;
+}
+
+type DataType = MilestonePatchDataType | LabelPatchDataType;
+type MutateType = (data?: DataType) => void;
 
 const usePatch = (query: string, queryKey: string, handler?: () => void) => {
 	const queryClient = useQueryClient();
 	const { mutate }: { mutate: MutateType } = useMutation({
-		mutationFn: (data?: MilestoneDataType) => fetchData(query, { method: "PATCH", body: data }),
+		mutationFn: (data?: DataType) => fetchData(query, { method: "PATCH", body: data }),
 		onSuccess: () => {
 			if (handler) handler();
 			queryClient.invalidateQueries({ queryKey: [queryKey] });

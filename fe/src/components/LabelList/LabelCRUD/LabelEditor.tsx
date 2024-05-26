@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
 import LabelInfo from "./LabelInfo";
+import usePatch from "../../../hooks/usePatch";
 
 interface DataType {
 	name: string;
@@ -12,31 +13,18 @@ interface DataType {
 
 interface PropsType {
 	label: Label;
-	handleShowEditor: React.MouseEventHandler<HTMLButtonElement>;
-	setShowEditor: React.Dispatch<React.SetStateAction<boolean>>;
+	handleShowEditor: () => void;
 }
 
 const border = "border-[1px] rounded-2xl component-border dark:component-border--dark";
 
-function LabelEditor({ label, handleShowEditor, setShowEditor }: PropsType) {
+function LabelEditor({ label, handleShowEditor }: PropsType) {
 	const [name, setName] = useState(label.name);
 	const [textBright, setTextBright] = useState(label.textBright);
 	const [bgColor, setBgColor] = useState(label.backgroundColor);
 	const $description = useRef<HTMLInputElement>(null);
 	const [disabled, setDisabled] = useState("DISABLED");
-
-	// const queryClient = useQueryClient();
-	// const { mutate } = useMutation({
-	// 	mutationFn: (data: DataType) =>
-	// 		fetchData(`/label/${label.id}`, { method: "PATCH", body: data }),
-	// 	onSuccess: () => {
-	// 		setShowEditor(false);
-	// 		queryClient.invalidateQueries({ queryKey:["label"]});
-	// 	},
-	// 	onError: (e) => {
-	// 		console.error("업데이트 에러", e);
-	// 	},
-	// });
+	const mutate = usePatch(`/label/${label.id}`, "label", handleShowEditor);
 
 	const handleName = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
 		setName(value);
@@ -70,12 +58,12 @@ function LabelEditor({ label, handleShowEditor, setShowEditor }: PropsType) {
 			description: $description.current?.value || label.description,
 			textBright: textBright || label.textBright,
 		};
-		console.log("바디", data); //DELETE
-		// 	mutate(data);
+		mutate(data);
 	};
+
 	return (
 		<div className="w-full h-full flex flex-col justify-evenly">
-			<h2 className="font-bold text-xl mx-8">레이블 편집</h2>
+			<h2 className="font-bold text-xl mx-8 text-grayscale.900 dark:text-gray-50">레이블 편집</h2>
 			<div className="h-2/3 mx-8 flex flex-wrap">
 				<section className={`${border} w-[288px] h-[153px] flex justify-center items-center`}>
 					<InformationTag

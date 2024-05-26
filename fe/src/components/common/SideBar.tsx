@@ -7,7 +7,7 @@ const border = "component-border dark:component-border--dark";
 const borderBottom = `border-b-[1px] ${border}`;
 
 function SideBar() {
-	const { data: milestone, refetch: milestoneRefetch } = useGet("milestone", "/milestone");
+	const { data: milestone, refetch: milestoneRefetch } = useGet("milestone", "/milestone", false);
 	// const { data: label, refetch: lableRefetch } = useGet("label", "/label");
 	// const { data: member, refetch: memberRefetch } = useGet("member", "/member");
 	const sideBarItems = [

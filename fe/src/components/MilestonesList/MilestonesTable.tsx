@@ -1,26 +1,17 @@
 import TabButton from "../common/TabButton";
 import Milestone from "./Milestone";
-import { useQuery } from "@tanstack/react-query";
-import fetchData from "../../utility/fetchData";
+import useGet from "../../hooks/useGet";
 
 interface PropsType {
 	queryParam: null | string;
 	queryKey: string;
 }
 
-interface MilestonesDataType {
-	milestones: Milestone[];
-	milestoneCounts: MilestoneCounts;
-}
-
 const border = "component-border dark:component-border--dark";
 
 function MilestonesTable({ queryParam, queryKey }: PropsType) {
-	const api = `${queryParam ? `/milestone?state=${queryParam}` : "/milestone"}`;
-	const { data, error, isLoading } = useQuery({
-		queryKey: [queryKey],
-		queryFn: () => fetchData(api),
-	});
+	const query = `${queryParam ? `/milestone?state=${queryParam}` : "/milestone"}`;
+	const { data, error, isLoading } = useGet(queryKey, query, true);
 	if (isLoading) return <div>로딩</div>;
 	if (error) return <div>에러 {error.message}</div>;
 

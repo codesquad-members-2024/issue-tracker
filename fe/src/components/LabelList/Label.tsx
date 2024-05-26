@@ -3,6 +3,7 @@ import Button from "../common/Button";
 import InformationTag from "../common/InformationTag";
 import LabelEditor from "./LabelCRUD/LabelEditor";
 import Alert from "../common/Alert";
+import useDelete from "../../hooks/useDelete";
 
 interface PropsType {
 	label: Label;
@@ -15,25 +16,15 @@ const border = "component-border dark:component-border--dark";
 function Label({ label, i, length }: PropsType) {
 	const [showAlert, setShowAlert] = useState(false);
 	const [showEditor, setShowEditor] = useState(false);
-
-	// const queryClient = useQueryClient();
-	// const { mutate } = useMutation({
-	// 	mutationFn: () => fetchData(`/label/${label.id}`, { method: "DELETE" }),
-	// 	onSuccess: () => {
-	// 		queryClient.invalidateQueries({ queryKey: ["label"] });
-	// 	},
-	// 	onError: (e) => {
-	// 		console.error("삭제 에러", e);
-	// 	},
-	// });
+	const mutate = useDelete(`/label/${label.id}`, "label");
 
 	const handleShowEditor = () => setShowEditor(!showEditor);
 	const handleAlert = () => setShowAlert(true);
 	const handleDelete = () => {
-		console.log(label.id);
-		// mutate();
+		mutate();
 		setShowAlert(false);
 	};
+
 	return (
 		<>
 			<li
@@ -79,13 +70,7 @@ function Label({ label, i, length }: PropsType) {
 					</div>
 				</div>
 
-				{showEditor && (
-					<LabelEditor
-						label={label}
-						handleShowEditor={handleShowEditor}
-						setShowEditor={setShowEditor}
-					/>
-				)}
+				{showEditor && <LabelEditor label={label} handleShowEditor={handleShowEditor} />}
 			</li>
 			{showAlert && (
 				<Alert
