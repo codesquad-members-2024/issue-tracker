@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.issue.IssueIdNotFoundException;
 import team08.issuetracker.exception.label.LabelNotFoundException;
+import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
@@ -26,6 +27,7 @@ import team08.issuetracker.issue.repository.IssueAttachedLabelRepository;
 import team08.issuetracker.issue.repository.IssueRepository;
 import team08.issuetracker.label.model.dto.LabelResponse;
 import team08.issuetracker.label.repository.LabelRepository;
+import team08.issuetracker.member.repository.MemberRepository;
 import team08.issuetracker.milestone.repository.MilestoneRepository;
 
 @Slf4j
@@ -37,6 +39,7 @@ public class IssueService {
     private final MilestoneRepository milestoneRepository;
     private final AssigneeRepository assigneeRepository;
     private final IssueAttachedLabelRepository issueAttachedLabelRepository;
+    private final MemberRepository memberRepository;
 
     public List<IssueResponse> getIssueListResponse() {
         List<IssueResponse> issueResponses = new ArrayList<>();
@@ -123,6 +126,8 @@ public class IssueService {
     public Issue updateIssueAssignee(Long id, IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
         Issue issue = getIssueById(id);
 
+        validateAssigneeIds(issueAssigneeUpdateRequest);
+
         issue.updateAssignee(issueAssigneeUpdateRequest);
 
         return issueRepository.save(issue);
@@ -177,6 +182,15 @@ public class IssueService {
         return issueRepository
                 .findById(id)
                 .orElseThrow(IssueIdNotFoundException::new);
+    }
+
+    private void validateAssigneeIds(IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
+        boolean memberNotFound = issueAssigneeUpdateRequest.assigneeIds().stream()
+                .anyMatch(assigneeId -> !memberRepository.existsById(assigneeId));
+
+        if (memberNotFound) {
+            throw new MemberIdNotFoundException();
+        }
     }
 
     private void validateLabelIds(IssueLabelUpdateRequest issueLabelUpdateRequest) {
