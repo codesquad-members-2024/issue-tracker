@@ -20,13 +20,13 @@ jobs:
         working-directory: ./fe #디렉토리명
 
       - name: Cache node modules
-              uses: actions/cache@v3
-              with:
-                path: ./frontend/node_modules
-                key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                restore-keys: |
-                  ${{ runner.os }}-node-
-                  ${{ runner.OS }}-
+        uses: actions/cache@v3
+        with:
+          path: ./fe/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            ${{ runner.OS }}-
 
       - name: Build
         run: npm run build
