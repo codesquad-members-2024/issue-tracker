@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
+import team08.issuetracker.issue.model.dto.IssueLabelUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
@@ -62,6 +63,10 @@ public class Issue {
 
     public void updateAssignee(IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
         this.assignees = issueAssigneeUpdateRequest.getAssigneesOfIssue(this.id);
+    }
+
+    public void updateIssueAttachedLabel(IssueLabelUpdateRequest issueLabelUpdateRequest) {
+        this.issueAttachedLabels = issueLabelUpdateRequest.getIssueAttachedLabel(this.id);
     }
 
     public void open() {

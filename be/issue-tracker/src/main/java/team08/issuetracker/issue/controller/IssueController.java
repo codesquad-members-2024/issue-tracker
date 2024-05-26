@@ -16,6 +16,7 @@ import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
+import team08.issuetracker.issue.model.dto.IssueLabelUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueResponse;
 import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueUpdateResponse;
@@ -44,7 +45,8 @@ public class IssueController {
     }
 
     @PatchMapping("/{id}/title")
-    public ResponseEntity<IssueUpdateResponse> updateIssueTitle(@PathVariable long id, @RequestBody IssueTitleUpdateRequest issueTitleUpdateRequest) {
+    public ResponseEntity<IssueUpdateResponse> updateIssueTitle(@PathVariable long id,
+                                                                @RequestBody IssueTitleUpdateRequest issueTitleUpdateRequest) {
         Issue issue = issueService.updateIssueTitle(id, issueTitleUpdateRequest);
 
         IssueUpdateResponse response = IssueUpdateResponse.from(issue);
@@ -55,12 +57,23 @@ public class IssueController {
     }
 
     @PatchMapping("/{id}/assignee")
-    public ResponseEntity<IssueUpdateResponse> updateIssueAssignee(@PathVariable long id, @RequestBody IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
+    public ResponseEntity<IssueUpdateResponse> updateIssueAssignee(@PathVariable long id,
+                                                                   @RequestBody IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
         Issue issue = issueService.updateIssueAssignee(id, issueAssigneeUpdateRequest);
 
         IssueUpdateResponse response = IssueUpdateResponse.from(issue);
 
         log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/label")
+    public ResponseEntity<IssueUpdateResponse> updateIssueLabel(@PathVariable long id,
+                                                                @RequestBody IssueLabelUpdateRequest issueLabelUpdateRequest) {
+        Issue issue = issueService.updateIssueLabel(id, issueLabelUpdateRequest);
+
+        IssueUpdateResponse response = IssueUpdateResponse.from(issue);
 
         return ResponseEntity.ok(response);
     }
