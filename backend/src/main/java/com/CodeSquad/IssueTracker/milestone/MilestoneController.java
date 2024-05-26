@@ -1,7 +1,7 @@
 package com.CodeSquad.IssueTracker.milestone;
 
+import com.CodeSquad.IssueTracker.milestone.dto.MilestoneListResponse;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,48 +18,54 @@ public class MilestoneController {
     @PostMapping("/milestone")
     public ResponseEntity<?> createMilestone(@RequestBody MilestoneRequest milestoneRequest) {
         milestoneService.createMilestone(milestoneRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/milestones/open")
     public ResponseEntity<List<Milestone>> getAllOpenMilestones(){
         List<Milestone> milestones = milestoneService.getOpenMilestones();
-        return new ResponseEntity<>(milestones, HttpStatus.OK);
+        return ResponseEntity.ok(milestones);
     }
 
     @GetMapping("/milestones/close")
     public ResponseEntity<List<Milestone>> getAllCloseMilestones(){
         List<Milestone> milestones = milestoneService.getCloseMilestones();
-        return new ResponseEntity<>(milestones, HttpStatus.OK);
+        return ResponseEntity.ok(milestones);
     }
 
     @GetMapping("/milestone/{milestoneId}")
     public ResponseEntity<Milestone> getMilestone(@PathVariable Long milestoneId) {
         Milestone milestone = milestoneService.getMilestoneById(milestoneId);
-        return new ResponseEntity<>(milestone, HttpStatus.OK);
+        return ResponseEntity.ok(milestone);
     }
 
     @DeleteMapping("/milestone/{milestoneId}")
     public ResponseEntity<?> deleteMilestone(@PathVariable Long milestoneId) {
         milestoneService.deleteMilestone(milestoneId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/milestone/{milestoneId}")
     public ResponseEntity<?> updateMilestone(@PathVariable Long milestoneId, @RequestBody MilestoneRequest milestoneRequest) {
         milestoneService.editMilestone(milestoneId, milestoneRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping ("/milestone/{milestoneId}/open")
     public ResponseEntity<?> openMilestone(@PathVariable Long milestoneId ) {
         milestoneService.openMilestone(milestoneId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping ("/milestone/{milestoneId}/close")
     public ResponseEntity<?> closeMilestone(@PathVariable Long milestoneId ) {
         milestoneService.closeMilestone(milestoneId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping ("/milestone/list")
+    public ResponseEntity<List<MilestoneListResponse>> getMilestoneList() {
+        List<MilestoneListResponse> milestoneList = milestoneService.getOpenMilestoneList();
+        return ResponseEntity.ok(milestoneList);
     }
 }

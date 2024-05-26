@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -19,20 +20,18 @@ public class Milestone {
 
     private String description;
 
-    private Timestamp deadline;
+    private LocalDateTime deadline;
 
-    private Integer totalIssue;
+    private Integer totalIssue = 0;
 
-    private Integer closedIssue;
+    private Integer closedIssue = 0;
 
     private Boolean isClosed = false;
 
-    public Milestone(Long milestoneId, String title, String description, Timestamp deadline, Integer totalIssue, Integer closedIssue) {
+    public Milestone(Long milestoneId, String title, String description, LocalDateTime deadline) {
         this.milestoneId = milestoneId;
         this.title = title;
         this.description = description;
         this.deadline = deadline;
-        this.totalIssue = totalIssue;
-        this.closedIssue = closedIssue;
     }
 }

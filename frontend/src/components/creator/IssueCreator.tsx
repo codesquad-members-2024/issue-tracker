@@ -4,11 +4,56 @@ import CreatorForm from "./CreatorForm";
 import userIcon from "../../img/icon/userIcon.png";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import Sidebar from "../issue/Sidebar";
+<<<<<<< be-dev
+import { useEffect, useRef, useState } from "react";
+import useUserStore from "../../hooks/useUserStore";
+import { useNavigate } from "react-router-dom";
+import { postNewIssue } from "../../api/IssueAPI";
+
+function IssueCreator() {
+  const { userId } = useUserStore();
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+  const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [commentLength, setCommentLength] = useState(0);
+  const [isSubmitable, setIsSubmitable] = useState(false);
+  const navigate = useNavigate();
+
+  const handleOnChange = () => {
+    const title = titleRef.current?.value;
+    const content = commentRef.current?.value;
+    const currentIsSubmitable = !!(title && content);
+
+    if (currentIsSubmitable === !isSubmitable) setIsSubmitable(currentIsSubmitable);
+  };
+  const handleCancel = () => navigate("/");
+  const handleSubmit = () => {
+    const title = titleRef.current?.value;
+    const content = commentRef.current?.value;
+
+    // 추후 /issue/{issueId} 로 라우팅 예정
+    if (title && content) postNewIssue({ title, content, userId }).then(() => navigate("/"));
+  };
+
+  useEffect(() => {
+    const handleCommentChange = () => {
+      const length = commentRef.current?.value.length || 0;
+      setCommentLength(length);
+      handleOnChange();
+    };
+    const commentElement = commentRef.current;
+    commentElement?.addEventListener("input", handleCommentChange);
+
+    return () => {
+      commentElement?.removeEventListener("input", handleCommentChange);
+    };
+  }, []);
+=======
 import useIssueCreatorLogic from "../../hooks/logics/useIssueCreatorLogic";
 
 function IssueCreator() {
   const { titleRef, commentRef, commentCount, isSubmitable, handleOnChange, handleCancel, handleSubmit } =
     useIssueCreatorLogic();
+>>>>>>> team-05
 
   return (
     <Wrapper>
@@ -23,11 +68,17 @@ function IssueCreator() {
           <CreatorForm ref={titleRef} labelText="제목" height="3.5em" onChange={handleOnChange} />
           <CreatorForm ref={commentRef} labelText="코멘트를 입력하세요." height="100%" onChange={handleOnChange} />
           <ExtensionWrapper>
+<<<<<<< be-dev
+          <ContentWordCount key={`word-count-${commentLength}`}>띄어쓰기 포함 {commentLength}자</ContentWordCount>
+          <DashedLine />
+          <FileImageButton><img /> 파일 첨부하기</FileImageButton>
+=======
             <ContentWordCount key={`word-count-${commentCount}`}>띄어쓰기 포함 {commentCount}자</ContentWordCount>
             <DashedLine />
             <FileImageButton>
               <img /> 파일 첨부하기
             </FileImageButton>
+>>>>>>> team-05
           </ExtensionWrapper>
         </FormWrapper>
         <Sidebar />
@@ -52,7 +103,11 @@ const FadeOut = keyframes`
   } to {
     opacity: 0;
   }
+<<<<<<< be-dev
+`
+=======
 `;
+>>>>>>> team-05
 
 const Wrapper = styled.div`
   position: block;
@@ -151,7 +206,11 @@ const ContentWordCount = styled.span`
 `;
 
 const DashedLine = styled.hr`
+<<<<<<< be-dev
+  border-top: 1px dashed #D9DBE9;
+=======
   border-top: 1px dashed #d9dbe9;
+>>>>>>> team-05
   border-bottom: none;
   margin: 1.5em;
 `;
@@ -161,6 +220,10 @@ const FileImageButton = styled.button`
   background-color: transparent;
   border: none;
   text-align: left;
+<<<<<<< be-dev
+`
+=======
 `;
+>>>>>>> team-05
 
 export default IssueCreator;

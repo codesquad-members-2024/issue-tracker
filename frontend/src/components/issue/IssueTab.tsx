@@ -2,6 +2,27 @@ import styled from "styled-components";
 import openedIssueIcon from "../../img/icon/openedIssueIcon.svg";
 import closedIssueIcon from "../../img/icon/closedIssueIcon.svg";
 import arrowBottom from "../../img/icon/arrowBottom.svg";
+<<<<<<< be-dev
+import useIssueStore from "../../hooks/useIssueStore";
+import { useEffect } from "react";
+import { IssueType } from "./IssueList";
+import { useMutation } from "react-query";
+import { sendFiltersRequest } from "../../api/FilterAPI";
+
+export interface IssueTabProps {
+  focusedTab: string;
+  setFocusedTab: (tabDescription: IssueType) => void;
+}
+
+function IssueTab({ focusedTab, setFocusedTab }: IssueTabProps) {
+  const { openIssueCount, closeIssueCount, setIssueCounts } = useIssueStore();
+
+  const { mutate: fetchFilters } = useMutation(sendFiltersRequest, {
+    onSuccess: (data) => setIssueCounts(data),
+  });
+
+  useEffect(fetchFilters, []);
+=======
 import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useEffect } from "react";
 import { useMutation } from "react-query";
@@ -15,6 +36,7 @@ export interface IssueTabProps {
 
 function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
   const { openIssueCount, closeIssueCount } = useIssueStore();
+>>>>>>> team-05
 
   return (
     <Wrapper>
@@ -22,13 +44,21 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
         <input type="checkbox" />
         <LeftMenu>
           <img src={openedIssueIcon} />
+<<<<<<< be-dev
+          <IssueMenuText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>
+=======
           <IssueMenuText isFocused={focusedTab === "open"} onClick={() => handleFocusedTabClick("open")}>
+>>>>>>> team-05
             열린 이슈({openIssueCount})
           </IssueMenuText>
         </LeftMenu>
         <LeftMenu>
           <img src={closedIssueIcon} />
+<<<<<<< be-dev
+          <IssueMenuText isFocused={focusedTab === "close"} onClick={() => setFocusedTab("close")}>
+=======
           <IssueMenuText isFocused={focusedTab === "close"} onClick={() => handleFocusedTabClick("close")}>
+>>>>>>> team-05
             닫힌 이슈({closeIssueCount})
           </IssueMenuText>
         </LeftMenu>

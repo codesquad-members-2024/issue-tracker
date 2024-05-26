@@ -15,15 +15,26 @@ public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
     @Query("SELECT * FROM milestone WHERE is_closed = 0")
     List<Milestone> findAllOpenMilestones();
 
+    @Query("SELECT * FROM milestone WHERE title = :title")
+    Milestone findByTitle(String title);
+
     @Modifying
     @Query("UPDATE milestone SET total_issue = total_issue + 1 WHERE milestone_id = :milestoneId")
-    void incrementIssueCountForMilestone(Long milestoneId);
+    void incrementTotalIssue(Long milestoneId);
+
+    @Modifying
+    @Query("UPDATE milestone SET total_issue = total_issue - 1 WHERE milestone_id = :milestoneId")
+    void decrementTotalIssue(Long milestoneId);
 
     @Modifying
     @Query("UPDATE milestone SET closed_issue = closed_issue + 1 WHERE milestone_id = :milestoneId")
-    void incrementClosedIssueCountForMilestone(Long milestoneId);
+    void incrementClosedIssue(Long milestoneId);
 
     @Modifying
     @Query("UPDATE milestone SET closed_issue = closed_issue - 1 WHERE milestone_id = :milestoneId")
-    void decrementClosedIssueCountForMilestone(Long milestoneId);
+    void decrementClosedIssue(Long milestoneId);
+
+    @Modifying
+    @Query("UPDATE issues SET milestone_id = NULL WHERE milestone_id = :milestoneId")
+    void deleteAllIssueReferences(Long milestoneId);
 }
