@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
+import team08.issuetracker.issue.model.dto.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
 import team08.issuetracker.issue.model.dto.IssueLabelUpdateRequest;
@@ -49,6 +50,19 @@ public class IssueController {
     public ResponseEntity<IssueUpdateResponse> updateIssueTitle(@PathVariable long id,
                                                                 @RequestBody IssueTitleUpdateRequest issueTitleUpdateRequest) {
         Issue issue = issueService.updateIssueTitle(id, issueTitleUpdateRequest);
+
+        IssueUpdateResponse response = IssueUpdateResponse.from(issue);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PatchMapping("/{id}/content")
+    public ResponseEntity<IssueUpdateResponse> updateIssueContent(@PathVariable long id,
+                                                                  @RequestBody IssueContentUpdateRequest issueContentUpdateRequest) {
+        Issue issue = issueService.updateIssueContent(id, issueContentUpdateRequest);
 
         IssueUpdateResponse response = IssueUpdateResponse.from(issue);
 

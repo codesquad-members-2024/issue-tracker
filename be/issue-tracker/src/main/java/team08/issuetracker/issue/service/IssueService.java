@@ -13,6 +13,7 @@ import team08.issuetracker.exception.label.LabelNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
+import team08.issuetracker.issue.model.dto.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueLabelUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueMilestoneUpdateRequest;
@@ -107,6 +108,14 @@ public class IssueService {
         Issue issue = getIssue(id);
 
         issue.updateTitle(issueTitleUpdateRequest);
+
+        return issueRepository.save(issue);
+    }
+
+    public Issue updateIssueContent(Long id, IssueContentUpdateRequest issueContentUpdateRequest) {
+        Issue issue = getIssue(id);
+
+        issue.updateContent(issueContentUpdateRequest);
 
         return issueRepository.save(issue);
     }
