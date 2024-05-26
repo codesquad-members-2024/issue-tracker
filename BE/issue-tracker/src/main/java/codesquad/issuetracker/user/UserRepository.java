@@ -12,4 +12,8 @@ public interface UserRepository extends CrudRepository<User, String> {
     @Query("SELECT * FROM USERS WHERE USERS.id = :id")
     @Override
     Optional<User> findById(@Param("id") String id);
+
+    @Override
+    @Query("SELECT EXISTS(SELECT 1 FROM USERS WHERE ID = :id)")
+    boolean existsById(String id);
 }
