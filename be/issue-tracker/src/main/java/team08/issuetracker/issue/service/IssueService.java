@@ -46,8 +46,7 @@ public class IssueService {
 
         for (Issue issue : issueRepository.findAll()) {
 
-            Long milestoneId = issue.getMilestoneId();
-            String milestoneName = getMilestoneName(milestoneId);
+            String milestoneName = getMilestoneName(issue.getMilestoneId());
 
             //특정 이슈의 담당자 아이디를 모두 찾는 기능
             List<String> assigneeIds = getAssigneeIds(issue);
