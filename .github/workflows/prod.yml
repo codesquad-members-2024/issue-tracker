@@ -43,6 +43,8 @@ jobs:
         with:
           args: --acl public-read --follow-symlinks --delete ./build s3://fe-issue-tracker-s3/
         env:
+          SOURCE_DIR: ./front/build
+          DEST_DIR: s3://fe-issue-tracker-s3/
           AWS_S3_BUCKET: fe-issue-tracker-s3
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
