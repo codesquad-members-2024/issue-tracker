@@ -1,6 +1,7 @@
 package codesquad.issuetracker.user;
 
 import codesquad.issuetracker.user.dto.LoginResponse;
+import codesquad.issuetracker.user.dto.SimpleUserResponse;
 import codesquad.issuetracker.user.dto.UserCreateRequest;
 import codesquad.issuetracker.user.dto.UserLoginRequest;
 import codesquad.issuetracker.user.dto.UserResponse;
@@ -39,7 +40,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody UserLoginRequest userLoginRequest) {
         String token = userService.login(userLoginRequest);
-        LoginResponse loginResponse = new LoginResponse(token, userLoginRequest.getId());
+        User user = userService.findById(userLoginRequest.getId());
+
+        SimpleUserResponse userResponse = new SimpleUserResponse(user.getId(), user.getImgUrl());
+        LoginResponse loginResponse = new LoginResponse(token, userResponse);
         return ResponseEntity.ok().body(loginResponse);
     }
 

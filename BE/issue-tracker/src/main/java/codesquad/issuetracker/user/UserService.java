@@ -41,6 +41,7 @@ public class UserService {
             .id(request.getId())
             .username(request.getUsername())
             .password(hashedPassword)
+            .imgUrl(request.getImgUrl())
             .role(request.getRole())
             .build();
 
