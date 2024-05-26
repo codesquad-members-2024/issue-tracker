@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
+import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
 
@@ -19,10 +20,10 @@ public class Issue {
     private Long id;
     private boolean isOpen; // default : open 수정 할 때 만 클라이언트에서 값 받는다.
     private final String writer; //Non-Null
-    private final String title; //Non-Null
-    private final String content;
+    private String title; //Non-Null
+    private String content;
     private final String uploadedFile;
-    private final Long milestoneId;
+    private Long milestoneId;
     private LocalDateTime createdAt;
 
     @MappedCollection(idColumn = "ISSUE_ID")
@@ -52,6 +53,10 @@ public class Issue {
 
     public void setIssueAttachedLabels(Set<IssueAttachedLabel> issueAttachedLabels) {
         this.issueAttachedLabels = issueAttachedLabels;
+    }
+
+    public void updateTitle(IssueTitleUpdateRequest issueTitleUpdateRequest) {
+        this.title = issueTitleUpdateRequest.title();
     }
 
     public void open() {

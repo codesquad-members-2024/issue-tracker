@@ -17,6 +17,7 @@ import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
 import team08.issuetracker.issue.model.dto.IssueResponse;
+import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueUpdateResponse;
 import team08.issuetracker.issue.service.IssueService;
 
@@ -41,6 +42,17 @@ public class IssueController {
 
         return ResponseEntity.status(HttpStatus.FOUND)
                 .body(IssueCreationResponse.from(issue));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<IssueUpdateResponse> updateIssueTitle(@PathVariable long id, @RequestBody IssueTitleUpdateRequest issueTitleUpdateRequest) {
+        Issue issue = issueService.updateIssueTitle(id, issueTitleUpdateRequest);
+
+        IssueUpdateResponse response = IssueUpdateResponse.from(issue);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/open")

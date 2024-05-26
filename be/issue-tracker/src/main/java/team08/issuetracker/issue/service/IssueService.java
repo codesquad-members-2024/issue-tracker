@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team08.issuetracker.exception.issue.IssueIdNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueResponse;
+import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
 import team08.issuetracker.issue.repository.AssigneeRepository;
@@ -95,6 +97,16 @@ public class IssueService {
         log.info("SAVED ISSUE : {}", savedIssue);
 
         return savedIssue;
+    }
+
+    public Issue updateIssueTitle(Long id, IssueTitleUpdateRequest issueTitleUpdateRequest) {
+        Issue issue = issueRepository
+                .findById(id)
+                .orElseThrow(IssueIdNotFoundException::new);
+
+        issue.updateTitle(issueTitleUpdateRequest);
+
+        return issueRepository.save(issue);
     }
 
     public Issue updateIssueStateToOpen(Long id) {
