@@ -28,13 +28,13 @@ jobs:
         run: npm install
         working-directory: ./fe #디렉토리명
 
-      - name: Build
+      - name: Build # 빌드 및 환경변수 설정
         run: npm run build
         working-directory: ./fe
         env:
           REACT_APP_EC2_SERVER: ${{ secrets.REACT_APP_EC2_SERVER }}
 
-      - name: SHOW AWS CLI VERSION
+      - name: SHOW AWS CLI VERSION # S3에 배포, CLI
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
@@ -46,5 +46,5 @@ jobs:
             --delete
         working-directory: ./fe
 
-      - name: Invalidate CloudFront Cache
+      - name: Invalidate CloudFront Cache # 클라우드 프론트 무효화 (캐시 무효 설정)
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
