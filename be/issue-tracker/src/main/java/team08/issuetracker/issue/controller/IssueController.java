@@ -44,7 +44,7 @@ public class IssueController {
                 .body(IssueCreationResponse.from(issue));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/title")
     public ResponseEntity<IssueUpdateResponse> updateIssueTitle(@PathVariable long id, @RequestBody IssueTitleUpdateRequest issueTitleUpdateRequest) {
         Issue issue = issueService.updateIssueTitle(id, issueTitleUpdateRequest);
 
