@@ -46,7 +46,6 @@ jobs:
           AWS_EC2_METADATA_DISABLED: true
         run: |
           aws s3 sync \
-            --region ap-northeast-2 \
             build s3://codesquad-2024-team8-issue-tracker \
             --delete
         working-directory: ./fe
