@@ -17,6 +17,7 @@ import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
 import team08.issuetracker.issue.model.dto.IssueLabelUpdateRequest;
+import team08.issuetracker.issue.model.dto.IssueMilestoneUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueResponse;
 import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueUpdateResponse;
@@ -72,6 +73,16 @@ public class IssueController {
     public ResponseEntity<IssueUpdateResponse> updateIssueLabel(@PathVariable long id,
                                                                 @RequestBody IssueLabelUpdateRequest issueLabelUpdateRequest) {
         Issue issue = issueService.updateIssueLabel(id, issueLabelUpdateRequest);
+
+        IssueUpdateResponse response = IssueUpdateResponse.from(issue);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/milestone")
+    public ResponseEntity<IssueUpdateResponse> updateIssueMilestone(@PathVariable long id,
+                                                                    @RequestBody IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
+        Issue issue = issueService.updateIssueMilestone(id, issueMilestoneUpdateRequest);
 
         IssueUpdateResponse response = IssueUpdateResponse.from(issue);
 
