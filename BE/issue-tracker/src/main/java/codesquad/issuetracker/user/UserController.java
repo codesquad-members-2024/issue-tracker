@@ -3,7 +3,9 @@ package codesquad.issuetracker.user;
 import codesquad.issuetracker.user.dto.LoginResponse;
 import codesquad.issuetracker.user.dto.UserCreateRequest;
 import codesquad.issuetracker.user.dto.UserLoginRequest;
+import codesquad.issuetracker.user.dto.UserResponse;
 import java.net.URI;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,5 +41,10 @@ public class UserController {
         String token = userService.login(userLoginRequest);
         LoginResponse loginResponse = new LoginResponse(token, userLoginRequest.getId());
         return ResponseEntity.ok().body(loginResponse);
+    }
+
+    @GetMapping
+    public List<UserResponse> getUsers() {
+        return userService.findAllUser();
     }
 }
