@@ -209,11 +209,11 @@ export function IssueDetailContainer() {
 						</StyledNewComment>
 					</section>
 					<aside>
-						<IssueSidebar
+						{/* <IssueSidebar
 							assignees={issueDetail.assignees}
 							milestone={issueDetail.milestone}
 							labels={issueDetail.labels}
-						/>
+						/> */}
 						<div className='right-align'>
 							<Button
 								type='button'

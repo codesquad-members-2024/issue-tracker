@@ -4,38 +4,38 @@ import { IconPlus, IconUser } from '~/common/icons';
 import { Dropdowns, Label, InputRadio, InputCheck } from '~/common/components';
 import { Assignee, MilestoneIndicator } from '~/features/issue/components';
 
-export function IssueSidebar({ assignees, milestone, labels }) {
+export function IssueSidebar({
+	assignees,
+	milestones,
+	labels,
+	selectedAssignees,
+	selectedLabels,
+	selectedMilestone,
+	dispatch,
+}) {
 	const [isOpen, setIsOpen] = useState({
 		assignee: false,
 		label: false,
 		milestone: false,
 	});
 
-	const [selectedAssignees, setSelectedAssignees] = useState([]);
-	const [selectedLabels, setSelectedLabels] = useState([]);
-	const [selectedMilestone, setSelectedMilestone] = useState(null);
+	// 셀렉트박스 체크 여부
 
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
 
-	// 셀렉트박스 체크 여부
 	const handleAssigneeChange = assignee => {
-		setSelectedAssignees(prev =>
-			prev.includes(assignee)
-				? prev.filter(a => a !== assignee)
-				: [...prev, assignee]
-		);
+		dispatch({ type: 'TOGGLE_ASSIGNEE', payload: assignee });
 	};
 
 	const handleLabelChange = label => {
-		setSelectedLabels(prev =>
-			prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label]
-		);
+		dispatch({ type: 'TOGGLE_LABEL', payload: label });
 	};
 
 	const handleMilestoneChange = mile => {
-		setSelectedMilestone(mile);
+		dispatch({ type: 'SET_MILESTONE', payload: mile });
 	};
+
 	return (
 		<StyledWrapper>
 			<StyledSideItem>
@@ -85,17 +85,18 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 					</StyledDropdown>
 				)}
 				<StyledSideContent>
-					{selectedLabels.map((labelName, index) => {
-						const label = labels.find(l => l.name === labelName);
-						return (
-							<Label
-								key={index}
-								name={label.name}
-								backgroundColor={label.backgroundColor}
-								textColor={label.textColor}
-							/>
-						);
-					})}
+					{selectedLabels &&
+						selectedLabels.map((labelName, index) => {
+							const label = labels.find(l => l.name === labelName);
+							return (
+								<Label
+									key={index}
+									name={label.name}
+									backgroundColor={label.backgroundColor}
+									textColor={label.textColor}
+								/>
+							);
+						})}
 				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
@@ -105,7 +106,7 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 				</StyledTitleWrapper>
 				{isOpen.milestone && (
 					<StyledDropdown dropdownTitle='마일스톤 설정'>
-						{milestone.map((mile, index) => (
+						{milestones.map((mile, index) => (
 							<InputRadio
 								key={index}
 								listName={'milestone'}
@@ -116,7 +117,6 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 						))}
 					</StyledDropdown>
 				)}
-				{console.log(selectedMilestone)}
 				<StyledSideContent>
 					{selectedMilestone && (
 						<MilestoneIndicator milestone={selectedMilestone} />
