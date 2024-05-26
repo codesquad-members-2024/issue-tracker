@@ -107,6 +107,7 @@ public class IssueService {
         return savedIssue;
     }
 
+    @Transactional
     public Issue updateIssueTitle(Long id, IssueTitleUpdateRequest issueTitleUpdateRequest) {
         Issue issue = getIssueById(id);
 
@@ -115,6 +116,7 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
+    @Transactional
     public Issue updateIssueContent(Long id, IssueContentUpdateRequest issueContentUpdateRequest) {
         Issue issue = getIssueById(id);
 
@@ -123,6 +125,7 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
+    @Transactional
     public Issue updateIssueAssignee(Long id, IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
         Issue issue = getIssueById(id);
 
@@ -133,6 +136,7 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
+    @Transactional
     public Issue updateIssueLabel(Long id, IssueLabelUpdateRequest issueLabelUpdateRequest) {
         Issue issue = getIssueById(id);
 
@@ -143,6 +147,7 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
+    @Transactional
     public Issue updateIssueMilestone(Long id, IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
         Issue issue = getIssueById(id);
 
@@ -153,6 +158,7 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
+    @Transactional
     public Issue updateIssueStateToOpen(Long id) {
         Issue issue = getIssueById(id);
 
@@ -161,6 +167,7 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
+    @Transactional
     public Issue updateIssueStateToClose(Long id) {
         Issue issue = getIssueById(id);
 
@@ -169,6 +176,7 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
+    @Transactional
     public void deleteIssue(Long id) {
         Issue issue = getIssueById(id);
         issueRepository.delete(issue);
