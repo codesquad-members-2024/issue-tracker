@@ -1,4 +1,4 @@
-package team08.issuetracker.issue.model.dto;
+package team08.issuetracker.issue.model.dto.update;
 
 import team08.issuetracker.exception.issue.InvalidIssueUpdateFormException;
 

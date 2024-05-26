@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
-import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueContentUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
-import team08.issuetracker.issue.model.dto.IssueLabelUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueMilestoneUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueLabelUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueMilestoneUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueResponse;
-import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueUpdateResponse;
+import team08.issuetracker.issue.model.dto.update.IssueTitleUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueUpdateResponse;
 import team08.issuetracker.issue.service.IssueService;
 
 @Slf4j

@@ -8,11 +8,11 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
-import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueContentUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueLabelUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueMilestoneUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueLabelUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueMilestoneUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
 

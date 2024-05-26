@@ -1,4 +1,4 @@
-package team08.issuetracker.issue.model.dto;
+package team08.issuetracker.issue.model.dto.update;
 
 import java.util.Set;
 import java.util.stream.Collectors;
