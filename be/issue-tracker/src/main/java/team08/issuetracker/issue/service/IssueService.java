@@ -100,9 +100,7 @@ public class IssueService {
     }
 
     public Issue updateIssueTitle(Long id, IssueTitleUpdateRequest issueTitleUpdateRequest) {
-        Issue issue = issueRepository
-                .findById(id)
-                .orElseThrow(IssueIdNotFoundException::new);
+        Issue issue = getIssue(id);
 
         issue.updateTitle(issueTitleUpdateRequest);
 
@@ -110,8 +108,7 @@ public class IssueService {
     }
 
     public Issue updateIssueStateToOpen(Long id) {
-        Issue issue = issueRepository.findById(id)
-                .orElseThrow();
+        Issue issue = getIssue(id);
 
         issue.open();
 
@@ -119,11 +116,16 @@ public class IssueService {
     }
 
     public Issue updateIssueStateToClose(Long id) {
-        Issue issue = issueRepository.findById(id)
-                .orElseThrow();
+        Issue issue = getIssue(id);
 
         issue.close();
 
         return issueRepository.save(issue);
+    }
+
+    private Issue getIssue(Long id) {
+        return issueRepository
+                .findById(id)
+                .orElseThrow(IssueIdNotFoundException::new);
     }
 }
