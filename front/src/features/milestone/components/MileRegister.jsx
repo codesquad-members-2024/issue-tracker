@@ -1,23 +1,35 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
-import {
-	IconPlus,
-	IconXsquare,
-	IconRefresh,
-	IconChevronDown,
-	IconEdit,
-} from '~/common/icons';
+import { useState, useEffect, useReducer } from 'react';
+import { IconPlus, IconXsquare, IconEdit } from '~/common/icons';
 import { Input } from 'antd';
-import { Button, Label, InputRadio } from '~/common/components';
+import { Button } from '~/common/components';
 
+function milestoneReducer(state, action) {
+	switch (action.type) {
+		case 'SET_NAME':
+			return { ...state, name: action.payload };
+		case 'SET_DUEDATE':
+			return { ...state, dueDate: action.payload };
+		case 'SET_DESCRIPTION':
+			return { ...state, description: action.payload };
+		default:
+			return state;
+	}
+}
 export function MileRegister({
+	milestone,
 	isEdit,
 	setIsEdit,
-
-	newLabel,
-	setNewLabel,
+	newMilestone,
+	setNewMilestone,
 }) {
-	const [date, setDate] = useState('2024.05.22');
+	const initialMilestone = {
+		name: milestone?.name || '',
+		dueDate: milestone?.dueDate || '',
+		description: milestone?.description || '',
+	};
+	const [state, dispatch] = useReducer(milestoneReducer, initialMilestone);
+
 	return (
 		<StyledRegister>
 			<h3>{isEdit ? '마일스톤 편집' : '새로운 마일스톤 추가'}</h3>
@@ -25,24 +37,28 @@ export function MileRegister({
 				<div className='inputs'>
 					<Input
 						placeholder='마일스톤의 이름을 입력하세요'
-						value={2}
-						onChange={() => {}}
+						value={state.name}
+						onChange={e =>
+							dispatch({ type: 'SET_NAME', payload: e.target.value })
+						}
 						variant='filled'
 					/>
 					<Input
 						placeholder='완료일(선택)'
 						variant='filled'
-						value={date}
+						value={state.dueDate}
 						type='date'
-						onChange={e => {
-							setDate(e.target.value);
-						}}
+						onChange={e =>
+							dispatch({ type: 'SET_DUEDATE', payload: e.target.value })
+						}
 					/>
 				</div>
 				<Input
 					placeholder='마일스톤에 대한 설명을 입력하세요'
-					value={2}
-					onChange={() => {}}
+					value={state.description}
+					onChange={e =>
+						dispatch({ type: 'SET_DESCRIPTION', payload: e.target.value })
+					}
 					variant='filled'
 				/>
 			</div>
@@ -54,7 +70,9 @@ export function MileRegister({
 							buttonType='outlined'
 							size='small'
 							buttonText='취소'
-							onClick={() => {}}
+							onClick={() => {
+								setIsEdit(false);
+							}}
 							icon={<IconXsquare />}
 						/>
 						<Button
@@ -67,11 +85,14 @@ export function MileRegister({
 				) : (
 					<>
 						<Button
+							className='cancel'
 							type='button'
 							buttonType='outlined'
 							size='small'
 							buttonText='취소'
-							onClick={() => {}}
+							onClick={() => {
+								setNewMilestone(!newMilestone);
+							}}
 							icon={<IconXsquare />}
 						/>
 						<Button

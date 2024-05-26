@@ -5,25 +5,23 @@ import { IconPlus, IconAlertCircle, IconArchive } from '~/common/icons';
 import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
 import { Tabs, ListHeader, ListBody, Button, Label } from '~/common/components';
 import { MileRegister, MileListItem } from '~/features/milestone/components';
+import { useMilestoneList } from '~/features/issue/hooks';
 
 export function MilestoneContainer() {
-	const milestoneArray = [
-		{
-			id: 2,
-			name: 'documentation',
-			description: 'documentation description',
-			backgroundColor: '#008672',
-			textColor: '#ffffff',
-		},
-		{
-			id: 4,
-			name: 'bug',
-			description: 'bugggg description',
-			backgroundColor: '#008672',
-			textColor: '#ffffff',
-		},
-	];
+	const { milestoneList, loading, error, fetching } = useMilestoneList();
 	const [newMilestone, setNewMilestone] = useState(false);
+	const statusCount = milestoneList.reduce(
+		(acc, milestone) => {
+			if (!milestone.closed) {
+				acc.open += 1;
+			} else {
+				acc.closed += 1;
+			}
+			return acc;
+		},
+		{ open: 0, closed: 0 }
+	);
+
 	return (
 		<>
 			<StyledWrapper>
@@ -43,23 +41,27 @@ export function MilestoneContainer() {
 						}}
 					/>
 				</div>
-				<MileRegister
-					newMilestone={newMilestone}
-					setNewMilestone={setNewMilestone}
-				/>
-				{newMilestone && <div></div>}
+				{newMilestone && (
+					<MileRegister
+						setNewMilestone={setNewMilestone}
+						newMilestone={newMilestone}
+					/>
+				)}
+
 				<StyledListHeader>
 					<strong>
 						<IconAlertCircle />
-						열린 마일스톤(2)
+						열린 마일스톤({statusCount.open})
 					</strong>
 					<strong>
 						<IconArchive />
-						닫힌 마일스톤(0)
+						닫힌 마일스톤({statusCount.closed})
 					</strong>
 				</StyledListHeader>
 				<ListBody>
-					<MileListItem />
+					{milestoneList.map(milestone => (
+						<MileListItem key={milestone.id} milestone={milestone} />
+					))}
 				</ListBody>
 			</StyledWrapper>
 		</>

@@ -63,7 +63,6 @@ export function IssueCreateContainer() {
 				return { labelId: labelObj.id };
 			}),
 		};
-		console.log('포스트 요청', issueData);
 		try {
 			const id = await postIssueDetail(issueData);
 			navigate(`/issues/${id}`);

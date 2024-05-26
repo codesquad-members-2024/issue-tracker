@@ -14,7 +14,7 @@ import { MileRegister } from '~/features/milestone/components';
 export function MileListItem({ milestone }) {
 	const [isEdit, setIsEdit] = useState(false);
 	return (
-		<StyledListItem key={1}>
+		<StyledListItem>
 			{isEdit ? (
 				<MileRegister
 					isEdit={isEdit}
@@ -26,15 +26,15 @@ export function MileListItem({ milestone }) {
 					<StyledMileInfo>
 						<p className='title'>
 							<StyledIconMilestone />
-							<strong>마일스톤 이름</strong>
+							<strong>{milestone.name}</strong>
 							<span className='due'>
 								<IconCalendar />
-								<span>완료일 일정</span>
+								<span>{milestone.dueDate}</span>
 							</span>
 						</p>
-						<p className='description'>
-							레이블에 대한 설명이 있는 경우에만 렌더링
-						</p>
+						{milestone.description && (
+							<p className='description'>{milestone.description}</p>
+						)}
 					</StyledMileInfo>
 					<StyledOptions>
 						<div className='button-list'>
@@ -64,7 +64,12 @@ export function MileListItem({ milestone }) {
 						</div>
 						<div className='milestone-info'>
 							<MilestoneIndicator
-								milestone={{ progress: 40, name: '고치자' }}
+								milestone={{
+									progress: milestone.progress,
+									name: milestone.name,
+									openIssue: milestone.openIssue || '',
+									closeIssue: milestone.closeIssue || '',
+								}}
 								detail={true}
 							/>
 						</div>

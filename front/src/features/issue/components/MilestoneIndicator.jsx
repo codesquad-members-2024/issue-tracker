@@ -13,7 +13,9 @@ export function MilestoneIndicator({ milestone, detail }) {
 			{detail && (
 				<StyledStatus>
 					<p className='percent-text'>{milestone?.progress}%</p>
-					<p className='open-close'>열린 이슈 1 닫힌 이슈 1</p>
+					<p className='open-close'>
+						열린 이슈 {milestone?.openIssue} 닫힌 이슈 {milestone?.closeIssue}
+					</p>
 				</StyledStatus>
 			)}
 		</StyledWrapper>
