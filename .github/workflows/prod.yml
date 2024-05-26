@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18' # Node.js 18 버전으로 업데이트
+          node-version: '18'
 
       - name: Install dependencies
         run: |
@@ -38,16 +38,10 @@ jobs:
           echo "Build completed. Listing contents of the build directory:"
           ls -al ./build/
 
-      - name: List build directory contents
-        run: |
-          ls -al ./front/build/
-
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
-          args: --acl public-read --follow-symlinks --delete
-          source_dir: ./front/build/
-          dest_dir: s3://fe-issue-tracker-s3/
+          args: --acl public-read --follow-symlinks --delete ./build s3://fe-issue-tracker-s3/
         env:
           AWS_S3_BUCKET: fe-issue-tracker-s3
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
