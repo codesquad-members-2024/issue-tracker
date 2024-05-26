@@ -1,5 +1,6 @@
 package codesquad.issuetracker.user;
 
+import codesquad.issuetracker.exception.PasswordMismatch;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class User implements Persistable<String> {
     private LocalDateTime createdAt;
     private boolean isDeleted;
     @Transient
-    private boolean isNew = true;
+    private boolean isNew;
 
     @PersistenceCreator
     User(String id, String username, String password, Role role, LocalDateTime createdAt,
@@ -34,6 +35,7 @@ public class User implements Persistable<String> {
         this.role = role;
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
+        this.isNew = false;
     }
 
     @Builder
@@ -44,16 +46,18 @@ public class User implements Persistable<String> {
         this.role = role;
         this.createdAt = LocalDateTime.now();
         this.isDeleted = false;
-    }
-
-    public static User from(String id, String username, String password, Role role) {
-        User user = new User(id, username, password, role, LocalDateTime.now(), false);
-        return user;
+        this.isNew = true;
     }
 
     @Override
     public boolean isNew() {
         return isNew;
+    }
+
+    public void verifyPassword(String password) {
+        if (!password.equals(this.password)) {
+            throw new PasswordMismatch();
+        }
     }
 
     public enum Role {

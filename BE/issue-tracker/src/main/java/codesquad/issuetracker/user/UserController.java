@@ -1,6 +1,7 @@
 package codesquad.issuetracker.user;
 
 import codesquad.issuetracker.user.dto.UserCreateRequest;
+import codesquad.issuetracker.user.dto.UserLoginRequest;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,13 @@ public class UserController {
 
     @GetMapping("/checkUserId/{userId}")
     public ResponseEntity<?> checkUserIdDuplication(@PathVariable String userId) {
-        userService.checkUserIdDuplicate(userId);
+        userService.verifyDuplicateUserId(userId);
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) {
+        String jwt = userService.login(userLoginRequest);
+        return ResponseEntity.ok().body(jwt);
+    }
 }
