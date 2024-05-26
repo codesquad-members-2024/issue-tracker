@@ -16,8 +16,6 @@ export default defineConfig({
 		rollupOptions: {
 			output: {
 				manualChunks: {
-					// 청크를 수동으로 분할하는 설정을 추가합니다.
-					// 'react'와 'react-dom'을 별도의 청크로 분리합니다.
 					react: ['react', 'react-dom'],
 				},
 			},
