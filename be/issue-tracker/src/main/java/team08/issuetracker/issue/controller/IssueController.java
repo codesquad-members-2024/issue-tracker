@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
+import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
 import team08.issuetracker.issue.model.dto.IssueResponse;
@@ -25,7 +25,6 @@ import team08.issuetracker.issue.service.IssueService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/issue")
-@CrossOrigin("*")
 public class IssueController {
     private final IssueService issueService;
 
@@ -55,6 +54,19 @@ public class IssueController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/{id}/assignee")
+    public ResponseEntity<IssueUpdateResponse> updateIssueAssignee(@PathVariable long id, @RequestBody IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
+        Issue issue = issueService.updateIssueAssignee(id, issueAssigneeUpdateRequest);
+
+        IssueUpdateResponse response = IssueUpdateResponse.from(issue);
+
+        log.debug(response.getMessage());
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    //todo 이미 닫혀있거나 열려있는 상태에 대한 예외던지기
     @PatchMapping("/{id}/open")
     public ResponseEntity<IssueUpdateResponse> openIssue(@PathVariable long id) {
         Issue issue = issueService.updateIssueStateToOpen(id);

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.issue.IssueIdNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
+import team08.issuetracker.issue.model.dto.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueResponse;
 import team08.issuetracker.issue.model.dto.IssueTitleUpdateRequest;
@@ -49,8 +50,8 @@ public class IssueService {
 
             issueResponses.add(
                     IssueResponse.of(
-                    issue.getId(), issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
-            ));
+                            issue.getId(), issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
+                    ));
         }
 
         return issueResponses;
@@ -103,6 +104,14 @@ public class IssueService {
         Issue issue = getIssue(id);
 
         issue.updateTitle(issueTitleUpdateRequest);
+
+        return issueRepository.save(issue);
+    }
+
+    public Issue updateIssueAssignee(Long id, IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
+        Issue issue = getIssue(id);
+
+        issue.updateAssignee(issueAssigneeUpdateRequest);
 
         return issueRepository.save(issue);
     }
