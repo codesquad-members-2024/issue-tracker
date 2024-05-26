@@ -8,7 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 public class CheckLoginInterceptor implements HandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
             return true; // OPTIONS 요청은 바로 통과시킴
         }

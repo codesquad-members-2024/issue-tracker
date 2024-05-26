@@ -13,5 +13,5 @@ public interface UserRepository extends CrudRepository<User, String> {
     Set<User> findAllById(Iterable<String> userIds);
 
     @Query("SELECT user_id FROM users")
-    public List<String> getAllUserIds();
+    List<String> getAllUserIds();
 }

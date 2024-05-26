@@ -3,7 +3,6 @@ package com.CodeSquad.IssueTracker.user;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

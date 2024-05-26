@@ -12,10 +12,10 @@ import java.util.List;
 @Service
 public class FilterService {
     private final CustomFilterRepository customFilterRepository;
-    IssueService issueService;
-    LabelService labelService;
-    MilestoneService milestoneService;
-    UserService userService;
+    private final IssueService issueService;
+    private final LabelService labelService;
+    private final MilestoneService milestoneService;
+    private final UserService userService;
 
     public FilterService(IssueService issueService, LabelService labelService,
                          MilestoneService milestoneService, CustomFilterRepository customFilterRepository,
