@@ -15,11 +15,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./fe #디렉토리명
-
-      - name: Cache node modules
+      - name: Cache node modules # 빌드시 캐시 설정
         uses: actions/cache@v3
         with:
           path: ./fe/node_modules
@@ -27,6 +23,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
             ${{ runner.OS }}-
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./fe #디렉토리명
 
       - name: Build
         run: npm run build
@@ -45,3 +45,6 @@ jobs:
             build s3://codesquad-2024-team8-issue-tracker \
             --delete
         working-directory: ./fe
+
+      - name: Invalidate CloudFront Cache
+        run: aws cloudfront create-invalidation --distribution-id ${{secrets.CLOUDFRONT_DISTRIBUTION_ID}} --paths "/*"
