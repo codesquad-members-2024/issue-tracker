@@ -1,7 +1,6 @@
 import { server } from '~/apis/baseApi';
 
 export async function postMilestone(milestone) {
-	console.log(milestone);
 	try {
 		const requestOptions = {
 			method: 'POST',
