@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { IconPlus } from '~/common/icons';
+import { useState, useRef } from 'react';
+import { IconPlus, IconUser } from '~/common/icons';
 import { Dropdowns, Label, InputRadio, InputCheck } from '~/common/components';
 import { Assignee, MilestoneIndicator } from '~/features/issue/components';
-
-//여기서는 각각의 셀렉트/라디오 리스트를 fetch로 받은 다음에 리스트 렌더링하고, assignees, milestone, labels 값이 체크되어 있으면 체크된 상태로 렌더링하도록 구현했습니다.
 
 export function IssueSidebar({ assignees, milestone, labels }) {
 	const [isOpen, setIsOpen] = useState({
@@ -13,9 +11,31 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 		milestone: false,
 	});
 
+	const [selectedAssignees, setSelectedAssignees] = useState([]);
+	const [selectedLabels, setSelectedLabels] = useState([]);
+	const [selectedMilestone, setSelectedMilestone] = useState(null);
+
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
 
+	// 셀렉트박스 체크 여부
+	const handleAssigneeChange = assignee => {
+		setSelectedAssignees(prev =>
+			prev.includes(assignee)
+				? prev.filter(a => a !== assignee)
+				: [...prev, assignee]
+		);
+	};
+
+	const handleLabelChange = label => {
+		setSelectedLabels(prev =>
+			prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label]
+		);
+	};
+
+	const handleMilestoneChange = mile => {
+		setSelectedMilestone(mile);
+	};
 	return (
 		<StyledWrapper>
 			<StyledSideItem>
@@ -31,15 +51,17 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 								listName={'assignees'}
 								value={assignee.loginId}
 								src={assignee.profileImage}
+								checked={selectedAssignees.includes(assignee.loginId)}
+								onChange={() => handleAssigneeChange(assignee.loginId)}
 							/>
 						))}
 					</StyledDropdown>
 				)}
 				<StyledSideContent>
-					{assignees &&
-						assignees?.map((assignee, index) => (
-							<Assignee key={index} assignee={assignee} />
-						))}
+					{selectedAssignees.map((assigneeId, index) => {
+						const assignee = assignees.find(a => a.loginId === assigneeId);
+						return <Assignee key={index} assignee={assignee} />;
+					})}
 				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
@@ -54,25 +76,26 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 								key={index}
 								listName={'label'}
 								value={label.name}
+								checked={selectedLabels.includes(label.name)}
 								bgColor={label.backgroundColor}
 								fontColor={label.textColor}
-								onChange={e => {
-									console.log(e.target.checked);
-								}}
+								onChange={() => handleLabelChange(label.name)}
 							/>
 						))}
 					</StyledDropdown>
 				)}
 				<StyledSideContent>
-					{labels &&
-						labels?.map(label => (
+					{selectedLabels.map((labelName, index) => {
+						const label = labels.find(l => l.name === labelName);
+						return (
 							<Label
-								key={label.name}
+								key={index}
 								name={label.name}
 								backgroundColor={label.backgroundColor}
 								textColor={label.textColor}
 							/>
-						))}
+						);
+					})}
 				</StyledSideContent>
 			</StyledSideItem>
 			<StyledSideItem>
@@ -82,11 +105,22 @@ export function IssueSidebar({ assignees, milestone, labels }) {
 				</StyledTitleWrapper>
 				{isOpen.milestone && (
 					<StyledDropdown dropdownTitle='마일스톤 설정'>
-						<InputRadio listName={milestone.name} value={milestone.name} />
+						{milestone.map((mile, index) => (
+							<InputRadio
+								key={index}
+								listName={'milestone'}
+								value={mile.name}
+								checked={selectedMilestone?.id === mile.id}
+								onChange={() => handleMilestoneChange(mile)}
+							/>
+						))}
 					</StyledDropdown>
 				)}
+				{console.log(selectedMilestone)}
 				<StyledSideContent>
-					{milestone && <MilestoneIndicator milestone={milestone} />}
+					{selectedMilestone && (
+						<MilestoneIndicator milestone={selectedMilestone} />
+					)}
 				</StyledSideContent>
 			</StyledSideItem>
 		</StyledWrapper>
@@ -109,8 +143,8 @@ const StyledSideItem = styled.div`
 	}
 `;
 const StyledDropdown = styled(Dropdowns)`
-	top: 40%;
-	right: 25px;
+	top: 70px;
+	right: 0;
 `;
 
 const StyledTitleWrapper = styled.div`
@@ -125,7 +159,7 @@ const StyledTitle = styled.h4`
 const StyledSideContent = styled.div`
 	margin-top: 16px;
 	.label {
-		margin-right: 8px;
+		margin-bottom: 8px;
 		&:last-child {
 			margin-right: 0;
 		}

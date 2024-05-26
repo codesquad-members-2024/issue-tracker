@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { IconCheckCircle } from '~/common/icons';
+import { IconCheckCircle, IconUser } from '~/common/icons';
 /**
  * listName = assignees, labels, milestones, writers
  * value = [] or [id1, id2, id3, ...]
@@ -13,24 +13,27 @@ export function InputCheck({
 	bgColor,
 	fontColor,
 	onChange,
+	checked,
 	...props
 }) {
-	const select = useRef(null);
-
 	return (
 		<StyledLabel {...props} className='select'>
 			<span>
-				{src && <img src={src} alt={src} />}
-				{bgColor && <StyledCircle $bgColor={bgColor} className='aaa' />}
+				{src === null ? (
+					<StyledIconUser />
+				) : (
+					src && <img className='img' src={src} alt='profile' />
+				)}
+				{bgColor && <StyledCircle $bgColor={bgColor} className='bgColor' />}
 				<StyledValue $fontColor={fontColor}>{value}</StyledValue>
 			</span>
 
 			<input
+				type='checkbox'
 				id={id}
 				name={listName}
 				value={value}
-				type='checkbox'
-				ref={select}
+				checked={checked}
 				onChange={onChange}
 			/>
 		</StyledLabel>
@@ -53,6 +56,11 @@ const StyledLabel = styled.label`
 		height: 20px;
 		border-radius: 50%;
 	}
+`;
+const StyledIconUser = styled(IconUser)`
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
 `;
 const StyledCircle = styled.b`
 	display: block;

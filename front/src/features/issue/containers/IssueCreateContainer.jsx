@@ -3,10 +3,15 @@ import styled from 'styled-components';
 import { IconXsquare } from '~/common/icons';
 import { IssueSidebar, IssueCommentEdit } from '~/features/issue/components';
 import { Button, InputTitleEdit } from '~/common/components';
+import { useUser } from '../../../common/hooks/useUser';
+import { useLabelList, useMilestoneList } from '~/features/issue/hooks';
 
 export function IssueCreateContainer() {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
+	const { user } = useUser();
+	const { labelList } = useLabelList();
+	const { milestoneList } = useMilestoneList();
 	return (
 		<StyledWrapper>
 			<h2>새로운 이슈 작성</h2>
@@ -34,7 +39,11 @@ export function IssueCreateContainer() {
 						/>
 					</StyledInputWrapper>
 				</section>
-				<IssueSidebar assignees={[]} milestone={[]} labels={[]} />
+				<IssueSidebar
+					assignees={user}
+					labels={labelList}
+					milestone={milestoneList}
+				/>
 			</StyledContent>
 			<StyledFooter>
 				<Button

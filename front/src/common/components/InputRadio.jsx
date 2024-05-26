@@ -1,10 +1,7 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
+import { IconCheckCircle, IconUser } from '~/common/icons';
 
-/**
- * listName = assignees, labels, milestones, writers
- * value = [] or [id1, id2, id3, ...]
- */
 export function InputRadio({
 	id,
 	listName,
@@ -12,17 +9,20 @@ export function InputRadio({
 	src,
 	bgColor,
 	fontColor,
+	checked,
 	onChange,
 	defaultChecked,
 	...props
 }) {
-	const radio = useRef(null);
-
 	return (
 		<StyledLabel {...props} className='radio'>
 			<span>
-				{src && <img src={src} alt={src} />}
-				{bgColor && <StyledCircle $bgColor={bgColor} className='aaa' />}
+				{src === null ? (
+					<StyledIconUser />
+				) : (
+					src && <img className='img' src={src} alt='profile' />
+				)}
+				{bgColor && <StyledCircle $bgColor={bgColor} className='bgColor' />}
 				<StyledValue $fontColor={fontColor}>{value}</StyledValue>
 			</span>
 			<input
@@ -30,7 +30,7 @@ export function InputRadio({
 				name={listName}
 				value={value}
 				type='radio'
-				ref={radio}
+				checked={checked}
 				onChange={onChange}
 				defaultChecked={defaultChecked}
 			/>
@@ -56,6 +56,11 @@ const StyledLabel = styled.label`
 		height: 20px;
 		border-radius: 50%;
 	}
+`;
+const StyledIconUser = styled(IconUser)`
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
 `;
 const StyledCircle = styled.b`
 	display: block;
