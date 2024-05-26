@@ -90,6 +90,8 @@ public class IssueController {
 
         IssueUpdateResponse response = IssueUpdateResponse.from(issue);
 
+        log.debug(response.getMessage());
+
         return ResponseEntity.ok(response);
     }
 
@@ -99,6 +101,8 @@ public class IssueController {
         Issue issue = issueService.updateIssueMilestone(id, issueMilestoneUpdateRequest);
 
         IssueUpdateResponse response = IssueUpdateResponse.from(issue);
+
+        log.debug(response.getMessage());
 
         return ResponseEntity.ok(response);
     }

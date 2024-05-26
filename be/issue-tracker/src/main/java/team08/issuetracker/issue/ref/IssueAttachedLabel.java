@@ -11,4 +11,9 @@ public class IssueAttachedLabel {
     private Long id;
     private final Long issueId;
     private final Long labelId;
+
+    @Override
+    public String toString() {
+        return String.format("id : %d\n issueId : %d\n labelId : %s", id, issueId, labelId);
+    }
 }
