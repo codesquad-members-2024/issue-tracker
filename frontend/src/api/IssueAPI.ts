@@ -12,24 +12,13 @@ interface IssuesRequestProps {
 }
 
 interface CommentRequestProps {
-  issueId: number;
+  issueId: number | string;
   author: string;
   content: string;
 }
 
 interface TitleEditProps {
-  issueId: number;
-  title: string;
-}
-
-interface CommentRequestProps {
-  issueId: number;
-  author: string;
-  content: string;
-}
-
-interface TitleEditProps {
-  issueId: number;
+  issueId: number | string;
   title: string;
 }
 
@@ -167,7 +156,7 @@ export const postNewComment = async ({ issueId, author, content }: CommentReques
   }
 };
 
-export const openIssue = async (issueId: number) => {
+export const openIssue = async (issueId: number | string) => {
   try {
     const token = getAuthToken();
     const request = {
@@ -191,7 +180,7 @@ export const openIssue = async (issueId: number) => {
   }
 };
 
-export const closeIssue = async (issueId: number) => {
+export const closeIssue = async (issueId: number | string) => {
   try {
     const token = getAuthToken();
     const request = {

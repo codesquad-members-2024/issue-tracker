@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import CreatorForm from "../new/CreatorForm";
 import Sidebar from "../../extension/Sidebar";
-import useIssueDetailLogic from "../../../hooks/logics/useIssueDetailLogic";
 import Comment from "./Comment";
 import plusIcon from "../../../img/icon/plusIcon.svg";
+import useCommentLogic from "../../../hooks/logics/useCommentLogic";
 
 function DetailContent() {
-  const { issueContent, commentRef, isCommentSubmitable, handleCommentChange, handleCommentSubmit } =
-    useIssueDetailLogic();
+  const { issueContent, commentRef, isCommentSubmitable, handleCommentChange, handleCommentSubmit } = useCommentLogic();
   const { author, comments } = issueContent || {};
 
   return (
