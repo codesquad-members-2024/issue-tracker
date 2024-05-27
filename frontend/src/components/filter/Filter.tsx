@@ -6,18 +6,42 @@ import milestoneIcon from "../../img/icon/milestoneIcon.svg";
 import plusIcon from "../../img/icon/plusIcon.svg";
 import { useNavigate } from "react-router-dom";
 import useFilterLogic from "../../hooks/logics/useFilterLogic";
+import { useEffect, useRef, useState } from "react";
+import FilterPopup from "../extension/FilterPopup";
+
+const popupPostionStyle = {
+  top: "10.25em",
+  left: "7em",
+};
 
 function Filter() {
   const { labels, milestones } = useFilterLogic();
+  const [filterbarVisible, setFilterbarVisible] = useState(false);
+  const aboutMeButtonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const handleAboutMeButtonClick = () => setFilterbarVisible(true);
+  const handleClickOutside = ({ target }: Event) => {
+    if (aboutMeButtonRef.current && !aboutMeButtonRef.current.contains(target as Node)) setFilterbarVisible(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
       <FilterTab>
         <FilterBox>
-          <MyFilterBar>
+          <MyFilterBar onClick={() => handleAboutMeButtonClick()}>
             <MyFilterTitle>필터</MyFilterTitle>
             <FilterIcon src={filterClickIcon} />
+            {filterbarVisible && (
+              <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />
+            )}
           </MyFilterBar>
           <SearchBar>
             <SmallIcon src={searchIcon} />

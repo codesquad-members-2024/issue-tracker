@@ -19,6 +19,37 @@ const TITLE_KEY = {
   milestone: "title",
 };
 
+const renderSelectOption = (option: string) => (
+  <SelectOption key={option}>
+    <span>{option}</span>
+    <input type="checkbox" />
+  </SelectOption>
+);
+
+const getOptionName = (item: string | object, popupType: PopupType): string => {
+  if (typeof item === "string") {
+    return item;
+  }
+
+  switch (popupType) {
+    case "assignee":
+      return JSON.stringify(item);
+    case "label":
+    case "milestone":
+      return item[TITLE_KEY[popupType] as keyof typeof item];
+    default:
+      return "";
+  }
+};
+
+const renderOptions = (popupType: PopupType, items: string[] | object[] | undefined) => (
+  <ScrollableArea>
+    {items?.map((item) => {
+      const optionName = getOptionName(item, popupType);
+      return renderSelectOption(optionName);
+    })}
+  </ScrollableArea>
+);
 const SidePopup = React.forwardRef<HTMLDivElement, SidePopupProps>((props, ref) => {
   const { popupType, items } = props;
 
@@ -26,17 +57,7 @@ const SidePopup = React.forwardRef<HTMLDivElement, SidePopupProps>((props, ref) 
     <Wrapper ref={ref}>
       <div>
         <Header>{HEADER_NAME[popupType]} 설정</Header>
-        <ScrollableArea>
-          {items?.map((item) => (
-            <SelectOption>
-              {typeof item === "string"
-                ? item
-                : popupType === "assignee"
-                  ? JSON.stringify(item)
-                  : item[TITLE_KEY[popupType] as keyof typeof item]}
-            </SelectOption>
-          ))}
-        </ScrollableArea>
+        {renderOptions(popupType, items)}
       </div>
     </Wrapper>
   );

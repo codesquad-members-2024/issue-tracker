@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import plusIcon from "../../../img/icon/plusIcon_dark.svg";
+import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import { useEffect, useRef, useState } from "react";
 import SidePopup from "./SidePopup";
-import useIssueStore from "../../../hooks/stores/useIssueStore";
+import useIssueStore from "../../hooks/stores/useIssueStore";
 
 type SidebarKeys = "assignee" | "label" | "milestone";
 
@@ -50,19 +50,27 @@ function Sidebar() {
   return (
     <Wrapper>
       <Sector>
-        <span>담당자</span>
-        <img src={plusIcon} onClick={() => handleRightMenuClick("assignee")} />
+        <SectorWrapper onClick={() => handleRightMenuClick("assignee")}>
+          <span>담당자</span>
+          <img src={plusIcon} />
+        </SectorWrapper>
         {filterbarVisible.assignee && <SidePopup ref={sidebarRefs.assignee} popupType="assignee" items={users} />}
       </Sector>
       <Sector>
-        <span>레이블</span>
-        <img src={plusIcon} onClick={() => handleRightMenuClick("label")} />
+        <SectorWrapper onClick={() => handleRightMenuClick("label")}>
+          <span>레이블</span>
+          <img src={plusIcon} />
+        </SectorWrapper>
         {filterbarVisible.label && <SidePopup ref={sidebarRefs.label} popupType="label" items={labels} />}
       </Sector>
       <Sector>
-        <span>마일스톤</span>
-        <img src={plusIcon} onClick={() => handleRightMenuClick("milestone")} />
-        {filterbarVisible.milestone && <SidePopup ref={sidebarRefs.milestone} popupType="milestone" items={milestones} />}
+        <SectorWrapper onClick={() => handleRightMenuClick("milestone")}>
+          <span>마일스톤</span>
+          <img src={plusIcon} />
+        </SectorWrapper>
+        {filterbarVisible.milestone && (
+          <SidePopup ref={sidebarRefs.milestone} popupType="milestone" items={milestones} />
+        )}
       </Sector>
     </Wrapper>
   );
@@ -86,6 +94,13 @@ const Sector = styled.div`
   &:first-child {
     border-top: none;
   }
+`;
+
+const SectorWrapper = styled.div`
+  display: flex;
+  gap: 1.5em;
+  color: #4e4b66;
+  cursor: pointer;
 `;
 
 export default Sidebar;

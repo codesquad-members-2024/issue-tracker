@@ -5,7 +5,7 @@ import arrowBottom from "../../../img/icon/arrowBottom.svg";
 import useIssueStore from "../../../hooks/stores/useIssueStore";
 import { IssueType } from "../../../hooks/logics/useIssueListLogic";
 import { useEffect, useRef, useState } from "react";
-import FilterPopup from "../extension/FilterPopup";
+import FilterPopup from "../../extension/FilterPopup";
 
 type FilterBarKeys = "assignee" | "label" | "milestone" | "author";
 
@@ -34,7 +34,7 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
   const handleRightMenuClick = (menu: FilterBarKeys) => {
     setFilterbarVisible((prev) => ({
       ...prev,
-      [menu]: true,
+      [menu]: !prev[menu as FilterBarKeys],
     }));
   };
 
@@ -44,7 +44,7 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
       if (ref.current && !ref.current.contains(target as Node)) {
         setFilterbarVisible((prev) => ({
           ...prev,
-          [key]: !prev[key as FilterBarKeys],
+          [key]: false,
         }));
       }
     });
@@ -75,26 +75,36 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
         </LeftMenu>
       </LeftMenus>
       <RightMenus>
-        <RightMenu onClick={() => handleRightMenuClick("assignee")}>
-          <span>담당자</span>
-          <img src={arrowBottom} />
-          {filterbarVisible.assignee && <FilterPopup ref={filterbarRefs.assignee} filterType="assginee" items={users} />}
+        <RightMenu>
+          <MenuWrapper onClick={() => handleRightMenuClick("assignee")}>
+            <span>담당자</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
+          {filterbarVisible.assignee && (
+            <FilterPopup ref={filterbarRefs.assignee} filterType="assignee" items={users} />
+          )}
         </RightMenu>
-        <RightMenu onClick={() => handleRightMenuClick("label")}>
-          <span>레이블</span>
-          <img src={arrowBottom} />
+        <RightMenu>
+          <MenuWrapper onClick={() => handleRightMenuClick("label")}>
+            <span>레이블</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
           {filterbarVisible.label && <FilterPopup ref={filterbarRefs.label} filterType="label" items={labels} />}
         </RightMenu>
-        <RightMenu onClick={() => handleRightMenuClick("milestone")}>
-          <span>마일스톤</span>
-          <img src={arrowBottom} />
+        <RightMenu>
+          <MenuWrapper onClick={() => handleRightMenuClick("milestone")}>
+            <span>마일스톤</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
           {filterbarVisible.milestone && (
             <FilterPopup ref={filterbarRefs.milestone} filterType="milestone" items={milestones} />
           )}
         </RightMenu>
-        <RightMenu onClick={() => handleRightMenuClick("author")}>
-          <span>작성자</span>
-          <img src={arrowBottom} />
+        <RightMenu>
+          <MenuWrapper onClick={() => handleRightMenuClick("author")}>
+            <span>작성자</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
           {filterbarVisible.author && <FilterPopup ref={filterbarRefs.author} filterType="author" items={users} />}
         </RightMenu>
       </RightMenus>
@@ -142,6 +152,9 @@ const RightMenus = styled.div`
 
 const RightMenu = styled.div`
   position: relative;
+`;
+
+const MenuWrapper = styled.div`
   display: flex;
   gap: 1.5em;
   color: #4e4b66;
