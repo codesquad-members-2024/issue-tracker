@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import CreatorForm from "../new/CreatorForm";
-import Sidebar from "../Sidebar";
+import Sidebar from "../extension/Sidebar";
 import useIssueDetailLogic from "../../../hooks/logics/useIssueDetailLogic";
 import Comment from "./Comment";
 import plusIcon from "../../../img/icon/plusIcon.svg";

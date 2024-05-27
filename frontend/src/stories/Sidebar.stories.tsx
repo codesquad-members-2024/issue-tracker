@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react/*';
-import Sidebar from '../components/issue/Sidebar';
+import Sidebar from '../components/issue/extension/Sidebar';
 
 export default {
   title: "Components/Sidebar",

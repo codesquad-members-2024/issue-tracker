@@ -4,7 +4,7 @@ import CreatorForm from "./CreatorForm";
 import userIcon from "../../../img/icon/userIcon.png";
 import plusIcon from "../../../img/icon/plusIcon_dark.svg";
 import uploadIcon from "../../../img/icon/uploadIcon.svg";
-import Sidebar from "../Sidebar";
+import Sidebar from "../extension/Sidebar";
 import useIssueCreatorLogic from "../../../hooks/logics/useIssueCreatorLogic";
 
 function IssueCreator() {
