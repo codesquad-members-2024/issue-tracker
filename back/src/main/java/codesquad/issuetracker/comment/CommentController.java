@@ -1,5 +1,6 @@
 package codesquad.issuetracker.comment;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,10 @@ public class CommentController {
     @PostMapping("/comments")
     public ResponseEntity<CommentShowDto> createComment(
             @RequestBody Comment comment,
-            UriComponentsBuilder uriComponentsBuilder
+            UriComponentsBuilder uriComponentsBuilder,
+            HttpServletRequest request
     ) {
+        comment.setLoginId((String) request.getAttribute("loginId")); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
         Comment createdComment = commentService.createComment(comment);
         URI location = uriComponentsBuilder.path("/comments/{id}")
                 .buildAndExpand(createdComment.getId())

@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,10 @@ public class IssueController {
     @PostMapping("/issues")
     public ResponseEntity<IssueShowDto> createIssue(
             @RequestBody Issue issue,
-            UriComponentsBuilder uriComponentsBuilder
+            UriComponentsBuilder uriComponentsBuilder,
+            HttpServletRequest request
     ) {
+        issue.setWriter((String) request.getAttribute("loginId")); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
         Issue createdIssue = issueService.createIssue(issue);
         URI location = uriComponentsBuilder.path("/issues/{id}")
                 .buildAndExpand(createdIssue.getId())

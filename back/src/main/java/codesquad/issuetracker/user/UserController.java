@@ -1,5 +1,6 @@
 package codesquad.issuetracker.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,5 +22,12 @@ public class UserController {
                 .map(user -> new UserShowDto(user))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(allUserShowDto);
+    }
+
+    @GetMapping("/users/login")
+    public ResponseEntity<UserShowDto> getLoggedInUser(HttpServletRequest request) {
+        User user = userService.getUserById((String) request.getAttribute("loginId")); // 현재 로그인된 user 정보
+        return ResponseEntity
+                .ok(new UserShowDto(user));
     }
 }
