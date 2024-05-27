@@ -2,9 +2,12 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { OpenIcon } from "@/icons/OpenIcon";
 import { calculateTime } from "@/utils/calculateTime";
-import { issues } from "@/test.json"; // test data
 
-export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
+export function IssueTableContent({
+  checkedItems,
+  onIssueCheckboxChange,
+  issues,
+}) {
   return (
     <>
       {issues.length === 0 ? (
@@ -13,37 +16,41 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange }) {
         issues
           .slice()
           .reverse()
-          .map((issue, index) => (
-            <Issues key={index}>
-              <Checkbox
-                type="checkbox"
-                checked={checkedItems.has(issue.issue_id)}
-                onChange={() => onIssueCheckboxChange(issue.issue_id)}
-              />
-              <Content>
-                <Top>
-                  <StyledOpen />
-                  <StyledLink to={`/issues/${issue.issue_id}`}>
-                    <div className="title">{issue.title}</div>
-                  </StyledLink>
-                  <div>
-                    {issue.labels.map((label) => (
-                      <Label key={label.id} color={label.color}>
-                        {label.name}
-                      </Label>
-                    ))}
-                  </div>
-                </Top>
-                <Bottom>
-                  <div>#{issue.issue_id}</div>
-                  <div>
-                    이 이슈가 {calculateTime(issue.create_time)}, {issue.writer}님에 의해 작성되었습니다
-                  </div>
-                  <div>{issue.milestone}</div>
-                </Bottom>
-              </Content>
-            </Issues>
-          ))
+          .map((issue, index) => {
+            const { issue_id, title, writer, create_time, labels, milestone } = issue;
+            return (
+              <Issues key={index}>
+                <Checkbox
+                  type="checkbox"
+                  checked={checkedItems.has(issue_id)}
+                  onChange={() => onIssueCheckboxChange(issue_id)}
+                />
+                <Content>
+                  <Top>
+                    <StyledOpen />
+                    <StyledLink to={`/issues/${issue_id}`}>
+                      <div className="title">{title}</div>
+                    </StyledLink>
+                    <div>
+                      {labels.map((label) => (
+                        <Label key={label.id} color={label.color}>
+                          {label.name}
+                        </Label>
+                      ))}
+                    </div>
+                  </Top>
+                  <Bottom>
+                    <div>#{issue_id}</div>
+                    <div>
+                      이 이슈가 {calculateTime(create_time)},{" "}
+                      {writer}님에 의해 작성되었습니다
+                    </div>
+                    <div>{milestone}</div>
+                  </Bottom>
+                </Content>
+              </Issues>
+            );
+          })
       )}
     </>
   );

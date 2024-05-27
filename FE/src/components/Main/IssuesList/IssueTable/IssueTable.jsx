@@ -2,11 +2,15 @@ import styled from "styled-components";
 import { useState } from "react";
 import { IssueTableHeader } from "./IssueTableHeader";
 import { IssueTableContent } from "./IssueTableContent";
+import { issues, closedIssues } from "@/test.json"; // test data
 
 export function IssueTable() {
   const [checkedCount, setCheckedCount] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
+  const [isOpenIssues, setIsOpenIssues] = useState(true);
+
+  const issuesToDisplay = isOpenIssues ? issues : closedIssues;
 
   const handleCheckboxChange = () => setIsChecked(!isChecked);
 
@@ -26,10 +30,15 @@ export function IssueTable() {
         checkedCount={checkedCount}
         isChecked={isChecked}
         onCheckedChange={handleCheckboxChange}
+        isOpenIssues={isOpenIssues}
+        setIsOpenIssues={setIsOpenIssues}
+        openIssueCount={issues.length}
+        closedIssueCount={closedIssues.length}
       />
       <IssueTableContent
         checkedItems={checkedItems}
         onIssueCheckboxChange={handleIssueCheckboxChange}
+        issues={issuesToDisplay}
       />
     </StyledDiv>
   );
