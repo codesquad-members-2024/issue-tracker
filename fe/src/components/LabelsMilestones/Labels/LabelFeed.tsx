@@ -13,14 +13,15 @@ export interface Label {
 }
 interface LabelFeedProps {
     labelsInfo: Label[];
+    labelsCount: number
 }
 
-export const LabelFeed = ({ labelsInfo }: LabelFeedProps) => {
+export const LabelFeed = ({ labelsInfo, labelsCount }: LabelFeedProps) => {
     const labelsLength = labelsInfo.length;
     return (
         <section className="w-full border-2 border-gray-300 rounded-xl mt-4">
             <div className="h-[45px] bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG flex text-sm rounded-t-lg">
-                <div className="pl-6 font-bold flex items-center">{labelsLength}개의 레이블</div>
+                <div className="pl-6 font-bold flex items-center">{labelsCount}개의 레이블</div>
             </div>
             {!labelsLength ? (
                 <NotFound />

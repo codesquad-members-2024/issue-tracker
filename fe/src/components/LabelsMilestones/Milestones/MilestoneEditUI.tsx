@@ -25,7 +25,7 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
     const { mutate } = useMutation({
         mutationFn: async ({ formData, type, id }: MutationPayload) => {
             if (type === "createData") {
-                await APiUtil.createData("milestones", formData);
+                await APiUtil.createData("milestones/new", formData);
             } else if (type === "modifyData" && id !== undefined) {
                 await APiUtil.modifyData("milestones", formData, id);
             }

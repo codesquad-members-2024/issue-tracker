@@ -1,32 +1,37 @@
 import { FormState } from "../components/LabelsMilestones/Milestones/MilestoneEditUI";
 import { ChangeColorProps } from "../components/LabelsMilestones/Labels/LabelEditUI";
 import { LabelFormState } from "../components/LabelsMilestones/Labels/LabelEditUI";
+import { SignUpForm } from "../pages/SignUpPage";
+import { LoginForm } from "../pages/LoginPage";
+import { PostRequestFrom } from "../pages/NewPage";
 const serverURL = import.meta.env.VITE_API_URL;
+const token = sessionStorage.getItem('token')
 
 export const APiUtil = {
     async getData(tableName: string) {
-        try {
-            const response = await fetch(serverURL + tableName);
-            if (!response.ok) {
-                throw new Error(`API 호출 실패 - HTTP 상태 코드: ${response.status}`);
+        const response = await fetch(serverURL + tableName, {
+            headers: {
+                "content-type": "application/json",
+                "Authorization": token ? `Bearer ${token}` : "",
             }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            if (error instanceof Error) {
-                throw new Error(`${error.message}`);
-            }
+        });
+        if (!response.ok) {
+            throw new Error(`에러!: ${response.status}`);
         }
+        const data = await response.json();
+        return data;
     },
 
-    async createData(tableName: string, createData: FormState | LabelFormState) {
-        await fetch(serverURL + tableName, {
+    async createData(tableName: string, createData: FormState | LabelFormState | PostRequestFrom | SignUpForm | LoginForm) {
+        const response = await fetch(serverURL + tableName, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
+                
             },
             body: JSON.stringify(createData),
         });
+        return response
     },
 
     async modifyData(tableName: string, modifyData: FormState | LabelFormState, id: number) {

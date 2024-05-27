@@ -13,13 +13,11 @@ const IssuePage = () => {
 
     const handleResetFilterUI = () => setResetFilterUI(true);
 
-    const { data, error, isLoading } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["issues"],
         queryFn: () => APiUtil.getData("issues?state=OPEN"),
     });
-
     if (isLoading) return <div><Loading/></div>;
-    if (error) return <div>error...{error.message}</div>;
 
     return (
         <main className="w-[1280px] mx-auto">
@@ -43,4 +41,3 @@ const IssuePage = () => {
 };
 
 export default IssuePage;
-// 엔터 눌렀을때, 필터 눌렀을때 
