@@ -1,6 +1,5 @@
 package team08.issuetracker.issue.controller;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueDeleteResponse;
+import team08.issuetracker.issue.model.dto.IssueOverviewResponse;
 import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
 import team08.issuetracker.issue.model.dto.update.IssueLabelUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueMilestoneUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueResponse;
 import team08.issuetracker.issue.model.dto.update.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueUpdateResponse;
 import team08.issuetracker.issue.service.IssueService;
@@ -34,8 +33,8 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping()
-    public ResponseEntity<List<IssueResponse>> issues() {
-        List<IssueResponse> issues = issueService.getIssueListResponse();
+    public ResponseEntity<IssueOverviewResponse> issues() {
+        IssueOverviewResponse issues = issueService.getIssueListResponse();
         return ResponseEntity.ok(issues);
     }
 
