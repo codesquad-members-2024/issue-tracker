@@ -48,10 +48,13 @@ export const sendLoginRequest: (loginState: LoginState) => Promise<Response> = a
       const errorMessage = LOGIN_ERROR_MEESAGE[response.status] || SERVER_ERROR_MESSAGE;
       throw new Error(errorMessage);
     }
-    
+
     if (response.status === 400) throw new Error(LOGIN_INPUT_VALIDATION_ERROR_MESSAGE);
     if (response.status === 404) throw new Error(LOGIN_ID_NOT_FOUND_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    const token = await response.text();
+    localStorage.setItem("token", token);
 
     return response;
   } catch (error) {
@@ -73,12 +76,11 @@ export const sendRegistrationRequest: (registrationState: RegistrationState) => 
     };
     const response = await fetch(`${SERVER}/registration`, request);
 
-
     if (!response.ok) {
       const errorMessage = REGISTRATION_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
       throw new Error(errorMessage);
     }
-    
+
     if (response.status === 400) throw new Error(REGISTRATION_FORMAT_ERROR_MESSAGE);
     if (response.status === 409) throw new Error(REGISTRATION_DUPLICATE_VALIDATION_FAILURE_MEESAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
