@@ -65,9 +65,13 @@ public class IssueService {
     }
 
     private String getMilestoneName(Long milestoneId) {
+        if (milestoneId == null) {
+            return null;
+        }
+
         return milestoneRepository.findById(milestoneId)
                 .map(Milestone::getName)
-                .orElse(null);
+                .orElseThrow(MilestoneIdNotFoundException::new);
     }
 
     private List<String> getAssigneeIds(Issue issue) {
