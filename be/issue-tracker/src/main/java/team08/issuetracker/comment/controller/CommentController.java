@@ -8,9 +8,6 @@ import team08.issuetracker.comment.model.Comment;
 import team08.issuetracker.comment.model.dto.*;
 import team08.issuetracker.comment.service.CommentService;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController // ResponseBody + Controller
 @RequestMapping("/issue/{issueId}/comment")
 @Slf4j

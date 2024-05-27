@@ -1,12 +1,8 @@
 package team08.issuetracker.comment.model;
 
 import lombok.Getter;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
-import team08.issuetracker.label.model.Label;
-
 import java.time.LocalDateTime;
 
 @Getter

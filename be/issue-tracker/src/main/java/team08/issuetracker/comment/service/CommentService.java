@@ -3,7 +3,6 @@ package team08.issuetracker.comment.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import team08.issuetracker.comment.model.Comment;
 import team08.issuetracker.comment.model.dto.CommentCreationRequest;
