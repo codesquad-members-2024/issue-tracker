@@ -16,7 +16,7 @@ const IMAGE_REGEX = /<img src="(.*?)" \/>/g;
 
 const parseContent = (content: string) =>
   content.split("\n").map((line) => {
-    const images = Array.from(line.matchAll(IMAGE_REGEX));
+    const images = [...line.matchAll(IMAGE_REGEX)];
     let textWithoutImages = line.replace(IMAGE_REGEX, "");
 
     return (
