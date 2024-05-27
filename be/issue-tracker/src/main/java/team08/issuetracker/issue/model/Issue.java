@@ -36,16 +36,17 @@ public class Issue {
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<IssueAttachedLabel> issueAttachedLabels;
 
-    public Issue(String title, String writer, String content, String uploadedFile, Long milestoneId) {
+    public Issue(String title, String writer, String content, LocalDateTime createdAt, String uploadedFile,
+                 Long milestoneId) {
 
         // issue 생성시 서버에서 초기화 값을 부여하는 필드들
         this.isOpen = true; // 이슈 생성시 true를 기본값으로 초기화 되어야 한다
-        this.createdAt = LocalDateTime.now(); // 이슈 생성시, 생성 시간을 저장
 
         // issue 생성시 클라이언트에서 받은 값으로 초기화 하는 필드들
         this.title = title;
         this.writer = writer;
         this.content = content;
+        this.createdAt = createdAt;
         this.uploadedFile = uploadedFile;
         this.milestoneId = milestoneId;
     }
