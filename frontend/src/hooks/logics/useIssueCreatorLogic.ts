@@ -5,6 +5,8 @@ import { postNewIssue } from "../../api/IssueAPI";
 import useFileUpload from "@schnee/s3-file-upload";
 
 const IMAGE_DIRECTORY = process.env.REACT_APP_IMG_DIRECTORY;
+const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"];
+const EXTENSIONS_ERROR = "이미지 파일이 아닙니다.";
 
 const parseImageTag = (src: string) => `\n<img src="${src}" />\n`;
 
@@ -43,6 +45,9 @@ const useIssueCreatorLogic = () => {
     if (!file) return;
 
     try {
+      const fileExtension = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+      if (!IMAGE_EXTENSIONS.includes(fileExtension)) throw new Error(EXTENSIONS_ERROR);
+
       const fileLocation = await upload(file, IMAGE_DIRECTORY);
 
       if (commentRef.current)
