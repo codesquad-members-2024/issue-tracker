@@ -1,6 +1,7 @@
 package com.CodeSquad.IssueTracker.labels;
 
 import com.CodeSquad.IssueTracker.Exception.label.*;
+import com.CodeSquad.IssueTracker.labels.dto.LabelDetailResponse;
 import com.CodeSquad.IssueTracker.labels.dto.LabelListResponse;
 import com.CodeSquad.IssueTracker.labels.dto.LabelRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -24,12 +24,37 @@ public class LabelService {
         return (List<Label>) labelRepository.findAll();
     }
 
-    public Optional<Label> getLabelById(Long id) {
+    public List<LabelDetailResponse> getAllLabelDetails() {
+        List<Label> labels = (List<Label>) labelRepository.findAll();
+        List<LabelDetailResponse> labelDetailResponseList = new ArrayList<>();
+
+        for (Label label : labels) {
+            labelDetailResponseList.add(getLabelDetail(label));
+        }
+        log.info("모든 라벨 조회 요청");
+        return labelDetailResponseList;
+    }
+
+    public LabelDetailResponse getLabelDetail(Label label) {
+        return LabelDetailResponse.builder()
+                .labelId(label.getLabelId())
+                .labelName(label.getLabelName())
+                .description(label.getDescription())
+                .textColor(label.getTextColor())
+                .bgColor(label.getBgColor())
+                .build();
+    }
+
+    public Label getLabelById(Long id) {
         if (id <= 0) {
             throw new InvalidLabelIdException("유효하지 않은 라벨 ID: " + id);
         }
         log.info("라벨 id: {} 조회 요청", id);
-        return labelRepository.findById(id);
+        return labelRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("해당 라벨이 존재하지 않습니다: {}", id);
+                    return new LabelNotFoundException("해당 라벨이 존재하지 않습니다: " + id);
+                });
     }
 
     public Set<Label> findAllByIds(Set<Long> ids) {
@@ -56,10 +81,6 @@ public class LabelService {
     }
 
     public void validateLabelRequest(LabelRequest newLabel, boolean isUpdate) {
-        if (labelRepository.findByLabelName(newLabel.labelName()).isPresent()) {
-            throw new DuplicateLabelNameException("이미 존재하는 라벨 이름입니다: " + newLabel.labelName());
-        }
-
         if (isUpdate) {
             if (labelRepository.findByLabelName(newLabel.labelName()).isPresent())
                 throw new DuplicateLabelNameException("이미 존재하는 라벨 이름입니다: " + newLabel.labelName());
@@ -67,15 +88,18 @@ public class LabelService {
     }
 
 
-    public Label updateLabel(Long id, LabelRequest updatedLabel) {
+    public void updateLabel(Long id, LabelRequest updatedLabel) {
         log.info("라벨 id: {} 업데이트 요청: {}", id, updatedLabel);
-        labelRepository.findById(id)
+        Label label = labelRepository.findById(id)
                 .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다."));
-        validateLabelRequest(updatedLabel, true);
 
+        if (label.getLabelName().equals(updatedLabel.labelName())){
+            validateLabelRequest(updatedLabel, false);
+        }else {
+            validateLabelRequest(updatedLabel, true);
+        }
 
-
-        return labelRepository.findById(id).map(existingLabel -> {
+        labelRepository.findById(id).map(existingLabel -> {
             existingLabel.setLabelName(updatedLabel.labelName());
             existingLabel.setDescription(updatedLabel.description());
             existingLabel.setTextColor(updatedLabel.textColor());
