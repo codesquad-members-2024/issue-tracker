@@ -14,7 +14,6 @@ import java.util.List;
 public class CustomFilterRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public CustomFilterRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

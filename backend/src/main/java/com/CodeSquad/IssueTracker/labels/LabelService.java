@@ -20,7 +20,6 @@ public class LabelService {
     private LabelRepository labelRepository;
 
     public List<Label> getAllLabels() {
-        log.info("모든 라벨 조회 요청");
         return (List<Label>) labelRepository.findAll();
     }
 
@@ -67,7 +66,7 @@ public class LabelService {
             throw new LabelNotFoundException("존재하지 않는 라벨이 포함되어 있습니다.");
     }
 
-    public Label createLabel(LabelRequest labelRequest) {
+    public void createLabel(LabelRequest labelRequest) {
         log.info("새 라벨 생성 요청: {}", labelRequest);
         validateLabelRequest(labelRequest, false);
         Label label = Label.builder()
@@ -77,7 +76,7 @@ public class LabelService {
                 .bgColor(labelRequest.bgColor())
                 .build();
 
-        return labelRepository.save(label);
+        labelRepository.save(label);
     }
 
     public void validateLabelRequest(LabelRequest newLabel, boolean isUpdate) {

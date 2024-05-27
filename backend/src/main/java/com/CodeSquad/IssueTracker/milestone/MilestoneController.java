@@ -12,8 +12,7 @@ import java.util.List;
 @RestController
 public class MilestoneController {
     private final MilestoneService milestoneService;
-
-    @Autowired
+    
     public MilestoneController(MilestoneService milestoneService) {
         this.milestoneService = milestoneService;
     }
