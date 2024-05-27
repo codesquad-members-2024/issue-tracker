@@ -12,7 +12,7 @@ import java.util.List;
 public class IssuesController {
 
     private final IssueService issueService;
-    private final static long DEFAULT_OFFSET = 15;
+    private final static long PAGE_LIMIT = 15;
 
 
     public IssuesController(IssueService issueService) {
@@ -27,13 +27,13 @@ public class IssuesController {
 
     @GetMapping("/open")
     public ResponseEntity<List<Issue>> getOpenIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
-        List<Issue> openIssues = issueService.findOpenIssues(page, DEFAULT_OFFSET);
+        List<Issue> openIssues = issueService.findOpenIssues(page, PAGE_LIMIT);
         return ResponseEntity.ok(openIssues);
     }
 
     @GetMapping("/close")
     public ResponseEntity<List<Issue>> getCloseIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
-        List<Issue> openIssues = issueService.findCloseIssues(page, DEFAULT_OFFSET);
+        List<Issue> openIssues = issueService.findCloseIssues(page, PAGE_LIMIT);
         return ResponseEntity.ok(openIssues);
     }
 
