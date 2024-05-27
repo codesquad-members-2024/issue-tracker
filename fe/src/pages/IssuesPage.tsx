@@ -1,26 +1,28 @@
 import Nav from "../components/IssueContainer/Nav";
 import IssueFeed from "../components/IssueContainer/IssueFeed";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FilterProvider from "../Providers/FilterProvider";
 import { Header } from "../common/UtilUI";
-import { APiUtil } from "../common/APIUtils";
+import { APiUtil } from "../common/Utils";
+import { useQuery } from "@tanstack/react-query";
+import { Loading } from "../common/NotFound";
+
 const IssuePage = () => {
-    const [isOpen, setOpen] = useState<boolean>(true);
-    const [issueInfo, setIssueInfo] = useState([]);
+    const [isOpen, setOpen] = useState<string>("OPEN");
     const [resetFilterUI, setResetFilterUI] = useState(false);
 
     const handleResetFilterUI = () => setResetFilterUI(true);
 
-    useEffect(() => {
-        const getLabelList = async () => {
-            const milestoneList = await APiUtil.getData("issues");
-            setIssueInfo(milestoneList);
-        };
-        getLabelList();
-    }, []);
+    const { data, error, isLoading } = useQuery({
+        queryKey: ["issues"],
+        queryFn: () => APiUtil.getData("issues?state=OPEN"),
+    });
+
+    if (isLoading) return <div><Loading/></div>;
+    if (error) return <div>error...{error.message}</div>;
 
     return (
-        <main className="w-1280 mx-auto">
+        <main className="w-[1280px] mx-auto">
             <Header/>
             <FilterProvider>
                 <Nav
@@ -31,7 +33,7 @@ const IssuePage = () => {
                 <IssueFeed
                     isOpen={isOpen}
                     setOpen={setOpen}
-                    issueInfo={issueInfo}
+                    issueInfo={data}
                     resetFilterUI={resetFilterUI}
                     setResetFilterUI={setResetFilterUI}
                 />

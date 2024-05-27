@@ -29,8 +29,8 @@ const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI}: NavProps) 
 
     return (
         <div>
-            <div className="flex items-center justify-between h-36">
-                <div className="flex items-center w-594 h-full">
+            <div className="flex items-center justify-between h-[36px]">
+                <div className="flex items-center w-[594px] h-full">
                     <div className="border-l-2 border-t-2 border-b-2 rounded-l-lg border-gray-300 h-full w-1/5 flex items-center">
                         <FilterUI  filterInfo={ISSUES_FILTER} filterType={"필터"} resetFilterUI={resetFilterUI} setResetFilterUI={setResetFilterUI}/>
                     </div>

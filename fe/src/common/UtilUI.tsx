@@ -1,6 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { TagOutlined, FlagOutlined } from "@ant-design/icons";
 
+interface LabelsAndMilestoneUIProps {
+    labelsCount?: number
+    milestoneCount?: number
+}
+
 export const Header = () => {
     return (
         <header className="pb-10 flex justify-between">
@@ -12,7 +17,8 @@ export const Header = () => {
     );
 };
 
-const LabelsAndMilestoneUI = () => {
+
+const LabelsAndMilestoneUI = ({labelsCount, milestoneCount}:LabelsAndMilestoneUIProps) => {
 
     const location = useLocation();
     
@@ -24,9 +30,9 @@ const LabelsAndMilestoneUI = () => {
                     location.pathname === "/labels"
                         ? "bg-gray-200 font-bold"
                         : ""
-                } w-32 border-l-2 border-t-2 border-b-2 rounded-l-lg border-gray-300 dark:bg-darkModeBorderBG px-6 py-1`}
+                } w-32 border-l-2 border-t-2 border-b-2 rounded-l-lg border-gray-300 dark:bg-darkModeBorderBG py-1 text-center`}
             >
-                <TagOutlined /> 레이블
+                <TagOutlined /> 레이블 ({labelsCount})
             </Link>
             <Link
                 to="/milestones"
@@ -34,9 +40,9 @@ const LabelsAndMilestoneUI = () => {
                     location.pathname === "/milestones"
                         ? "bg-gray-200 font-bold"
                         : ""
-                } w-32 border-2 rounded-r-lg border-gray-300 dark:bg-darkModeBorderBG px-6 py-1`}
+                } w-32 border-2 rounded-r-lg border-gray-300 dark:bg-darkModeBorderBG py-1 text-center`}
             >
-                <FlagOutlined /> 마일스톤
+                <FlagOutlined /> 마일스톤 ({milestoneCount})
             </Link>
         </div>
     );

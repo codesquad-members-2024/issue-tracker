@@ -26,7 +26,7 @@ const FilterUI: React.FC<FilterProps> = ({
     resetFilterUI,
     setResetFilterUI,
 }) => {
-    const [FilterState, FilterDispatch] = useContext(FilterContext);
+    const [, FilterDispatch] = useContext(FilterContext);
     const [isOpen, setIsOpen] = useState(false);
     const [selectItem, setSelectItem] = useState<Filter>(filterInfo[0]);
     const dropdownRef = useRef<HTMLButtonElement | null>(null);
@@ -35,7 +35,6 @@ const FilterUI: React.FC<FilterProps> = ({
         if (resetFilterUI) setSelectItem(filterInfo[INITIAL_IDX]);
         setResetFilterUI(false);
         FilterDispatch({ type: "SET_INIT", prevFilter: "", curFilter: "" });
-        console.log(FilterState)
     }, [resetFilterUI, filterInfo, FilterDispatch, setResetFilterUI]);
 
     useEffect(() => {
@@ -86,20 +85,14 @@ const FilterUI: React.FC<FilterProps> = ({
                 <DownOutlined />
             </div>
             {isOpen && (
-                <div className="absolute bg-gray-100 dark:bg-darkModeBorderBG border border-gray-200 shadow-md z-10 mt-1 w-230px flex flex-col rounded-xl">
+                <div className="absolute bg-gray-100 dark:bg-darkModeBorderBG border border-gray-200 shadow-md z-10 mt-1 w-[230px] flex flex-col rounded-xl">
                     {filterInfo.map((type, idx) => (
                         <div
                             onClick={() => handleClick(type)}
                             className="flex-grow border-b-2 border-gray-200 px-6 flex items-center justify-between h-10"
                             key={idx}
                         >
-                            <div
-                                className={
-                                    selectItem?.value === type.value
-                                        ? "font-bold"
-                                        : ""
-                                }
-                            >
+                            <div className={`${selectItem?.value === type.value && "font-bold"}`}>
                                 {type.value}
                             </div>
                             {selectItem?.value === type.value ? (

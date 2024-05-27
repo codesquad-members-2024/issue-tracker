@@ -3,22 +3,35 @@ import FeedNav from "./FeedNav";
 import IssueCard from "./IssueCard";
 import NotFound from "../../common/NotFound";
 
+interface Comment {
+    id: number;
+    issueId: { id: number };
+    authorId: { id: string };
+    contents: string;
+    createdAt: string;
+    updatedAt: string;
+    deleted: boolean;
+}
+
 export interface Issue {
     id: number;
-    author: string;
+    authorId: string;
     title: string;
-    contents: string;
-    created_at: string;
-    updated_at: string;
-    closed_at: string | null;
-    milestone_id: number | null;
-    is_open: boolean;
-    is_deleted: boolean;
+    description: string;
+    openAt: string;
+    updatedAt: string;
+    closedAt: string | null;
+    milestoneId: { id: number };
+    state: "OPEN" | "CLOSED";
+    labelRefs: { labelId: number }[];
+    assigneeIds: { assigneeId: string }[];
+    comments: Comment[];
+    deleted: boolean;
 }
 
 export interface IssueFeedProps {
-    isOpen: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isOpen: string;
+    setOpen: React.Dispatch<React.SetStateAction<string>>;
     issueInfo: Issue[];
     resetFilterUI: boolean;
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,7 +46,7 @@ const IssueFeed = ({
 }: IssueFeedProps) => {
     const [checkedItem, setCheckItem] = useState<string[]>([]);
     const [isAllChecked, setIsAllChecked] = useState(false);
-    const isOpenInfo = issueInfo.filter((curInfo) => curInfo.is_open === isOpen);
+    const isOpenInfo = issueInfo.filter((curInfo) => curInfo.state === isOpen);
 
     const checkItemHandler = (id: string, isChecked: boolean) => {
         if (isChecked) {
@@ -41,7 +54,6 @@ const IssueFeed = ({
         } else {
             setCheckItem((prev) => prev.filter((curItem) => id !== curItem));
         }
-        console.log(checkedItem)
     };
 
     const allCheckHandler = () => {
@@ -81,7 +93,6 @@ const IssueFeed = ({
                     isAllChecked={isAllChecked}
                 />
             ))}
-            
         </section>
     );
 };

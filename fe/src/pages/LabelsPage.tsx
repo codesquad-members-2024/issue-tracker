@@ -1,30 +1,27 @@
 import { Header } from "../common/UtilUI";
 import ModifyDeleteProvider from "../Providers/ModifyDeleteProvider";
 import Nav from "../components/LabelsMilestones/Nav";
-import { useEffect, useState } from "react";
-import { APiUtil } from "../common/APIUtils";
 import { LabelFeed } from "../components/LabelsMilestones/Labels/LabelFeed";
 import LabelEditUI from "../components/LabelsMilestones/Labels/LabelEditUI";
+import { useQuery } from "@tanstack/react-query";
+import { APiUtil } from "../common/Utils";
+import { Loading } from "../common/NotFound";
+
 const LabelsPage = () => {
-
-    const [labelsInfo, setLabelsInfo] = useState([]);
+    const { data, error, isLoading } = useQuery({
+        queryKey: ["labels"],
+        queryFn: () => APiUtil.getData("labels"),
+    });
+    if (isLoading) return <div><Loading/></div>;
+    if (error) return <div>error...</div>;
     
-    useEffect(() => {
-        const getLabelList = async () => {
-            const milestoneList = await APiUtil.getData("labels");
-            setLabelsInfo(milestoneList);
-        };
-        getLabelList();
-    }, []);
-
-
     return (
-        <main className="w-1280 mx-auto">
+        <main className="w-[1280px] mx-auto">
             <Header />
             <ModifyDeleteProvider>
-                <Nav location="labels"/>
+                <Nav location="labels" labelsCount={data[0].labelCount} milestoneCount={data[0].milestoneCount}/>
                 <LabelEditUI />
-                <LabelFeed labelsInfo={labelsInfo}/>
+                <LabelFeed labelsInfo={data}/>
             </ModifyDeleteProvider>
         </main>
     );
