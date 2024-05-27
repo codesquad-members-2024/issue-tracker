@@ -12,9 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "https://issue-tracker-team08.site",    // 배포 Domain 주소
-                        "http://192.168.1.18:3000",             // 개발용 Domain 주소 [코쿼]
-                        "http://192.168.0.15:3000",             // 개발용 Domain 주소 [카페]
-                        "http://192.168.35.157:3000")           // 개발용 Domain 주소 [집]
+                        "http://192.168.1.34:3000")             // 개발용 Domain 주소
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization", "Set-Cookie")
