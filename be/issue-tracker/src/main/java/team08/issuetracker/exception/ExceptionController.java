@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
+import team08.issuetracker.exception.comment.CommentNotFoundException;
 import team08.issuetracker.exception.issue.InvalidIssueTitleUpdateFormException;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
 
@@ -93,10 +94,17 @@ public class ExceptionController {
     }
 
     @ExceptionHandler()
-    public ResponseEntity<ErrorResponse> handleInvalidIssueTitleUpdateFormException(
-            InvalidIssueTitleUpdateFormException e) {
+    public ResponseEntity<ErrorResponse> handleInvalidIssueTitleUpdateFormException(InvalidIssueTitleUpdateFormException e) {
         ErrorResponse response = ErrorResponse.from(e);
         log.error(response.toString());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handCommentNotFoundException(CommentNotFoundException e) {
+        ErrorResponse response = ErrorResponse.from(e);
+        log.error(response.toString());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
 }
