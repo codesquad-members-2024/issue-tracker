@@ -1,27 +1,11 @@
 import { server } from '~/apis/baseApi';
 
-export async function postMilestone(milestone) {
-	try {
-		const token = localStorage.getItem('token');
-		const requestOptions = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`,
-			},
-			body: JSON.stringify(milestone),
-		};
-		const response = await fetch(`${server}/milestones`, requestOptions);
-		if (response.status === 201) {
-			return { success: true };
-		}
-	} catch (error) {
-		console.error('Error:', error);
-		return { error: error.message };
-	}
-}
-
-export async function putMilestone(milestoneId, milestone) {
+/**
+ * issueId => 목록에서 체크박스로 선택한 이슈의 id, 이슈 상세에서는 그냥 issueId
+ */
+export async function openIssue(issueId) {
+	let issueIds = [];
+	issueIds.push(issueId);
 	try {
 		const token = localStorage.getItem('token');
 		const requestOptions = {
@@ -30,14 +14,13 @@ export async function putMilestone(milestoneId, milestone) {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${token}`,
 			},
-			body: JSON.stringify(milestone),
+			body: JSON.stringify(issueIds),
 		};
-		const response = await fetch(
-			`${server}/milestones/${milestoneId}`,
-			requestOptions
-		);
+		const response = await fetch(`${server}/issues/open`, requestOptions);
 		if (response.status === 200) {
 			return { success: true };
+		} else {
+			console.error(response.status, response);
 		}
 	} catch (error) {
 		console.error('Error:', error);
@@ -45,7 +28,38 @@ export async function putMilestone(milestoneId, milestone) {
 	}
 }
 
-export async function deleteMilestone(milestoneId) {
+/**
+ * 이슈 닫기
+ */
+export async function closeIssue(issueId) {
+	let issueIds = [];
+	issueIds.push(issueId);
+	try {
+		const token = localStorage.getItem('token');
+		const requestOptions = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(issueIds),
+		};
+		const response = await fetch(`${server}/issues/close`, requestOptions);
+		if (response.status === 200) {
+			return { success: true };
+		} else {
+			console.error(response.status, response);
+		}
+	} catch (error) {
+		console.error('Error:', error);
+		return { error: error.message };
+	}
+}
+
+/**
+ * 이슈 삭제 API
+ */
+export async function deleteIssue(issueId) {
 	try {
 		const token = localStorage.getItem('token');
 		const requestOptions = {
@@ -55,12 +69,11 @@ export async function deleteMilestone(milestoneId) {
 				Authorization: `Bearer ${token}`,
 			},
 		};
-		const response = await fetch(
-			`${server}/milestones/${milestoneId}`,
-			requestOptions
-		);
+		const response = await fetch(`${server}/issues/${issueId}`, requestOptions);
 		if (response.status === 204) {
 			return { success: true };
+		} else {
+			console.error(response.status, response);
 		}
 	} catch (error) {
 		console.error('Error:', error);

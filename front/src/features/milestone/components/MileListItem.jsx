@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	IconEdit,
@@ -10,9 +10,22 @@ import {
 import { Button } from '~/common/components';
 import { MilestoneIndicator } from '~/features/issue/components';
 import { MileRegister } from '~/features/milestone/components';
+import { deleteMilestone } from '~/features/milestone/apis';
+import { useMilestoneList } from '~/features/issue/hooks';
 
 export function MileListItem({ milestone }) {
 	const [isEdit, setIsEdit] = useState(false);
+	const { fetchMilestoneList } = useMilestoneList();
+
+	const handleDeleteMilestone = async () => {
+		try {
+			await deleteMilestone(milestone.id);
+			await fetchMilestoneList();
+		} catch (error) {
+			console.error('Error:', error);
+			alert('마일스톤 삭제에 실패했습니다.');
+		}
+	};
 	return (
 		<StyledListItem>
 			{isEdit ? (
@@ -60,6 +73,7 @@ export function MileListItem({ milestone }) {
 								size='small'
 								buttonText='삭제'
 								icon={<IconTrash />}
+								onClick={handleDeleteMilestone}
 							/>
 						</div>
 						<div className='milestone-info'>

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from '../../../styles/theme';
 
-import { useIssueDetail } from '../hooks/useIssueDetail';
+import { useIssueDetail, useIssueStatus } from '~/features/issue/hooks';
 import { Button, InputTitleEdit } from '~/common/components';
 import {
 	IconEdit,
@@ -11,6 +11,8 @@ import {
 	IconAlertCircle,
 	IconXsquare,
 	IconPlus,
+	IconRefresh,
+	IconArchive,
 } from '~/common/icons';
 
 import { postComment, editIssueTitle } from '~/features/issue/apis/';
@@ -25,7 +27,7 @@ export function IssueDetailContainer() {
 	const { id } = useParams();
 
 	const { issueDetail, loading, error, fetchIssueDetail } = useIssueDetail(id);
-
+	const { onOpenIssue, onCloseIssue, onDeleteIssue } = useIssueStatus();
 	const [detailState, setDateilState] = useState({
 		title: issueDetail?.title,
 		newComment: '',
@@ -137,21 +139,43 @@ export function IssueDetailContainer() {
 									onClick={editTitle}
 								/>
 							) : (
-								<Button
-									type='button'
-									size='small'
-									buttonType='outline'
-									buttonText='이슈 닫기'
-									icon={<IconTrash />}
-								/>
+								<>
+									{issueDetail?.closed ? (
+										<Button
+											type='button'
+											size='small'
+											buttonType='outline'
+											buttonText='이슈 열기'
+											icon={<IconRefresh />}
+											onClick={() => onOpenIssue(issueDetail.id)}
+										/>
+									) : (
+										<Button
+											type='button'
+											size='small'
+											buttonType='outline'
+											buttonText='이슈 닫기'
+											icon={<IconArchive />}
+											onClick={() => onCloseIssue(issueDetail.id)}
+										/>
+									)}
+								</>
 							)}
 						</StyledButtonWrap>
 					</StyledTitle>
 					<StyledSubHeader>
-						<StyledBadge>
-							<IconAlertCircle />
-							열린 이슈
-						</StyledBadge>
+						{issueDetail?.closed ? (
+							<StyledBadge $isClosed={issueDetail.$isClosed}>
+								<IconAlertCircle />
+								닫힌 이슈
+							</StyledBadge>
+						) : (
+							<StyledBadge $isClosed={issueDetail.$isClosed}>
+								<IconAlertCircle />
+								열린 이슈
+							</StyledBadge>
+						)}
+
 						<p>
 							이 이슈가 {issueDetail.duration} 전에 {issueDetail.writer}
 							님에 의해 열렸습니다
@@ -287,8 +311,10 @@ const StyledBadge = styled.span`
 	margin-right: 6px;
 	height: 32px;
 	border-radius: ${theme.radius.large};
-	background: ${theme.color.palette.blue};
-	color: ${theme.color.brand.text.default};
+	background: ${({ $isClosed }) =>
+		$isClosed
+			? theme.color.brand.surface.default
+			: theme.color.brand.surface.weak};
 	${theme.typography.medium[12]};
 	i {
 		padding-right: 4px;
