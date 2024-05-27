@@ -57,7 +57,7 @@ public class IssueService {
 
             issueResponses.add(
                     IssueResponse.of(
-                            issue.getId(), issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
+                            issue.getId(), issue.getTitle(),issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
                     ));
         }
 
