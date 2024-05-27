@@ -90,11 +90,14 @@ public class LabelService {
 
     public void updateLabel(Long id, LabelRequest updatedLabel) {
         log.info("라벨 id: {} 업데이트 요청: {}", id, updatedLabel);
-        labelRepository.findById(id)
+        Label label = labelRepository.findById(id)
                 .orElseThrow(() -> new LabelNotFoundException("해당 라벨이 존재하지 않습니다."));
-        validateLabelRequest(updatedLabel, true);
 
-
+        if (label.getLabelName().equals(updatedLabel.labelName())){
+            validateLabelRequest(updatedLabel, false);
+        }else {
+            validateLabelRequest(updatedLabel, true);
+        }
 
         labelRepository.findById(id).map(existingLabel -> {
             existingLabel.setLabelName(updatedLabel.labelName());
