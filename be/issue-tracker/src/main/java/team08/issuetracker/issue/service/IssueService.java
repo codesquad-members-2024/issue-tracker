@@ -12,6 +12,7 @@ import team08.issuetracker.exception.issue.IssueIdNotFoundException;
 import team08.issuetracker.exception.label.LabelNotFoundException;
 import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
+import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountResponse;
 import team08.issuetracker.issue.model.dto.IssueOverviewResponse;
@@ -44,10 +45,15 @@ public class IssueService {
     private final IssueAttachedLabelRepository issueAttachedLabelRepository;
     private final MemberRepository memberRepository;
 
-    public IssueOverviewResponse getIssueListResponse() {
+    private static final String OPEN_STATE_QUERY = "opened";
+    private static final String CLOSE_STATE_QUERY = "closed";
+
+    public IssueOverviewResponse getAllIssuesWithCounts(String state) {
+        boolean openState = convertStateQueryToOpenState(state);
+
         List<IssueDetailResponse> issueDetailResponse = new ArrayList<>();
 
-        for (Issue issue : issueRepository.getAllOpenedIssues()) {
+        for (Issue issue : issueRepository.getAllIssuesByOpenState(openState)) {
 
             String milestoneName = getMilestoneName(issue.getMilestoneId());
 
@@ -60,7 +66,7 @@ public class IssueService {
             issueDetailResponse.add(
                     IssueDetailResponse.of(
                             issue.getId(), issue.getTitle(), issue.getWriter(), milestoneName,
-                            issue.getCreatedAt().toString(), assigneeIds, labelResponses
+                            issue.getCreatedAt(), assigneeIds, labelResponses
                     ));
         }
 
@@ -227,5 +233,15 @@ public class IssueService {
         if (!milestoneRepository.existsById(milestoneId)) {
             throw new MilestoneIdNotFoundException();
         }
+    }
+
+    private boolean convertStateQueryToOpenState(String state) {
+        if (state == null || state.equals(OPEN_STATE_QUERY)) {
+            return true;
+        }
+        if (state.equals(CLOSE_STATE_QUERY)) {
+            return false;
+        }
+        throw new MilestoneQueryStateException(); // todo Exception 바꿔야함
     }
 }
