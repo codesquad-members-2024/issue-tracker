@@ -13,12 +13,14 @@ import team08.issuetracker.exception.label.LabelNotFoundException;
 import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
+import team08.issuetracker.issue.model.dto.IssueCountResponse;
+import team08.issuetracker.issue.model.dto.IssueOverviewResponse;
 import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.update.IssueLabelUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueMilestoneUpdateRequest;
-import team08.issuetracker.issue.model.dto.IssueResponse;
+import team08.issuetracker.issue.model.dto.IssueDetailResponse;
 import team08.issuetracker.issue.model.dto.update.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
@@ -42,8 +44,8 @@ public class IssueService {
     private final IssueAttachedLabelRepository issueAttachedLabelRepository;
     private final MemberRepository memberRepository;
 
-    public List<IssueResponse> getIssueListResponse() {
-        List<IssueResponse> issueResponses = new ArrayList<>();
+    public IssueOverviewResponse getIssueListResponse() {
+        List<IssueDetailResponse> issueDetailResponse = new ArrayList<>();
 
         for (Issue issue : issueRepository.findAll()) {
 
@@ -55,13 +57,22 @@ public class IssueService {
             //특정 이슈의 모든 라벨을 (dto로) 찾는 기능
             List<LabelResponse> labelResponses = getLabelResponses(issue);
 
-            issueResponses.add(
-                    IssueResponse.of(
-                            issue.getId(), issue.getTitle(),issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
+            issueDetailResponse.add(
+                    IssueDetailResponse.of(
+                            issue.getId(), issue.getTitle(), issue.getWriter(), milestoneName,
+                            issue.getCreatedAt().toString(), assigneeIds, labelResponses
                     ));
         }
 
-        return issueResponses;
+        long countTotalIssues = issueRepository.countTotalIssues();
+        long countOpenedIssues = issueRepository.countOpenedIssues();
+        long countClosedIssues = issueRepository.countClosedIssues();
+
+        IssueCountResponse issueCountResponse = new IssueCountResponse(countTotalIssues,
+                countOpenedIssues,
+                countClosedIssues);
+
+        return new IssueOverviewResponse(issueCountResponse, issueDetailResponse);
     }
 
     private String getMilestoneName(Long milestoneId) {
