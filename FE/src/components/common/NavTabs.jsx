@@ -7,12 +7,14 @@ import { MilestonesIcon } from "@/icons/MilestonesIcon";
 export function NavTabs() {
   const navigate = useNavigate();
   const location = useLocation();
+  const pathName = location.pathname;
 
   const handleLabels = () => navigate("/labels");
   const handleMilestones = () => navigate("/milestones");
-
-  const isLabelsActive = location.pathname === "/labels";
-  const isMilestonesActive = location.pathname === "/milestones";
+  
+  const isLabelsActive = pathName === "/labels";
+  const isMilestonesActive = pathName === "/milestones";
+  
 
   return (
     <Tabs>

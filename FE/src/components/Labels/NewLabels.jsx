@@ -1,30 +1,55 @@
 import styled from "styled-components";
 import { ContentNavStyles } from "@/styles/commonStyles";
-import { useState, useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import { DropdownIcon } from "@/icons/DropdownIcon";
 
-const getRandomColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
+const getRandomColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0);
+
+const initialState = {
+  labelName: "",
+  labelDescription: "",
+  labelColor: "",
+  labelFontColor: "black",
+};
+
+const labelReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_LABEL_NAME":
+      return { ...state, labelName: action.payload };
+    case "SET_LABEL_DESCRIPTION":
+      return { ...state, labelDescription: action.payload };
+    case "SET_LABEL_COLOR":
+      return { ...state, labelColor: action.payload };
+    case "SET_LABEL_FONT_COLOR":
+      return { ...state, labelFontColor: action.payload };
+    case "TOGGLE_FONT_COLOR":
+      return { ...state, labelFontColor: state.labelFontColor === "black" ? "white" : "black" };
+    case "TOGGLE_BACKGROUND_COLOR":
+      return { ...state, labelColor: getRandomColor() };
+    case "SET_INITIAL_LABEL":
+      return {
+        ...state,
+        labelName: action.payload.title,
+        labelDescription: action.payload.description,
+        labelColor: action.payload.color,
+        labelFontColor: action.payload.fontColor,
+      };
+    default:
+      return state;
+  }
+};
 
 export function NewLabels(props) {
   const { postData, fetchData, putData, actionType, closeNewLabels, labelId, initialData } = props;
 
-  const [labelName, setLabelName] = useState("");
-  const [labelColor, setLabelColor] = useState("");
-  const [labelDescription, setLabelDescription] = useState("");
-  const [labelFontColor, setLabelFontColor] = useState("black");
+  const [state, dispatch] = useReducer(labelReducer, initialState);
+  const { labelName, labelDescription, labelColor, labelFontColor } = state;
 
   useEffect(() => {
     if (actionType === "updateLabels" && initialData) {
-      const { title, color, description, fontColor } = initialData;
-      setLabelName(title);
-      setLabelColor(color);
-      setLabelDescription(description);
-      setLabelFontColor(fontColor);
+      dispatch({ type: "SET_INITIAL_LABEL", payload: initialData });
     }
   }, [initialData]);
-
-  const toggleFontColor = () => setLabelFontColor((prev) => (prev === "black" ? "white" : "black"));
-  const toggleBackgroundColor = () => setLabelColor(getRandomColor);
 
   const fontColor = labelFontColor === "black" ? "어두운 글자색" : "밝은 글자색";
 
@@ -36,7 +61,7 @@ export function NewLabels(props) {
       fontColor: labelFontColor,
     };
 
-    actionType == "createLabels" ? await postData(newLabel) : await putData(labelId, newLabel);
+    actionType === "createLabels" ? await postData(newLabel) : await putData(labelId, newLabel);
     closeNewLabels();
     fetchData();
   };
@@ -59,7 +84,7 @@ export function NewLabels(props) {
                 id="name"
                 value={labelName}
                 placeholder="레이블의 이름을 입력하세요"
-                onChange={(e) => setLabelName(e.target.value)}
+                onChange={(e) => dispatch({ type: "SET_LABEL_NAME", payload: e.target.value })}
               />
             </LabelWrapper>
             <LabelWrapper>
@@ -69,7 +94,7 @@ export function NewLabels(props) {
                 id="description"
                 value={labelDescription}
                 placeholder="레이블에 대한 설명을 입력하세요"
-                onChange={(e) => setLabelDescription(e.target.value)}
+                onChange={(e) => dispatch({ type: "SET_LABEL_DESCRIPTION", payload: e.target.value })}
               />
             </LabelWrapper>
             <ColorWraper>
@@ -79,11 +104,11 @@ export function NewLabels(props) {
                   type="text"
                   id="backgroundcolor"
                   value={labelColor}
-                  onChange={(e) => setLabelColor(e.target.value)}
+                  onChange={(e) => dispatch({ type: "SET_LABEL_COLOR", payload: e.target.value})}
                 />
               </StyledColor>
-              <RandomBtn color={labelColor} onClick={toggleBackgroundColor}></RandomBtn>
-              <button className="font" onClick={toggleFontColor}>{fontColor}<DropdownIcon /></button>
+              <RandomBtn color={labelColor} onClick={() => dispatch({ type: "TOGGLE_BACKGROUND_COLOR" })}></RandomBtn>
+              <button className="font" onClick={() => dispatch({ type: "TOGGLE_FONT_COLOR" })}>{fontColor}<DropdownIcon /></button>
             </ColorWraper>
           </LabelDescript>
         </Content>
@@ -126,7 +151,7 @@ const Preview = styled.div`
 `;
 
 const StyledLabel = styled.span`
-  background-color: ${(props) => props.$backgroundColor || "white"};
+  background-color: ${(props) => props.$backgroundColor};
   color: ${({ color }) => color};
   padding: 5px 10px;
   border-radius: 20px;
@@ -204,7 +229,6 @@ const ColorWraper = styled.div`
   }
   .font {
     background-color: white;
-    padding: 0 20px;
     border: none;
   }
 `;
