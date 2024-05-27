@@ -16,14 +16,14 @@ public class LabelController {
     private final LabelService labelService;
 
     @PostMapping("/labels")
-    public ResponseEntity<Label> createLabel(@RequestBody Label label, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<LabelShowDto> createLabel(@RequestBody Label label, UriComponentsBuilder uriComponentsBuilder) {
         Label createdLabel = labelService.createLabel(label);
         URI location = uriComponentsBuilder.path("/labels/{id}")
                 .buildAndExpand(createdLabel.getId())
                 .toUri();
         return ResponseEntity
                 .created(location)
-                .body(createdLabel);
+                .body(new LabelShowDto(createdLabel));
     }
 
     @GetMapping("/labels")
@@ -43,9 +43,9 @@ public class LabelController {
     }
 
     @PutMapping("/labels/{labelId}")
-    public ResponseEntity<Label> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
+    public ResponseEntity<LabelShowDto> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
         Label updatedLabel = labelService.updateLabelById(labelUpdateDto.toEntity(labelId));
-        return ResponseEntity.ok(updatedLabel);
+        return ResponseEntity.ok(new LabelShowDto(updatedLabel));
     }
 
     @DeleteMapping("/labels/{labelId}")

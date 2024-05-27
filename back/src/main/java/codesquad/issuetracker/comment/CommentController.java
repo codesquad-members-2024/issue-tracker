@@ -15,7 +15,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comments")
-    public ResponseEntity<Comment> createComment(
+    public ResponseEntity<CommentShowDto> createComment(
             @RequestBody Comment comment,
             UriComponentsBuilder uriComponentsBuilder,
             HttpServletRequest request
@@ -27,12 +27,12 @@ public class CommentController {
                 .toUri();
         return ResponseEntity
                 .created(location)
-                .body(createdComment);
+                .body(new CommentShowDto(createdComment));
     }
 
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<Comment> updateCommentById(@PathVariable Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
+    public ResponseEntity<CommentShowDto> updateCommentById(@PathVariable Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
         Comment updatedComment = commentService.updateCommentById(commentId, commentUpdateDto.getContent());
-        return ResponseEntity.ok(updatedComment);
+        return ResponseEntity.ok(new CommentShowDto(updatedComment));
     }
 }
