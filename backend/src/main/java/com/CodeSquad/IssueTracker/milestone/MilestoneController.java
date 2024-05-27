@@ -38,8 +38,9 @@ public class MilestoneController {
 
     @GetMapping("/milestone/{milestoneId}")
     public ResponseEntity<MilestoneResponse> getMilestone(@PathVariable Long milestoneId) {
-        MilestoneResponse milestone = milestoneService.getMilestoneResponseById(milestoneId);
-        return ResponseEntity.ok(milestone);
+        Milestone milestone = milestoneService.getMilestoneById(milestoneId);
+        MilestoneResponse milestoneResponse = milestoneService.getMilestoneResponse(milestone);
+        return ResponseEntity.ok(milestoneResponse);
     }
 
     @DeleteMapping("/milestone/{milestoneId}")

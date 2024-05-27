@@ -70,9 +70,7 @@ public class MilestoneService {
                 });
     }
 
-    public MilestoneResponse getMilestoneResponseById(Long milestoneId) {
-        Milestone milestone = getMilestoneById(milestoneId);
-
+    public MilestoneResponse getMilestoneResponse(Milestone milestone) {
         return MilestoneResponse.builder()
                 .milestoneId(milestone.getMilestoneId())
                 .title(milestone.getTitle())
@@ -96,14 +94,7 @@ public class MilestoneService {
     public List<MilestoneResponse> createResponseList(List<Milestone> milestones) {
         List<MilestoneResponse> responseList = new ArrayList<>();
         for (Milestone milestone : milestones) {
-            responseList.add(MilestoneResponse.builder()
-                    .milestoneId(milestone.getMilestoneId())
-                    .title(milestone.getTitle())
-                    .description(milestone.getDescription())
-                    .deadline(milestone.getDeadline())
-                    .totalIssue(milestone.getTotalIssue())
-                    .closedIssue(milestone.getClosedIssue())
-                    .build());
+            responseList.add(getMilestoneResponse(milestone));
         }
         return responseList;
     }
