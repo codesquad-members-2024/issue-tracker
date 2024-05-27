@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getUser } from '~/common/apis/getUser';
+import { getUserList } from '~/common/apis';
 
 export const useUser = () => {
 	const [user, setUser] = useState(null);
 	const fetchUser = async () => {
 		try {
-			const response = await getUser();
+			const response = await getUserList();
 			setUser(response);
 		} catch (error) {
 			console.error(error);

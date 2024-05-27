@@ -2,10 +2,12 @@ import { server } from '~/apis/baseApi';
 
 export async function postMilestone(milestone) {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOptions = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify(milestone),
 		};
@@ -21,10 +23,12 @@ export async function postMilestone(milestone) {
 
 export async function putMilestone(milestoneId, milestone) {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOptions = {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify(milestone),
 		};

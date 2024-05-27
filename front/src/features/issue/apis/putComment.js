@@ -2,10 +2,12 @@ import { server } from '~/apis/baseApi';
 
 export async function putComment(commentId, comment) {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOptions = {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({ content: comment }),
 		};

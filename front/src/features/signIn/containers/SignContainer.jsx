@@ -17,7 +17,7 @@ export function SignContainer() {
 		e.preventDefault();
 		try {
 			const response = await getUser(id, password);
-			if (response.message === '로그인 성공') {
+			if (response.message === '로그인 성공!') {
 				navigate('/issues');
 			}
 		} catch (error) {

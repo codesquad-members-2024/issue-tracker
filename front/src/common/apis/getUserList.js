@@ -1,21 +1,17 @@
 import { server } from '~/apis/baseApi';
 
 // 유저 정보 조회 API
-
-export async function getUser() {
+export async function getUserList() {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOptions = {
 			method: 'GET',
 			headers: {
-				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 		};
 		const response = await fetch(`${server}/users`, requestOptions);
-		if (response.status === 200) {
-			return response.json();
-		} else {
-			console.error('Error:', response);
-		}
+		return response.json();
 	} catch (error) {
 		console.error(error);
 		throw new Error('유저 정보 조회에 실패했습니다.');

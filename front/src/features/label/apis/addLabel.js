@@ -2,10 +2,12 @@ import { server } from '~/apis/baseApi';
 import { message } from 'antd';
 export async function addLabel(label) {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOptions = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify(label),
 		};

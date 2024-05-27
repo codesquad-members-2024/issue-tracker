@@ -9,9 +9,12 @@ import { server } from '~/apis/baseApi';
 
 export async function getIssueDetail(id) {
 	try {
+		const token = localStorage.getItem('token');
 		const response = await fetch(`${server}/issues/${id}`, {
 			method: 'GET',
-			// credentials: 'include',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
 		}).then(res => res.json());
 		const data = response;
 		return data;
@@ -23,10 +26,12 @@ export async function getIssueDetail(id) {
 
 export async function editIssueTitle(issueId, issueTitle) {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOptions = {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({ title: issueTitle }),
 		};
@@ -46,10 +51,12 @@ export async function editIssueTitle(issueId, issueTitle) {
 
 export async function editIssueContent(issueId, content) {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOptions = {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({ content: content }),
 		};

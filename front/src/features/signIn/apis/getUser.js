@@ -23,7 +23,8 @@ export async function getUser(id, password) {
 		const data = await response.json();
 
 		if (response.status === 200) {
-			console.log('🚀 ~ getUser ~ data:', data);
+			console.log('data, 로그인:', data);
+			localStorage.setItem('token', data.token);
 			return data;
 		} else {
 			return { error: data };

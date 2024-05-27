@@ -2,10 +2,12 @@ import { server } from '~/apis/baseApi';
 
 export const postIssueDetail = async issue => {
 	try {
+		const token = localStorage.getItem('token');
 		const requestOption = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify(issue),
 		};

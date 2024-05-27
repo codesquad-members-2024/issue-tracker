@@ -5,13 +5,13 @@ import { server } from '~/apis/baseApi';
  */
 
 export async function postComment(issueId, comment) {
-	// 📍POST 성공 이후 서버에서 반환되는 데이터 필요
 	try {
+		const token = localStorage.getItem('token');
 		const response = await fetch(`${server}/comments`, {
 			method: 'POST',
-			// credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({
 				loginId: 'daniel',

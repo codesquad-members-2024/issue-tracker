@@ -19,6 +19,7 @@ import {
 	Loading,
 } from '~/common/components';
 import { IconPlus, IconChevronDown } from '~/common/icons';
+import { getAuth } from '../../../common/apis';
 
 export function IssueListViewContainer() {
 	const { Search } = Input;
@@ -53,6 +54,7 @@ export function IssueListViewContainer() {
 	const onSearch = queryString => {
 		navigate(`/issues?search=${queryString}`);
 	};
+
 	return (
 		<StyledWrapper>
 			<StyledSearch>

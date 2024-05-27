@@ -38,7 +38,7 @@ export function MileRegister({
 			console.log('Milestone Data:', state);
 			const result = await postMilestone(state);
 			if (result.error) {
-				console.error('Server Error:', result.error); // 서버 에러 출력
+				console.error('Server Error:', result.error); // 서버 에러 확인
 			} else {
 				await fetchMilestoneList();
 				setNewMilestone(!newMilestone);

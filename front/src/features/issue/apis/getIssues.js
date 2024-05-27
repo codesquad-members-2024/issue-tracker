@@ -7,9 +7,12 @@ import { server, devServer } from '../../../apis/baseApi';
  */
 export async function getIssues() {
 	try {
+		const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰 가져오기
 		const response = await fetch(`${server}/issues`, {
 			method: 'GET',
-			// credentials: 'include',
+			headers: {
+				Authorization: `Bearer ${token}`, // 헤더에 토큰을 포함시키기 (JWT)
+			},
 		}).then(res => res.json());
 		const data = response;
 		return data;
