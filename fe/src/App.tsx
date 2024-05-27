@@ -12,7 +12,6 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                {/* <Route path="/" element={<Navigate to="/Login" />} /> */}
                 <Route path="/" element={<LoginPage />}></Route>
                 <Route path="/signUp" element={<SignUp />}></Route>
                 <Route element={<PrivateRoute />}>
