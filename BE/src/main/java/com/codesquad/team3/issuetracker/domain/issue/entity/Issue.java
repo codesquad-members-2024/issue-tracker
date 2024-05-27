@@ -1,68 +1,93 @@
 package com.codesquad.team3.issuetracker.domain.issue.entity;
 
+import com.codesquad.team3.issuetracker.domain.assigner.Assigner;
+import com.codesquad.team3.issuetracker.domain.issue.dto.request.CreateIssue;
+import com.codesquad.team3.issuetracker.domain.issuelabel.IssueLabel;
 import com.codesquad.team3.issuetracker.global.entity.OpenCloseEntity;
-import com.codesquad.team3.issuetracker.global.entity.SoftDeleteEntity;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
 
-@Table("ISSUE")
-@AllArgsConstructor
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+@Table(name="ISSUE")
 @Getter
-@Builder
-public class Issue implements SoftDeleteEntity, OpenCloseEntity {
+@Setter
+@NoArgsConstructor
+public class Issue implements OpenCloseEntity {
 
     @Id
-    private int id;
-
-    private Integer writer_id;
-
+    private Integer id;
+    private Integer writerId;
     private String title;
+    private LocalDateTime createTime;
+
+    private Integer milestoneId;
+    private boolean isClosed;
+    private boolean isDeleted;
+
+    @MappedCollection(idColumn = "issue_id")
+    private Set<IssueLabel> labels = new HashSet<>();
+
+    @MappedCollection(idColumn = "issue_id")
+    private Set<Assigner> assignees = new HashSet<>();
 
 
-    @CreatedDate
-    private final LocalDateTime create_time;
+    public Issue(Integer writerId, String title, LocalDateTime createTime, Integer milestoneId) {
+        this.writerId = writerId;
+        this.title = title;
+        this.createTime = createTime;
+        this.milestoneId = milestoneId;
+    }
 
-    private boolean is_closed;
-    private Integer milestone_id;
-    private boolean is_deleted;
+    public static Issue toEntity(CreateIssue createIssue) {
+
+        return new Issue(createIssue.getWriter(),
+                createIssue.getTitle(),
+                LocalDateTime.now(),
+                createIssue.getMilestone());
+    }
+
+    public void addLables(Set<IssueLabel> label){
+        labels.addAll(label);
+    }
+
+    public void addAssignee(Set<Assigner> assignee){
+        this.assignees.addAll(assignee);
+    }
+
+    public void deleteLabel(Integer label){
+        labels.removeIf(i->i.getLabelId().equals(label));
+    }
+
+    public void deleteAssignee(Integer assignee){
+        assignees.removeIf(i->i.getAssignerId().equals(assignee));
+    }
+
+    public void deleteMilestone(){
+        milestoneId = null;
+    }
 
     @Override
     public void close() {
-        this.is_closed = true;
+        this.isClosed = true;
     }
 
     @Override
     public void open() {
-        this.is_closed = false;
+        this.isClosed = false;
     }
 
     @Override
     public boolean isClosed() {
-        return this.is_closed;
+        return this.isClosed;
     }
 
-    @Override
-    public void delete() {
-        this.is_deleted = true;
-    }
 
-    @Override
-    public void recover() {
-        this.is_deleted = false;
-    }
-
-    @Override
-    public boolean isDeleted() {
-        return this.is_deleted;
-    }
 }

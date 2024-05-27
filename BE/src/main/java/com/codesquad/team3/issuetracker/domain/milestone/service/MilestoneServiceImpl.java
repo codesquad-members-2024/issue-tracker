@@ -1,46 +1,98 @@
 package com.codesquad.team3.issuetracker.domain.milestone.service;
 
+import com.codesquad.team3.issuetracker.domain.issue.entity.Issue;
+import com.codesquad.team3.issuetracker.domain.issue.service.IssueService;
+import com.codesquad.team3.issuetracker.domain.milestone.dto.response.MilestoneInfo;
+import com.codesquad.team3.issuetracker.domain.milestone.dto.response.MilestoneResponse;
 import com.codesquad.team3.issuetracker.domain.milestone.entity.Milestone;
 import com.codesquad.team3.issuetracker.domain.milestone.repository.MilestoneRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.codesquad.team3.issuetracker.support.enums.OpenCloseSearchFlags.CLOSE;
+import static com.codesquad.team3.issuetracker.support.enums.OpenCloseSearchFlags.OPEN;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MilestoneServiceImpl implements MilestoneService {
 
     private final MilestoneRepository milestoneRepository;
+    private final IssueService issueService;
 
     @Override
     public void create(Milestone milestone) {
         milestoneRepository.insert(milestone);
     }
+
     @Override
     public void delete(Integer id) {
         milestoneRepository.deleteById(id);
     }
 
     @Override
-    public void update(Milestone updatemilestone) {
-        milestoneRepository.update(updatemilestone);
-    }
-    @Override
-    public Milestone getMilestone(Integer id) {
-        return milestoneRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    public void update(Integer id, Milestone updatemilestone) {
+        milestoneRepository.update(new Milestone(id, updatemilestone.getTitle(), updatemilestone.getDescription(),
+                updatemilestone.getDeadline()));
     }
 
     @Override
-    public List<Milestone> getOpenMilestones() {
-        return milestoneRepository.getAllClosed();
+    public void close(Integer id) {
+        Milestone milestone = milestoneRepository.findById(id).get();
+        milestoneRepository.close(milestone);
     }
 
     @Override
-    public List<Milestone> getClosedMilestones() {
-        return milestoneRepository.getAllClosed();
+    public MilestoneResponse getMilestone(Integer id) {
+        Milestone milestone = milestoneRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        return new MilestoneResponse(milestone.getId(), milestone.getTitle(), milestone.getDescription(), milestone.getDeadline());
+    }
+
+    @Override
+    public List<MilestoneInfo> getOpenMilestones() {
+
+        List<Milestone> openmilestones = (List<Milestone>) milestoneRepository.findAll(OPEN);
+        List<MilestoneInfo> opens = new ArrayList<>();
+        for (Milestone milestone : openmilestones) {
+            MilestoneInfo milestoneInfo = createMilestoneInfo(milestone);
+            opens.add(milestoneInfo);
+        }
+
+        return opens;
+    }
+
+    @Override
+    public List<MilestoneInfo> getClosedMilestones() {
+        List<Milestone> closedList = (List<Milestone>) milestoneRepository.findAll(CLOSE);
+        List<MilestoneInfo> closed = new ArrayList<>();
+        for (Milestone milestone : closedList) {
+            MilestoneInfo milestoneInfo = createMilestoneInfo(milestone);
+            closed.add(milestoneInfo);
+
+        }
+
+        return closed;
     }
 
 
+    public MilestoneInfo createMilestoneInfo(Milestone milestone) {
+
+        List<Issue> issueList = issueService.getIssueByMilestoneId(milestone.getId());
+        int size = issueList.size();
+        int close = 0;
+
+        for (Issue issue : issueList) {
+            if (issue.isClosed()) {
+                close = close + 1;
+            }
+        }
+        int open = size - close;
+        return new MilestoneInfo(milestone.getId(), milestone.getTitle(), milestone.getDescription(),milestone.getDeadline(),close, open);
+    }
 
 }

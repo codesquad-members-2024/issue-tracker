@@ -7,4 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRepository extends SoftDeleteCrudRepository<Member, Integer> {
 
+
+    @Override
+    default Class<Member> getType(){
+        return Member.class;
+    }
 }
