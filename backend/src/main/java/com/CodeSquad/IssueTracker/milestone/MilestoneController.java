@@ -3,7 +3,6 @@ package com.CodeSquad.IssueTracker.milestone;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneListResponse;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneRequest;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,6 @@ import java.util.List;
 public class MilestoneController {
     private final MilestoneService milestoneService;
 
-    @Autowired
     public MilestoneController(MilestoneService milestoneService) {
         this.milestoneService = milestoneService;
     }
