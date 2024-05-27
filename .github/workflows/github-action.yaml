@@ -3,7 +3,7 @@ name: Deploy Spring Application to EC2
 # feat/member에 대한 브랜치 push가 수행되었을 때 동작
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "be-dev", "main" ]
 
 # 워크플로우가 저장소의 콘텐츠를 읽을 수 있는 권한을 갖도록 설정
 permissions:
@@ -28,7 +28,7 @@ jobs:
           mkdir -p resources
           cd resources
           touch application.yaml
-          echo "${ { secrets.YAML } }" > application.yaml
+          echo "${{ secrets.YAML }}" > application.yaml
         shell: bash
 
       - name: Grant execute permission for gradlew
@@ -57,12 +57,12 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-                    echo ${{ secrets.DOCKER_PASSWORD }} | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-                    sudo docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
-                    # 기존에 실행 중인 컨테이너 중지 및 삭제
-                    if [ $(sudo docker ps -q -f "name=spring-server") ]; then
-                    sudo docker stop spring-server
-                    sudo docker rm spring-server
-                    fi
+            echo ${{ secrets.DOCKER_PASSWORD }} | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            sudo docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
+            # 기존에 실행 중인 컨테이너 중지 및 삭제
+            if [ $(sudo docker ps -q -f "name=spring-server") ]; then
+            sudo docker stop spring-server
+              sudo docker rm spring-server
+            fi
             # 새로운 컨테이너 실행
-                    sudo docker run -d -p 80:80 -p 8080:8080 -p 443:443 --name spring-server ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
+            sudo docker run -d -p 80:80 -p 8080:8080 -p 443:443 --name spring-server ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
