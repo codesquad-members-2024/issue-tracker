@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import team08.issuetracker.issue.model.Issue;
+import team08.issuetracker.milestone.model.Milestone;
 
 @Repository
 public interface IssueRepository extends CrudRepository<Issue, Long> {
@@ -25,6 +26,6 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
     @Query("SELECT COUNT(*) FROM issue")
     long countTotalIssues();
 
-    @Query("SELECT * FROM issue WHERE is_open = true")
-    List<Issue> getAllOpenedIssues();
+    @Query("SELECT * FROM issue WHERE is_open = :openState")
+    List<Issue> getAllIssuesByOpenState(@Param("openState") boolean openState);
 }
