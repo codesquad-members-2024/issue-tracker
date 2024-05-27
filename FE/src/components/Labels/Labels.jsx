@@ -9,27 +9,26 @@ import useFetch from "../../hooks/useFetch";
 
 export function Labels() {
   const { state: labels, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${import.meta.env.VITE_SERVER}/labels`);
-  const [showNewLabels, setShowNewLabels] = useState(false);
 
-  const handleNewLabels = () => {
-    setShowNewLabels(true);
-  };
-  
-  const closeNewLabels = () => {
-    setShowNewLabels(false);
-  };
+  const [showNewLabels, setShowNewLabels] = useState(false);
 
   return (
     <>
       <Header />
       <Nav>
         <NavTabs />
-        <LabelsBtn onClick={handleNewLabels}>
+        <LabelsBtn onClick={() => setShowNewLabels(true)}>
           <div>+ 레이블 추가</div>
         </LabelsBtn>
       </Nav>
-      {showNewLabels && <NewLabels {...{ closeNewLabels, fetchData, postData }} actionType="createLabels" />}
-      <LabelsContent {...{ labels, loading, error, fetchData, putData, deleteData }} />
+      {showNewLabels && (
+        <NewLabels
+          {...{ fetchData, postData }}
+          closeNewLabels={() => setShowNewLabels(false)}
+          actionType="createLabels"
+        />
+      )}
+      <LabelsContent{...{ labels, loading, error, fetchData, putData, deleteData }}/>
     </>
   );
 }
