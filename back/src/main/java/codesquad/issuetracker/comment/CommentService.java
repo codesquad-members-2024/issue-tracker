@@ -10,8 +10,13 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public Comment createComment(Comment comment) {
-        return commentRepository.save(comment);
+    public Comment createComment(CommentServiceDto commentServiceDto) {
+        return commentRepository.save(
+                new Comment(commentServiceDto.getContent(),
+                        commentServiceDto.getLoginId(),
+                        commentServiceDto.getIssueId(),
+                        commentServiceDto.getCreatedDate())
+        );
     }
 
     public Comment updateCommentById(Long commentId, String newContent) {

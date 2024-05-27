@@ -16,12 +16,12 @@ public class CommentController {
 
     @PostMapping("/comments")
     public ResponseEntity<CommentShowDto> createComment(
-            @RequestBody Comment comment,
+            @RequestBody CommentSaveDto commentSaveDto,
             UriComponentsBuilder uriComponentsBuilder,
             HttpServletRequest request
     ) {
-        comment.setLoginId((String) request.getAttribute("loginId")); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
-        Comment createdComment = commentService.createComment(comment);
+        commentSaveDto.setLoginId((String) request.getAttribute("loginId")); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
+        Comment createdComment = commentService.createComment(commentSaveDto.toServiceDto());
         URI location = uriComponentsBuilder.path("/comments/{id}")
                 .buildAndExpand(createdComment.getId())
                 .toUri();
