@@ -1,4 +1,4 @@
-import { server, devServer } from '~/apis/baseApi';
+import { server } from '~/apis/baseApi';
 
 /**
  * 로그인 API
