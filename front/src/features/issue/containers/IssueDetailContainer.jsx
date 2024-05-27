@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from '../../../styles/theme';
 
@@ -19,15 +19,22 @@ import { postComment, editIssueTitle } from '~/features/issue/apis/';
 
 import {
 	IssueCommentItem,
-	IssueSidebar,
+	IssueAside,
 	IssueCommentEdit,
 } from '~/features/issue/components';
 
 export function IssueDetailContainer() {
 	const { id } = useParams();
+	const navigate = useNavigate();
 
 	const { issueDetail, loading, error, fetchIssueDetail } = useIssueDetail(id);
 	const { onOpenIssue, onCloseIssue, onDeleteIssue } = useIssueStatus();
+
+	const [isClosed, setIsClosed] = useState(issueDetail?.closed);
+	useEffect(() => {
+		setIsClosed(issueDetail?.closed);
+	}, [issueDetail?.closed]);
+
 	const [detailState, setDateilState] = useState({
 		title: issueDetail?.title,
 		newComment: '',
@@ -84,6 +91,21 @@ export function IssueDetailContainer() {
 			}));
 		} catch (error) {
 			console.error('Error editing title:', error);
+		}
+	};
+
+	const deleteIssue = async () => {
+		try {
+			const isSuccess = await onDeleteIssue(issueDetail.id);
+			// BUG: 콘솔 오류 (가져오기 로드하지 못함: DELETE)
+
+			if (isSuccess) {
+				navigate('/issues');
+			} else {
+				console.error('Error deleting issue:', isSuccess);
+			}
+		} catch (error) {
+			console.error('Error deleting issue:', error);
 		}
 	};
 	const isNewComment = detailState.newComment !== '';
@@ -147,7 +169,11 @@ export function IssueDetailContainer() {
 											buttonType='outline'
 											buttonText='이슈 열기'
 											icon={<IconRefresh />}
-											onClick={() => onOpenIssue(issueDetail.id)}
+											onClick={() => {
+												onOpenIssue(issueDetail.id);
+												fetchIssueDetail();
+												setIsClosed(prev => !prev);
+											}}
 										/>
 									) : (
 										<Button
@@ -156,7 +182,11 @@ export function IssueDetailContainer() {
 											buttonType='outline'
 											buttonText='이슈 닫기'
 											icon={<IconArchive />}
-											onClick={() => onCloseIssue(issueDetail.id)}
+											onClick={() => {
+												onCloseIssue(issueDetail.id);
+												fetchIssueDetail();
+												setIsClosed(prev => !prev);
+											}}
 										/>
 									)}
 								</>
@@ -164,13 +194,13 @@ export function IssueDetailContainer() {
 						</StyledButtonWrap>
 					</StyledTitle>
 					<StyledSubHeader>
-						{issueDetail?.closed ? (
-							<StyledBadge $isClosed={issueDetail.$isClosed}>
+						{isClosed ? (
+							<StyledBadge $isClosed={isClosed}>
 								<IconAlertCircle />
 								닫힌 이슈
 							</StyledBadge>
 						) : (
-							<StyledBadge $isClosed={issueDetail.$isClosed}>
+							<StyledBadge $isClosed={isClosed}>
 								<IconAlertCircle />
 								열린 이슈
 							</StyledBadge>
@@ -233,19 +263,15 @@ export function IssueDetailContainer() {
 						</StyledNewComment>
 					</section>
 					<aside>
-						{/* <IssueSidebar
-							assignees={issueDetail.assignees}
-							milestone={issueDetail.milestone}
-							labels={issueDetail.labels}
-						/> */}
+						<IssueAside />
 						<div className='right-align'>
 							<Button
 								type='button'
 								size='small'
 								buttonType='ghost'
-								onClick={() => {}}
 								buttonText='이슈 삭제'
 								icon={<IconTrash />}
+								onClick={deleteIssue}
 							/>
 						</div>
 					</aside>
@@ -313,9 +339,13 @@ const StyledBadge = styled.span`
 	border-radius: ${theme.radius.large};
 	background: ${({ $isClosed }) =>
 		$isClosed
-			? theme.color.brand.surface.default
-			: theme.color.brand.surface.weak};
+			? theme.color.neutral.text.weak
+			: theme.color.brand.surface.default};
 	${theme.typography.medium[12]};
+	color: ${({ $isClosed }) =>
+		$isClosed
+			? theme.color.brand.text.default
+			: theme.color.brand.text.default};
 	i {
 		padding-right: 4px;
 	}

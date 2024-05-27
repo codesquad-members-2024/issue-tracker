@@ -9,11 +9,10 @@ export function Layout() {
 	return (
 		<>
 			<StyledWrapper>
-				<UserProvider>
-					{location.pathname !== '/' && location.pathname !== '/signIn' && (
-						<GlobalHeader />
-					)}
-				</UserProvider>
+				{location.pathname !== '/' && location.pathname !== '/signIn' && (
+					<GlobalHeader />
+				)}
+
 				<Outlet />
 			</StyledWrapper>
 		</>

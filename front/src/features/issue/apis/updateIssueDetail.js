@@ -70,13 +70,16 @@ export async function deleteIssue(issueId) {
 			},
 		};
 		const response = await fetch(`${server}/issues/${issueId}`, requestOptions);
+		console.log('이슈 삭제 response', response);
 		if (response.status === 204) {
-			return { success: true };
+			return true;
 		} else {
-			console.error(response.status, response);
+			const data = await response.text(); // JSON 파싱을 시도하지 않음
+			console.error(`Failed to delete issue: ${response.status}`, data);
+			return false;
 		}
 	} catch (error) {
 		console.error('Error:', error);
-		return { error: error.message };
+		return false;
 	}
 }

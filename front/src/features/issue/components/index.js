@@ -4,3 +4,5 @@ export * from './IssueSidebar';
 export * from './Assignee';
 export * from './MilestoneIndicator';
 export * from './IssueCommentEdit';
+export * from './IssueAside';
+export * from './PopoverAssignee';

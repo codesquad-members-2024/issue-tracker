@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getUserList } from '~/common/apis';
 
 export const useUser = () => {
-	const [user, setUser] = useState(null);
+	const [userList, setUser] = useState(null);
 	const fetchUser = async () => {
 		try {
 			const response = await getUserList();
@@ -17,5 +17,5 @@ export const useUser = () => {
 	useEffect(() => {
 		fetchUser();
 	}, []);
-	return { user, fetchUser };
+	return { userList, fetchUser };
 };

@@ -1,19 +1,20 @@
 import { useState, useReducer } from 'react';
 import styled from 'styled-components';
 import { IconXsquare } from '~/common/icons';
-import { IssueSidebar, IssueCommentEdit } from '~/features/issue/components';
+import { IssueAside, IssueCommentEdit } from '~/features/issue/components';
 import { Button, InputTitleEdit } from '~/common/components';
 import { useUser } from '../../../common/hooks/useUser';
-import { useLabelList, useMilestoneList } from '~/features/issue/hooks';
+import {
+	useLabelList,
+	useMilestoneList,
+	useCheckList,
+} from '~/features/issue/hooks';
 import { postIssueDetail } from '~/features/issue/apis';
 import { useNavigate } from 'react-router-dom';
 
 const initialState = {
 	title: '',
 	content: '',
-	selectedAssignees: [],
-	selectedLabels: [],
-	selectedMilestone: null,
 };
 
 function issueReducer(state, action) {
@@ -22,54 +23,15 @@ function issueReducer(state, action) {
 			return { ...state, title: action.payload };
 		case 'SET_CONTENT':
 			return { ...state, content: action.payload };
-		case 'TOGGLE_ASSIGNEE':
-			return {
-				...state,
-				selectedAssignees: state.selectedAssignees.includes(action.payload)
-					? state.selectedAssignees.filter(a => a !== action.payload)
-					: [...state.selectedAssignees, action.payload],
-			};
-		case 'TOGGLE_LABEL':
-			return {
-				...state,
-				selectedLabels: state.selectedLabels.includes(action.payload)
-					? state.selectedLabels.filter(l => l !== action.payload)
-					: [...state.selectedLabels, action.payload],
-			};
-		case 'SET_MILESTONE':
-			return { ...state, selectedMilestone: action.payload };
 		default:
 			return state;
 	}
 }
 
 export function IssueCreateContainer() {
-	const [state, dispatch] = useReducer(issueReducer, initialState);
 	const navigate = useNavigate();
-	const { user } = useUser();
-	const { labelList } = useLabelList();
-	const { milestoneList } = useMilestoneList();
-
-	const handleCreateIssue = async () => {
-		const issueData = {
-			title: state.title,
-			content: state.content,
-			milestoneId: state.selectedMilestone?.id || null,
-			issueAssignees: state.selectedAssignees.map(assignee => ({
-				userLoginId: assignee,
-			})),
-			issueLabels: state.selectedLabels.map(label => {
-				const labelObj = labelList.find(l => l.name === label);
-				return { labelId: labelObj.id };
-			}),
-		};
-		try {
-			const id = await postIssueDetail(issueData);
-			navigate(`/issues/${id}`);
-		} catch (error) {
-			console.error('postIssueDetail', error);
-		}
-	};
+	const [state, dispatch] = useReducer(issueReducer, initialState);
+	const [check, dispatchCheck] = useCheckList();
 
 	return (
 		<StyledWrapper>
@@ -97,15 +59,8 @@ export function IssueCreateContainer() {
 						/>
 					</StyledInputWrapper>
 				</section>
-				<IssueSidebar
-					assignees={user}
-					labels={labelList}
-					milestones={milestoneList}
-					selectedAssignees={state.selectedAssignees}
-					selectedLabels={state.selectedLabels}
-					selectedMilestone={state.selectedMilestone}
-					dispatch={dispatch}
-				/>
+				{/* 사이드 메뉴 */}
+				<IssueAside />
 			</StyledContent>
 			<StyledFooter>
 				<Button
@@ -122,7 +77,7 @@ export function IssueCreateContainer() {
 					type='button'
 					size='large'
 					buttonText='완료'
-					onClick={handleCreateIssue}
+					onClick={() => {}}
 				/>
 			</StyledFooter>
 		</StyledWrapper>

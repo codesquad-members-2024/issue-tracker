@@ -29,7 +29,8 @@ export const useIssueStatus = () => {
 	const onDeleteIssue = async issueId => {
 		setLoading(true);
 		try {
-			await deleteIssue(issueId);
+			const result = await deleteIssue(issueId);
+			return result;
 		} catch (error) {
 			console.error('Error:', error);
 		} finally {

@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { InputRadio, InputCheck } from '~/common/components';
 import { theme } from '~/styles/theme';
 
 export function Dropdowns({ dropdownTitle = '', children, className }) {
@@ -14,10 +12,7 @@ export function Dropdowns({ dropdownTitle = '', children, className }) {
 const StyledWrapper = styled.div`
 	position: absolute;
 	z-index: 10;
-	top: auto;
-	right: auto;
-	left: auto;
-	bottom: auto;
+	top: 100px;
 	min-width: 240px;
 
 	border: 1px solid ${theme.color.neutral.border.default};

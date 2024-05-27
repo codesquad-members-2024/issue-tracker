@@ -1,13 +1,13 @@
-import { useContext } from 'react';
+// import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { InnerLayout } from '../../../common/components/InnerLayout';
 import { Logo } from '../../../common/Logo';
-import { UserContext } from '~/context/UserContext';
+// import { UserContext } from '~/context/UserContext';
 import { IconUser } from '../../../common/icons/IconUser';
 
 export function GlobalHeader({ ...props }) {
-	const { user } = useContext(UserContext);
+	// const { user } = useContext(UserContext);
 	// TODO: user 연동
 	// console.log(user);
 	return (
