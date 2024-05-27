@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueDeleteResponse;
@@ -33,8 +34,8 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping()
-    public ResponseEntity<IssueOverviewResponse> issues() {
-        IssueOverviewResponse issues = issueService.getIssueListResponse();
+    public ResponseEntity<IssueOverviewResponse> getAllIssuesWithCounts(@RequestParam(required = false, value = "state") String state) {
+        IssueOverviewResponse issues = issueService.getAllIssuesWithCounts(state);
         return ResponseEntity.ok(issues);
     }
 
