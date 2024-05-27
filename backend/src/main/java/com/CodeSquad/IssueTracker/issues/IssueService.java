@@ -12,8 +12,8 @@ import com.CodeSquad.IssueTracker.issues.issueLabel.IssueLabelService;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelId;
 import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.LabelService;
-import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
+import com.CodeSquad.IssueTracker.milestone.dto.MilestoneResponse;
 import com.CodeSquad.IssueTracker.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -210,7 +210,7 @@ public class IssueService {
     }
 
     @Transactional
-    public Milestone updateMilestoneIdForIssue(Long issueId, IssueMilestoneRequest issueMilestoneRequest) {
+    public MilestoneResponse updateMilestoneIdForIssue(Long issueId, IssueMilestoneRequest issueMilestoneRequest) {
         Issue issue = findIssueById(issueId);
         Long milestoneId = issueMilestoneRequest.milestoneId();
         log.info("Updating milestone id for issue: {}", milestoneId);
@@ -221,7 +221,7 @@ public class IssueService {
                 milestoneService.incrementClosedIssue(milestoneId);
             }
             issueRepository.updateMilestoneIdForIssue(issueId, milestoneId);
-            return milestoneService.getMilestoneById(milestoneId);
+            return milestoneService.getMilestoneResponseById(milestoneId);
         } else
         if (milestoneId != null) {
             // 마일스톤 ID가 존재하는 경우 업데이트
@@ -234,7 +234,7 @@ public class IssueService {
             }
 
             issueRepository.updateMilestoneIdForIssue(issueId, milestoneId);
-            return milestoneService.getMilestoneById(milestoneId);
+            return milestoneService.getMilestoneResponseById(milestoneId);
         } else {
             // 마일스톤 ID가 null인 경우 해당 이슈의 마일스톤을 삭제
             milestoneService.decrementTotalIssue(issue.getMilestoneId());
