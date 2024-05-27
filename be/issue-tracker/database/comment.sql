@@ -1,14 +1,10 @@
--- auto-generated definition
-create table COMMENT
-(
-    ID            BIGINT auto_increment
-        primary key,
-    WRITER        CHARACTER VARYING(16),
-    ISSUE_ID      BIGINT,
-    CONTENT       CHARACTER VARYING(255),
-    CREATED_AT    TIMESTAMP,
-    UPLOADED_FILE CHARACTER VARYING(255),
-    FOREIGN KEY (WRITER) REFERENCES MEMBER(member_id),
-    FOREIGN KEY (ISSUE_ID) REFERENCES ISSUE(ID)
+CREATE TABLE comment (
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                         writer VARCHAR(16),
+                         issue_id BIGINT,
+                         content VARCHAR(255),
+                         created_at TIMESTAMP,
+                         uploaded_file VARCHAR(255),
+                         FOREIGN KEY (writer) REFERENCES member(member_id),
+                         FOREIGN KEY (issue_id) REFERENCES issue(id)
 );
-
