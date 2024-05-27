@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { ContentNavStyles } from "@/styles/commonStyles";
 import { useState } from "react";
 
-export function NewMilestones({ closeNewMilestones }) {
-  const [MilestonesName, setMilestonesName] = useState("");
+export function NewMilestones({ actionType, closeNewMilestones }) {
+  const [milestoneName, setMilestonsName] = useState("");
 
   return (
     <>
-      <Wrap>
-        <h3>새로운 마일스톤 추가</h3>
+      <Wrap $actionType={actionType}>
+        <h3>{actionType === "createMilestones" ? "새로운 마일스톤 추가" : "마일스톤 편집"}</h3>
         <Content>
           <MilestonesDescript>
             <StyledTop>
@@ -17,18 +17,14 @@ export function NewMilestones({ closeNewMilestones }) {
                 <input
                   type="text"
                   id="name"
-                  value={MilestonesName}
+                  value={milestoneName}
                   placeholder="마일스톤의 이름을 입력하세요"
-                  onChange={(e) => setMilestonesName(e.target.value)}
+                  onChange={(e) => setMilestonsName(e.target.value)}
                 />
               </TopMilestonesWrapper>
               <TopMilestonesWrapper>
                 <label htmlFor="deadline">완료일(선택)</label>
-                <input
-                  type="text"
-                  id="deadline"
-                  placeholder="마일스톤에 대한 설명을 입력하세요"
-                />
+                <input type="text" id="deadline" placeholder="YYYY-MM-DD" />
               </TopMilestonesWrapper>
             </StyledTop>
             <MilestonesWrapper>
@@ -50,11 +46,14 @@ export function NewMilestones({ closeNewMilestones }) {
   );
 }
 
+
+
+
 const Wrap = styled.div`
+  margin: ${(props) => (props.$actionType === "updateMilestones" ? "0" : "20px 100px")};
+  border: ${(props) => (props.$actionType === "updateMilestones" ? "none" : "solid #dadbef")};
   height: 330px;
   display: flex;
-  margin: 20px 100px;
-  border: solid #dadbef;
   border-radius: 10px;
   overflow: hidden;
   background-color: white;

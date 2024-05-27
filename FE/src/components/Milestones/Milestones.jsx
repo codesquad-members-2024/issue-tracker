@@ -9,25 +9,20 @@ import { MilestonesList } from "./MilestonesList";
 export function Milestones() {
   const [showNewMilestones, setShowNewMilestones] = useState(false);
 
-  const handleNewMilestones = () => {
-    setShowNewMilestones(true);
-  };
-
-  const closeNewMilestones = () => {
-    setShowNewMilestones(false);
-  };
-
   return (
     <>
       <Header />
       <Nav>
         <NavTabs />
-        <LabelsBtn onClick={handleNewMilestones}>
+        <LabelsBtn onClick={() => setShowNewMilestones(true)}>
           <div>+ 마일스톤 추가</div>
         </LabelsBtn>
       </Nav>
       {showNewMilestones && (
-        <NewMilestones closeNewMilestones={closeNewMilestones} />
+        <NewMilestones
+          closeNewMilestones={() => setShowNewMilestones(false)}
+          actionType="createMilestones"
+        />
       )}
       <MilestonesList />
     </>
