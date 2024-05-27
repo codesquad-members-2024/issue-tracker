@@ -16,6 +16,7 @@ import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountResponse;
 import team08.issuetracker.issue.model.dto.IssueOverviewResponse;
+import team08.issuetracker.issue.model.dto.update.AssigneeResponse;
 import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
@@ -57,16 +58,14 @@ public class IssueService {
 
             String milestoneName = getMilestoneName(issue.getMilestoneId());
 
-            //특정 이슈의 담당자 아이디를 모두 찾는 기능
-            List<String> assigneeIds = getAssigneeIds(issue);
+            List<AssigneeResponse> assigneeResponses = getAssigneeResponses(issue);
 
-            //특정 이슈의 모든 라벨을 (dto로) 찾는 기능
             List<LabelResponse> labelResponses = getLabelResponses(issue);
 
             issueDetailResponse.add(
                     IssueDetailResponse.of(
                             issue.getId(), issue.getTitle(), issue.getWriter(), milestoneName,
-                            issue.getCreatedAt(), assigneeIds, labelResponses
+                            issue.getCreatedAt(), assigneeResponses, labelResponses
                     ));
         }
 
@@ -91,9 +90,12 @@ public class IssueService {
                 .orElseThrow(MilestoneIdNotFoundException::new);
     }
 
-    private List<String> getAssigneeIds(Issue issue) {
+    private List<AssigneeResponse> getAssigneeResponses(Issue issue) {
         return issue.getAssignees().stream()
                 .map(Assignee::getMemberId)
+                .map(memberRepository::findById)
+                .filter(Optional::isPresent)
+                .map(member -> new AssigneeResponse(member.get().getMemberId(), member.get().getProfileImage()))
                 .toList();
     }
 
