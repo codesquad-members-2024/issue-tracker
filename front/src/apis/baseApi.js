@@ -1,2 +1,4 @@
-export const server = import.meta.env.VITE_BASE_API_BASE_URL;
-export const devServer = import.meta.env.VITE_DEV_API_BASE_URL;
+export const server =
+	import.meta.env.MODE === 'production'
+		? 'http://3.38.30.88:8080'
+		: 'http://3.38.30.88:8080';
