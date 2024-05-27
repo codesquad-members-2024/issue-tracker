@@ -6,7 +6,7 @@ import { DropdownIcon } from "@/icons/DropdownIcon";
 const getRandomColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
 
 export function NewLabels(props) {
-  const { postData, fetchData, putData, type, closeNewLabels, labelId, initialData } = props;
+  const { postData, fetchData, putData, actionType, closeNewLabels, labelId, initialData } = props;
 
   const [labelName, setLabelName] = useState("");
   const [labelColor, setLabelColor] = useState("");
@@ -14,7 +14,7 @@ export function NewLabels(props) {
   const [labelFontColor, setLabelFontColor] = useState("black");
 
   useEffect(() => {
-    if (type === "edit" && initialData) {
+    if (actionType === "updateIssue" && initialData) {
       const { title, color, description, fontColor } = initialData;
       setLabelName(title);
       setLabelColor(color);
@@ -36,15 +36,15 @@ export function NewLabels(props) {
       fontColor: labelFontColor,
     };
 
-    type == "new" ? await postData(newLabel) : await putData(labelId, newLabel);
+    actionType == "createIssue" ? await postData(newLabel) : await putData(labelId, newLabel);
     closeNewLabels();
     fetchData();
   };
 
   return (
     <>
-      <Wrap type={type}>
-        <h3>{type === "new" ? "새로운 레이블 추가" : "레이블 편집"}</h3>
+      <Wrap $actionType={actionType}>
+        <h3>{actionType === "createIssue" ? "새로운 레이블 추가" : "레이블 편집"}</h3>
         <Content>
           <Preview>
             <StyledLabel $backgroundColor={labelColor} color={labelFontColor}>
@@ -97,8 +97,8 @@ export function NewLabels(props) {
 }
 
 const Wrap = styled.div`
-  margin: ${(props) => (props.type === "edit" ? "0" : "20px 100px")};
-  border: ${(props) => (props.type === "edit" ? "none" : "solid #dadbef")};
+  margin: ${(props) => (props.$actionType === "updateIssue" ? "0" : "20px 100px")};
+  border: ${(props) => (props.$actionType === "updateIssue" ? "none" : "solid #dadbef")};
   height: 330px;
   display: flex;
   border-radius: 10px;

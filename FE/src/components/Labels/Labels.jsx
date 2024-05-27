@@ -28,7 +28,7 @@ export function Labels() {
           <div>+ 레이블 추가</div>
         </LabelsBtn>
       </Nav>
-      {showNewLabels && <NewLabels {...{ closeNewLabels, fetchData, postData }} type="new" />}
+      {showNewLabels && <NewLabels {...{ closeNewLabels, fetchData, postData }} actionType="createIssue" />}
       <LabelsContent {...{ labels, loading, error, fetchData, putData, deleteData }} />
     </>
   );
