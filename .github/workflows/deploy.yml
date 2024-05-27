@@ -24,6 +24,7 @@ jobs:
             cd /home/ubuntu/issue-tracker/back
             rm -rf src/main/resources/application.properties
             git pull origin dev-be
+            mkdir -p src/main/resources
             echo "$APPLICATION_PROPERTIES" > src/main/resources/application.properties
             ./gradlew clean build
             sudo fuser -k -n tcp 8080 || true
