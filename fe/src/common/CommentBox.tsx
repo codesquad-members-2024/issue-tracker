@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NewIssueForm } from "../pages/NewPage";
-// import FileUploader from "./FileUploader";
+import FileUploader from "./FileUploader";
 interface CommentBoxProps {
     height: string;
     issueData: NewIssueForm;
@@ -44,7 +44,7 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
                     띄어쓰기 포함 {issueData.content.length}자
                 </div>
             </div>
-            {/* <FileUploader<NewIssueForm> setIssueData={setIssueData} /> */}
+            <FileUploader<NewIssueForm> setIssueData={setIssueData} />
         </div>
     );
 };

@@ -27,7 +27,7 @@ export const APiUtil = {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                
+                "Authorization": token ? `Bearer ${token}` : "",
             },
             body: JSON.stringify(createData),
         });
@@ -39,6 +39,7 @@ export const APiUtil = {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
+                "Authorization": token ? `Bearer ${token}` : "",
             },
             body: JSON.stringify(modifyData),
         });
@@ -48,6 +49,10 @@ export const APiUtil = {
         try {
             await fetch(serverURL + `${tableName}/${id}`, {
                 method: "DELETE",
+                headers: {
+                    "content-type": "application/json",
+                    "Authorization": token ? `Bearer ${token}` : "",
+                },
             });
         } catch (error) {
             console.error(error);
@@ -57,6 +62,10 @@ export const APiUtil = {
     async patchData(tableName: string, id: number) {
         await fetch(serverURL + `${tableName}/${id}/close`, {
             method: "PATCH",
+            headers: {
+                "content-type": "application/json",
+                "Authorization": token ? `Bearer ${token}` : "",
+            },
         });
     },
 };
