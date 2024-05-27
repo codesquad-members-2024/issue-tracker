@@ -1,7 +1,6 @@
 package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.issues.dto.*;
-import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
