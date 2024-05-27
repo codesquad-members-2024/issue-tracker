@@ -4,22 +4,28 @@ import { LabelFormState } from "../components/LabelsMilestones/Labels/LabelEditU
 import { SignUpForm } from "../pages/SignUpPage";
 import { LoginForm } from "../pages/LoginPage";
 import { PostRequestFrom } from "../pages/NewPage";
+import { notification } from "antd";
 const serverURL = import.meta.env.VITE_API_URL;
 const token = sessionStorage.getItem('token')
 
 export const APiUtil = {
     async getData(tableName: string) {
-        const response = await fetch(serverURL + tableName, {
-            headers: {
-                "content-type": "application/json",
-                "Authorization": token ? `Bearer ${token}` : "",
+        try {
+            const response = await fetch(serverURL + tableName, {
+                headers: {
+                    "content-type": "application/json",
+                    "Authorization": token ? `Bearer ${token}` : "",
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`에러!: ${response.status}`);
             }
-        });
-        if (!response.ok) {
-            throw new Error(`에러!: ${response.status}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("getData 함수 오류:", error);
+            throw error;
         }
-        const data = await response.json();
-        return data;
     },
 
     async createData(tableName: string, createData: FormState | LabelFormState | PostRequestFrom | SignUpForm | LoginForm) {
@@ -100,4 +106,10 @@ export const getDateDifference = (createdAt: string) => {
     return `${Math.floor(betweenTimeDay / 365)}년 전`;
 };
 
+export const openNotification = (message: string) => {
+    notification.info({
+        message: message,
+        placement: "top",
+    });
+};
 

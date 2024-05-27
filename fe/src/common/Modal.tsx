@@ -35,3 +35,4 @@ export const ModalComponent = ({type, callBack}: ModalComponentProps) => {
     );
 };
 
+

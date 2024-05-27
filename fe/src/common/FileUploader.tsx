@@ -1,14 +1,13 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { PaperClipOutlined } from '@ant-design/icons';
+
 import AWS from "../../awsConfig"
 
-interface FileUploaderProps<T> {
-	setIssueData: React.Dispatch<React.SetStateAction<T>>;
+interface FileUploaderProps {
+	addImgUrl: (url: string) => void;
 }
 
-const FileUploader = <T extends { content?: string; imgUrl?: string }>({
-	setIssueData,
-}: FileUploaderProps<T>) => {
+const FileUploader = ({ addImgUrl }: FileUploaderProps) => {
 	const [selectFile, setSelectFile] = useState<File | null>(null);
 	const upLoadNode = useRef<HTMLInputElement>(null);
 
@@ -20,7 +19,6 @@ const FileUploader = <T extends { content?: string; imgUrl?: string }>({
 			const accessKeyId = import.meta.env.VITE_APP_S3_ACCESS_KEY_ID;
 			const secretAccessKey = import.meta.env.VITE_APP_S3_SECRET_ACCESS_KEY;
 
-			// AWS SDK 초기화
 			AWS.config.update({
 				region,
 				accessKeyId,
@@ -67,27 +65,12 @@ const FileUploader = <T extends { content?: string; imgUrl?: string }>({
 		const putFileURL = async () => {
 			if (selectFile) {
 				const fileUrl = await uploadFile(selectFile);
-				console.log('fileUrl', fileUrl);
-				if (fileUrl) {
-					setIssueData(prev => {
-						if (prev.imgUrl) {
-							return {
-								...prev,
-								imgUrl: fileUrl,
-							};
-						} else {
-							return {
-								...prev,
-								content: `${prev.content}\n![이미지](${fileUrl})`,
-							};
-						}
-					});
-				}
+				if (fileUrl) addImgUrl(`![이미지](${fileUrl})`)
 			}
 		};
 		putFileURL();
-	}, [selectFile, setIssueData]);
-
+	}, [selectFile]);
+	
 	return (
 		<div className='flex py-2 border-gray-300 border-t-2 border-dotted mt-2'>
 			<input
