@@ -10,6 +10,9 @@ public class SHA256Util {
 
     private static final int SALT_LEN = 16;
     private static final String ENCRYPT_ALGORITHM = "SHA-256";
+    private static final int SPLIT_SALT = 0;
+    private static final int SPLIT_HASH = 1;
+
 
     public static String encrypt(String password, byte[] salt) {
         try {
@@ -37,9 +40,9 @@ public class SHA256Util {
 
     public static boolean verify(String password, String saltedHash) {
         String[] split = saltedHash.split(":");
-        byte[] salt = Base64.getDecoder().decode(split[0]);
+        byte[] salt = Base64.getDecoder().decode(split[SPLIT_SALT]);
         String hash = encrypt(password, salt);
-        return hash.equals(split[1]);
+        return hash.equals(split[SPLIT_HASH]);
     }
 
     public static void main(String[] args) {

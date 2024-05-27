@@ -50,17 +50,17 @@ public class UserService {
     }
 
     public void authenticate(LoginRequest loginRequest) {
-        String userId = loginRequest.getUserId();
-        String userPassword = loginRequest.getUserPassword();
+        String loginId = loginRequest.getUserId();
+        String loginPassword = loginRequest.getUserPassword();
 
-        User user = userRepository.findById(userId)
+        User userInfo = userRepository.findById(loginId)
                 .orElseThrow(() -> {
-                    log.error("해당 유저가 존재하지 않습니다.: {}", userId);
+                    log.error("해당 유저가 존재하지 않습니다.: {}", loginId);
                     return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
                 });
 
-        if (!Objects.equals(user.getUserPassword(), userPassword)){
-            log.warn("로그인 실패: {}", userId);
+        if (!SHA256Util.verify(loginPassword, userInfo.getUserPassword())) {
+            log.warn("로그인 실패: {}", loginId);
             throw new InvalidCredentialException("아이디나 비밀번호가 맞지 않습니다.");
         }
     }
