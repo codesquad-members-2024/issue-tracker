@@ -4,22 +4,39 @@ import { Label } from "../../Model/types";
 
 interface LabelPopupProps {
   labelList: Label[];
-  handleInputLabel: (item: Label) => void;
-  closePopup: () => void;
+  selectedLabel: string[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isLabelNone: boolean;
 }
 
 export default function LabelPopup({
   labelList,
-  handleInputLabel,
-  closePopup,
+  selectedLabel,
+  onChange,
+  isLabelNone,
 }: LabelPopupProps) {
   return (
     <S.DropdownPanel>
       <S.DropdownHeader>레이블 설정</S.DropdownHeader>
+      {isLabelNone && (
+        <S.DropdownOption>
+          <S.OptionInfo>
+            <span>라벨이 없는 이슈</span>
+          </S.OptionInfo>
+          <input
+            type="radio"
+            id={"none"}
+            name="label"
+            value={"none"}
+            checked={selectedLabel.includes("none")}
+            onChange={onChange}
+          />
+        </S.DropdownOption>
+      )}
       {labelList.map((item) => {
-        const { name, background_color } = item;
+        const { id, name, background_color } = item;
         return (
-          <S.DropdownOption key={`label-${name}`}>
+          <S.DropdownOption key={`labelPopupOtion-${name}`}>
             <S.OptionInfo>
               <LabelColorCircle color={background_color} />
               <span>{name}</span>
@@ -28,11 +45,9 @@ export default function LabelPopup({
               type="radio"
               id={name}
               name="label"
-              value={name}
-              onChange={() => {
-                handleInputLabel(item);
-                closePopup();
-              }}
+              value={id.toString()}
+              checked={selectedLabel.includes(name)}
+              onChange={onChange}
             />
           </S.DropdownOption>
         );

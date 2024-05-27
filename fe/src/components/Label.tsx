@@ -2,10 +2,14 @@ import { styled } from "styled-components";
 import { Label } from "../Model/types";
 
 interface LabelProps {
-  labelInfo: Label;
+  labelInfo?: Label;
 }
 
 export default function LabelComponent({ labelInfo }: LabelProps) {
+  if (!labelInfo) {
+    return null;
+  }
+
   const { background_color, text_color, name } = labelInfo;
   return (
     <LabelDiv $backgroundColor={background_color} $textColor={text_color}>
@@ -15,7 +19,7 @@ export default function LabelComponent({ labelInfo }: LabelProps) {
 }
 
 const LabelDiv = styled.div<{ $backgroundColor: string; $textColor: string }>`
-  padding: 4px 8px;
+  padding: 4px 16px;
   border-radius: 16px;
   background-color: ${(props) => props.$backgroundColor};
   color: ${(props) => props.$textColor};

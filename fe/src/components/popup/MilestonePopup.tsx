@@ -3,18 +3,35 @@ import { Milestone } from "../../Model/types";
 
 interface MilestonePopupProps {
   milestoneList: Milestone[];
-  handleInputMilestone: (item: Milestone) => void;
-  closePopup: () => void;
+  selectedMilestone: string[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isMilestoneNone: boolean;
 }
 
 export default function MilestonePopup({
   milestoneList,
-  handleInputMilestone,
-  closePopup,
+  selectedMilestone,
+  onChange,
+  isMilestoneNone,
 }: MilestonePopupProps) {
   return (
     <S.DropdownPanel>
       <S.DropdownHeader>마일스톤 설정</S.DropdownHeader>
+      {isMilestoneNone && (
+        <S.DropdownOption>
+          <S.OptionInfo>
+            <span>마일스톤이 없는 이슈</span>
+          </S.OptionInfo>
+          <input
+            type="radio"
+            id={"none"}
+            name="label"
+            value={"none"}
+            checked={selectedMilestone.includes("none")}
+            onChange={onChange}
+          />
+        </S.DropdownOption>
+      )}
       {milestoneList.map((item) => {
         const { id, name } = item;
         return (
@@ -27,10 +44,8 @@ export default function MilestonePopup({
               id={name}
               name="label"
               value={id}
-              onChange={() => {
-                handleInputMilestone(item);
-                closePopup();
-              }}
+              checked={selectedMilestone.includes(id.toString())}
+              onChange={onChange}
             />
           </S.DropdownOption>
         );
