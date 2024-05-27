@@ -4,6 +4,7 @@ import com.CodeSquad.IssueTracker.Exception.user.UserIdAlreadyExistException;
 import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
+import com.CodeSquad.IssueTracker.user.utils.SHA256Util;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class UserService {
     public void save(UserRegisterRequest userRegisterRequest) {
         User user = User.builder()
                 .userId(userRegisterRequest.userId())
-                .userPassword(userRegisterRequest.userPassword())
+                .userPassword(SHA256Util.getSaltedHash(userRegisterRequest.userPassword()))
                 .isNew(true)
                 .build();
         verifyUserInfo(user);
