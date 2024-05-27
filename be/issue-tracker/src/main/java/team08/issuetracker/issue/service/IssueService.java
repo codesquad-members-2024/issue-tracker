@@ -28,6 +28,7 @@ import team08.issuetracker.issue.repository.IssueRepository;
 import team08.issuetracker.label.model.dto.LabelResponse;
 import team08.issuetracker.label.repository.LabelRepository;
 import team08.issuetracker.member.repository.MemberRepository;
+import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.repository.MilestoneRepository;
 
 @Slf4j
@@ -56,7 +57,7 @@ public class IssueService {
 
             issueResponses.add(
                     IssueResponse.of(
-                            issue.getId(), issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
+                            issue.getId(), issue.getTitle(),issue.getWriter(), milestoneName, issue.getCreatedAt().toString(), assigneeIds, labelResponses
                     ));
         }
 
@@ -64,9 +65,13 @@ public class IssueService {
     }
 
     private String getMilestoneName(Long milestoneId) {
+        if (milestoneId == null) {
+            return null;
+        }
+
         return milestoneRepository.findById(milestoneId)
-                .orElseThrow(MilestoneIdNotFoundException::new)
-                .getName();
+                .map(Milestone::getName)
+                .orElseThrow(MilestoneIdNotFoundException::new);
     }
 
     private List<String> getAssigneeIds(Issue issue) {

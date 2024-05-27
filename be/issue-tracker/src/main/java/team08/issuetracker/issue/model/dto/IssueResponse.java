@@ -10,6 +10,7 @@ import team08.issuetracker.label.model.dto.LabelResponse;
 @Getter
 public class IssueResponse {
     private final long id;
+    private final String title;
     private final String writer;
     private final String milestoneName;
     private final String timestamp; // 형식 맞추기
@@ -17,12 +18,14 @@ public class IssueResponse {
     private final List<LabelResponse> labels;
 
     private IssueResponse(long id,
+                          String title,
                           String writer,
                           String milestoneName,
                           String timestamp,
                           List<String> assigneeIds,
                           List<LabelResponse> labels) {
         this.id = id;
+        this.title = title;
         this.writer = writer;
         this.milestoneName = milestoneName;
         this.timestamp = timestamp;
@@ -31,12 +34,13 @@ public class IssueResponse {
     }
 
     public static IssueResponse of(long id,
+                                   String title,
                                    String writer,
                                    String milestoneName,
                                    String timestamp,
                                    List<String> assigneeIds,
                                    List<LabelResponse> labels) {
 
-        return new IssueResponse(id, writer, milestoneName, timestamp, assigneeIds, labels);
+        return new IssueResponse(id, title, writer, milestoneName, timestamp, assigneeIds, labels);
     }
 }
