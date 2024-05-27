@@ -39,6 +39,7 @@ const useIssueListLogic = () => {
       setUsers(data[USERS_KEY]);
     },
     onError: () => navigate("/login"),
+    enabled: issues.length === 0,
   });
 
   useQuery(issueQueryKey, () => sendIssuesRequest({ issueType: focusedTab, page }), {
@@ -46,6 +47,7 @@ const useIssueListLogic = () => {
     onError: () => navigate("/login"),
     keepPreviousData: true,
     enabled: filterQuery.isSuccess,
+    refetchOnWindowFocus: false,
   });
 
   const { observe } = useInfiniteScroll(fetchNextIssues);
