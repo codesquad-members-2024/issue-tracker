@@ -23,11 +23,6 @@ interface MutationArgs {
 }
 
 const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
-    const length = {
-        open: curMilestone.issues.filter((cur) => cur.state === "OPEN").length,
-        closed: curMilestone.issues.filter((cur) => cur.state === "CLOSED").length,
-    };
-
     const queryClient = useQueryClient();
     const [ModifyDeleteState, ModifyDeleteDispatch] =
         useContext(ModifyDeleteContext);
@@ -106,11 +101,11 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
                                 />
                             </div>
                         </div>
-                        <Progressbar open={length.open} closed={length.closed}/>
+                        <Progressbar open={curMilestone.openIssueCount} closed={curMilestone.closedIssueCount}/>
 
                         <div className="flex justify-end gap-2 text-xs">
-                            <div>열린 이슈({length.open})</div>
-                            <div>닫힌 이슈({length.closed})</div>
+                            <div>열린 이슈({curMilestone.openIssueCount})</div>
+                            <div>닫힌 이슈({curMilestone.closedIssueCount})</div>
                         </div>
                     </div>
                 </div>

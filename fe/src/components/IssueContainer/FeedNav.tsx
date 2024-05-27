@@ -72,14 +72,14 @@ const FeedNav = ({
                 ) : (
                     <div>
                         <button
-                            className={`mr-6 ${isOpen ? "font-bold" : ""}`}
+                            className={`mr-6 ${isOpen === "OPEN" && "font-bold"}`}
                             onClick={() => setOpen("OPEN")}
                         >
                             <InfoCircleOutlined /> 열린 이슈({issuesLength.open}
                             )
                         </button>
                         <button
-                            className={isOpen ? "" : "font-bold"}
+                            className={`${isOpen === "CLOSED" && "font-bold"}`}
                             onClick={() => setOpen("CLOSED")}
                         >
                             <CreditCardOutlined /> 닫힌 이슈(

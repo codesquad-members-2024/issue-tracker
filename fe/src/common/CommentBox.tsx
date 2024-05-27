@@ -1,14 +1,10 @@
 import { useState } from "react";
-import { IssueData } from "../pages/NewPage";
-import FileUploader from "./FileUploader";
+import { NewIssueForm } from "../pages/NewPage";
+// import FileUploader from "./FileUploader";
 interface CommentBoxProps {
     height: string;
-    issueData: IssueData | {
-        description: string;
-    };
-    setIssueData: React.Dispatch<React.SetStateAction<IssueData | {
-        description: string;
-    }>>;
+    issueData: NewIssueForm;
+    setIssueData: React.Dispatch<React.SetStateAction<NewIssueForm>>;
 }
 
 const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
@@ -27,17 +23,17 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
                 코맨트를 입력하세요.
             </div>
             <textarea
-                name="description"
+                name="content"
                 className={`${
                     isActive ? "bg-white" : ""
                 } h-full bg-gray-200 dark:bg-darkModeBorderBG w-full outline-none rounded-xl`}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                value={issueData.description}
+                value={issueData.content}
                 onChange={(e) => {
                     setIssueData({
                         ...issueData,
-                        description: e.target.value,
+                        content: e.target.value,
                     });
                 }}
             />
@@ -45,10 +41,10 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
                 <div
                     className={`text-sm font-normal bottom-0 right-6 absolute transition-opacity duration-500`}
                 >
-                    띄어쓰기 포함 {issueData.description.length}자
+                    띄어쓰기 포함 {issueData.content.length}자
                 </div>
             </div>
-            <FileUploader setIssueData={setIssueData} />
+            {/* <FileUploader<NewIssueForm> setIssueData={setIssueData} /> */}
         </div>
     );
 };

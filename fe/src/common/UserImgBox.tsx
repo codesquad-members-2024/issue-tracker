@@ -5,6 +5,7 @@ interface UserImgBoxProps {
 }
 
 export const UserImgBox = ({imgURL}: UserImgBoxProps) => {
+    console.log(imgURL)
     return (
         <ReactMarkdown
                 components={{
@@ -18,7 +19,7 @@ export const UserImgBox = ({imgURL}: UserImgBoxProps) => {
                     ),
                 }}
             >
-                {imgURL ? imgURL : "이미지를 첨부해주세요."}
+                {imgURL !== "" ? imgURL : "이미지를 첨부해주세요."}
             </ReactMarkdown>
     );
 };

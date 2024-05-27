@@ -78,7 +78,7 @@ const TitleView = ({ issueData, editState, setEditState }: TitleViewProps) => {
                 </p>
                 <div className="flex items-center mx-2"> ∙ </div>
                 <div className="flex items-center">
-                    코맨트 {issueData.comments.length}개
+                    코맨트 {!issueData.comments ? "0" : issueData.comments.length}개
                 </div>
             </div>
         </>

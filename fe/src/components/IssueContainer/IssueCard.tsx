@@ -42,7 +42,6 @@ const IssueCard = ({ curIssue, id, isLast, checkItemHandler, isAllChecked }: Iss
                     />
                     <Link
                         to={`/issue/${id}`}
-                        state={curIssue}
                         className="h-4/5"
                     >
                         <div className="w-full h-1/2 flex items-center">

@@ -8,20 +8,19 @@ import { APiUtil } from "../common/Utils";
 import { Loading } from "../common/NotFound";
 
 const LabelsPage = () => {
-    const { data, error, isLoading } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["labels"],
         queryFn: () => APiUtil.getData("labels"),
     });
     if (isLoading) return <div><Loading/></div>;
-    if (error) return <div>error...</div>;
-    
+
     return (
         <main className="w-[1280px] mx-auto">
             <Header />
             <ModifyDeleteProvider>
-                <Nav location="labels" labelsCount={data[0].labelCount} milestoneCount={data[0].milestoneCount}/>
+                <Nav location="labels" labelsCount={data.labelCount} milestoneCount={data.openMilestoneCount}/>
                 <LabelEditUI />
-                <LabelFeed labelsInfo={data}/>
+                <LabelFeed labelsInfo={data.labelResponses} labelsCount={data.labelCount}/>
             </ModifyDeleteProvider>
         </main>
     );

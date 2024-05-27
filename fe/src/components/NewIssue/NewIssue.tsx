@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { IssueData } from "../../pages/NewPage";
+import { NewIssueForm } from "../../pages/NewPage";
 import CommentBox from "../../common/CommentBox";
 interface CommentProps {
-    issueData: IssueData;
-    setIssueData: React.Dispatch<React.SetStateAction<IssueData>>;
+    issueData: NewIssueForm;
+    setIssueData: React.Dispatch<React.SetStateAction<NewIssueForm>>;
 }
 
 const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
@@ -23,7 +23,7 @@ const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
                     <div className="text-sm font-normal opacity-60">제목</div>
                     <input
                         type="text"
-                        name="description"
+                        name="title"
                         className={`${
                             isActive ? "bg-white" : ""
                         } bg-gray-200 dark:bg-darkModeBorderBG h-full w-full outline-none rounded-xl`}

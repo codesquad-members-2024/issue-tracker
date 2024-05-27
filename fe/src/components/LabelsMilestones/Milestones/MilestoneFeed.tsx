@@ -2,7 +2,6 @@ import { useState } from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
 import NotFound from "../../../common/NotFound";
 import MilestoneCard from "./MilestoneCard";
-import { Issue } from "../../IssueContainer/IssueFeed";
 
 export interface Milestone {
     id: number;
@@ -11,15 +10,16 @@ export interface Milestone {
     dueDate: string;
     state: string;
     updatedAt: string;
-    issues: Issue[]
+    openIssueCount: number;
+    closedIssueCount: number;
 }
-
 
 interface MilestoneFeedProps {
     milestoneData: Milestone[];
 }
 
 export const MilestoneFeed = ({ milestoneData }: MilestoneFeedProps) => {
+    console.log(milestoneData)
     const [isOpen, setOpen] = useState("OPEN");
     const isOpenInfo = milestoneData.filter(
         (curInfo) => curInfo.state === isOpen
