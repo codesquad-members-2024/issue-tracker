@@ -4,6 +4,7 @@ import com.CodeSquad.IssueTracker.Exception.milestone.InvalidMilestoneRequestExc
 import com.CodeSquad.IssueTracker.Exception.milestone.MilestoneNotFoundException;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneListResponse;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneRequest;
+import com.CodeSquad.IssueTracker.milestone.dto.MilestoneResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -69,14 +70,33 @@ public class MilestoneService {
                 });
     }
 
-    public List<Milestone> getOpenMilestones() {
-        log.info("열린 마일스톤 조회 요청");
-        return milestoneRepository.findAllOpenMilestones();
+    public MilestoneResponse getMilestoneResponse(Milestone milestone) {
+        return MilestoneResponse.builder()
+                .milestoneId(milestone.getMilestoneId())
+                .title(milestone.getTitle())
+                .description(milestone.getDescription())
+                .deadline(milestone.getDeadline())
+                .totalIssue(milestone.getTotalIssue())
+                .closedIssue(milestone.getClosedIssue())
+                .build();
     }
 
-    public List<Milestone> getCloseMilestones() {
+    public List<MilestoneResponse> getOpenMilestones() {
+        log.info("열린 마일스톤 조회 요청");
+        return createResponseList(milestoneRepository.findAllOpenMilestones());
+    }
+
+    public List<MilestoneResponse> getCloseMilestones() {
         log.info("닫힌 마일스톤 조회 요청");
-        return milestoneRepository.findAllCloseMilestones();
+        return createResponseList(milestoneRepository.findAllCloseMilestones());
+    }
+
+    public List<MilestoneResponse> createResponseList(List<Milestone> milestones) {
+        List<MilestoneResponse> responseList = new ArrayList<>();
+        for (Milestone milestone : milestones) {
+            responseList.add(getMilestoneResponse(milestone));
+        }
+        return responseList;
     }
 
     private void validateMilestoneRequest(MilestoneRequest milestoneRequest, Boolean checkSameTitle) {

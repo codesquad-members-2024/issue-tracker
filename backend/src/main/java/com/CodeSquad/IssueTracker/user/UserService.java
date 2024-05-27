@@ -7,6 +7,7 @@ import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
@@ -63,8 +64,11 @@ public class UserService {
         }
     }
 
+    @Value("${server.servlet.session.timeout}")
+    private int sessionTimeout;
+
     public void addLoginSession(LoginRequest loginRequest, HttpSession session) {
-        session.setMaxInactiveInterval(32400); //9시간
+        session.setMaxInactiveInterval(sessionTimeout);
         session.setAttribute("userId", loginRequest.getUserId());
     }
 
