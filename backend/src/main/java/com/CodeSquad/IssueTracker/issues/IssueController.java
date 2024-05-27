@@ -72,6 +72,7 @@ public class IssueController {
         issueService.updateAssignees(issueId, assigneeIdsRequest.assignees());
         return ResponseEntity.ok().build();
     }
+
     // 로드밸런서 확인용 엔드포인트
     @GetMapping("/check")
     public ResponseEntity<String> checkLoadBalancer() {

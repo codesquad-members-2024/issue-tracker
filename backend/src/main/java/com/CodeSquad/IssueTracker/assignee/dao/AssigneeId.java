@@ -1,4 +1,4 @@
-package com.CodeSquad.IssueTracker.assignee.dto;
+package com.CodeSquad.IssueTracker.assignee.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
