@@ -1,7 +1,6 @@
 package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.exception.IssueNotFoundException;
-import codesquad.issuetracker.exception.MilestoneNotFoundException;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelRepository;
 import codesquad.issuetracker.milestone.Milestone;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,8 +45,11 @@ public class IssueService {
         return (List<User>) userRepository.findAllById(assigneeNames);
     }
 
-    public Milestone getMilestoneForIssue(Issue issue) {
-        return milestoneRepository.findById(issue.getMilestoneId()).orElseThrow(() -> new MilestoneNotFoundException("존재하지 않는 마일스톤 입니다."));
+    public Optional<Milestone> getMilestoneForIssue(Issue issue) {
+        if (issue.getMilestoneId() == null) {
+            return Optional.empty();
+        }
+        return milestoneRepository.findById(issue.getMilestoneId());
     }
 
     public Issue getIssue(Long issueId) {
