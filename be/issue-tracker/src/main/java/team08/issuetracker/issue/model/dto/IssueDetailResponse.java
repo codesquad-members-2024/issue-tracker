@@ -1,5 +1,6 @@
 package team08.issuetracker.issue.model.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import team08.issuetracker.label.model.dto.LabelResponse;
@@ -10,7 +11,7 @@ public class IssueDetailResponse {
     private final String title;
     private final String writer;
     private final String milestoneName;
-    private final String timestamp; // 형식 맞추기
+    private final LocalDateTime timestamp; // 형식 맞추기
     private final List<String> assigneeIds;
     private final List<LabelResponse> labels;
 
@@ -18,7 +19,7 @@ public class IssueDetailResponse {
                                 String title,
                                 String writer,
                                 String milestoneName,
-                                String timestamp,
+                                LocalDateTime timestamp,
                                 List<String> assigneeIds,
                                 List<LabelResponse> labels) {
         this.id = id;
@@ -34,7 +35,7 @@ public class IssueDetailResponse {
                                          String title,
                                          String writer,
                                          String milestoneName,
-                                         String timestamp,
+                                         LocalDateTime timestamp,
                                          List<String> assigneeIds,
                                          List<LabelResponse> labels) {
 
