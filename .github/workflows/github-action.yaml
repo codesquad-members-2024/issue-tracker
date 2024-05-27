@@ -28,7 +28,7 @@ jobs:
           mkdir -p resources
           cd resources
           touch application.yaml
-          echo "${ { secrets.YAML } }" > application.yaml
+          echo "${{ secrets.YAML }}" > application.yaml
         shell: bash
 
       - name: Grant execute permission for gradlew
@@ -62,7 +62,7 @@ jobs:
             # 기존에 실행 중인 컨테이너 중지 및 삭제
             if [ $(sudo docker ps -q -f "name=spring-server") ]; then
                 sudo docker stop spring-server
-                sudo docker rm spring-server
-                fi
-      # 새로운 컨테이너 실행
-                sudo docker run -d -p 80:80 -p 8080:8080 -p 443:443 --name spring-server ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
+              sudo docker rm spring-server
+            fi
+            # 새로운 컨테이너 실행
+            sudo docker run -d -p 80:80 -p 8080:8080 -p 443:443 --name spring-server ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
