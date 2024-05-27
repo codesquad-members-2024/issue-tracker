@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { APiUtil } from "../common/Utils";
+import { openNotification } from "../common/Utils";
 
 export interface LoginForm {
     id: string;
@@ -9,38 +10,32 @@ export interface LoginForm {
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const [isLogin, setIsLogin] = useState(false)
+    const [isLogin, setIsLogin] = useState(false);
     const [LoginForm, setLoginForm] = useState<LoginForm>({
         id: "",
-        password: ""
-    })
+        password: "",
+    });
+    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            const response = await APiUtil.createData("users/login", LoginForm);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
-            }
-            const data = await response.json();
-            sessionStorage.setItem('token', data.token);
-            sessionStorage.setItem('user', JSON.stringify(data.userResponse));
-            
-            setIsLogin(true)
-            
-        } catch (error) {
-            console.error("Login failed:", error);
-        }
-    };
+        const response = await APiUtil.createData("users/login", LoginForm);
 
-    useEffect(()=> {
-        // <Navigate to="/Login" />
-        if(isLogin) navigate("/issue", { replace: true });
-    }, [isLogin])
+        if (response.status !== 200) return openNotification("로그인 실패 \n 아이디, 비빌번호를 다시 확인 해주세요.");
+        
+        const data = await response.json();
+        
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("user", JSON.stringify(data.userResponse));
+        setIsLogin(true);
+    };
 
     useEffect(() => {
         const isLogin = !!sessionStorage.getItem("token");
-        if(isLogin) navigate("/issue", { replace: true });
-    }, [navigate])
+        if (isLogin) {
+            navigate("/issue", { replace: true });
+            location.reload();
+        }
+    }, [isLogin, navigate]);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -52,8 +47,11 @@ const LoginPage = () => {
     return (
         <main className="h-full flex justify-center items-center">
             <div className="flex flex-col items-center">
-                <Link to="/" className="text-5xl font-style: italic font-extralight p-10">
-                    Issue Tracker11
+                <Link
+                    to="/"
+                    className="text-5xl font-style: italic font-extralight p-10"
+                >
+                    Issue Tracker
                 </Link>
                 <button className="px-10 py-2 font-normal border-solid border-2 text-blue-500 border-blue-500 rounded-xl">
                     GitHub 계정으로 로그인
@@ -73,7 +71,7 @@ const LoginPage = () => {
                         onChange={handleChange}
                         value={LoginForm.password}
                         name="password"
-                        type="text"
+                        type="password"
                         placeholder="비밀번호"
                     />
                     <input
@@ -82,11 +80,12 @@ const LoginPage = () => {
                         value="아이디로 로그인"
                     />
                 </form>
-                <Link to="/SignUp" className="p-5">회원가입</Link>
+                <Link to="/SignUp" className="p-5">
+                    회원가입
+                </Link>
             </div>
         </main>
     );
 };
 
 export default LoginPage;
-

@@ -13,6 +13,12 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
     const handleFocus = () => setActive(true);
     const handleBlur = () => setActive(false);
 
+    const addImgUrl = (url: string) => {
+        setIssueData(prev => ({
+            ...prev,
+            content: `${prev.content}\n![이미지](${url})`,
+        }))
+    }
     return (
         <div
             className={`${
@@ -44,7 +50,7 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
                     띄어쓰기 포함 {issueData.content.length}자
                 </div>
             </div>
-            <FileUploader<NewIssueForm> setIssueData={setIssueData} />
+            <FileUploader addImgUrl={addImgUrl} />
         </div>
     );
 };
