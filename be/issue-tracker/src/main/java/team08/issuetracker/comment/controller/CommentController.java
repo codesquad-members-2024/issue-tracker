@@ -12,7 +12,6 @@ import team08.issuetracker.comment.service.CommentService;
 @RequestMapping("/issue/{issueId}/comment")
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class CommentController {
 
     private final CommentService commentService;
