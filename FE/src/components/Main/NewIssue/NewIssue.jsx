@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Header } from "../IssuesList/Header";
 import { RightPanel } from "../IssueDetail/RightPanel";
-import { CommonBtnStyles } from "../../../styles/commonStyles";
+import { CommonBtnStyles } from "@/styles/commonStyles";
 
 export function NewIssue() {
   return (

@@ -1,4 +1,4 @@
-export const Label = () => (
+export const LabelIcon = () => (
   <svg
     width="15"
     height="15"

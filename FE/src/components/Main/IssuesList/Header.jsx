@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Logo } from "../../../icons/logo";
 import { Link } from "react-router-dom";
+import { LogoIcon } from "@/icons/LogoIcon";
 
 export function Header() {
   return (
@@ -24,7 +24,7 @@ const StyledHeader = styled.div`
   }
 `;
 
-const StyledLogo = styled(Logo)`
+const StyledLogo = styled(LogoIcon)`
   width: 200px;
   height: auto;
 `;
