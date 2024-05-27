@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.CodeSquad.IssueTracker.milestone.utils.TimestampParser.parseDeadline;
 
@@ -142,18 +143,15 @@ public class MilestoneService {
     }
 
     public List<MilestoneListResponse> getOpenMilestoneList() {
-        List<Milestone> openMilestone = milestoneRepository.findAllOpenMilestones();
-        List<MilestoneListResponse> milestoneListResponse = new ArrayList<>();
+        List<Milestone> openMilestones = milestoneRepository.findAllOpenMilestones();
         log.info("열려있는 마일스톤 리스트로 조회");
 
-        for (Milestone milestone : openMilestone) {
-            milestoneListResponse.add (MilestoneListResponse.builder()
-                    .milestoneId(milestone.getMilestoneId())
-                    .title(milestone.getTitle())
-                    .build());
-        }
-
-        return milestoneListResponse;
+        return openMilestones.stream()
+                .map(milestone -> MilestoneListResponse.builder()
+                        .milestoneId(milestone.getMilestoneId())
+                        .title(milestone.getTitle())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public void incrementTotalIssue(Long milestoneId){
