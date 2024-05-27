@@ -5,7 +5,7 @@ import arrowBottom from "../../../img/icon/arrowBottom.svg";
 import useIssueStore from "../../../hooks/stores/useIssueStore";
 import { IssueType } from "../../../hooks/logics/useIssueListLogic";
 import { useEffect, useRef, useState } from "react";
-import Filterbar from "../extension/Filterbar";
+import FilterPopup from "../extension/FilterPopup";
 
 type FilterBarKeys = "assignee" | "label" | "milestone" | "author";
 
@@ -78,24 +78,24 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
         <RightMenu onClick={() => handleRightMenuClick("assignee")}>
           <span>담당자</span>
           <img src={arrowBottom} />
-          {filterbarVisible.assignee && <Filterbar ref={filterbarRefs.assignee} filterType="assginee" items={users} />}
+          {filterbarVisible.assignee && <FilterPopup ref={filterbarRefs.assignee} filterType="assginee" items={users} />}
         </RightMenu>
         <RightMenu onClick={() => handleRightMenuClick("label")}>
           <span>레이블</span>
           <img src={arrowBottom} />
-          {filterbarVisible.label && <Filterbar ref={filterbarRefs.label} filterType="label" items={labels} />}
+          {filterbarVisible.label && <FilterPopup ref={filterbarRefs.label} filterType="label" items={labels} />}
         </RightMenu>
         <RightMenu onClick={() => handleRightMenuClick("milestone")}>
           <span>마일스톤</span>
           <img src={arrowBottom} />
           {filterbarVisible.milestone && (
-            <Filterbar ref={filterbarRefs.milestone} filterType="milestone" items={milestones} />
+            <FilterPopup ref={filterbarRefs.milestone} filterType="milestone" items={milestones} />
           )}
         </RightMenu>
         <RightMenu onClick={() => handleRightMenuClick("author")}>
           <span>작성자</span>
           <img src={arrowBottom} />
-          {filterbarVisible.author && <Filterbar ref={filterbarRefs.author} filterType="author" items={users} />}
+          {filterbarVisible.author && <FilterPopup ref={filterbarRefs.author} filterType="author" items={users} />}
         </RightMenu>
       </RightMenus>
     </Wrapper>

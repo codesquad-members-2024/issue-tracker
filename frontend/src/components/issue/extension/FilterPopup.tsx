@@ -21,7 +21,7 @@ const TITLE_KEY = {
   milestone: "title",
 };
 
-const Filterbar = React.forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
+const FilterPopup = React.forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
   const { filterType, items } = props;
 
   return (
@@ -119,4 +119,4 @@ const SelectOption = styled.div`
   border-top: 1px solid #d9dbe9;
 `;
 
-export default Filterbar;
+export default FilterPopup;
