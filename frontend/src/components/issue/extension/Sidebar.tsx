@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import plusIcon from "../../img/icon/plusIcon_dark.svg";
+import plusIcon from "../../../img/icon/plusIcon_dark.svg";
 
 function Sidebar() {
   return (

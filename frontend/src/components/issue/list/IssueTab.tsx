@@ -4,6 +4,10 @@ import closedIssueIcon from "../../../img/icon/closedIssueIcon_dark.svg";
 import arrowBottom from "../../../img/icon/arrowBottom.svg";
 import useIssueStore from "../../../hooks/stores/useIssueStore";
 import { IssueType } from "../../../hooks/logics/useIssueListLogic";
+import { useEffect, useRef, useState } from "react";
+import Filterbar from "../extension/Filterbar";
+
+type FilterBarKeys = "assignee" | "label" | "milestone" | "author";
 
 export interface IssueTabProps {
   focusedTab: string;
@@ -11,7 +15,47 @@ export interface IssueTabProps {
 }
 
 function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
-  const { openIssueCount, closeIssueCount } = useIssueStore();
+  const { openIssueCount, closeIssueCount, labels, milestones, users } = useIssueStore();
+
+  const [filterbarVisible, setFilterbarVisible] = useState<Record<FilterBarKeys, boolean>>({
+    assignee: false,
+    label: false,
+    milestone: false,
+    author: false,
+  });
+
+  const filterbarRefs = {
+    assignee: useRef<HTMLDivElement>(null),
+    label: useRef<HTMLDivElement>(null),
+    milestone: useRef<HTMLDivElement>(null),
+    author: useRef<HTMLDivElement>(null),
+  };
+
+  const handleRightMenuClick = (menu: FilterBarKeys) => {
+    setFilterbarVisible((prev) => ({
+      ...prev,
+      [menu]: true,
+    }));
+  };
+
+  const handleClickOutside = ({ target }: Event) => {
+    Object.keys(filterbarRefs).forEach((key) => {
+      const ref = filterbarRefs[key as FilterBarKeys];
+      if (ref.current && !ref.current.contains(target as Node)) {
+        setFilterbarVisible((prev) => ({
+          ...prev,
+          [key]: !prev[key as FilterBarKeys],
+        }));
+      }
+    });
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Wrapper>
@@ -31,21 +75,27 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
         </LeftMenu>
       </LeftMenus>
       <RightMenus>
-        <RightMenu>
+        <RightMenu onClick={() => handleRightMenuClick("assignee")}>
           <span>담당자</span>
           <img src={arrowBottom} />
+          {filterbarVisible.assignee && <Filterbar ref={filterbarRefs.assignee} filterType="assginee" items={users} />}
         </RightMenu>
-        <RightMenu>
+        <RightMenu onClick={() => handleRightMenuClick("label")}>
           <span>레이블</span>
           <img src={arrowBottom} />
+          {filterbarVisible.label && <Filterbar ref={filterbarRefs.label} filterType="label" items={labels} />}
         </RightMenu>
-        <RightMenu>
+        <RightMenu onClick={() => handleRightMenuClick("milestone")}>
           <span>마일스톤</span>
           <img src={arrowBottom} />
+          {filterbarVisible.milestone && (
+            <Filterbar ref={filterbarRefs.milestone} filterType="milestone" items={milestones} />
+          )}
         </RightMenu>
-        <RightMenu>
+        <RightMenu onClick={() => handleRightMenuClick("author")}>
           <span>작성자</span>
           <img src={arrowBottom} />
+          {filterbarVisible.author && <Filterbar ref={filterbarRefs.author} filterType="author" items={users} />}
         </RightMenu>
       </RightMenus>
     </Wrapper>
@@ -91,9 +141,11 @@ const RightMenus = styled.div`
 `;
 
 const RightMenu = styled.div`
+  position: relative;
   display: flex;
   gap: 1.5em;
   color: #4e4b66;
+  cursor: pointer;
 `;
 
 export default IssueTab;
