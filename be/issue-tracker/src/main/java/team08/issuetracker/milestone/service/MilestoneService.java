@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
 import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
+import team08.issuetracker.issue.model.dto.IssueCountDto;
+import team08.issuetracker.issue.service.IssueCountService;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.model.dto.MilestoneCountResponse;
 import team08.issuetracker.milestone.model.dto.MilestoneCreationRequest;
@@ -22,28 +24,27 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class MilestoneService {
-    private final MilestoneRepository milestoneRepository;
 
+    private final IssueCountService issueCountService;
+
+    private final MilestoneRepository milestoneRepository;
 
     private static final String OPEN_STATE_QUERY = "opened";
     private static final String CLOSE_STATE_QUERY = "closed";
 
+    @Transactional
     public MilestoneOverviewResponse getAllMilestonesWithCounts(String state) {
         boolean openState = convertStateQueryToOpenState(state);
 
-        List<MilestoneDetailResponse> milestones = milestoneRepository.getAllMilestonesByOpenState(openState).stream()
-                .map(MilestoneDetailResponse::from)
-                /* TODO : 마일스톤과 이슈간의 연관된 정보 추가하기
-                1) openedIssueCount : 마일스톤에 해당하는 열린 이슈 개수 [long]
-                2) closedIssueCount : 마일스톤에 해당하는 닫힌 이슈 개수 [long]
-                3) milestoneProgress : 마일스톤 진행도 [double]
-                 */
+        List<MilestoneDetailResponse> milestoneDetailResponses = milestoneRepository.getAllMilestonesByOpenState(openState)
+                .stream()
+                .map(this::mapToDetailResponse)
                 .collect(Collectors.toList());
 
-
-        return new MilestoneOverviewResponse(getMilestoneCountDto(), milestones);
+        return new MilestoneOverviewResponse(getMilestoneCountDto(), milestoneDetailResponses);
     }
 
+    @Transactional
     public Milestone saveMilestone(MilestoneCreationRequest milestoneCreationRequest) {
         validateMilestoneForm(milestoneCreationRequest.name());
 
@@ -53,6 +54,7 @@ public class MilestoneService {
     }
 
 
+    @Transactional
     public Milestone updateMilestone(Long id, MilestoneUpdateRequest milestoneUpdateRequest) {
         validateMilestoneForm(milestoneUpdateRequest.name());
 
@@ -92,6 +94,13 @@ public class MilestoneService {
         Milestone milestone = milestoneRepository.findById(id).orElseThrow(MilestoneIdNotFoundException::new);
 
         milestoneRepository.delete(milestone);
+    }
+
+    private MilestoneDetailResponse mapToDetailResponse(Milestone milestone) {
+        IssueCountDto issueCountDto = issueCountService.getCounts(milestone.getId());
+        MilestoneDetailResponse detailResponse = MilestoneDetailResponse.from(milestone);
+        detailResponse.updateCount(issueCountDto);
+        return detailResponse;
     }
 
     private boolean convertStateQueryToOpenState(String state) {

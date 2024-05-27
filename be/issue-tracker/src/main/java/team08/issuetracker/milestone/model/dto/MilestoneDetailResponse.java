@@ -1,6 +1,7 @@
 package team08.issuetracker.milestone.model.dto;
 
 import lombok.Getter;
+import team08.issuetracker.issue.model.dto.IssueCountDto;
 import team08.issuetracker.milestone.model.Milestone;
 
 import java.time.LocalDate;
@@ -22,9 +23,6 @@ public class MilestoneDetailResponse {
         this.completeDate = completeDate;
         this.description = description;
         this.state = state;
-        this.openedIssueCount = 10;
-        this.closedIssueCount = 10;
-        this.milestoneProgress = 50.0;
     }
 
     public static MilestoneDetailResponse from(Milestone milestone) {
@@ -35,6 +33,14 @@ public class MilestoneDetailResponse {
                 milestone.getDescription(),
                 milestone.isOpen()
         );
+    }
+
+    public MilestoneDetailResponse updateCount(IssueCountDto issueCountDto) {
+        this.openedIssueCount = issueCountDto.getOpenedIssueCount();
+        this.closedIssueCount = issueCountDto.getClosedIssueCount();
+        this.milestoneProgress = issueCountDto.getMilestoneProgress();
+
+        return this;
     }
 
 }

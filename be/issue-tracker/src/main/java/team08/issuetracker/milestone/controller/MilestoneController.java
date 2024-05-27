@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team08.issuetracker.issue.service.IssueCountService;
+import team08.issuetracker.issue.service.IssueService;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.model.dto.MilestoneCreationRequest;
 import team08.issuetracker.milestone.model.dto.MilestoneCreationResponse;
@@ -23,6 +25,7 @@ public class MilestoneController {
     @GetMapping()
     public ResponseEntity<?> getAllMilestonesWithCounts(@RequestParam(required = false, value = "state") String state) {
         MilestoneOverviewResponse milestoneOverviewResponse = milestoneService.getAllMilestonesWithCounts(state);
+
         return ResponseEntity.ok(milestoneOverviewResponse);
     }
 
