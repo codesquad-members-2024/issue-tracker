@@ -47,7 +47,7 @@ public class IssueService {
     public IssueOverviewResponse getIssueListResponse() {
         List<IssueDetailResponse> issueDetailResponse = new ArrayList<>();
 
-        for (Issue issue : issueRepository.findAll()) {
+        for (Issue issue : issueRepository.getAllOpenedIssues()) {
 
             String milestoneName = getMilestoneName(issue.getMilestoneId());
 
