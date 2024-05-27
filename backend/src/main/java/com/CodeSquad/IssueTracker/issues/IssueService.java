@@ -20,8 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -111,16 +110,73 @@ public class IssueService {
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
     }
 
-    public List<Issue> findOpenIssues(long page, long limit) {
+//    public List<IssueListResponse> findOpenIssues(long page, long limit) {
+//        validateIssueListPage(page);
+//        long offset = (page - 1) * limit;
+//        return issueRepository.findOpenIssues(limit, offset);
+//    }
+//
+//    public List<IssueListResponse> findCloseIssues(long page, long limit) {
+//        validateIssueListPage(page);
+//        long offset = (page - 1) * limit;
+//        return issueRepository.findCloseIssues(limit, offset);
+//    }
+
+    public List<IssueListResponse> findIssues(long page, long limit, boolean isClosed) {
         validateIssueListPage(page);
         long offset = (page - 1) * limit;
-        return issueRepository.findOpenIssues(limit, offset);
+
+        List<Long> issueIds = issueRepository.findIssueIds(isClosed, limit, offset);
+        Collections.sort(issueIds);
+        Collections.reverse(issueIds);
+
+        List<IssueDetailAccess> issueDetailById = issueRepository.getIssueDetailByIds(issueIds);
+        Map<Long, IssueListResponse> issueMap = new HashMap<>();
+        for (IssueDetailAccess issue : issueDetailById) {
+            if (!issueMap.containsKey(issue.getIssueId())) {
+                IssueListResponse issueListResponse = IssueListResponse.builder()
+                        .issueId(issue.getIssueId())
+                        .title(issue.getTitle())
+                        .author(issue.getAuthor())
+                        .publishedAt(issue.getPublishedAt())
+                        .isClosed(issue.getIsClosed())
+                        .assignees(new ArrayList<>())
+                        .labels(new ArrayList<>())
+                        .milestoneId(issue.getMilestoneId())
+                        .build();
+                issueMap.put(issue.getIssueId(), issueListResponse);
+            }
+            IssueListResponse issueListResponse = issueMap.get(issue.getIssueId());
+
+            if (issue.getAssignee() != null && !issue.getAssignee().isEmpty() &&
+                    !issueListResponse.getAssignees().contains(issue.getAssignee())) {
+                issueListResponse.getAssignees().add(issue.getAssignee());
+            }
+            if (issue.getLabelId() != null && !isExistLabelRequest(issueListResponse.getLabels(), issue.getLabelId())) {
+                issueListResponse.getLabels().add(LabelRequest.builder()
+                        .labelId(issue.getLabelId())
+                        .labelName(issue.getLabelName())
+                        .bgColor(issue.getBgColor())
+                        .textColor(issue.getTextColor())
+                        .build());
+            }
+        }
+
+        List<IssueListResponse> result = new ArrayList<>();
+        for (Long issueId : issueIds) {
+            result.add(issueMap.get(issueId));
+        }
+
+        return result;
     }
 
-    public List<Issue> findCloseIssues(long page, long limit) {
-        validateIssueListPage(page);
-        long offset = (page - 1) * limit;
-        return issueRepository.findCloseIssues(limit, offset);
+    private boolean isExistLabelRequest(List<LabelRequest> labels, Long labelId) {
+        for (LabelRequest label : labels) {
+            if (label.getLabelId().equals(labelId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public IssueDetailResponse getIssueById(long issueId) {

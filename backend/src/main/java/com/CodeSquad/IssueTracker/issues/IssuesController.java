@@ -1,6 +1,7 @@
 package com.CodeSquad.IssueTracker.issues;
 
 import com.CodeSquad.IssueTracker.issues.dto.IssueIds;
+import com.CodeSquad.IssueTracker.issues.dto.IssueListResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +20,21 @@ public class IssuesController {
         this.issueService = issueService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Issue>> getAllIssues() {
-        List<Issue> issues = issueService.getAllIssues();
-        return new ResponseEntity<>(issues, HttpStatus.OK);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<IssueListResponse>> getAllIssues() {
+//        List<IssueListResponse> issues = issueService.getAllIssues();
+//        return new ResponseEntity<>(issues, HttpStatus.OK);
+//    }
 
     @GetMapping("/open")
-    public ResponseEntity<List<Issue>> getOpenIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
-        List<Issue> openIssues = issueService.findOpenIssues(page, PAGE_LIMIT);
+    public ResponseEntity<List<IssueListResponse>> getOpenIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
+        List<IssueListResponse> openIssues = issueService.findIssues(page, PAGE_LIMIT, false);
         return ResponseEntity.ok(openIssues);
     }
 
     @GetMapping("/close")
-    public ResponseEntity<List<Issue>> getCloseIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
-        List<Issue> openIssues = issueService.findCloseIssues(page, PAGE_LIMIT);
+    public ResponseEntity<List<IssueListResponse>> getCloseIssues(@RequestParam(value = "page", defaultValue = "1") long page) {
+        List<IssueListResponse> openIssues = issueService.findIssues(page, PAGE_LIMIT, true);
         return ResponseEntity.ok(openIssues);
     }
 
