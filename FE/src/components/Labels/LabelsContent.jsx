@@ -32,7 +32,7 @@ export function LabelsContent(props) {
       {error && <h1>{error}</h1>}
       {onEdit && (
         <NewLabels
-          actionType="updateIssue"
+          actionType="updateLabels"
           labelId={selectedLabel?.id}
           initialData={selectedLabel}
           {...{ closeNewLabels, fetchData, putData, deleteData }}
