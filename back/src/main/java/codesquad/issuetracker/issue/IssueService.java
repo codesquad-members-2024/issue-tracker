@@ -72,16 +72,14 @@ public class IssueService {
 
     public List<Issue> openIssuesById(List<Long> ids) {
         List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
-        return (List<Issue>) issueRepository.saveAll(issues.stream()
-                .peek(Issue::open)
-                .collect(Collectors.toList()));
+        issues.forEach(Issue::open);
+        return (List<Issue>) issueRepository.saveAll(issues);
     }
 
     public List<Issue> closeIssuesById(List<Long> ids) {
         List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
-        return (List<Issue>) issueRepository.saveAll(issues.stream()
-                .peek(Issue::close)
-                .collect(Collectors.toList()));
+        issues.forEach(Issue::close);
+        return (List<Issue>) issueRepository.saveAll(issues);
     }
 
     public Issue addAssigneesById(Long issueId, List<String> userLoginIds) {
@@ -121,7 +119,7 @@ public class IssueService {
     }
 
     public List<Issue> getFilteredIssues(List<String> assigneeIds, List<Long> labelIds, Long milestoneId, String writer) {
-        List<Issue> issues = (List<Issue>) issueRepository.findAll();
+        List<Issue> issues = issueRepository.findAll();
         return issues.stream().filter(issue -> issue.checkFilter(assigneeIds, labelIds, milestoneId, writer)).collect(Collectors.toList());
     }
 
