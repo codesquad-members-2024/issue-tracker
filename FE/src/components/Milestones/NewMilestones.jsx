@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ContentNavStyles } from "@/styles/commonStyles";
+import { CommonBtnStyles } from "@/styles/commonStyles";
 import { useState } from "react";
 
 export function NewMilestones({ actionType, closeNewMilestones }) {
@@ -106,21 +106,22 @@ const Buttons = styled.div`
   gap: 20px;
 `;
 
-const CancelButton = styled.div`
-  ${ContentNavStyles}
+const CancelButton = styled.button`
+  ${CommonBtnStyles}
   background-color: unset;
   color: #007bff;
-  border-radius: 10px;
   border: solid #007bff;
   width: 120px;
+  font-size: 16px;
   height: 40px;
 `;
 
-const CompleteButton = styled.div`
-  ${ContentNavStyles}
+const CompleteButton = styled.button`
+  ${CommonBtnStyles}
   background-color: #007bff;
   color: white;
-  border-radius: 10px;
+  border: none;
   width: 120px;
   height: 40px;
+  font-size: 16px;
 `;

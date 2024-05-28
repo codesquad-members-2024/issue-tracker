@@ -4,7 +4,6 @@ import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
-import { CalendarOutlined } from "@ant-design/icons";
 import { milestonesList } from "@/test.json";
 import { NewMilestones } from "./NewMilestones";
 
@@ -50,7 +49,6 @@ export function MilestonesContent() {
                     <span>{title}</span>
                   </div>
                   <div className="deadLine">
-                    <CalendarOutlined />
                     <span>{deadLine}</span>
                   </div>
                 </div>

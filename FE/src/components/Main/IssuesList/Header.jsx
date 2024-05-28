@@ -10,7 +10,7 @@ export function Header() {
     <StyledHeader>
       <StyledLogo onClick={navigateHome}/>
       <Link to={"/login"}>
-        <img src="/img/frog.png" />
+        <img alt="frog" src="/img/frog.png" />
       </Link>
     </StyledHeader>
   );

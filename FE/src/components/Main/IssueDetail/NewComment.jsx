@@ -47,7 +47,6 @@ const StyledBtn = styled.div`
   height: 40px;
   background-color: #007bff;
   color: white;
-  border-radius: 10px;
   width: 120px;
   align-self: flex-end;
 `;
