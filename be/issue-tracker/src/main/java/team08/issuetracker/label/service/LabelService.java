@@ -3,6 +3,7 @@ package team08.issuetracker.label.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import team08.issuetracker.exception.label.LabelNotFoundException;
 import team08.issuetracker.label.model.Label;
 import team08.issuetracker.label.model.dto.*;
@@ -70,5 +71,18 @@ public class LabelService {
 
     private LabelCountResponse fetchLabelCount() {
         return new LabelCountResponse(labelRepository.countLabels());
+    }
+
+    private List<Label> getLabelsByIssueId(long issueId) {
+        return labelRepository.findByIssueId(issueId);
+    }
+
+    // 이슈 상세에서 사용
+    public List<LabelSummaryDto> getLabelSummaryDto(long issueId) {
+        List<Label> labels = getLabelsByIssueId(issueId);
+
+        return labels.stream()
+                .map(LabelSummaryDto::new)
+                .collect(Collectors.toList());
     }
 }
