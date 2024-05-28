@@ -72,6 +72,7 @@ public class CustomFilterRepository {
             params.add(labels.size());
         }
 
+        sql.append("ORDER BY i.issue_id DESC ");
         Long offset = (page - 1) * size;
         sql.append("LIMIT ? OFFSET ?");
         params.add(size);
