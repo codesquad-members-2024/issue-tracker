@@ -1,7 +1,9 @@
 package codesquad.issuetracker.util;
 
 import codesquad.issuetracker.issue.IssueFilterDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FilterQueryMaker {
 
     private String makeQueryJoin(String joinTable, String tableNickname) {
