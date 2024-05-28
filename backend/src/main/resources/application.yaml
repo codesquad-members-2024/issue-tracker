@@ -2,3 +2,6 @@ server:
   servlet:
     session:
       timeout: 32400 # 9시간 (초 단위)
+
+jwt:
+  secret-key: NZfLZ8BH1LqDVTzMoRN8Kd6uGv5FSu4oBjc5VeT7VtMKHgr/NeETzwxL0awVkgJWejbL6j1RxYLcFVPklnQBmA==

@@ -22,14 +22,19 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
+//                                       HttpServletRequest request) {
+//        userService.isLoginRequestNotExists(loginRequest);
+//        userService.authenticate(loginRequest);
+//        userService.addLoginSession(loginRequest, request.getSession());
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
-                                       HttpServletRequest request) {
-        userService.isLoginRequestNotExists(loginRequest);
-        userService.authenticate(loginRequest);
-        userService.addLoginSession(loginRequest, request.getSession());
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+        String token = userService.authenticate(loginRequest);
+        return ResponseEntity.ok(token);
     }
 
     @GetMapping("/registration/validate/{id}")
