@@ -1,8 +1,8 @@
 package team08.issuetracker.issue.controller;
 
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +22,8 @@ import team08.issuetracker.issue.model.dto.IssueCreationRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationResponse;
 import team08.issuetracker.issue.model.dto.update.IssueLabelUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueMilestoneUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueStateMultipleUpdateRequest;
+import team08.issuetracker.issue.model.dto.update.IssueStateMultipleUpdateResponse;
 import team08.issuetracker.issue.model.dto.update.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueUpdateResponse;
 import team08.issuetracker.issue.service.IssueService;
@@ -124,6 +126,29 @@ public class IssueController {
         Issue issue = issueService.updateIssueStateToClose(id);
 
         return ResponseEntity.ok(IssueUpdateResponse.from(issue));
+    }
+
+    @PatchMapping("/all-open")
+    public ResponseEntity<IssueStateMultipleUpdateResponse> openMultipleIssues(@RequestBody IssueStateMultipleUpdateRequest issueStateMultipleUpdateRequest) {
+        Set<Long> issueIds = issueStateMultipleUpdateRequest.issueIds();
+
+        Set<Long> updatedIds = issueService.updateMultipleIssueStateToOpen(issueIds);
+
+        IssueStateMultipleUpdateResponse response = new IssueStateMultipleUpdateResponse(updatedIds);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/all-close")
+    public ResponseEntity<IssueStateMultipleUpdateResponse> closeMultipleIssues(@RequestBody IssueStateMultipleUpdateRequest issueStateMultipleUpdateRequest) {
+        Set<Long> issueIds = issueStateMultipleUpdateRequest.issueIds();
+
+        Set<Long> updatedIds = issueService.updateMultipleIssueStateToClose(issueIds);
+
+        IssueStateMultipleUpdateResponse response = new IssueStateMultipleUpdateResponse(updatedIds);
+
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
