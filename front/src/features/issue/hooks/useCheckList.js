@@ -4,6 +4,7 @@ import { useIssueDetail, useIssueStatus } from '~/features/issue/hooks';
 
 export function useCheckList(id) {
 	const { issueDetail } = useIssueDetail(id);
+	id = id || null;
 	const initialCheck = {
 		selectedAssignees: issueDetail?.assignees ? [...issueDetail.assignees] : [],
 		selectedLabels: [],

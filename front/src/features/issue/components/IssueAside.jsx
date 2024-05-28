@@ -13,7 +13,7 @@ function listArrayReducer(state, action) {
 	}
 }
 
-export function IssueAside({ id, list, ...props }) {
+export function IssueAside({ id, list, getAssignees, ...props }) {
 	const [check, dispatchCheck] = useCheckList(id);
 	const listArray = useRef(list ? [...list] : []);
 	const [, forceUpdate] = useReducer(listArrayReducer, []);
@@ -30,10 +30,12 @@ export function IssueAside({ id, list, ...props }) {
 
 		if (checked) {
 			listArray.current = [...listArray.current, newAssignee];
+			getAssignees(listArray.current);
 		} else {
 			listArray.current = listArray.current.filter(
 				assignee => assignee.loginId !== value
 			);
+			getAssignees(listArray.current);
 		}
 
 		// Force a re-render

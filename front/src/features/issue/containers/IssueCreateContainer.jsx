@@ -16,7 +16,6 @@ const initialState = {
 	title: '',
 	content: '',
 };
-
 function issueReducer(state, action) {
 	switch (action.type) {
 		case 'SET_TITLE':
@@ -31,8 +30,9 @@ function issueReducer(state, action) {
 export function IssueCreateContainer() {
 	const navigate = useNavigate();
 	const [state, dispatch] = useReducer(issueReducer, initialState);
-	const [check, dispatchCheck] = useCheckList();
-
+	function getAssignees(assignees) {
+		console.log(assignees);
+	}
 	return (
 		<StyledWrapper>
 			<h2>새로운 이슈 작성</h2>
@@ -60,7 +60,7 @@ export function IssueCreateContainer() {
 					</StyledInputWrapper>
 				</section>
 				{/* 사이드 메뉴 */}
-				<IssueAside />
+				<IssueAside getAssignees={getAssignees} />
 			</StyledContent>
 			<StyledFooter>
 				<Button
