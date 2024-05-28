@@ -10,9 +10,12 @@ import team08.issuetracker.issue.model.dto.IssueDetailResponse;
 import team08.issuetracker.issue.model.dto.update.AssigneeResponse;
 import team08.issuetracker.label.model.Label;
 import team08.issuetracker.label.model.dto.LabelResponse;
+import team08.issuetracker.milestone.model.Milestone;
+import team08.issuetracker.milestone.repository.MilestoneRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +34,15 @@ public class FilterService {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private final MilestoneRepository milestoneRepository;
+
     public FilteredIssueResponse getFilteredIssues(FilteredIssueRequest request) {
         List<IssueDetailResponse> detailIssues = new ArrayList<>();
 
         List<Issue> issues = getIssuesFromQuery(request.toQuery());
 
         for (Issue issue : issues) {
+
             List<LabelResponse> labels = getIssueAttachedLabels(issue.getId());
             List<AssigneeResponse> assignees = getAssignees(issue.getId());
 
@@ -45,7 +51,7 @@ public class FilterService {
                     issue.getTitle(),
                     issue.getWriter(),
                     issue.isOpen(),
-                    String.valueOf(issue.getMilestoneId()),
+                    getMilestoneName(issue.getMilestoneId()),
                     issue.getCreatedAt(),
                     assignees,
                     labels
@@ -99,6 +105,11 @@ public class FilterService {
                     return assignee;
                 }
         );
+    }
+
+    private String getMilestoneName(long milestoneId) {
+        Optional<Milestone> milestone = milestoneRepository.findById(milestoneId);
+        return milestone.map(Milestone::getName).orElse(null);
     }
 
 }
