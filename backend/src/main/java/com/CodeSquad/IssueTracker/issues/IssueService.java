@@ -111,18 +111,6 @@ public class IssueService {
                         new IssueNotExistException("존재하지 않는 이슈입니다."));
     }
 
-//    public List<IssueListResponse> findOpenIssues(long page, long limit) {
-//        validateIssueListPage(page);
-//        long offset = (page - 1) * limit;
-//        return issueRepository.findOpenIssues(limit, offset);
-//    }
-//
-//    public List<IssueListResponse> findCloseIssues(long page, long limit) {
-//        validateIssueListPage(page);
-//        long offset = (page - 1) * limit;
-//        return issueRepository.findCloseIssues(limit, offset);
-//    }
-
     public List<IssueListResponse> findIssues(long page, long limit, boolean isClosed) {
         validateIssueListPage(page);
         long offset = (page - 1) * limit;
@@ -130,6 +118,10 @@ public class IssueService {
         List<Long> issueIds = issueRepository.findIssueIds(isClosed, limit, offset);
         Collections.sort(issueIds);
         Collections.reverse(issueIds);
+        if (issueIds.isEmpty()) {
+            log.info("더 이상 가져올 이슈가 없습니다.");
+            return new ArrayList<>();
+        }
 
         List<IssueDetailAccess> issueDetailById = issueRepository.getIssueDetailByIds(issueIds);
         Map<Long, IssueListResponse> issueMap = new HashMap<>();
