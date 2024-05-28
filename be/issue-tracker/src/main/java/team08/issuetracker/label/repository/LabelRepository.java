@@ -15,4 +15,6 @@ public interface LabelRepository extends CrudRepository<Label, Long> {
 
     @Query("SELECT * FROM label")
     List<Label> getAllLabels();
+
+    List<Label> findByIssueId(Long issueId);
 }
