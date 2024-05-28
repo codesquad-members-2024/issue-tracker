@@ -4,15 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class IssueQueryParamsDto {
+public class IssueFilterDto {
 
-    private List<String> assigneeIds;
-    private List<Long> labelIds;
+    private String assignee;
+    private Long labelId;
     private Long milestoneId;
     private String writer;
 }
