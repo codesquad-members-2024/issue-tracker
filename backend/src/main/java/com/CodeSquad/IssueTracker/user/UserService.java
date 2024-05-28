@@ -4,6 +4,7 @@ import com.CodeSquad.IssueTracker.Exception.user.UserIdAlreadyExistException;
 import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
+import com.CodeSquad.IssueTracker.user.utils.SHA256Util;
 import com.CodeSquad.IssueTracker.user.jwtlogin.JwtUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class UserService {
     public void save(UserRegisterRequest userRegisterRequest) {
         User user = User.builder()
                 .userId(userRegisterRequest.userId())
-                .userPassword(userRegisterRequest.userPassword())
+                .userPassword(SHA256Util.getSaltedHash(userRegisterRequest.userPassword()))
                 .isNew(true)
                 .build();
         verifyUserInfo(user);
@@ -88,21 +89,21 @@ public class UserService {
 //    }
 
     public String authenticate(LoginRequest loginRequest) {
-        String userId = loginRequest.getUserId();
-        String userPassword = loginRequest.getUserPassword();
+        String loginId = loginRequest.getUserId();
+        String loginPassword = loginRequest.getUserPassword();
 
-        User user = userRepository.findById(userId)
+        User userInfo = userRepository.findById(loginId)
                 .orElseThrow(() -> {
-                    log.error("해당 유저가 존재하지 않습니다.: {}", userId);
+                    log.error("해당 유저가 존재하지 않습니다.: {}", loginId);
                     return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
                 });
 
-        if (!Objects.equals(user.getUserPassword(), userPassword)){
-            log.warn("로그인 실패: {}", userId);
+        if (!SHA256Util.verify(loginPassword, userInfo.getUserPassword())) {
+            log.warn("로그인 실패: {}", loginId);
             throw new InvalidCredentialException("아이디나 비밀번호가 맞지 않습니다.");
         }
 
-        return jwtUtil.generateToken(userId);
+        return jwtUtil.generateToken(loginId);
     }
 
 
