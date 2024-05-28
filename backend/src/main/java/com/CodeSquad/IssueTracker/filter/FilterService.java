@@ -1,5 +1,6 @@
 package com.CodeSquad.IssueTracker.filter;
 
+import com.CodeSquad.IssueTracker.Exception.issue.InvalidIssueDataException;
 import com.CodeSquad.IssueTracker.filter.dto.FilterListResponse;
 import com.CodeSquad.IssueTracker.issues.IssueService;
 import com.CodeSquad.IssueTracker.issues.dto.IssueListResponse;
@@ -36,9 +37,17 @@ public class FilterService {
                 .build();
     }
 
-    public List<IssueListResponse> findFilteredIssues(Boolean isClosed, String assignee,
+    public List<IssueListResponse> findFilteredIssues(String isClosed, String assignee,
                                                       List<String> labelTitles, String milestoneTitle,
                                                       String author, Long page, Long offset){
-        return customFilterRepository.findFilteredIssues(isClosed, assignee, labelTitles, milestoneTitle, author, page, offset);
+        boolean closed = false;
+        if(isClosed.equals("close")){
+            closed = true;
+        }else if(isClosed.equals("open")){
+            closed = false;
+        }else{
+            throw new InvalidIssueDataException("데이터 형식에 맞지 않습니다.");
+        }
+        return customFilterRepository.findFilteredIssues(closed, assignee, labelTitles, milestoneTitle, author, page, offset);
     }
 }
