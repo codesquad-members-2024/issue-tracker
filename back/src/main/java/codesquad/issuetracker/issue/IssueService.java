@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,13 +70,13 @@ public class IssueService {
     }
 
     public List<Issue> openIssuesById(List<Long> ids) {
-        List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
+        List<Issue> issues = issueRepository.findAllById(ids);
         issues.forEach(Issue::open);
         return (List<Issue>) issueRepository.saveAll(issues);
     }
 
     public List<Issue> closeIssuesById(List<Long> ids) {
-        List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
+        List<Issue> issues = issueRepository.findAllById(ids);
         issues.forEach(Issue::close);
         return (List<Issue>) issueRepository.saveAll(issues);
     }
@@ -118,9 +117,9 @@ public class IssueService {
         issueRepository.save(issue);
     }
 
-    public List<Issue> getFilteredIssues(List<String> assigneeIds, List<Long> labelIds, Long milestoneId, String writer) {
-        List<Issue> issues = issueRepository.findAll();
-        return issues.stream().filter(issue -> issue.checkFilter(assigneeIds, labelIds, milestoneId, writer)).collect(Collectors.toList());
+    public List<Issue> getFilteredIssues(IssueFilterDto issueFilterDto) {
+        List<Long> filteredIssueIds = issueRepository.findIssuesByFilter(issueFilterDto);
+        return issueRepository.findAllById(filteredIssueIds);
     }
 
     private Issue getIssueById(Long issueId) {
