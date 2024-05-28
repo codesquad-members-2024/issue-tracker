@@ -6,6 +6,7 @@ import codesquad.issuetracker.comment.CommentCreateRequest;
 import codesquad.issuetracker.comment.CommentService;
 import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.issue.dto.IssueCreateRequest;
+import codesquad.issuetracker.issue.dto.IssueTitleRequest;
 import java.net.URI;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -56,8 +57,9 @@ public class IssueController {
     }
 
     @PatchMapping("/{issueId}")
-    public Issue updateIssue(@PathVariable Long issueId, @RequestBody String title) {
-        return issueService.updateTitle(issueId, title);
+    public Issue updateIssue(@PathVariable Long issueId, @RequestBody IssueTitleRequest request) {
+        log.info("Issue title = {}", request);
+        return issueService.updateTitle(issueId, request.getTitle());
 
     }
 
