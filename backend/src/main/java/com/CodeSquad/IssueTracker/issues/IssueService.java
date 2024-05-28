@@ -165,7 +165,7 @@ public class IssueService {
 
     private boolean isExistLabelRequest(List<LabelRequest> labels, Long labelId) {
         for (LabelRequest label : labels) {
-            if (label.getLabelId().equals(labelId)) {
+            if (label.labelId().equals(labelId)) {
                 return true;
             }
         }
