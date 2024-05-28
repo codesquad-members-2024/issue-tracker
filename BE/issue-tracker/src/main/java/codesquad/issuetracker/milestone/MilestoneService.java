@@ -27,8 +27,9 @@ public class MilestoneService {
         Page<Milestone> filteredMilestones = milestoneRepository.findAll(pageable);
         List<Milestone> milestones = filteredMilestones.getContent();
         return MilestoneListResponse.of(milestones.stream()
-            .map(milestone -> MilestoneResponse.of(
-                milestone, countService.fetchIssueCount(milestone.getId()))).toList(), countService.fetchLabelMilestoneCount());
+                .map(milestone -> MilestoneResponse.of(
+                    milestone, countService.fetchIssueCountByMilestone(milestone.getId()))).toList(),
+            countService.fetchLabelMilestoneCount());
 
     }
 
