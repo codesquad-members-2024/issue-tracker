@@ -101,6 +101,16 @@ public class IssueService {
                 .toList();
     }
 
+    public List<LabelSummaryDto> getLabelSummaryDto(long issueId) {
+        Issue issue = getIssueById(issueId);
+        return issue.getIssueAttachedLabels().stream()
+                .map(IssueAttachedLabel::getLabelId)
+                .map(labelRepository::findById)
+                .filter(Optional::isPresent)
+                .map(label -> new LabelSummaryDto(label.get()))
+                .toList();
+    }
+
     private List<LabelResponse> getLabelResponses(Issue issue) {
         return issue.getIssueAttachedLabels().stream()
                 .map(IssueAttachedLabel::getLabelId)

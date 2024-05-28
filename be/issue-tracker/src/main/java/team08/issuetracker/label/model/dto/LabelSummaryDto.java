@@ -1,8 +1,6 @@
 package team08.issuetracker.label.model.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import team08.issuetracker.label.model.Label;
 
 @Getter
