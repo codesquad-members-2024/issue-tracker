@@ -1,6 +1,7 @@
 package codesquad.issuetracker.exception;
 
 import static codesquad.issuetracker.exception.ErrorCode.NOT_FOUND;
+import static codesquad.issuetracker.exception.ErrorCode.OAUTH_FAILD;
 import static codesquad.issuetracker.exception.ErrorCode.PASSWORD_MISMATCH;
 import static codesquad.issuetracker.exception.ErrorCode.TOKEN_EXPIRED;
 import static codesquad.issuetracker.exception.ErrorCode.TOKEN_INVALID;
@@ -44,6 +45,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<String> handleTokenExpiredException() {
         return ResponseEntity.status(TOKEN_EXPIRED.getStatus()).body(TOKEN_EXPIRED.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<String> handleUnauthorizedException() {
+        return ResponseEntity.status(OAUTH_FAILD.getStatus()).body(OAUTH_FAILD.getMessage());
     }
 
 }
