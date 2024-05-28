@@ -11,6 +11,7 @@ public class IssueDetailResponse {
     private final long id;
     private final String title;
     private final String writer;
+    private final boolean state;
     private final String milestoneName;
     private final LocalDateTime timestamp; // 형식 맞추기
     private final List<AssigneeResponse> assignees;
@@ -19,6 +20,7 @@ public class IssueDetailResponse {
     private IssueDetailResponse(long id,
                                 String title,
                                 String writer,
+                                boolean state,
                                 String milestoneName,
                                 LocalDateTime timestamp,
                                 List<AssigneeResponse> assignees,
@@ -26,6 +28,7 @@ public class IssueDetailResponse {
         this.id = id;
         this.title = title;
         this.writer = writer;
+        this.state = state;
         this.milestoneName = milestoneName;
         this.timestamp = timestamp;
         this.assignees = assignees;
@@ -35,11 +38,12 @@ public class IssueDetailResponse {
     public static IssueDetailResponse of(long id,
                                          String title,
                                          String writer,
+                                         boolean state,
                                          String milestoneName,
                                          LocalDateTime timestamp,
                                          List<AssigneeResponse> assignees,
                                          List<LabelResponse> labels) {
 
-        return new IssueDetailResponse(id, title, writer, milestoneName, timestamp, assignees, labels);
+        return new IssueDetailResponse(id, title, writer, state, milestoneName, timestamp, assignees, labels);
     }
 }
