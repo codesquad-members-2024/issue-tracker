@@ -1,8 +1,8 @@
 package com.CodeSquad.IssueTracker.filter;
 
 import com.CodeSquad.IssueTracker.filter.dto.FilterListResponse;
-import com.CodeSquad.IssueTracker.issues.Issue;
 import com.CodeSquad.IssueTracker.issues.IssueService;
+import com.CodeSquad.IssueTracker.issues.dto.IssueListResponse;
 import com.CodeSquad.IssueTracker.labels.LabelService;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
 import com.CodeSquad.IssueTracker.user.UserService;
@@ -36,9 +36,9 @@ public class FilterService {
                 .build();
     }
 
-    public List<Issue> findFilteredIssues(Boolean isClosed, String assignee,
-                                          List<String> labelTitles, String milestoneTitle,
-                                          String author){
-        return customFilterRepository.findFilteredIssues(isClosed, assignee, labelTitles, milestoneTitle, author);
+    public List<IssueListResponse> findFilteredIssues(Boolean isClosed, String assignee,
+                                                      List<String> labelTitles, String milestoneTitle,
+                                                      String author, Long page, Long offset){
+        return customFilterRepository.findFilteredIssues(isClosed, assignee, labelTitles, milestoneTitle, author, page, offset);
     }
 }
