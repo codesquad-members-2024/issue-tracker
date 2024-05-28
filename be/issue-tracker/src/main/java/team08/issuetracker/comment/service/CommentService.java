@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import team08.issuetracker.comment.model.Comment;
 import team08.issuetracker.comment.model.dto.CommentCreationRequest;
 import team08.issuetracker.comment.model.dto.CommentResponse;
+import team08.issuetracker.comment.model.dto.CommentSummaryDto;
 import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
 import team08.issuetracker.comment.repository.CommentRepository;
 import team08.issuetracker.exception.comment.CommentNotFoundException;
+import team08.issuetracker.member.model.Member;
+import team08.issuetracker.member.service.MemberService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,11 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final CommentRepository commentRepository;
+    private final MemberService memberService;
 
-    public long getTotalCommentCounts(long issueId) {
-        return commentRepository.findByIssueId(issueId).size();
-    }
+    private final CommentRepository commentRepository;
 
     @Transactional
     public Comment createComment(CommentCreationRequest commentCreationRequest) {
@@ -51,11 +52,19 @@ public class CommentService {
     }
 
     // 이슈에서 사용
-    public List<CommentResponse> getCommentByIssueId(@PathVariable long issueId) {
+    public List<CommentSummaryDto> getCommentByIssueId(@PathVariable long issueId) {
         List<Comment> comments = getCommentsByIssueId(issueId);
 
         return comments.stream()
-                .map(CommentResponse::from)
+                .map(comment -> {
+                    String imageUrl = memberService.getProfileImageUrl(comment.getWriter());
+                    return new CommentSummaryDto(comment.getWriter(), comment.getContent(), comment.getCreatedAt(), imageUrl);
+                })
                 .collect(Collectors.toList());
+    }
+
+
+    public long getTotalCommentCounts(long issueId) {
+        return commentRepository.findByIssueId(issueId).size();
     }
 }
