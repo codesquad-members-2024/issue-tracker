@@ -2,7 +2,9 @@ package com.CodeSquad.IssueTracker.issues.issueLabel.dto;
 
 import lombok.*;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
 @Builder
 public class LabelRequest {
     private Long labelId;
