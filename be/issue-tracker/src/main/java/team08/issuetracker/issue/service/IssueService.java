@@ -16,6 +16,7 @@ import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountResponse;
 import team08.issuetracker.issue.model.dto.IssueOverviewResponse;
+import team08.issuetracker.issue.model.dto.IssueSummaryDto;
 import team08.issuetracker.issue.model.dto.update.AssigneeResponse;
 import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
@@ -90,7 +91,7 @@ public class IssueService {
                 .orElseThrow(MilestoneIdNotFoundException::new);
     }
 
-    private List<AssigneeResponse> getAssigneeResponses(Issue issue) {
+    public List<AssigneeResponse> getAssigneeResponses(Issue issue) {
         return issue.getAssignees().stream()
                 .map(Assignee::getMemberId)
                 .map(memberRepository::findById)
@@ -106,6 +107,14 @@ public class IssueService {
                 .filter(Optional::isPresent)
                 .map(label -> new LabelResponse(label.get()))
                 .toList();
+    }
+
+    public IssueSummaryDto getIssueSummaryDto(long issueId) {
+        Issue issue = issueRepository
+                .findById(issueId)
+                .orElseThrow(IssueIdNotFoundException::new);
+
+        return IssueSummaryDto.from(issue);
     }
 
     @Transactional
