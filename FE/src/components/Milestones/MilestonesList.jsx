@@ -15,11 +15,11 @@ export function MilestonesList() {
       <MilestonesHeader>
         <StyledBtn onClick={() => setIsOpenMilestones(true)} $active={isOpenMilestones}>
           <OpenIcon />
-          <span>열린 마일스톤(3)</span>
+          <span>열린 마일스톤({milestonesList.length})</span>
         </StyledBtn>
         <StyledBtn onClick={() => setIsOpenMilestones(!isOpenMilestones)} $active={!isOpenMilestones}>
           <ClosedIcon />
-          <span>닫힌 마일스톤(0)</span>
+          <span>닫힌 마일스톤({closedMilestonesList.length})</span>
         </StyledBtn>
       </MilestonesHeader>
       <MilestonesContent milestones={milestonesToDisplay}/>

@@ -17,18 +17,18 @@ export function IssueTableContent({
           .slice()
           .reverse()
           .map((issue, index) => {
-            const { issue_id, title, writer, create_time, labels, milestone } = issue;
+            const { id, title, writer, createTime, labels, milestone } = issue;
             return (
               <Issues key={index}>
                 <Checkbox
                   type="checkbox"
-                  checked={checkedItems.has(issue_id)}
-                  onChange={() => onIssueCheckboxChange(issue_id)}
+                  checked={checkedItems.has(id)}
+                  onChange={() => onIssueCheckboxChange(id)}
                 />
                 <Content>
                   <Top>
                     <StyledOpen />
-                    <StyledLink to={`/issues/${issue_id}`}>
+                    <StyledLink to={`/issues/${id}`}>
                       <div className="title">{title}</div>
                     </StyledLink>
                     <div>
@@ -40,9 +40,9 @@ export function IssueTableContent({
                     </div>
                   </Top>
                   <Bottom>
-                    <div>#{issue_id}</div>
+                    <div>#{id}</div>
                     <div>
-                      이 이슈가 {calculateTime(create_time)},{" "}
+                      이 이슈가 {calculateTime(createTime)},{" "}
                       {writer}님에 의해 작성되었습니다
                     </div>
                     <div>{milestone}</div>
