@@ -1,10 +1,15 @@
 import { CSSProperties, Dispatch, SetStateAction, forwardRef, useState } from "react";
 import styled from "styled-components";
+import useIssueStore from "../../hooks/stores/useIssueStore";
+import { useQueryClient } from "react-query";
 
-type FilterType = "aboutMe" | "assignee" | "label" | "milestone" | "author";
+type FilterBarKeys = "assignee" | "label" | "milestone" | "author";
+
+type FilterType = "aboutMe" | FilterBarKeys;
 
 interface FilterbarProps {
   filterType: FilterType;
+  onClose?: (menu: FilterBarKeys) => void;
   items?: string[] | object[];
   customStyle?: CSSProperties;
 }
@@ -22,79 +27,77 @@ const TITLE_KEY = {
   milestone: "title",
 };
 
-const handleCheckboxChange = (
-  option: string,
-  isChecked: boolean,
-  setCheckedItems: Dispatch<SetStateAction<string[]>>
-) => {
-  setCheckedItems((prev) => (isChecked ? [...prev, option] : prev.filter((item) => item !== option)));
-};
-
-const renderSelectOption = (option: string, handleCheckboxChange: (option: string, isChecked: boolean) => void) => (
-  <SelectOption key={option}>
-    <span>{option}</span>
-    <input type="checkbox" onChange={(e) => handleCheckboxChange(option, e.target.checked)} />
-  </SelectOption>
-);
-
-const getOptionName = (item: string | object, filterType: FilterType): string => {
-  if (typeof item === "string") {
-    return item;
-  }
-
-  switch (filterType) {
-    case "assignee":
-    case "author":
-      return JSON.stringify(item);
-    case "label":
-    case "milestone":
-      return (item as any)[TITLE_KEY[filterType]];
-    default:
-      return "";
-  }
-};
-
-const renderOptions = (
-  filterType: FilterType,
-  items: string[] | object[] | undefined,
-  handleCheckboxChange: (option: string, isChecked: boolean) => void
-) => {
-  if (filterType !== "aboutMe") {
-    return (
-      <ScrollableArea>
-        {renderSelectOption(`${HEADER_NAME[filterType]}이/가 없는 이슈`, handleCheckboxChange)}
-        {items?.map((item, index) => {
-          const optionName = getOptionName(item, filterType);
-          return renderSelectOption(optionName, handleCheckboxChange);
-        })}
-      </ScrollableArea>
-    );
-  }
-
-  return (
-    <>
-      {renderSelectOption("내가 작성한 이슈", handleCheckboxChange)}
-      {renderSelectOption("나에게 할당된 이슈", handleCheckboxChange)}
-      {renderSelectOption("열린 이슈", handleCheckboxChange)}
-      {renderSelectOption("내가 댓글을 남긴 이슈", handleCheckboxChange)}
-      {renderSelectOption("닫힌 이슈", handleCheckboxChange)}
-    </>
-  );
-};
-
 const FilterPopup = forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
+  const client = useQueryClient();
   const { filterType, items, customStyle } = props;
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const { filterText, setFilterText, setIssues, setPage } = useIssueStore();
 
-  const handleChange = (option: string, isChecked: boolean) => {
-    handleCheckboxChange(option, isChecked, setCheckedItems);
+  const handleCheckboxChange = (option: string, { target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
+    if (checked) {
+      const newFilterText = `${filterText} ${filterType}:${option}`;
+
+      setFilterText(newFilterText);
+      setIssues([]);
+      setPage(1);
+      client.invalidateQueries(`issues-1-${newFilterText}`);
+    }
+  };
+
+  const getOptionName = (item: string | object): string => {
+    if (typeof item === "string") return item;
+
+    switch (filterType) {
+      case "assignee":
+      case "author":
+        return JSON.stringify(item);
+      case "label":
+      case "milestone":
+        return (item as any)[TITLE_KEY[filterType]];
+      default:
+        return "";
+    }
+  };
+
+  const renderSelectOption = (option: string) => {
+    return (
+      <SelectOption key={option}>
+        <span>{option}</span>
+        <input
+          type="checkbox"
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCheckboxChange(option, event)}
+        />
+      </SelectOption>
+    );
+  };
+
+  const renderOptions = () => {
+    if (filterType !== "aboutMe") {
+      return (
+        <ScrollableArea>
+          {items?.map((item, index) => {
+            const optionName = getOptionName(item);
+            return renderSelectOption(optionName);
+          })}
+        </ScrollableArea>
+      );
+    }
+
+    return (
+      <>
+        {renderSelectOption("내가 작성한 이슈")}
+        {renderSelectOption("나에게 할당된 이슈")}
+        {renderSelectOption("열린 이슈")}
+        {renderSelectOption("내가 댓글을 남긴 이슈")}
+        {renderSelectOption("닫힌 이슈")}
+      </>
+    );
   };
 
   return (
     <Wrapper ref={ref} customStyle={customStyle} style={customStyle}>
       <div>
         <Header>{HEADER_NAME[filterType]} 필터</Header>
-        {renderOptions(filterType, items, handleChange)}
+        {renderOptions()}
       </div>
     </Wrapper>
   );

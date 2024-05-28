@@ -3,7 +3,7 @@ import useIssueStore from "../stores/useIssueStore";
 import useInfiniteScroll from "@schnee/react-infinite-scroll";
 import { useQuery } from "react-query";
 import { sendIssuesRequest } from "../../api/IssueAPI";
-import { sendFiltersRequest } from "../../api/FilterAPI";
+import { sendFiltersRequest, sendIssuesRequestByFilter } from "../../api/FilterAPI";
 import { useNavigate } from "react-router";
 
 export type IssueType = "open" | "close";
@@ -15,14 +15,25 @@ const MILESTONES_KEY = "milestoneListResponse";
 const USERS_KEY = "userListResponse";
 
 const useIssueListLogic = () => {
-  const { openIssueCount, closeIssueCount, issues, setIssues, setIssueCounts, setLabels, setMilestones, setUsers } =
-    useIssueStore();
+  const {
+    openIssueCount,
+    closeIssueCount,
+    issues,
+    filterText,
+    page,
+    setIssues,
+    setIssueCounts,
+    setLabels,
+    setMilestones,
+    setUsers,
+    setFilterText,
+    setPage
+  } = useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
-  const [page, setPage] = useState(FIRST_PAGE);
   const lastIssueRef = useRef(null);
   const navigate = useNavigate();
 
-  const issueQueryKey = ["issues", { issueType: focusedTab, page }];
+  const issueQueryKey = [`issues-${page}-${filterText}`];
   const fetchNextIssues = () => {
     const maxIssueCount = focusedTab === "open" ? openIssueCount : closeIssueCount;
     if (maxIssueCount > issues.length) {
@@ -42,7 +53,7 @@ const useIssueListLogic = () => {
     enabled: issues.length === 0,
   });
 
-  useQuery(issueQueryKey, () => sendIssuesRequest({ issueType: focusedTab, page }), {
+  useQuery(issueQueryKey, () => sendIssuesRequestByFilter(filterText, page), {
     onSuccess: (data) => setIssues([...issues, ...data]),
     onError: () => navigate("/login"),
     keepPreviousData: true,
@@ -69,6 +80,7 @@ const useIssueListLogic = () => {
     setFocusedTab,
     issues,
     setIssues,
+    setFilterText,
     lastIssueRef,
     filterQuery,
   };

@@ -81,7 +81,12 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
             <img src={arrowBottom} />
           </MenuWrapper>
           {filterbarVisible.assignee && (
-            <FilterPopup ref={filterbarRefs.assignee} filterType="assignee" items={users} />
+            <FilterPopup
+              ref={filterbarRefs.assignee}
+              filterType="assignee"
+              onClose={() => handleRightMenuClick("assignee")}
+              items={users}
+            />
           )}
         </RightMenu>
         <RightMenu>
@@ -89,7 +94,14 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
             <span>레이블</span>
             <img src={arrowBottom} />
           </MenuWrapper>
-          {filterbarVisible.label && <FilterPopup ref={filterbarRefs.label} filterType="label" items={labels} />}
+          {filterbarVisible.label && (
+            <FilterPopup
+              ref={filterbarRefs.label}
+              filterType="label"
+              onClose={() => handleRightMenuClick("label")}
+              items={labels}
+            />
+          )}
         </RightMenu>
         <RightMenu>
           <MenuWrapper onClick={() => handleRightMenuClick("milestone")}>
@@ -97,7 +109,12 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
             <img src={arrowBottom} />
           </MenuWrapper>
           {filterbarVisible.milestone && (
-            <FilterPopup ref={filterbarRefs.milestone} filterType="milestone" items={milestones} />
+            <FilterPopup
+              ref={filterbarRefs.milestone}
+              filterType="milestone"
+              onClose={() => handleRightMenuClick("milestone")}
+              items={milestones}
+            />
           )}
         </RightMenu>
         <RightMenu>
@@ -105,7 +122,14 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
             <span>작성자</span>
             <img src={arrowBottom} />
           </MenuWrapper>
-          {filterbarVisible.author && <FilterPopup ref={filterbarRefs.author} filterType="author" items={users} />}
+          {filterbarVisible.author && (
+            <FilterPopup
+              ref={filterbarRefs.author}
+              filterType="author"
+              onClose={() => handleRightMenuClick("author")}
+              items={users}
+            />
+          )}
         </RightMenu>
       </RightMenus>
     </Wrapper>

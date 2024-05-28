@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { closeIssue, openIssue, sendIssueRequestById, sendTitleEditRequest } from "../../api/IssueAPI";
 import { useParams } from "react-router-dom";
+import { Label, Milestone } from "../stores/useIssueStore";
 
 interface Comment {
   commentId: number;
@@ -15,6 +16,8 @@ interface IssueContent {
   author: string;
   publishedAt: string;
   comments: Comment[];
+  labels: Label[];
+  milestone: Milestone;
   closed: boolean;
 }
 

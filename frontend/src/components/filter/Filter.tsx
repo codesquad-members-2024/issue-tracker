@@ -8,15 +8,20 @@ import { useNavigate } from "react-router-dom";
 import useFilterLogic from "../../hooks/logics/useFilterLogic";
 import { useEffect, useRef, useState } from "react";
 import FilterPopup from "../extension/FilterPopup";
+import useIssueStore from "../../hooks/stores/useIssueStore";
+import { useQueryClient } from "react-query";
 
 const popupPostionStyle = {
-  top: "10.25em",
-  left: "7em",
+  top: "2.25em",
+  left: "0",
 };
 
 function Filter() {
+  const client = useQueryClient();
+  const { page, filterText, setFilterText, setPage, setIssues } = useIssueStore();
   const { labels, milestones } = useFilterLogic();
   const [filterbarVisible, setFilterbarVisible] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
   const aboutMeButtonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -24,6 +29,18 @@ function Filter() {
   const handleClickOutside = ({ target }: Event) => {
     if (aboutMeButtonRef.current && !aboutMeButtonRef.current.contains(target as Node)) setFilterbarVisible(false);
   };
+  const handleInputKeyDown = ({ key }: React.KeyboardEvent<HTMLInputElement>) => {
+    if (key === "Enter" && searchRef.current) {
+      setFilterText(searchRef.current.value);
+      setIssues([]);
+      setPage(1);
+      client.invalidateQueries(`issues-1-${filterText}`);
+    }
+  }
+
+  useEffect(() => {
+    if (searchRef.current) searchRef.current.value = filterText;
+  }, [filterText]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -37,15 +54,14 @@ function Filter() {
       <FilterTab>
         <FilterBox>
           <MyFilterBar onClick={() => handleAboutMeButtonClick()}>
-            <MyFilterTitle>필터</MyFilterTitle>
-            <FilterIcon src={filterClickIcon} />
-            {filterbarVisible && (
-              <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />
-            )}
+            <FilterButtonWrapper>
+              <MyFilterTitle>필터</MyFilterTitle>
+              <FilterIcon src={filterClickIcon} />
+            </FilterButtonWrapper>
           </MyFilterBar>
           <SearchBar>
             <SmallIcon src={searchIcon} />
-            <SearchTitle>is:issue is:open</SearchTitle>
+            <SearchTitle ref={searchRef} required defaultValue={filterText} onKeyDown={handleInputKeyDown} />
           </SearchBar>
         </FilterBox>
         <RightBox>
@@ -66,12 +82,14 @@ function Filter() {
             <span>이슈 작성</span>
           </NewIssueButton>
         </RightBox>
+        {filterbarVisible && <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />}
       </FilterTab>
     </>
   );
 }
 
 const FilterTab = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
   height: 40px;
@@ -92,7 +110,16 @@ const RightBox = styled.div`
 `;
 
 const MyFilterBar = styled.div`
-  width: 5em;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 8em;
+`;
+
+const FilterButtonWrapper = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   padding: 0 1.5em;
   display: flex;
   justify-content: space-between;
@@ -123,9 +150,12 @@ const SmallIcon = styled.img`
   height: 1em;
 `;
 
-const SearchTitle = styled.span`
+const SearchTitle = styled.input`
+  width: 100%;
   height: 1em;
   color: #6e7191;
+  background-color: transparent;
+  border: none;
 `;
 
 const LargeTitle = styled.span`
