@@ -6,9 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface IssueRepository extends CrudRepository<Issue, Long> {
+public interface IssueRepository extends CrudRepository<Issue, Long>, IssueRepositoryCustom {
 
     List<Issue> findAll();
+
+    List<Issue> findAllById(Iterable<Long> ids);
 
     @Modifying
     @Query("update issue set title = :newTitle where id = :issueId")
