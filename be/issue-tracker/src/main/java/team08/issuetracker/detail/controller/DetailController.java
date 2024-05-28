@@ -19,13 +19,11 @@ public class DetailController {
     private final DetailService detailService;
 
     // GET 요청이 /1/detail
-    @GetMapping("{id}/detail")
+    @GetMapping("/{id}")
     ResponseEntity<IssueDetailDto> getIssueDetail(@PathVariable long id) {
 
         IssueDetailDto response = detailService.getIssueDetailResponse(id);
 
         return ResponseEntity.ok(response);
     }
-
-
 }
