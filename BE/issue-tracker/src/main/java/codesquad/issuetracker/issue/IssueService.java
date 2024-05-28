@@ -9,6 +9,7 @@ import codesquad.issuetracker.issue.dto.DetailIssueResponse;
 import codesquad.issuetracker.issue.dto.IssueCreateRequest;
 import codesquad.issuetracker.issue.dto.IssueListResponse;
 import codesquad.issuetracker.issue.dto.IssueResponse;
+import codesquad.issuetracker.issue.dto.IssueTitleRequest;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
 import codesquad.issuetracker.milestone.Milestone;
@@ -89,15 +90,8 @@ public class IssueService {
         return optionalIssue.orElseThrow(NoSuchElementException::new);
     }
 
-    public List<Issue> findByMilestoneId(Long milestoneId) {
-        return issueRepository.findByMilestoneId(milestoneId);
-    }
-
-    public Issue updateTitle(Long issueId, String title) {
-        Issue issue = findById(issueId);
-        issue.updateTitle(title);
-        issueRepository.save(issue);
-        return issue;
+    public void updateTitle(Long issueId, IssueTitleRequest issueTitleRequest) {
+        issueRepository.update(issueId, issueTitleRequest.toEntity());
     }
 
     public void delete(Long issueId) {
