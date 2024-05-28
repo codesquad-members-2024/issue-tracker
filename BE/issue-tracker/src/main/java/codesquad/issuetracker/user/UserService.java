@@ -3,6 +3,7 @@ package codesquad.issuetracker.user;
 import codesquad.issuetracker.exception.UserAlreadyExist;
 import codesquad.issuetracker.exception.UserNotFoundException;
 import codesquad.issuetracker.user.auth.JwtTokenProvider;
+import codesquad.issuetracker.user.dto.SimpleUserResponse;
 import codesquad.issuetracker.user.dto.UserCreateRequest;
 import codesquad.issuetracker.user.dto.UserLoginRequest;
 import codesquad.issuetracker.user.dto.UserResponse;
@@ -10,9 +11,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserService {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -90,5 +93,13 @@ public class UserService {
         return users.stream()
             .map(UserResponse::of)
             .toList();
+    }
+
+    public List<SimpleUserResponse> getSimpleUsersByAssignee(List<String> assignees) {
+        return assignees.stream()
+            .map(this::findById)
+            .map(SimpleUserResponse::from)
+            .toList();
+
     }
 }
