@@ -3,7 +3,9 @@ package team08.issuetracker.issue.model;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -19,20 +21,24 @@ import team08.issuetracker.issue.ref.IssueAttachedLabel;
 @ToString
 @Setter
 @Getter
+@RequiredArgsConstructor
 public class Issue {
     @Id
     private Long id;
     private boolean isOpen; // default : open 수정 할 때 만 클라이언트에서 값 받는다.
-    private final String writer; //Non-Null
+    private String writer; //Non-Null
     private String title; //Non-Null
     private String content;
-    private final String uploadedFile;
+    private String uploadedFile;
     private Long milestoneId;
     private LocalDateTime createdAt;
 
+    // 다대다 관계는 setter를 통해 저장
+    @Setter
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<Assignee> assignees;
 
+    @Setter
     @MappedCollection(idColumn = "ISSUE_ID")
     private Set<IssueAttachedLabel> issueAttachedLabels;
 
@@ -49,15 +55,6 @@ public class Issue {
         this.createdAt = createdAt;
         this.uploadedFile = uploadedFile;
         this.milestoneId = milestoneId;
-    }
-
-    // 다대다 관계는 setter를 통해 저장
-    public void setAssignees(Set<Assignee> assignees) {
-        this.assignees = assignees;
-    }
-
-    public void setIssueAttachedLabels(Set<IssueAttachedLabel> issueAttachedLabels) {
-        this.issueAttachedLabels = issueAttachedLabels;
     }
 
     public void updateTitle(IssueTitleUpdateRequest issueTitleUpdateRequest) {
