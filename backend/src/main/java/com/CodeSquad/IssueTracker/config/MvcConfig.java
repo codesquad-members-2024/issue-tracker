@@ -16,13 +16,13 @@ public class MvcConfig implements WebMvcConfigurer {
         this.jwtUtil = jwtUtil;
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new CheckLoginInterceptor(jwtUtil))
-//            .order(1)
-//            .addPathPatterns("/**")
-//            .excludePathPatterns("/login", "/registration/**");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new CheckLoginInterceptor(jwtUtil))
+            .order(1)
+            .addPathPatterns("/**")
+            .excludePathPatterns("/login", "/registration/**");
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
