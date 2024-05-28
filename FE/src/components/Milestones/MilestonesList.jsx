@@ -1,22 +1,28 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { OpenIcon } from "@/icons/OpenIcon";
 import { MilestonesContent } from "./MilestonesContent";
+import { milestonesList, closedMilestonesList } from "@/test.json"; // test data
 
 export function MilestonesList() {
+  const [isOpenMilestones, setIsOpenMilestones] = useState(true);
+
+  const milestonesToDisplay = isOpenMilestones ? milestonesList : closedMilestonesList;
+
   return (
     <Wrap>
       <MilestonesHeader>
-        <StyledBtn>
+        <StyledBtn onClick={() => setIsOpenMilestones(true)} $active={isOpenMilestones}>
           <OpenIcon />
           <span>열린 마일스톤(3)</span>
         </StyledBtn>
-        <StyledBtn>
+        <StyledBtn onClick={() => setIsOpenMilestones(!isOpenMilestones)} $active={!isOpenMilestones}>
           <ClosedIcon />
           <span>닫힌 마일스톤(0)</span>
         </StyledBtn>
       </MilestonesHeader>
-      <MilestonesContent />
+      <MilestonesContent milestones={milestonesToDisplay}/>
     </Wrap>
   );
 }
@@ -34,7 +40,7 @@ const MilestonesHeader = styled.div`
   height: 60px;
   display: flex;
   align-items: center;
-  margin-left: 35px;
+  margin-left: 20px;
 `;
 
 const StyledBtn = styled.button`
@@ -43,7 +49,7 @@ const StyledBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-
+  font-weight: ${(props) => (props.$active ? "bold" : "normal")};
   span {
     margin-left: 10px;
     font-size: 16px;

@@ -8,7 +8,6 @@ import { MilestonesList } from "./MilestonesList";
 
 export function Milestones() {
   const [showNewMilestones, setShowNewMilestones] = useState(false);
-
   return (
     <>
       <Header />

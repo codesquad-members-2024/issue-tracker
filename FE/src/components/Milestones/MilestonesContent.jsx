@@ -4,10 +4,9 @@ import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
-import { milestonesList } from "@/test.json";
 import { NewMilestones } from "./NewMilestones";
 
-export function MilestonesContent() {
+export function MilestonesContent({ milestones }) {
   const [onEdit, setOnEdit] = useState(false);
   const [selectedMilestones, setSelectedMilestones] = useState(null);
 
@@ -31,10 +30,10 @@ export function MilestonesContent() {
           closeNewMilestones={closeNewMilestones}
         />
       )}
-      {milestonesList.length === 0 ? (
+      {milestones.length === 0 ? (
         <Content />
       ) : (
-        milestonesList.map((milestone) => {
+        milestones.map((milestone) => {
           const {id, description, deadLine, title, countOfClosedIssue, countOfOpenIssue } = milestone;
           
           const totalIssues = countOfClosedIssue + countOfOpenIssue;
