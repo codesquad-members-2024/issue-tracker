@@ -179,7 +179,9 @@ public class IssueService {
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
         List<String> assignees = assigneeService.findUsersByIssueId(issueId);
         List<LabelRequest> labels = issueLabelService.getLabelsByIssueId(issueId);
-        MilestoneInIssue milestoneInIssue = milestoneService.getMilestoneInIssue(issue.getMilestoneId());
+        MilestoneInIssue milestoneInIssue = Optional.ofNullable(issue.getMilestoneId())
+                .map(milestoneService::getMilestoneInIssue)
+                .orElse(null);
 
         return IssueDetailResponse.builder()
                 .issueId(issue.getIssueId())
