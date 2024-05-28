@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import team08.issuetracker.count.dto.LabelMilestoneCountsResponse;
 import team08.issuetracker.label.service.LabelService;
+import team08.issuetracker.milestone.repository.MilestoneRepository;
 import team08.issuetracker.milestone.service.MilestoneService;
 
 @Service

@@ -30,6 +30,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    public String getProfileImageUrl(String memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberIdNotFoundException::new);
+
+        return member.getProfileImage();
+    }
+
     public MemberOverviewResponse findAllMembers() {
         List<MemberPreviewResponse> members = memberRepository.findAll()
                 .stream()
