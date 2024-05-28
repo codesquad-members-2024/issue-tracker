@@ -44,8 +44,9 @@ public class IssueController {
 
         Issue issue = issueService.createNewIssue(issueCreationRequest);
 
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .body(IssueCreationResponse.from(issue));
+        IssueCreationResponse response = IssueCreationResponse.from(issue);
+
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/title")
