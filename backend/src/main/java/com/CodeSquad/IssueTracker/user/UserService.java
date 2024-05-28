@@ -89,8 +89,8 @@ public class UserService {
 //    }
 
     public String authenticate(LoginRequest loginRequest) {
-        String userId = loginRequest.getUserId();
-        String userPassword = loginRequest.getUserPassword();
+        String loginId = loginRequest.getUserId();
+        String loginPassword = loginRequest.getUserPassword();
 
         User userInfo = userRepository.findById(loginId)
                 .orElseThrow(() -> {
@@ -103,7 +103,7 @@ public class UserService {
             throw new InvalidCredentialException("아이디나 비밀번호가 맞지 않습니다.");
         }
 
-        return jwtUtil.generateToken(userId);
+        return jwtUtil.generateToken(loginId);
     }
 
 

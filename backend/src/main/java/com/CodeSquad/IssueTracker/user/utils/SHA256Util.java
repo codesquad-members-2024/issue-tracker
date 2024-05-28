@@ -1,10 +1,14 @@
 package com.CodeSquad.IssueTracker.user.utils;
 
+import com.CodeSquad.IssueTracker.user.User;
+import com.CodeSquad.IssueTracker.user.UserRepository;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 
 public class SHA256Util {
 
@@ -12,12 +16,14 @@ public class SHA256Util {
     private static final String ENCRYPT_ALGORITHM = "SHA-256";
     private static final int SPLIT_SALT = 0;
     private static final int SPLIT_HASH = 1;
+    private static final String PEPPER_STRING = "pepper";
 
 
     public static String encrypt(String password, byte[] salt) {
         try {
             MessageDigest digest = MessageDigest.getInstance(ENCRYPT_ALGORITHM);
             digest.update(salt);
+            digest.update(PEPPER_STRING.getBytes(StandardCharsets.UTF_8));
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(hash);
         } catch (NoSuchAlgorithmException e) {
@@ -43,14 +49,5 @@ public class SHA256Util {
         byte[] salt = Base64.getDecoder().decode(split[SPLIT_SALT]);
         String hash = encrypt(password, salt);
         return hash.equals(split[SPLIT_HASH]);
-    }
-
-    public static void main(String[] args) {
-        String password = "qqwweerr";
-        String saltedHash = getSaltedHash(password);
-        System.out.println(saltedHash);
-        System.out.println(verify(password, saltedHash));
-        System.out.println(verify("qwerqwer", saltedHash));
-        System.out.println(verify("1234", saltedHash));
     }
 }
