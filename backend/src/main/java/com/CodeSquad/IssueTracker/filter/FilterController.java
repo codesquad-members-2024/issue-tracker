@@ -28,7 +28,7 @@ public class FilterController {
 
     @GetMapping("/filters/issues")
     public ResponseEntity<List<IssueListResponse>> getIssues(
-            @RequestParam(value = "isClosed", required = false) Boolean isClosed,
+            @RequestParam(value = "is", required = false) String isClosed,
             @RequestParam(value = "assignee", required = false) String assignee,
             @RequestParam(value = "label", required = false) List<String> labelTitles,
             @RequestParam(value = "milestone", required = false) String milestoneTitle,
