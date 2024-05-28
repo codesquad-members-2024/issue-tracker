@@ -6,12 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import team08.issuetracker.comment.model.Comment;
 import team08.issuetracker.comment.model.dto.CommentCreationRequest;
-import team08.issuetracker.comment.model.dto.CommentResponse;
 import team08.issuetracker.comment.model.dto.CommentSummaryDto;
 import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
 import team08.issuetracker.comment.repository.CommentRepository;
 import team08.issuetracker.exception.comment.CommentNotFoundException;
-import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.service.MemberService;
 
 import java.util.List;
@@ -47,18 +45,18 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public List<Comment> getCommentsByIssueId(long issueId) {
+    private List<Comment> getCommentsByIssueId(long issueId) {
         return commentRepository.findByIssueId(issueId);
     }
 
     // 이슈에서 사용
-    public List<CommentSummaryDto> getCommentByIssueId(@PathVariable long issueId) {
+    public List<CommentSummaryDto> getCommentSummaryDto(long issueId) {
         List<Comment> comments = getCommentsByIssueId(issueId);
 
         return comments.stream()
                 .map(comment -> {
                     String imageUrl = memberService.getProfileImageUrl(comment.getWriter());
-                    return new CommentSummaryDto(comment.getWriter(), comment.getContent(), comment.getCreatedAt(), imageUrl);
+                    return new CommentSummaryDto(comment, imageUrl);
                 })
                 .collect(Collectors.toList());
     }
