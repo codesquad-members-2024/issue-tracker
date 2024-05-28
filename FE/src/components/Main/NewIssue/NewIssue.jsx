@@ -2,8 +2,11 @@ import styled from "styled-components";
 import { Header } from "../IssuesList/Header";
 import { RightPanel } from "../IssueDetail/RightPanel";
 import { CommonBtnStyles } from "@/styles/commonStyles";
+import { useNavigate } from "react-router-dom";
 
 export function NewIssue() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -19,7 +22,7 @@ export function NewIssue() {
         <RightPanel />
       </MainContent>
       <Buttons>
-        <CancelBtn>x 작성취소</CancelBtn>
+        <CancelBtn onClick={() => navigate(-1)}>x 작성취소</CancelBtn>
         <SummitBtn>완료</SummitBtn>
       </Buttons>
     </>
