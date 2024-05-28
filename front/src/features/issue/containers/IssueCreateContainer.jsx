@@ -30,8 +30,23 @@ function issueReducer(state, action) {
 export function IssueCreateContainer() {
 	const navigate = useNavigate();
 	const [state, dispatch] = useReducer(issueReducer, initialState);
+	const [check, checkDispatch] = useCheckList();
+	console.log(check);
 	function getAssignees(assignees) {
-		console.log(assignees);
+		console.log(assignees); //나쁜코드
+	}
+
+	function newIssue() {
+		const issue = {
+			title: state.title,
+			content: state.content,
+			milestoneId: null,
+			issueAssignees: [],
+			issueLabels: [],
+		};
+		postIssueDetail(issue).then(id => {
+			navigate(`/issue/${id}`);
+		});
 	}
 	return (
 		<StyledWrapper>

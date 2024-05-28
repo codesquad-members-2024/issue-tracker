@@ -12,9 +12,9 @@ export function Dropdowns({ dropdownTitle = '', children, className }) {
 const StyledWrapper = styled.div`
 	position: absolute;
 	z-index: 10;
-	top: 100px;
 	min-width: 240px;
-
+	top: 56px;
+	right: 10px;
 	border: 1px solid ${theme.color.neutral.border.default};
 	border-radius: ${theme.radius.large};
 	overflow: hidden;

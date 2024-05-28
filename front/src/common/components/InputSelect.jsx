@@ -6,8 +6,8 @@ export function InputSelect({
 	listName,
 	value,
 	src,
-	bgColor = null,
-	fontColor = null,
+	bgColor,
+	fontColor,
 	checked,
 	onChange,
 	defaultChecked,
@@ -35,6 +35,7 @@ export function InputSelect({
 				defaultChecked={defaultChecked}
 				data-src={src}
 				data-bgcolor={bgColor}
+				data-textcolor={fontColor}
 			/>
 		</StyledLabel>
 	);

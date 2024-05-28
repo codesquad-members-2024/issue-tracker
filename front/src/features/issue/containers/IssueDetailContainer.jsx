@@ -271,7 +271,12 @@ export function IssueDetailContainer() {
 						</StyledNewComment>
 					</section>
 					<aside>
-						<IssueAside id={id} list={issueDetail.assignees} />
+						<IssueAside
+							id={id}
+							list={issueDetail?.assignees}
+							labels={issueDetail?.labels}
+							// miles={issueDetail?.milestone}
+						/>
 						<div className='right-align'>
 							<Button
 								type='button'
