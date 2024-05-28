@@ -13,6 +13,7 @@ import team08.issuetracker.milestone.model.dto.MilestoneCountResponse;
 import team08.issuetracker.milestone.model.dto.MilestoneCreationRequest;
 import team08.issuetracker.milestone.model.dto.MilestoneDetailResponse;
 import team08.issuetracker.milestone.model.dto.MilestoneOverviewResponse;
+import team08.issuetracker.milestone.model.dto.MilestoneSummaryDto;
 import team08.issuetracker.milestone.model.dto.MilestoneUpdateRequest;
 import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.milestone.repository.MilestoneRepository;
@@ -34,6 +35,18 @@ public class MilestoneService {
 
     public long getTotalMilestoneCounts() {
         return milestoneRepository.count();
+    }
+
+    public MilestoneSummaryDto getMilestoneSummaryDto(long id) {
+        String name = milestoneRepository.findById(id)
+                .orElseThrow(MilestoneIdNotFoundException::new)
+                .getName();
+
+        IssueCountDto countDto = issueCountService.getCounts(id);
+
+        double progress = countDto.getMilestoneProgress();
+
+        return new MilestoneSummaryDto(name, progress);
     }
 
     @Transactional
