@@ -9,6 +9,6 @@ import lombok.*;
 public class LabelRequest {
     private Long labelId;
     private String labelName;
-    private String textColor;
     private String bgColor;
+    private String textColor;
 }
