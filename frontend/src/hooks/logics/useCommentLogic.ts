@@ -3,6 +3,7 @@ import useUserStore from "../stores/useUserStore";
 import { useRef, useState } from "react";
 import { useParams } from "react-router";
 import { postNewComment, sendIssueRequestById } from "../../api/IssueAPI";
+import { Label, Milestone } from "../stores/useIssueStore";
 
 interface Comment {
   commentId: number;
@@ -12,10 +13,14 @@ interface Comment {
 }
 
 export interface IssueContent {
+  issueId: number;
   title: string;
   author: string;
   publishedAt: string;
   comments: Comment[];
+  labels: Label[];
+  milestone: Milestone | null;
+  assignees: string[];
   closed: boolean;
 }
 

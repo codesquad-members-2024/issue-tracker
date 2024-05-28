@@ -1,16 +1,12 @@
 import { create } from "zustand";
 
-export interface LabelResponse {
-  labelId: number;
-}
-
 export interface Headline {
   issueId: number;
   title: string;
   author: string;
   publishedAt: string;
   isClosed: boolean;
-  labels: LabelResponse[];
+  labels: Label[];
   milestoneId: number | null;
 }
 
@@ -22,13 +18,15 @@ interface IssueCounts {
 export interface Label {
   labelId: number;
   labelName: string;
-  labelBgColor: string;
-  labelTextColor: string;
+  bgColor: string;
+  textColor: string;
 }
 
 export interface Milestone {
   milestoneId: number;
   title: string;
+  totalIssue?: number;
+  closedIssue?: number;
 }
 
 interface IssueStoreState {

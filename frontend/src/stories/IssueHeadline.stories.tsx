@@ -32,9 +32,15 @@ IssueDetail.args = {
   labels: [
     {
       labelId: 1,
+      labelName: "bug",
+      bgColor: "#000000",
+      textColor: "#FFFFFF",
     },
     {
       labelId: 2,
+      labelName: "feature",
+      bgColor: "#0000FF",
+      textColor: "#FFFFFF",
     },
   ],
   milestoneId: 1,

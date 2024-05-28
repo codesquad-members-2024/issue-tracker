@@ -34,9 +34,13 @@ function Filter() {
       setFilterText(searchRef.current.value);
       setIssues([]);
       setPage(1);
-      client.invalidateQueries(`issues-${page}-${filterText}`);
+      client.invalidateQueries(`issues-1-${filterText}`);
     }
   }
+
+  useEffect(() => {
+    if (searchRef.current) searchRef.current.value = filterText;
+  }, [filterText]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

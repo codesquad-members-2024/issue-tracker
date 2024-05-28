@@ -6,14 +6,11 @@ import milestoneIcon from "../../../img/icon/milestoneIcon.svg";
 import dateUtils from "../../../utils/DateUtils";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import useIssueStore, { Headline, Label, LabelResponse, Milestone } from "../../../hooks/stores/useIssueStore";
+import useIssueStore, { Headline, Label, Milestone } from "../../../hooks/stores/useIssueStore";
 
-const matchedLabels = (labels: Label[], labelResponses: LabelResponse[]) =>
-  labels.filter((label) => labelResponses.some((response) => response.labelId === label.labelId));
-
-const renderLabels = (labels: Label[], labelResponses: LabelResponse[]) =>
-  matchedLabels(labels, labelResponses).map(({ labelName, labelBgColor, labelTextColor }) => (
-    <LabelBox labelBgColor={labelBgColor} labelTextColor={labelTextColor}>
+const renderLabels = (labels: Label[]) =>
+  labels.map(({ labelName, bgColor, textColor }) => (
+    <LabelBox bgColor={bgColor} textColor={textColor}>
       {labelName}
     </LabelBox>
   ));
@@ -40,12 +37,12 @@ const IssueHeadline = React.forwardRef<HTMLDivElement, Headline>((props, ref) =>
         <IssueTitleDescription>
           <img src={isClosed ? violetClosedIssueIcon : blueOpenedIssueIcon} />
           <TitleText onClick={() => navigate(`/issue/${issueId}`)}>{title}</TitleText>
-          {renderLabels(labels, labelResponses)}
+          {renderLabels(labelResponses)}
         </IssueTitleDescription>
         <IssueInfo>
           <span>#{issueId}</span>
           <span>{`이 이슈가 ${dateUtils.parseTimeDifference(publishedAt)}, ${author}님에 의해 작성되었습니다.`}</span>
-          {milestoneId && renderMilestone(milestones, milestoneId) || ""}
+          {(milestoneId && renderMilestone(milestones, milestoneId)) || ""}
         </IssueInfo>
       </IssueDescriptions>
       <UserIconContainer>
@@ -91,16 +88,16 @@ const TitleText = styled.a`
   cursor: pointer;
 `;
 
-const LabelBox = styled.div<{ labelBgColor: string; labelTextColor: string }>`
+const LabelBox = styled.div<{ bgColor: string; textColor: string }>`
   height: 1.5em;
   padding: 0 0.75em;
   font-size: 0.75em;
   display: flex;
   align-items: center;
-  border: 1px solid ${({ labelBgColor }) => labelBgColor};
+  border: 1px solid ${({ bgColor }) => bgColor};
   border-radius: 1em;
-  background-color: ${({ labelBgColor }) => labelBgColor};
-  color: ${({ labelTextColor }) => labelTextColor};
+  background-color: ${({ bgColor }) => bgColor};
+  color: ${({ textColor }) => textColor};
 `;
 
 const IssueInfo = styled.div`

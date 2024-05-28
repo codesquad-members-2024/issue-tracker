@@ -7,7 +7,7 @@ import useCommentLogic from "../../../hooks/logics/useCommentLogic";
 
 function DetailContent() {
   const { issueContent, commentRef, isCommentSubmitable, handleCommentChange, handleCommentSubmit } = useCommentLogic();
-  const { author, comments } = issueContent || {};
+  const { author, comments, labels: labelResponses, milestone, assignees } = issueContent || {};
 
   return (
     <ContentWrapper>
@@ -23,7 +23,7 @@ function DetailContent() {
           <img src={plusIcon} /> 코멘트 작성
         </SubmitButton>
       </CommentWrapper>
-      <Sidebar />
+      <Sidebar assignees={assignees} labelResponses={labelResponses} milestone={milestone} />
     </ContentWrapper>
   );
 }
