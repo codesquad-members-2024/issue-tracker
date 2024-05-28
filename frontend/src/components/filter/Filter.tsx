@@ -10,8 +10,8 @@ import { useEffect, useRef, useState } from "react";
 import FilterPopup from "../extension/FilterPopup";
 
 const popupPostionStyle = {
-  top: "10.25em",
-  left: "7em",
+  top: "2.25em",
+  left: "0",
 };
 
 function Filter() {
@@ -37,11 +37,10 @@ function Filter() {
       <FilterTab>
         <FilterBox>
           <MyFilterBar onClick={() => handleAboutMeButtonClick()}>
-            <MyFilterTitle>필터</MyFilterTitle>
-            <FilterIcon src={filterClickIcon} />
-            {filterbarVisible && (
-              <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />
-            )}
+            <FilterButtonWrapper>
+              <MyFilterTitle>필터</MyFilterTitle>
+              <FilterIcon src={filterClickIcon} />
+            </FilterButtonWrapper>
           </MyFilterBar>
           <SearchBar>
             <SmallIcon src={searchIcon} />
@@ -66,12 +65,14 @@ function Filter() {
             <span>이슈 작성</span>
           </NewIssueButton>
         </RightBox>
+        {filterbarVisible && <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />}
       </FilterTab>
     </>
   );
 }
 
 const FilterTab = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
   height: 40px;
@@ -92,7 +93,16 @@ const RightBox = styled.div`
 `;
 
 const MyFilterBar = styled.div`
-  width: 5em;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 8em;
+`;
+
+const FilterButtonWrapper = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   padding: 0 1.5em;
   display: flex;
   justify-content: space-between;
