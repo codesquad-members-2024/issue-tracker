@@ -1,5 +1,6 @@
 import { CSSProperties, Dispatch, SetStateAction, forwardRef, useState } from "react";
 import styled from "styled-components";
+import useIssueStore from "../../hooks/stores/useIssueStore";
 
 type FilterType = "aboutMe" | "assignee" | "label" | "milestone" | "author";
 
@@ -30,12 +31,16 @@ const handleCheckboxChange = (
   setCheckedItems((prev) => (isChecked ? [...prev, option] : prev.filter((item) => item !== option)));
 };
 
-const renderSelectOption = (option: string, handleCheckboxChange: (option: string, isChecked: boolean) => void) => (
-  <SelectOption key={option}>
-    <span>{option}</span>
-    <input type="checkbox" onChange={(e) => handleCheckboxChange(option, e.target.checked)} />
-  </SelectOption>
-);
+const renderSelectOption = (option: string, filterType: FilterType) => {
+  // const {} = useIssueStore();
+
+  return (
+    <SelectOption key={option}>
+      <span>{option}</span>
+      <input type="checkbox" />
+    </SelectOption>
+  );
+};
 
 const getOptionName = (item: string | object, filterType: FilterType): string => {
   if (typeof item === "string") {
@@ -56,16 +61,15 @@ const getOptionName = (item: string | object, filterType: FilterType): string =>
 
 const renderOptions = (
   filterType: FilterType,
-  items: string[] | object[] | undefined,
-  handleCheckboxChange: (option: string, isChecked: boolean) => void
+  items: string[] | object[] | undefined
 ) => {
   if (filterType !== "aboutMe") {
     return (
       <ScrollableArea>
-        {renderSelectOption(`${HEADER_NAME[filterType]}이/가 없는 이슈`, handleCheckboxChange)}
+        {renderSelectOption(`${HEADER_NAME[filterType]}이/가 없는 이슈`, filterType)}
         {items?.map((item, index) => {
           const optionName = getOptionName(item, filterType);
-          return renderSelectOption(optionName, handleCheckboxChange);
+          return renderSelectOption(optionName, filterType);
         })}
       </ScrollableArea>
     );
@@ -73,11 +77,11 @@ const renderOptions = (
 
   return (
     <>
-      {renderSelectOption("내가 작성한 이슈", handleCheckboxChange)}
-      {renderSelectOption("나에게 할당된 이슈", handleCheckboxChange)}
-      {renderSelectOption("열린 이슈", handleCheckboxChange)}
-      {renderSelectOption("내가 댓글을 남긴 이슈", handleCheckboxChange)}
-      {renderSelectOption("닫힌 이슈", handleCheckboxChange)}
+      {renderSelectOption("내가 작성한 이슈", filterType)}
+      {renderSelectOption("나에게 할당된 이슈", filterType)}
+      {renderSelectOption("열린 이슈", filterType)}
+      {renderSelectOption("내가 댓글을 남긴 이슈", filterType)}
+      {renderSelectOption("닫힌 이슈", filterType)}
     </>
   );
 };
@@ -94,7 +98,7 @@ const FilterPopup = forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
     <Wrapper ref={ref} customStyle={customStyle} style={customStyle}>
       <div>
         <Header>{HEADER_NAME[filterType]} 필터</Header>
-        {renderOptions(filterType, items, handleChange)}
+        {renderOptions(filterType, items)}
       </div>
     </Wrapper>
   );

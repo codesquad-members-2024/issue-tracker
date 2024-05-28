@@ -45,7 +45,7 @@ const IssueHeadline = React.forwardRef<HTMLDivElement, Headline>((props, ref) =>
         <IssueInfo>
           <span>#{issueId}</span>
           <span>{`이 이슈가 ${dateUtils.parseTimeDifference(publishedAt)}, ${author}님에 의해 작성되었습니다.`}</span>
-          {milestoneId && renderMilestone(milestones, milestoneId)}
+          {milestoneId && renderMilestone(milestones, milestoneId) || ""}
         </IssueInfo>
       </IssueDescriptions>
       <UserIconContainer>

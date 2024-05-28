@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import useFilterLogic from "../../hooks/logics/useFilterLogic";
 import { useEffect, useRef, useState } from "react";
 import FilterPopup from "../extension/FilterPopup";
+import useIssueStore from "../../hooks/stores/useIssueStore";
+import { useQueryClient } from "react-query";
 
 const popupPostionStyle = {
   top: "2.25em",
@@ -15,8 +17,11 @@ const popupPostionStyle = {
 };
 
 function Filter() {
+  const client = useQueryClient();
+  const { page, filterText, setFilterText, setPage, setIssues } = useIssueStore();
   const { labels, milestones } = useFilterLogic();
   const [filterbarVisible, setFilterbarVisible] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
   const aboutMeButtonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -24,6 +29,14 @@ function Filter() {
   const handleClickOutside = ({ target }: Event) => {
     if (aboutMeButtonRef.current && !aboutMeButtonRef.current.contains(target as Node)) setFilterbarVisible(false);
   };
+  const handleInputKeyDown = ({ key }: React.KeyboardEvent<HTMLInputElement>) => {
+    if (key === "Enter" && searchRef.current) {
+      setFilterText(searchRef.current.value);
+      setIssues([]);
+      setPage(1);
+      client.invalidateQueries(`issues-${page}-${filterText}`);
+    }
+  }
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -44,7 +57,7 @@ function Filter() {
           </MyFilterBar>
           <SearchBar>
             <SmallIcon src={searchIcon} />
-            <SearchTitle>is:issue is:open</SearchTitle>
+            <SearchTitle ref={searchRef} required defaultValue={filterText} onKeyDown={handleInputKeyDown} />
           </SearchBar>
         </FilterBox>
         <RightBox>
@@ -133,9 +146,12 @@ const SmallIcon = styled.img`
   height: 1em;
 `;
 
-const SearchTitle = styled.span`
+const SearchTitle = styled.input`
+  width: 100%;
   height: 1em;
   color: #6e7191;
+  background-color: transparent;
+  border: none;
 `;
 
 const LargeTitle = styled.span`
