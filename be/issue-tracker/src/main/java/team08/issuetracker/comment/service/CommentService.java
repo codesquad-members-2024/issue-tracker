@@ -20,6 +20,10 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
+    public long getTotalCommentCounts(long issueId) {
+        return commentRepository.findByIssueId(issueId).size();
+    }
+
     @Transactional
     public Comment createComment(CommentCreationRequest commentCreationRequest) {
         // 1) DTO -> Entity 변환
