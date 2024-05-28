@@ -14,6 +14,7 @@ import com.CodeSquad.IssueTracker.issues.issueLabel.dto.LabelRequest;
 import com.CodeSquad.IssueTracker.labels.LabelService;
 import com.CodeSquad.IssueTracker.milestone.Milestone;
 import com.CodeSquad.IssueTracker.milestone.MilestoneService;
+import com.CodeSquad.IssueTracker.milestone.dto.MilestoneInIssue;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneResponse;
 import com.CodeSquad.IssueTracker.user.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -176,9 +177,9 @@ public class IssueService {
         Issue issue = findIssueById(issueId);
 
         List<CommentResponse> comments = commentRepository.findByIssueId(issueId);
-
         List<String> assignees = assigneeService.findUsersByIssueId(issueId);
         List<LabelRequest> labels = issueLabelService.getLabelsByIssueId(issueId);
+        MilestoneInIssue milestoneInIssue = milestoneService.getMilestoneInIssue(issue.getMilestoneId());
 
         return IssueDetailResponse.builder()
                 .issueId(issue.getIssueId())
@@ -189,7 +190,7 @@ public class IssueService {
                 .comments(comments)
                 .assignees(assignees)
                 .labels(labels)
-                .milestone(issue.getMilestoneId())
+                .milestone(milestoneInIssue)
                 .build();
     }
     public void validateIssueListPage(long page) {

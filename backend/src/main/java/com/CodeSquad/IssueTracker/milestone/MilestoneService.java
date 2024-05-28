@@ -2,6 +2,7 @@ package com.CodeSquad.IssueTracker.milestone;
 
 import com.CodeSquad.IssueTracker.Exception.milestone.InvalidMilestoneRequestException;
 import com.CodeSquad.IssueTracker.Exception.milestone.MilestoneNotFoundException;
+import com.CodeSquad.IssueTracker.milestone.dto.MilestoneInIssue;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneListResponse;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneRequest;
 import com.CodeSquad.IssueTracker.milestone.dto.MilestoneResponse;
@@ -172,5 +173,9 @@ public class MilestoneService {
     public void decrementClosedIssue(Long milestoneId){
         getMilestoneById(milestoneId);
         milestoneRepository.decrementClosedIssue(milestoneId);
+    }
+
+    public MilestoneInIssue getMilestoneInIssue(long issueId) {
+        return milestoneRepository.getMilestoneInIssueById(issueId);
     }
 }
