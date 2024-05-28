@@ -31,6 +31,7 @@ import team08.issuetracker.issue.repository.AssigneeRepository;
 import team08.issuetracker.issue.repository.IssueAttachedLabelRepository;
 import team08.issuetracker.issue.repository.IssueRepository;
 import team08.issuetracker.label.model.dto.LabelResponse;
+import team08.issuetracker.label.model.dto.LabelSummaryDto;
 import team08.issuetracker.label.repository.LabelRepository;
 import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.repository.MemberRepository;
@@ -89,7 +90,12 @@ public class IssueService {
 
         return milestoneRepository.findById(milestoneId)
                 .map(Milestone::getName)
-                .orElseThrow(MilestoneIdNotFoundException::new);
+                .orElse(null);
+    }
+
+    public List<AssigneeResponse> getAssigneeDto(long issueId) {
+        Issue issue = getIssueById(issueId);
+        return getAssigneeResponses(issue);
     }
 
     public List<AssigneeResponse> getAssigneeResponses(Issue issue) {
