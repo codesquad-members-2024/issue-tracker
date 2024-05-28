@@ -4,6 +4,7 @@ import { Comment } from "./Comment";
 import { RightPanel } from "./RightPanel";
 import { calculateTime } from "@/utils/calculateTime";
 import { issues } from "@/test.json";
+import { Header } from "../IssuesList/Header";
 
 export function IssueDetail() {
   const { idx } = useParams();
@@ -12,7 +13,8 @@ export function IssueDetail() {
 
   return (
     <>
-      <Header>
+      <Header />
+      <StyledHeader>
         <Title>
           {selectedIssue.title}
           <IssueNumber>#{idx}</IssueNumber>
@@ -23,7 +25,7 @@ export function IssueDetail() {
             이 이슈가 {elapsedTime}에 {selectedIssue.writer}에 의해 열렸습니다.
           </div>
         </Info>
-      </Header>
+      </StyledHeader>
       <MainContent>
         <Comment selectedIssue={selectedIssue} elapsedTime={elapsedTime} />
         <RightPanel />
@@ -32,8 +34,8 @@ export function IssueDetail() {
   );
 }
 
-const Header = styled.header`
-  padding: 50px 0 25px;
+const StyledHeader = styled.header`
+  padding-bottom: 25px;
   border-bottom: solid #dadbe9;
   margin: 0 100px;
 `;

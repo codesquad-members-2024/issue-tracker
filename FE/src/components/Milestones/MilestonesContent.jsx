@@ -1,59 +1,90 @@
 import styled from "styled-components";
+import { useState } from "react";
 import { EditIcon } from "@/icons/EditIcon";
 import { TrashIcon } from "@/icons/TrashIcon";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
 import { CalendarOutlined } from "@ant-design/icons";
 import { milestonesList } from "@/test.json";
+import { NewMilestones } from "./NewMilestones";
 
 export function MilestonesContent() {
-  const progress = (1 / 2) * 100; // (닫힌 이슈 / 모든 이슈)
+  const [onEdit, setOnEdit] = useState(false);
+  const [selectedMilestones, setSelectedMilestones] = useState(null);
+
+  const handleEditMilestones = (label) => {
+    setOnEdit(true);
+    setSelectedMilestones(label);
+  };
+
+  const closeNewMilestones = () => {
+    setOnEdit(false);
+    setSelectedMilestones(null);
+  };
 
   return (
     <>
+      {onEdit && (
+        <NewMilestones
+          actionType="updateMilestones"
+          milestoneId={selectedMilestones?.id}
+          initialData={selectedMilestones}
+          closeNewMilestones={closeNewMilestones}
+        />
+      )}
       {milestonesList.length === 0 ? (
         <Content />
       ) : (
-        milestonesList.map((milestone) => (
-          <Content key={milestone.id}>
-            <StyledDescript>
-              <div className="top">
-                <div className="milestone">
-                  <StyledMilestonesIcon />
-                  <span>{milestone.title}</span>
+        milestonesList.map((milestone) => {
+          const {id, description, deadLine, title, countOfClosedIssue, countOfOpenIssue } = milestone;
+          
+          const totalIssues = countOfClosedIssue + countOfOpenIssue;
+          const progress = totalIssues === 0 ? 0 : (countOfClosedIssue / totalIssues) * 100;
+
+          return (
+            <Content key={id}>
+              <StyledDescript>
+                <div className="top">
+                  <div className="milestone">
+                    <StyledMilestonesIcon />
+                    <span>{title}</span>
+                  </div>
+                  <div className="deadLine">
+                    <CalendarOutlined />
+                    <span>{deadLine}</span>
+                  </div>
                 </div>
-                <div className="deadLine">
-                  <CalendarOutlined />
-                  <span>{milestone.deadLine}</span>
-                </div>
+                <div className="description">{description}</div>
+              </StyledDescript>
+              <div className="right">
+                <Buttons>
+                  <Button>
+                    <ClosedIcon />
+                    <div>닫기</div>
+                  </Button>
+                  <Button onClick={() => handleEditMilestones(milestone)}>
+                    <EditIcon />
+                    <div>편집</div>
+                  </Button>
+                  <Button className="delete">
+                    <TrashIcon />
+                    <div>삭제</div>
+                  </Button>
+                </Buttons>
+                <StyledProgress>
+                  <div className="progressBar">
+                    <StyledProgressBar $progress={progress}></StyledProgressBar>
+                  </div>
+                  <div className="element">
+                    <div>{progress.toFixed()}%</div>
+                    <div>열린 이슈 {countOfOpenIssue}</div>
+                    <div>닫힌 이슈 {countOfClosedIssue}</div>
+                  </div>
+                </StyledProgress>
               </div>
-              <div className="description">{milestone.description}</div>
-            </StyledDescript>
-            <div className="right">
-              <Buttons>
-                <Button>
-                  <ClosedIcon /><span>닫기</span>
-                </Button>
-                <Button>
-                  <EditIcon /><span>편집</span>
-                </Button>
-                <Button className="delete">
-                  <TrashIcon /><span>삭제</span>
-                </Button>
-              </Buttons>
-              <StyledProgress>
-                <div className="progressBar">
-                  <StyledProgressBar $progress={progress}></StyledProgressBar>
-                </div>
-                <div className="element">
-                  <span>{progress}%</span>
-                  <span>열린 이슈 0</span>
-                  <span>닫힌 이슈 0</span>
-                </div>
-              </StyledProgress>
-            </div>
-          </Content>
-        ))
+            </Content>
+          );
+        })
       )}
     </>
   );
@@ -94,10 +125,10 @@ const Buttons = styled.div`
 
 const Button = styled.button`
   display: flex;
-  align-items: center;
   background: none;
   border: none;
-  span {
+  cursor: pointer;
+  div {
     margin-left: 10px;
   }
 `;
@@ -118,8 +149,8 @@ const StyledProgress = styled.div`
   .element {
     display: flex;
     margin-top: 10px;
-    cursor: pointer;
     justify-content: space-between;
+    font-size: 14px;
   }
 `;
 

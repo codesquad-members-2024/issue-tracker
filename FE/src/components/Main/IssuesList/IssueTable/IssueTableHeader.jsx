@@ -21,7 +21,9 @@ const headerFilters = [
   { id: "author", label: "작성자", items: authorPopupItems },
 ];
 
-export function IssueTableHeader({ checkedCount, isChecked, onCheckedChange }) {
+export function IssueTableHeader(props) {
+  const { checkedCount, isChecked, onCheckedChange, isOpenIssues, setIsOpenIssues, openIssueCount, closedIssueCount } = props;
+  // openIssueCount, closedIssueCount 삭제 예정 ?
   const handleChecked = () => onCheckedChange(!isChecked);
 
   return (
@@ -47,13 +49,13 @@ export function IssueTableHeader({ checkedCount, isChecked, onCheckedChange }) {
       ) : (
         <Wrap>
           <Left>
-            <StyledIssueBtn>
+            <StyledIssueBtn onClick={() => setIsOpenIssues(true)} $active={isOpenIssues}>
               <OpenIcon />
-              <div className="open">열린 이슈(3)</div>
+              <div className="open">열린 이슈({openIssueCount})</div>
             </StyledIssueBtn>
-            <StyledIssueBtn>
+            <StyledIssueBtn onClick={() => setIsOpenIssues(!isOpenIssues)} $active={!isOpenIssues}>
               <ClosedIcon />
-              <div className="closed">닫힌 이슈(0)</div>
+              <div className="closed">닫힌 이슈({closedIssueCount})</div>
             </StyledIssueBtn>
           </Left>
           <Right>
@@ -92,6 +94,8 @@ const Left = styled.div`
 
 const StyledIssueBtn = styled.div`
   display: flex;
+  cursor: pointer;
+  font-weight: ${(props) => (props.$active ? "bold" : "normal")};
   div {
     margin-left: 10px;
   }

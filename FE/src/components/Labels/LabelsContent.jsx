@@ -10,12 +10,9 @@ export function LabelsContent(props) {
   const [onEdit, setOnEdit] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(null);
 
-  if (loading) return <h1>LOADING...</h1>;
-  if (error) console.log(error);
-
   const handleDelete = async (labelId) => {
     await deleteData(labelId);
-    fetchData(); 
+    fetchData();
   };
 
   const handleEdit = (label) => {
@@ -31,9 +28,11 @@ export function LabelsContent(props) {
   return (
     <Wrap>
       <LabelsHeader>{labels?.countsOfLabels}개의 레이블</LabelsHeader>
+      {loading && <h1>LOADING...</h1>}
+      {error && <h1>{error}</h1>}
       {onEdit && (
         <NewLabels
-          type="edit"
+          actionType="updateLabels"
           labelId={selectedLabel?.id}
           initialData={selectedLabel}
           {...{ closeNewLabels, fetchData, putData, deleteData }}
@@ -43,28 +42,31 @@ export function LabelsContent(props) {
         {labels?.countsOfLabels === 0 ? (
           <Content />
         ) : (
-          labels?.labelList.map((label) => (
-            <Content key={label.id}>
-              <div className="label">
-                <StyledLabel $backcolor={label.color} color={label.fontColor}>
-                  {label.title}
-                </StyledLabel>
-              </div>
-              <div className="description">
-                <div>{label.description}</div>
-              </div>
-              <Buttons>
-                <Button onClick={() => handleEdit(label)}>
-                  <EditIcon />
-                  <div>편집</div>
-                </Button>
-                <Button className="delete" onClick={() => handleDelete(label.id)}>
-                  <TrashIcon />
-                  <div>삭제</div>
-                </Button>
-              </Buttons>
-            </Content>
-          ))
+          labels?.labelList.map((label) => {
+            const { id, title, description, color, fontColor } = label;
+            return (
+              <Content key={id}>
+                <div className="label">
+                  <StyledLabel $backcolor={color} color={fontColor}>
+                    {title}
+                  </StyledLabel>
+                </div>
+                <div className="description">
+                  <div>{description}</div>
+                </div>
+                <Buttons>
+                  <Button onClick={() => handleEdit(label)}>
+                    <EditIcon />
+                    <div>편집</div>
+                  </Button>
+                  <Button className="delete" onClick={() => handleDelete(id)}>
+                    <TrashIcon />
+                    <div>삭제</div>
+                  </Button>
+                </Buttons>
+              </Content>
+            );
+          })
         )}
       </LabelsList>
     </Wrap>
