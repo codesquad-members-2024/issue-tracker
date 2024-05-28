@@ -182,6 +182,18 @@ public class IssueService {
     }
 
     @Transactional
+    public Set<Long> updateMultipleIssueStateToOpen(Set<Long> ids) {
+        ids.forEach(this::updateIssueStateToOpen);
+        return ids;
+    }
+
+    @Transactional
+    public Set<Long> updateMultipleIssueStateToClose(Set<Long> ids) {
+        ids.forEach(this::updateIssueStateToClose);
+        return ids;
+    }
+
+    @Transactional
     public Issue updateIssueStateToOpen(Long id) {
         Issue issue = getIssueById(id);
 
