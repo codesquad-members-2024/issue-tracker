@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team08.issuetracker.exception.issue.IssueIdNotFoundException;
 import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
 import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
+import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountDto;
+import team08.issuetracker.issue.repository.IssueRepository;
 import team08.issuetracker.issue.service.IssueCountService;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.model.dto.MilestoneCountResponse;
@@ -28,6 +31,7 @@ public class MilestoneService {
 
     private final IssueCountService issueCountService;
 
+    private final IssueRepository issueRepository;
     private final MilestoneRepository milestoneRepository;
 
     private static final String OPEN_STATE_QUERY = "opened";
@@ -38,9 +42,16 @@ public class MilestoneService {
     }
 
     public MilestoneSummaryDto getMilestoneSummaryDto(long id) {
-        String name = milestoneRepository.findById(id)
-                .orElseThrow(MilestoneIdNotFoundException::new)
-                .getName();
+
+        Issue issue = issueRepository.findById(id)
+                .orElseThrow(IssueIdNotFoundException::new);
+
+        Long milestoneId = issue.getMilestoneId();
+
+        String name = milestoneRepository
+                .findById(milestoneId)
+                .map(Milestone::getName)
+                .orElse(null);
 
         IssueCountDto countDto = issueCountService.getCounts(id);
 
@@ -53,7 +64,8 @@ public class MilestoneService {
     public MilestoneOverviewResponse getAllMilestonesWithCounts(String state) {
         boolean openState = convertStateQueryToOpenState(state);
 
-        List<MilestoneDetailResponse> milestoneDetailResponses = milestoneRepository.getAllMilestonesByOpenState(openState)
+        List<MilestoneDetailResponse> milestoneDetailResponses = milestoneRepository.getAllMilestonesByOpenState(
+                        openState)
                 .stream()
                 .map(this::mapToDetailResponse)
                 .collect(Collectors.toList());
