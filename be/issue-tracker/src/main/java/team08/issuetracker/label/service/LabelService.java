@@ -17,6 +17,10 @@ import java.util.stream.Collectors;
 public class LabelService {
     private final LabelRepository labelRepository;
 
+    public long getTotalMilestoneCounts() {
+        return labelRepository.count();
+    }
+
     public LabelListWithCountResponse getLabelsWithCount() {
         LabelCountResponse labelCount = fetchLabelCount();
 

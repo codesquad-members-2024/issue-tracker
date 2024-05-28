@@ -32,6 +32,10 @@ public class MilestoneService {
     private static final String OPEN_STATE_QUERY = "opened";
     private static final String CLOSE_STATE_QUERY = "closed";
 
+    public long getTotalMilestoneCounts() {
+        return milestoneRepository.count();
+    }
+
     @Transactional
     public MilestoneOverviewResponse getAllMilestonesWithCounts(String state) {
         boolean openState = convertStateQueryToOpenState(state);
