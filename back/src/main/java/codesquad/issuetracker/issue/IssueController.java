@@ -178,13 +178,8 @@ public class IssueController {
     }
 
     @GetMapping("/issues/filter")
-    public ResponseEntity<List<IssueShowDto>> filter(@ModelAttribute IssueQueryParamsDto queryParams) {
-        List<Issue> filteredIssues = issueService.getFilteredIssues(
-                queryParams.getAssigneeIds(),
-                queryParams.getLabelIds(),
-                queryParams.getMilestoneId(),
-                queryParams.getWriter()
-        );
+    public ResponseEntity<List<IssueShowDto>> filter(@ModelAttribute IssueFilterDto issueFilterDto) {
+        List<Issue> filteredIssues = issueService.getFilteredIssues(issueFilterDto);
         return ResponseEntity
                 .ok(filteredIssues.stream()
                         .map(issue -> new IssueShowDto(
