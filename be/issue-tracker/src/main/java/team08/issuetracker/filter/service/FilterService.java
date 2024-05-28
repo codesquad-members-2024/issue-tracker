@@ -8,10 +8,8 @@ import team08.issuetracker.filter.model.dto.FilteredIssueResponse;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueDetailResponse;
 import team08.issuetracker.issue.model.dto.update.AssigneeResponse;
-import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.label.model.Label;
 import team08.issuetracker.label.model.dto.LabelResponse;
-import team08.issuetracker.member.model.Member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +17,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FilterService {
-    private final JdbcTemplate jdbcTemplate;
-
     private static final String labelQuery = "SELECT label.id, label.name, label.background_color, label.description, label.text_bright " +
             "FROM issue " +
             "JOIN issue_attached_label ON issue.id = issue_attached_label.issue_id " +
@@ -33,17 +29,18 @@ public class FilterService {
             "JOIN member ON assignee.member_id = member.member_id " +
             "WHERE issue.id = ?";
 
+    private final JdbcTemplate jdbcTemplate;
+
     public FilteredIssueResponse getFilteredIssues(FilteredIssueRequest request) {
-        List<IssueDetailResponse> responses = new ArrayList<>();
+        List<IssueDetailResponse> detailIssues = new ArrayList<>();
 
         List<Issue> issues = getIssuesFromQuery(request.toQuery());
-        System.out.println(request.toQuery());
 
         for (Issue issue : issues) {
             List<LabelResponse> labels = getIssueAttachedLabels(issue.getId());
             List<AssigneeResponse> assignees = getAssignees(issue.getId());
 
-            IssueDetailResponse response = IssueDetailResponse.of(
+            IssueDetailResponse detailIssue = IssueDetailResponse.of(
                     issue.getId(),
                     issue.getTitle(),
                     issue.getWriter(),
@@ -53,10 +50,10 @@ public class FilterService {
                     assignees,
                     labels
             );
-            responses.add(response);
+            detailIssues.add(detailIssue);
         }
 
-        return new FilteredIssueResponse(responses);
+        return new FilteredIssueResponse(detailIssues);
     }
 
 
@@ -103,6 +100,5 @@ public class FilterService {
                 }
         );
     }
-
 
 }

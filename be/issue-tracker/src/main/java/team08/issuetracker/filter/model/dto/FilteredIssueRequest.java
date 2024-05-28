@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class FilteredIssueRequest {
     private final String target;
     private final String state;
-    private final String author;
+    private final String writer;
     private final String assignee;
     private final String commenter;
 
@@ -26,9 +26,9 @@ public class FilteredIssueRequest {
             query.append(" WHERE is_open = ").append(state.equalsIgnoreCase("open"));
             hasCondition = true;
         }
-        if (author != null) {
+        if (writer != null) {
             query.append(hasCondition ? " AND " : " WHERE ");
-            query.append("writer = '").append(author).append("'");
+            query.append("writer = '").append(writer).append("'");
             hasCondition = true;
         }
         if (assignee != null) {
