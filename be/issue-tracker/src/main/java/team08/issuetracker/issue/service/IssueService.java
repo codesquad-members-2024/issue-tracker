@@ -32,6 +32,7 @@ import team08.issuetracker.issue.repository.IssueAttachedLabelRepository;
 import team08.issuetracker.issue.repository.IssueRepository;
 import team08.issuetracker.label.model.dto.LabelResponse;
 import team08.issuetracker.label.repository.LabelRepository;
+import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.repository.MemberRepository;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.repository.MilestoneRepository;
@@ -114,7 +115,14 @@ public class IssueService {
                 .findById(issueId)
                 .orElseThrow(IssueIdNotFoundException::new);
 
-        return IssueSummaryDto.from(issue);
+        //memberService.getImageUrl 로 변경 예정
+        Member member = memberRepository
+                .findById(issue.getWriter())
+                .orElseThrow(MemberIdNotFoundException::new);
+
+        String profileImage = member.getProfileImage();
+
+        return IssueSummaryDto.from(issue, profileImage);
     }
 
     @Transactional

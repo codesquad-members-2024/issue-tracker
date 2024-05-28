@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import team08.issuetracker.detail.dto.IssueDetailDto;
 import team08.issuetracker.detail.service.DetailService;
 
 @Slf4j
@@ -18,14 +19,12 @@ public class DetailController {
     private final DetailService detailService;
 
     // GET 요청이 /1/detail
-    @GetMapping("{id}")
-    ResponseEntity<?> getIssueDetail(@PathVariable long id) {
+    @GetMapping("{id}/detail")
+    ResponseEntity<IssueDetailDto> getIssueDetail(@PathVariable long id) {
 
+        IssueDetailDto response = detailService.getIssueDetailResponse(id);
 
-        // Response response = detailService.getIssueDetail();
-
-
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(response);
     }
 
 
