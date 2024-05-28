@@ -1,9 +1,11 @@
 import { useReducer } from 'react';
 import { checkItemArray, toggleItemInArray } from '../../../utils/util';
+import { useIssueDetail, useIssueStatus } from '~/features/issue/hooks';
 
-export function useCheckList() {
+export function useCheckList(id) {
+	const { issueDetail } = useIssueDetail(id);
 	const initialCheck = {
-		selectedAssignees: [],
+		selectedAssignees: issueDetail?.assignees ? [...issueDetail.assignees] : [],
 		selectedLabels: [],
 		selectedMilestone: null,
 	};

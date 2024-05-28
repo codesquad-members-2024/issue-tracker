@@ -39,6 +39,7 @@ function checkItemArray(array, value) {
 
 // ! Refactor
 export function toggleItemInArray(array, item, key) {
+	if (!array || !item || !key) return;
 	return array.some(arrayItem => arrayItem[key] === item[key])
 		? array.filter(arrayItem => arrayItem[key] !== item[key])
 		: [...array, item];

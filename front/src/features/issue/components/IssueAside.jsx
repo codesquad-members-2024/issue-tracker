@@ -1,47 +1,65 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useRef, useReducer } from 'react';
 import { IconPlus } from '~/common/icons';
-import { Dropdowns } from '~/common/components';
 import { PopoverAssignee, Assignee } from '~/features/issue/components';
 import { useCheckList } from '~/features/issue/hooks';
 
-export function IssueAside({ ...props }) {
-	const [check, dispatchCheck] = useCheckList();
+function listArrayReducer(state, action) {
+	switch (action.type) {
+		case 'UPDATE':
+			return action.payload;
+		default:
+			throw new Error();
+	}
+}
 
-	const [isOpen, setIsOpen] = useState({
-		assignee: false,
-		label: false,
-		milestone: false,
-	});
-	console.log('check.selectedAssignees', check.selectedAssignees);
-	// 셀렉트박스 체크 여부
+export function IssueAside({ id, list, ...props }) {
+	const [check, dispatchCheck] = useCheckList(id);
+	const listArray = useRef(list ? [...list] : []);
+	const [, forceUpdate] = useReducer(listArrayReducer, []);
+	useEffect(() => {
+		listArray.current = list ? [...list] : [];
+		forceUpdate({ type: 'UPDATE', payload: listArray.current });
+	}, [list]);
 	const onChangeAssignee = e => {
-		const { value, dataset } = e.target;
+		const { value, dataset, checked } = e.target;
+		const newAssignee = {
+			loginId: value,
+			profileImage: dataset.src,
+		};
+
+		if (checked) {
+			listArray.current = [...listArray.current, newAssignee];
+		} else {
+			listArray.current = listArray.current.filter(
+				assignee => assignee.loginId !== value
+			);
+		}
+
+		// Force a re-render
+		forceUpdate({ type: 'UPDATE', payload: listArray.current });
+
 		dispatchCheck({
 			type: 'setAssignees',
-			payload: {
-				loginId: value,
-				profileImage: dataset.src,
-			},
+			payload: newAssignee,
 		});
 	};
-	const toggleOpen = target =>
-		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
 
 	return (
 		<StyledWrapper {...props}>
 			<StyledSideItem>
-				<StyledTitleWrapper onClick={() => toggleOpen('assignee')}>
+				<StyledTitleWrapper onClick={() => {}}>
 					<StyledTitle>담당자</StyledTitle>
 					<IconPlus />
 					<PopoverAssignee
 						dropdownTitle='담당자 설정'
 						type='checkbox'
 						onChange={onChangeAssignee}
+						checkedItems={listArray.current.map(assignee => assignee.loginId)}
 					/>
 				</StyledTitleWrapper>
 				<StyledContent>
-					{check.selectedAssignees?.map((assignee, index) => (
+					{listArray.current.map((assignee, index) => (
 						<Assignee key={index} assignee={assignee} />
 					))}
 				</StyledContent>
@@ -49,6 +67,7 @@ export function IssueAside({ ...props }) {
 		</StyledWrapper>
 	);
 }
+
 const StyledWrapper = styled.div`
 	width: 288px;
 	border: 1px solid ${({ theme }) => theme.color.neutral.border.default};
@@ -58,16 +77,12 @@ const StyledWrapper = styled.div`
 const StyledSideItem = styled.div`
 	position: relative;
 	padding: 32px;
-	min-height: 88px;
+	height: 410px;
 	align-items: flex-start;
 	border-bottom: 1px solid ${({ theme }) => theme.color.neutral.border.default};
 	&:last-child {
 		border-bottom: none;
 	}
-`;
-const StyledDropdown = styled(Dropdowns)`
-	top: 70px;
-	right: 0;
 `;
 
 const StyledTitleWrapper = styled.div`
@@ -81,6 +96,7 @@ const StyledTitle = styled.h4`
 `;
 const StyledContent = styled.div`
 	margin-top: 16px;
+	height: 100px;
 	.label {
 		margin-bottom: 8px;
 		&:last-child {

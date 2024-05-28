@@ -2,19 +2,27 @@ import styled from 'styled-components';
 import { Dropdowns } from '~/common/components';
 import { InputSelectGroup } from '~/common/components';
 import { useUser } from '~/common/hooks';
-export function PopoverAssignee({ dropdownTitle, type, onChange, ...props }) {
+
+export function PopoverAssignee({
+	dropdownTitle,
+	type,
+	onChange,
+	checkedItems,
+	...props
+}) {
 	const { userList } = useUser();
+
 	return (
 		<StyledWrapper {...props}>
 			<Dropdowns dropdownTitle={dropdownTitle}>
-				{userList?.map(user => (
+				{userList?.map((user, index) => (
 					<InputSelectGroup
-						key={user.loginId}
+						key={index}
 						type={type}
 						listName='assignee'
 						value={user.loginId}
 						src={user.profileImage}
-						// checked={false}
+						checked={checkedItems.includes(user.loginId)}
 						onChange={onChange}
 					/>
 				))}
@@ -22,6 +30,7 @@ export function PopoverAssignee({ dropdownTitle, type, onChange, ...props }) {
 		</StyledWrapper>
 	);
 }
+
 const StyledWrapper = styled.div`
 	padding: 0;
 `;

@@ -3,7 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from '../../../styles/theme';
 
-import { useIssueDetail, useIssueStatus } from '~/features/issue/hooks';
+import {
+	useIssueDetail,
+	useIssueStatus,
+	useCheckList,
+} from '~/features/issue/hooks';
 import { Button, InputTitleEdit } from '~/common/components';
 import {
 	IconEdit,
@@ -29,6 +33,10 @@ export function IssueDetailContainer() {
 
 	const { issueDetail, loading, error, fetchIssueDetail } = useIssueDetail(id);
 	const { onOpenIssue, onCloseIssue, onDeleteIssue } = useIssueStatus();
+	useEffect(() => {
+		fetchIssueDetail();
+	}, []);
+	const [check, dispatchCheck] = useCheckList(id);
 
 	const [isClosed, setIsClosed] = useState(issueDetail?.closed);
 	useEffect(() => {
@@ -263,7 +271,7 @@ export function IssueDetailContainer() {
 						</StyledNewComment>
 					</section>
 					<aside>
-						<IssueAside />
+						<IssueAside id={id} list={issueDetail.assignees} />
 						<div className='right-align'>
 							<Button
 								type='button'

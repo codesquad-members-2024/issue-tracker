@@ -23,12 +23,10 @@ import { getAuth } from '../../../common/apis';
 
 export function IssueListViewContainer() {
 	const { Search } = Input;
-	const {
-		issueList,
-		loading: issueLoading,
-		error: issueError,
-	} = useIssueList();
-
+	const { issueList, loading, error, fetchIssueList } = useIssueList();
+	useEffect(() => {
+		fetchIssueList();
+	}, []);
 	const [issue, setIssue] = useState([]);
 
 	const { labelList, loading: labelLoading, fetchLabelList } = useLabelList();
@@ -52,6 +50,7 @@ export function IssueListViewContainer() {
 
 	// TODO: 검색어를 이용한 이슈 필터링
 	const onSearch = queryString => {
+		console.log(queryString);
 		navigate(`/issues?search=${queryString}`);
 	};
 

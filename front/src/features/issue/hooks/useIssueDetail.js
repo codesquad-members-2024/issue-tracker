@@ -3,10 +3,11 @@ import { getIssueDetail } from '~/features/issue/apis/getIssueDetail';
 
 export const useIssueDetail = id => {
 	const [issueDetail, setIssueDetail] = useState({});
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
 	const fetchIssueDetail = async () => {
+		setLoading(true);
 		try {
 			const data = await getIssueDetail(id);
 			setIssueDetail(data);
@@ -16,9 +17,6 @@ export const useIssueDetail = id => {
 			setLoading(false);
 		}
 	};
-	useEffect(() => {
-		fetchIssueDetail();
-	}, [id]);
 
 	return { issueDetail, loading, error, fetchIssueDetail };
 };
