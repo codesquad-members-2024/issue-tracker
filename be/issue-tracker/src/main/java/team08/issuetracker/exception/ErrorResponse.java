@@ -7,7 +7,7 @@ import lombok.Getter;
 public class ErrorResponse {
     private final String errorMessage;
 
-    public ErrorResponse(Exception e) {
+    public ErrorResponse(RuntimeException e) {
         this.errorMessage = e.getMessage();
     }
 
