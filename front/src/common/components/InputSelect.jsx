@@ -15,7 +15,7 @@ export function InputSelect({
 	...props
 }) {
 	return (
-		<StyledLabel {...props} className='input-select'>
+		<StyledLabel {...props} className='input-select' htmlFor={id}>
 			<span>
 				{src === null ? (
 					<StyledIconUser />

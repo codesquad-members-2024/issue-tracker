@@ -6,7 +6,8 @@ import { theme } from '../../../styles/theme';
 import {
 	useIssueDetail,
 	useIssueStatus,
-	useCheckList,
+	useUpdateAssignee,
+	useUpdateLabel,
 } from '~/features/issue/hooks';
 import { useCheck } from '../context/CheckProvider';
 import { Button, InputTitleEdit } from '~/common/components';
@@ -34,11 +35,17 @@ export function IssueDetailContainer() {
 
 	const { issueDetail, loading, error, fetchIssueDetail } = useIssueDetail(id);
 	const { onOpenIssue, onCloseIssue, onDeleteIssue } = useIssueStatus();
+	const { onAddAssignee, onDeleteAssignee } = useUpdateAssignee();
+	const { onAddLabel, onDeleteLabel } = useUpdateLabel();
 
 	useEffect(() => {
 		fetchIssueDetail();
 	}, []);
+
 	const { check, checkDispatch } = useCheck();
+
+	// console.log(check);
+
 	const [isClosed, setIsClosed] = useState(issueDetail?.closed);
 	useEffect(() => {
 		setIsClosed(issueDetail?.closed);
@@ -273,10 +280,14 @@ export function IssueDetailContainer() {
 					</section>
 					<aside>
 						<IssueAside
-							id={id}
+							issueId={id}
 							list={issueDetail?.assignees}
 							labels={issueDetail?.labels}
 							// miles={issueDetail?.milestone}
+							onAddAssignee={onAddAssignee}
+							onDeleteAssignee={onDeleteAssignee}
+							onAddLabel={onAddLabel}
+							onDeleteLabel={onDeleteLabel}
 						/>
 						<div className='right-align'>
 							<Button

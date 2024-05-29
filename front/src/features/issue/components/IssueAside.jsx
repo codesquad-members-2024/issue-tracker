@@ -27,7 +27,16 @@ function lableArrayReducer(state, action) {
 	}
 }
 
-export function IssueAside({ id, list, labels, ...props }) {
+export function IssueAside({
+	issueId,
+	list,
+	labels,
+	onAddAssignee,
+	onDeleteAssignee,
+	onAddLabel,
+	onDeleteLabel,
+	...props
+}) {
 	const { check, checkDispatch } = useCheck();
 	const listArray = useRef(list ? [...list] : []);
 	const lableArray = useRef(labels ? [...labels] : []);
@@ -100,6 +109,56 @@ export function IssueAside({ id, list, labels, ...props }) {
 			payload: newLabel,
 		});
 	};
+
+	useEffect(() => {
+		if (list && listArray.current) {
+			console.log('unmount');
+			const addedAssignees = listArray.current.filter(
+				assignee => !list.some(item => item.loginId === assignee.loginId)
+			);
+			const removedAssignees = list.filter(
+				assignee =>
+					!listArray.current.some(item => item.loginId === assignee.loginId)
+			);
+
+			if (addedAssignees.length > 0) {
+				onAddAssignee(
+					issueId,
+					addedAssignees.map(assignee => assignee.loginId)
+				);
+			}
+			if (removedAssignees.length > 0) {
+				onDeleteAssignee(
+					issueId,
+					removedAssignees.map(assignee => assignee.loginId)
+				);
+			}
+		}
+	}, [list, listArray.current]);
+
+	useEffect(() => {
+		if (labels && lableArray.current) {
+			const addedLabels = lableArray.current.filter(
+				label => !labels.some(item => item.name === label.name)
+			);
+			const removedLabels = labels.filter(
+				label => !lableArray.current.some(item => item.name === label.name)
+			);
+
+			if (addedLabels.length > 0) {
+				onAddLabel(
+					issueId,
+					addedLabels.map(label => label.id)
+				);
+			}
+			if (removedLabels.length > 0) {
+				onDeleteLabel(
+					issueId,
+					removedLabels.map(label => label.id)
+				);
+			}
+		}
+	}, [labels, lableArray.current]);
 
 	return (
 		<StyledWrapper {...props}>

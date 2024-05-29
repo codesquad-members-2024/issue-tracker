@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
-import { checkItemArray, toggleItemInArray } from '../../../utils/util';
-import { useIssueDetail, useIssueStatus } from '~/features/issue/hooks';
+import { toggleItemInArray } from '../../../utils/util';
+import { useIssueDetail } from '~/features/issue/hooks';
 
 export function useCheckList(id) {
 	const { issueDetail } = useIssueDetail(id);

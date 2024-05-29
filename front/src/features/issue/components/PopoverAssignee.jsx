@@ -17,6 +17,7 @@ export function PopoverAssignee({
 			<Dropdowns dropdownTitle={dropdownTitle}>
 				{userList?.map((user, index) => (
 					<InputSelectGroup
+						id={user.loginId}
 						key={index}
 						type={type}
 						listName='assignee'
