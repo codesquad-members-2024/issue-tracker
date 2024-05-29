@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../common/Button";
-import SideBar from "./SideBar";
+import SideBar from "../common/SideBar";
 import TextArea from "../common/TextArea";
 import IssueInput from "../common/IssueInput";
 import { useState, useRef } from "react";
