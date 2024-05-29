@@ -1,30 +1,83 @@
 import styled from "styled-components";
-import { ContentNavStyles } from "@/styles/commonStyles";
-import { useState } from "react";
+import { CommonBtnStyles } from "@/styles/commonStyles";
+import { useReducer, useEffect } from "react";
 
-export function NewMilestones({ actionType, closeNewMilestones }) {
-  const [milestoneName, setMilestonsName] = useState("");
+const initialState = {
+  milestoneTitle: "",
+  milestoneDeadline: "",
+  milestoneDescription: "",
+};
+
+const milestoneReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_MILESTONE_TITLE":
+      return { ...state, milestoneTitle: action.payload };
+    case "SET_MILESTONE_DEADLINE":
+      return { ...state, milestoneDeadline: action.payload };
+    case "SET_MILESTONE_DESCRIPTION":
+      return { ...state, milestoneDescription: action.payload };
+    case "SET_INITIAL_MILESTONE":
+      return {
+        ...state,
+        milestoneTitle: action.payload.title,
+        milestoneDeadline: action.payload.deadline,
+        milestoneDescription: action.payload.description,
+      };
+    default:
+      return state;
+  }
+};
+
+export function NewMilestones(props) {
+  const { postData, fetchData, putData, actionType, milestoneId, initialData, closeNewMilestones } = props;
+
+  const [state, dispatch] = useReducer(milestoneReducer, initialState);
+  const { milestoneTitle, milestoneDeadline, milestoneDescription } = state;
+
+  useEffect(() => {
+    if (actionType === "updateMilestones" && initialData) {
+      dispatch({ type: "SET_INITIAL_MILESTONE", payload: initialData });
+    }
+  }, [initialData]);
+
+  const handleSubmit = async () => {
+    const NewMilestone = {
+      title: milestoneTitle,
+      deadline: milestoneDeadline,
+      description: milestoneDescription,
+    };
+
+    actionType === "createMilestones" ? await postData(NewMilestone) : await putData(milestoneId, NewMilestone);
+    closeNewMilestones();
+    fetchData();
+  };
 
   return (
     <>
       <Wrap $actionType={actionType}>
-        <h3>{actionType === "createMilestones" ? "새로운 마일스톤 추가" : "마일스톤 편집"}</h3>
+        <h3>{actionType === "createMilestones" ? "새로운 마일스톤 추가": "마일스톤 편집"}</h3>
         <Content>
           <MilestonesDescript>
             <StyledTop>
               <TopMilestonesWrapper>
-                <label htmlFor="name">이름</label>
+                <label htmlFor="title">이름</label>
                 <input
                   type="text"
-                  id="name"
-                  value={milestoneName}
+                  id="title"
+                  value={milestoneTitle}
                   placeholder="마일스톤의 이름을 입력하세요"
-                  onChange={(e) => setMilestonsName(e.target.value)}
+                  onChange={(e) =>dispatch({ type: "SET_MILESTONE_TITLE", payload: e.target.value })}
                 />
               </TopMilestonesWrapper>
               <TopMilestonesWrapper>
                 <label htmlFor="deadline">완료일(선택)</label>
-                <input type="text" id="deadline" placeholder="YYYY-MM-DD" />
+                <input
+                  type="text"
+                  id="deadline"
+                  value={milestoneDeadline}
+                  placeholder="YYYY-MM-DD"
+                  onChange={(e) =>dispatch({ type: "SET_MILESTONE_DEADLINE", payload: e.target.value })}
+                />
               </TopMilestonesWrapper>
             </StyledTop>
             <MilestonesWrapper>
@@ -32,26 +85,27 @@ export function NewMilestones({ actionType, closeNewMilestones }) {
               <input
                 type="text"
                 id="description"
+                value={milestoneDescription}
                 placeholder="마일스톤에 대한 설명을 입력하세요"
+                onChange={(e) =>dispatch({ type: "SET_MILESTONE_DESCRIPTION", payload: e.target.value })}
               />
             </MilestonesWrapper>
           </MilestonesDescript>
         </Content>
         <Buttons>
           <CancelButton onClick={closeNewMilestones}>x 취소</CancelButton>
-          <CompleteButton>+ 완료</CompleteButton>
+          <CompleteButton onClick={handleSubmit}>+ 완료</CompleteButton>
         </Buttons>
       </Wrap>
     </>
   );
 }
 
-
-
-
 const Wrap = styled.div`
-  margin: ${(props) => (props.$actionType === "updateMilestones" ? "0" : "20px 100px")};
-  border: ${(props) => (props.$actionType === "updateMilestones" ? "none" : "solid #dadbef")};
+  margin: ${(props) =>
+    props.$actionType === "updateMilestones" ? "0" : "20px 100px"};
+  border: ${(props) =>
+    props.$actionType === "updateMilestones" ? "none" : "solid #dadbef"};
   height: 330px;
   display: flex;
   border-radius: 10px;
@@ -106,21 +160,22 @@ const Buttons = styled.div`
   gap: 20px;
 `;
 
-const CancelButton = styled.div`
-  ${ContentNavStyles}
+const CancelButton = styled.button`
+  ${CommonBtnStyles}
   background-color: unset;
   color: #007bff;
-  border-radius: 10px;
   border: solid #007bff;
   width: 120px;
+  font-size: 16px;
   height: 40px;
 `;
 
-const CompleteButton = styled.div`
-  ${ContentNavStyles}
+const CompleteButton = styled.button`
+  ${CommonBtnStyles}
   background-color: #007bff;
   color: white;
-  border-radius: 10px;
+  border: none;
   width: 120px;
   height: 40px;
+  font-size: 16px;
 `;

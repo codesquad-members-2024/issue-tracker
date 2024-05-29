@@ -3,32 +3,37 @@ import { EditIcon } from "@/icons/EditIcon";
 import { SmileIcon } from "@/icons/SmileIcon";
 import { NewComment } from "./NewComment";
 
-export function Comment({ selectedIssue, elapsedTime }) {
+export function Comment({ issueWriter, selectedIssue, elapsedTime }) {
   return (
     <Wrap>
-      <StyledComment>
-        <Header>
-          <Info>
-            <img src="/img/frog.png" />
-            <div>{selectedIssue.writer}</div>
-            <div>{elapsedTime}</div>
-          </Info>
-          <Buttons>
-            <div className="writer">작성자</div>
-            <StyledCommentButton>
-              <EditIcon />
-              <div>편집</div>
-            </StyledCommentButton>
-            <StyledCommentButton>
-              <SmileIcon />
-              <div>반응</div>
-            </StyledCommentButton>
-          </Buttons>
-        </Header>
-        <Content>
-          <div> </div>
-        </Content>
-      </StyledComment>
+      {selectedIssue.comments.map((comment, index) => {
+        const { writer, contents } = comment;
+        return (
+          <StyledComment key={index}>
+            <Header>
+              <Info>
+                <img alt="frog" src="/img/frog.png" />
+                <div>{writer}</div>
+                <div>{elapsedTime}</div>
+              </Info>
+              <Buttons>
+              {issueWriter === writer ? <div className="writer">작성자</div> : null}
+                <StyledCommentButton>
+                  <EditIcon />
+                  <div>편집</div>
+                </StyledCommentButton>
+                <StyledCommentButton>
+                  <SmileIcon />
+                  <div>반응</div>
+                </StyledCommentButton>
+              </Buttons>
+            </Header>
+            <Content>
+              <div>{contents}</div>
+            </Content>
+          </StyledComment>
+        );
+      })}
       <NewComment />
     </Wrap>
   );

@@ -6,9 +6,12 @@ import { NavTabs } from "../common/NavTabs";
 import { NewMilestones } from "./NewMilestones";
 import { MilestonesList } from "./MilestonesList";
 
-export function Milestones() {
-  const [showNewMilestones, setShowNewMilestones] = useState(false);
+// const { VITE_SERVER } = import.meta.env;
+// const MILESTONES_API = "/api/milestones";
 
+export function Milestones() {
+  // const { state: milestones, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${VITE_SERVER}${MILESTONES_API}`);
+  const [showNewMilestones, setShowNewMilestones] = useState(false);
   return (
     <>
       <Header />
@@ -20,11 +23,14 @@ export function Milestones() {
       </Nav>
       {showNewMilestones && (
         <NewMilestones
+          // {...{ fetchData, postData }}
           closeNewMilestones={() => setShowNewMilestones(false)}
           actionType="createMilestones"
         />
       )}
-      <MilestonesList />
+      <MilestonesList
+        // {...{ milestones, loading, error, fetchData, putData, deleteData }}
+      />
     </>
   );
 }
