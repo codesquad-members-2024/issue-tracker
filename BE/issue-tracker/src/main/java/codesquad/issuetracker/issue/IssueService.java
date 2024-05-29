@@ -12,6 +12,7 @@ import codesquad.issuetracker.issue.dto.IssueResponse;
 import codesquad.issuetracker.issue.dto.IssueTitleRequest;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelService;
+import codesquad.issuetracker.label.dto.SimpleLabelResponse;
 import codesquad.issuetracker.milestone.Milestone;
 import codesquad.issuetracker.milestone.MilestoneService;
 import codesquad.issuetracker.milestone.dto.SimpleMilestoneResponse;
@@ -42,7 +43,7 @@ public class IssueService {
 
     public IssueListResponse findIssuesByState(State state) {
         List<Issue> issues = issueRepository.findAllByState(state);
-        return IssueListResponse.of(issues.stream().map(issue -> IssueResponse.of(issue, findLabelNameByIssueId(issue.getId()),
+        return IssueListResponse.of(issues.stream().map(issue -> IssueResponse.of(issue, findLabelByIssueId(issue.getId()),
                 milestoneService.findById(issue.getMilestoneId().getId()))).toList(), countService.fetchLabelMilestoneCount(),
             countService.fetchIssueCount());
     }
@@ -106,9 +107,9 @@ public class IssueService {
         return comment;
     }
 
-    public List<String> findLabelNameByIssueId(Long issueId) {
+    public List<SimpleLabelResponse> findLabelByIssueId(Long issueId) {
         Issue issue = findById(issueId);
-        return issue.getLabelRefs().stream().map(IssueAttachedLabel::getLabelId).map(labelService::findById).map(Label::getName)
-            .toList();
+        return issue.getLabelRefs().stream().map(IssueAttachedLabel::getLabelId).map(labelService::findById)
+            .map(SimpleLabelResponse::from).toList();
     }
 }
