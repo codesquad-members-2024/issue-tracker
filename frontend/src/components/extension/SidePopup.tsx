@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { Label, Milestone } from "../../hooks/stores/useIssueStore";
+import { updateAssigneesInIssue, updateLabelsInIssue, updateMilestoneInIssue } from "../../api/IssueAPI";
+import { useParams } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { CreatorContext } from "../../contexts/CreatorContext";
 
 type PopupType = "assignee" | "label" | "milestone";
+type SidebarType = "new-issue" | "detail";
 
 interface SidePopupProps {
   popupType: PopupType;
-  items?: string[] | object[];
+  sidebarType: SidebarType;
+  items?: string[] | Label[] | Milestone[];
+  selectedItems: string[] | Label[] | Milestone[];
 }
 
 const HEADER_NAME = {
@@ -19,10 +27,31 @@ const TITLE_KEY = {
   milestone: "title",
 };
 
-const renderSelectOption = (option: string) => (
+const isRefObject = (ref: any): ref is React.MutableRefObject<HTMLDivElement | null> => {
+  return "current" in ref;
+};
+
+const isChecked = (item: any, selectedItem: any): boolean => {
+  if (!item || !selectedItem) return false;
+  if (typeof item === "string" && typeof selectedItem === "string") return item === selectedItem;
+
+  const { milestoneId: itemMilestoneId, labelId: itemLabelId } = item;
+  const { milestoneId: selectedItemMilestoneId, labelId: selectedItemLabelId } = selectedItem;
+
+  if (itemLabelId && selectedItemLabelId) return itemLabelId === selectedItemLabelId;
+  if (itemMilestoneId && selectedItemMilestoneId) return itemMilestoneId === selectedItemMilestoneId;
+
+  return false;
+};
+
+const renderSelectOption = (
+  option: string,
+  isChecked: boolean,
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+) => (
   <SelectOption key={option}>
     <span>{option}</span>
-    <input type="checkbox" />
+    <input type="checkbox" checked={isChecked} onChange={onChange} />
   </SelectOption>
 );
 
@@ -42,22 +71,96 @@ const getOptionName = (item: string | object, popupType: PopupType): string => {
   }
 };
 
-const renderOptions = (popupType: PopupType, items: string[] | object[] | undefined) => (
+const renderOptions = (
+  popupType: PopupType,
+  items: string[] | object[] | undefined,
+  selectedItems: any[],
+  onItemChange: (item: any) => void
+) => (
   <ScrollableArea>
     {items?.map((item) => {
       const optionName = getOptionName(item, popupType);
-      return renderSelectOption(optionName);
+      const isCheckedItem = selectedItems.some((selectedItem) => isChecked(item, selectedItem));
+      return renderSelectOption(optionName, isCheckedItem, () => onItemChange(item));
     })}
   </ScrollableArea>
 );
+
 const SidePopup = React.forwardRef<HTMLDivElement, SidePopupProps>((props, ref) => {
-  const { popupType, items } = props;
+  const client = useQueryClient();
+  const { setAssignees, setLabels, setMilestone } = useContext(CreatorContext);
+  const { popupType, sidebarType, items, selectedItems } = props;
+  const [checkedItems, setCheckedItems] = useState<any[]>(selectedItems);
+  const prevRef = useRef<HTMLDivElement | null>(null);
+  const { issueId } = useParams<{ issueId: string }>();
+
+  const handleItemChange = (item: any) => {
+    setCheckedItems((prevCheckedItems) => {
+      const isCheckedItem = prevCheckedItems.some((checkedItem) => isChecked(item, checkedItem));
+      if (isCheckedItem) {
+        return prevCheckedItems.filter((checkedItem) => !isChecked(item, checkedItem));
+      } else {
+        return [...prevCheckedItems, item];
+      }
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      if (prevRef.current && isRefObject(ref) && !ref.current) {
+        let requestItems;
+        if (sidebarType === "detail") {
+          switch (popupType) {
+            case "assignee":
+              requestItems = checkedItems;
+              updateAssigneesInIssue(issueId || 0, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
+              break;
+            case "label":
+              requestItems = checkedItems.filter((item) => item).map(({ labelId }) => labelId);
+              updateLabelsInIssue(issueId || 0, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
+              break;
+            case "milestone":
+              requestItems = checkedItems.filter((item) => item).map(({ milestoneId }) => milestoneId);
+              updateMilestoneInIssue(issueId || 0, requestItems[0]).then(() =>
+                client.invalidateQueries(`issue-${issueId || 0}`)
+              );
+              break;
+            default:
+              return;
+          }
+        }
+
+        if (sidebarType === "new-issue") {
+          switch (popupType) {
+            case "assignee":
+              requestItems = checkedItems;
+              setAssignees(checkedItems);
+              break;
+            case "label":
+              console.log("labels", checkedItems);
+              requestItems = checkedItems;
+              setLabels(requestItems);
+              break;
+            case "milestone":
+              console.log("milestone", checkedItems);
+              requestItems = checkedItems.filter((item) => item);
+              setMilestone(requestItems[0]);
+              break;
+            default:
+              return;
+          }
+        }
+      }
+
+      if (isRefObject(ref) && prevRef.current !== ref.current) prevRef.current = ref.current;
+    };
+  }, [ref, checkedItems]);
 
   return (
     <Wrapper ref={ref}>
       <div>
         <Header>{HEADER_NAME[popupType]} 설정</Header>
-        {renderOptions(popupType, items)}
+        {renderOptions(popupType, items, checkedItems, handleItemChange)}
       </div>
     </Wrapper>
   );

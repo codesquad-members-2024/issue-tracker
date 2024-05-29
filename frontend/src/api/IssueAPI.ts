@@ -203,3 +203,72 @@ export const closeIssue = async (issueId: number | string) => {
     throw new Error(message);
   }
 };
+
+export const updateAssigneesInIssue = async (issueId: number | string, assignees: string[]) => {
+  try {
+    const token = getAuthToken();
+    const request = {
+      method: "PATCH",
+      credentials: "include" as RequestCredentials,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ assignees }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/assignees`, request);
+
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+}
+
+export const updateLabelsInIssue = async (issueId: number | string, labelIds: number[]) => {
+  try {
+    const token = getAuthToken();
+    const request = {
+      method: "PATCH",
+      credentials: "include" as RequestCredentials,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ labels: labelIds }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/labels`, request);
+
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
+export const updateMilestoneInIssue = async (issueId: number | string, milestoneId: number) => {
+  try {
+    const token = getAuthToken();
+    const request = {
+      method: "PATCH",
+      credentials: "include" as RequestCredentials,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ milestoneId }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/milestone`, request);
+
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+}

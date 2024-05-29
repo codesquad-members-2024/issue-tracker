@@ -8,6 +8,7 @@ import LabelList from "../components/label/LabelList";
 import MilestoneList from "../components/milestone/MilestoneList";
 import { LabelProvider } from "../contexts/LabelContext";
 import { MilestoneProvider } from "../contexts/MilestoneContext";
+import { CreatorProvider } from "../contexts/CreatorContext";
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/new",
-    element: <IssueCreator />,
+    element: (
+      <CreatorProvider>
+        <IssueCreator />
+      </CreatorProvider>
+    ),
   },
   {
     path: "/issue/:issueId",
