@@ -53,7 +53,7 @@ function TextArea({ h, $ref, handler }: PropsType) {
         ${value ? moving : " top-8 left-5"} `}
 				htmlFor="textarea"
 			>
-				코멘트를 입력하세요
+				내용을 입력하세요
 			</label>
 			<div className="flex items-center absolute right-4 bottom-16">
 				{isVisible && (
