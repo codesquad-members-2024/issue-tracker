@@ -2,7 +2,7 @@ package codesquad.issuetracker.milestone;
 
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 public class MilestoneShowDto {
@@ -10,7 +10,7 @@ public class MilestoneShowDto {
     private Long id;
     private String name;
     private String description;
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     private boolean isClosed;
     private Long openIssue;
     private Long closeIssue;
