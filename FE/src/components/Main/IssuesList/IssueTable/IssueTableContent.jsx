@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { OpenIcon } from "@/icons/OpenIcon";
-import { calculateTime } from "@/utils/calculateTime";
+import { calculateTime } from "@/util/calculateTime";
 
 export function IssueTableContent({
   checkedItems,

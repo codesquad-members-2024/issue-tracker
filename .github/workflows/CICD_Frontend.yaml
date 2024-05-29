@@ -27,7 +27,7 @@ jobs:
 
       - name: Build project
         working-directory: ./FE
-        run: CI=false npm run build
+        run: npm run build
 
       - name: List build directory contents
         working-directory: ./FE
