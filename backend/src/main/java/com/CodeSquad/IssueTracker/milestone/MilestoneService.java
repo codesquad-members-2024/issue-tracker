@@ -80,6 +80,7 @@ public class MilestoneService {
                 .deadline(milestone.getDeadline())
                 .totalIssue(milestone.getTotalIssue())
                 .closedIssue(milestone.getClosedIssue())
+                .isClosed(milestone.getIsClosed())
                 .build();
     }
 
