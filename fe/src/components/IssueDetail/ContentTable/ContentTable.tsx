@@ -15,9 +15,13 @@ interface PropsType {
 function ContentTable({ issue, comment, memberId }: PropsType) {
 	const [editor, setEditor] = useState(false);
 	const preRef = useRef<HTMLPreElement>(null);
-	const preHeight = preRef.current?.getBoundingClientRect().height || 100;
 	const data: Issue | IssueComment = (issue ? issue : comment)!;
+	const preHeight = useRef<number>(0);
 	const [contentValue, setContentValue] = useState(data.content);
+
+	useEffect(() => {
+		preHeight.current = preRef.current?.getBoundingClientRect().height || 100;
+	}, []);
 
 	return (
 		<div className={`${border} border-[1px] rounded-2xl w-full`}>
@@ -58,7 +62,7 @@ function ContentTable({ issue, comment, memberId }: PropsType) {
 			>
 				{editor ? (
 					<ContentEditor
-						preHeight={preHeight}
+						preHeight={preHeight.current}
 						content={contentValue}
 						setContentValue={setContentValue}
 					/>
