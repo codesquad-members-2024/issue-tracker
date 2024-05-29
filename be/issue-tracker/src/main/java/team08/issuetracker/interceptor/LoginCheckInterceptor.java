@@ -12,6 +12,7 @@ import team08.issuetracker.jwt.JwtService;
 @Slf4j
 @Component
 public class LoginCheckInterceptor implements HandlerInterceptor {
+  
     private final JwtService jwtService;
 
     public LoginCheckInterceptor(JwtService jwtService) {

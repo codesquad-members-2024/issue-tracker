@@ -5,6 +5,6 @@ CREATE TABLE comment (
                          content VARCHAR(255),
                          created_at TIMESTAMP,
                          uploaded_file VARCHAR(255),
-                         FOREIGN KEY (writer) REFERENCES member(member_id),
-                         FOREIGN KEY (issue_id) REFERENCES issue(id)
+                         FOREIGN KEY (writer) REFERENCES member(member_id) ON DELETE CASCADE,
+                         FOREIGN KEY (issue_id) REFERENCES issue(id) ON DELETE CASCADE
 );
