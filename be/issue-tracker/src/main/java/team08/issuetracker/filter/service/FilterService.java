@@ -9,7 +9,6 @@ import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountResponse;
 import team08.issuetracker.issue.model.dto.IssueDetailResponse;
 import team08.issuetracker.issue.model.dto.update.AssigneeResponse;
-import team08.issuetracker.issue.repository.IssueRepository;
 import team08.issuetracker.issue.service.IssueService;
 import team08.issuetracker.label.model.Label;
 import team08.issuetracker.label.model.dto.LabelResponse;
@@ -36,17 +35,28 @@ public class FilterService {
             "WHERE issue.id = ?";
 
     private final JdbcTemplate jdbcTemplate;
-
-    private final IssueService issueService;
-
     private final MilestoneRepository milestoneRepository;
 
     public FilteredIssueResponse getFilteredIssues(FilteredIssueRequest request) {
+        List<Issue> issues = getIssuesFromQuery(request.toQuery());
         List<IssueDetailResponse> detailIssues = new ArrayList<>();
 
-        List<Issue> issues = getIssuesFromQuery(request.toQuery());
+        long openedCount = countOpenedIssues(issues, detailIssues);
+
+        IssueCountResponse issueCountResponse = new IssueCountResponse(
+                issues.size(),
+                openedCount,
+                issues.size() - openedCount
+        );
+
+        return new FilteredIssueResponse(issueCountResponse, detailIssues);
+    }
+
+    private long countOpenedIssues(List<Issue> issues, List<IssueDetailResponse> detailIssues) {
+        long openedCount = 0;
 
         for (Issue issue : issues) {
+            if (issue.isOpen()) openedCount++;
 
             List<LabelResponse> labels = getIssueAttachedLabels(issue.getId());
             List<AssigneeResponse> assignees = getAssignees(issue.getId());
@@ -64,9 +74,7 @@ public class FilterService {
             detailIssues.add(detailIssue);
         }
 
-        IssueCountResponse issueCountResponse = issueService.getIssueCountResponse();
-
-        return new FilteredIssueResponse(issueCountResponse, detailIssues);
+        return openedCount;
     }
 
 
