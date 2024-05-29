@@ -11,11 +11,9 @@ import { Button } from '~/common/components';
 import { MilestoneIndicator } from '~/features/issue/components';
 import { MileRegister } from '~/features/milestone/components';
 import { deleteMilestone } from '~/features/milestone/apis';
-import { useMilestoneList } from '~/features/issue/hooks';
 
-export function MileListItem({ milestone }) {
+export function MileListItem({ milestone, fetchMilestoneList }) {
 	const [isEdit, setIsEdit] = useState(false);
-	const { fetchMilestoneList } = useMilestoneList();
 
 	const handleDeleteMilestone = async () => {
 		try {
@@ -33,6 +31,7 @@ export function MileListItem({ milestone }) {
 					isEdit={isEdit}
 					setIsEdit={setIsEdit}
 					milestone={milestone}
+					fetchMilestoneList={fetchMilestoneList}
 				/>
 			) : (
 				<>

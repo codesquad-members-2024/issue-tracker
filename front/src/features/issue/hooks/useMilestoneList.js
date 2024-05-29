@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getMilestones } from '~/features/issue/apis';
+import { getMilestones } from '../apis/getFilterList';
 
 export const useMilestoneList = () => {
 	const [milestoneList, setMilestoneList] = useState([]);

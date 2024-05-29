@@ -24,30 +24,33 @@ export function MileRegister({
 	setIsEdit,
 	newMilestone,
 	setNewMilestone,
+	fetchMilestoneList,
 }) {
 	const initialMilestone = {
-		name: milestone?.name || '',
-		description: milestone?.description || '',
-		dueDate: milestone?.dueDate || '',
+		name: milestone?.name || null,
+		description: milestone?.description || null,
+		dueDate: milestone?.dueDate || null,
 	};
 	const [state, dispatch] = useReducer(milestoneReducer, initialMilestone);
-	const { fetchMilestoneList } = useMilestoneList();
 
 	const addMilestone = async () => {
 		try {
-			console.log('Milestone Data:', state);
-			const result = await postMilestone(state);
-			if (result.error) {
-				console.error('Server Error:', result.error); // 서버 에러 확인
-			} else {
-				await fetchMilestoneList();
-				setNewMilestone(!newMilestone);
-			}
+			await postMilestone(state);
+			await fetchMilestoneList();
+			setNewMilestone(false);
 		} catch (error) {
-			console.error('Error:', error);
+			console.error('마일스톤 만들기에 실패했습니다', error);
 		}
 	};
-
+	const editMilestone = async () => {
+		try {
+			await putMilestone(milestone.id, state);
+			await fetchMilestoneList();
+			setIsEdit(false);
+		} catch (error) {
+			console.error('마일스톤 수정에 실패했습니다', error);
+		}
+	};
 	return (
 		<StyledRegister>
 			<h3>{isEdit ? '마일스톤 편집' : '새로운 마일스톤 추가'}</h3>
@@ -98,6 +101,7 @@ export function MileRegister({
 							size='small'
 							buttonText='편집 완료'
 							icon={<IconEdit />}
+							onClick={editMilestone}
 						/>
 					</>
 				) : (

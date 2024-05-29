@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IconPlus, IconAlertCircle, IconArchive } from '~/common/icons';
 import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
-import { Tabs, ListHeader, ListBody, Button, Label } from '~/common/components';
+import { Tabs, ListHeader, ListBody, Button } from '~/common/components';
 import { MileRegister, MileListItem } from '~/features/milestone/components';
 import { useMilestoneList } from '~/features/issue/hooks';
 
 export function MilestoneContainer() {
-	const { milestoneList } = useMilestoneList();
+	const { milestoneList, fetchMilestoneList } = useMilestoneList();
 	const [newMilestone, setNewMilestone] = useState(false);
 	const statusCount = milestoneList.reduce(
 		(acc, milestone) => {
@@ -45,6 +45,7 @@ export function MilestoneContainer() {
 					<MileRegister
 						setNewMilestone={setNewMilestone}
 						newMilestone={newMilestone}
+						fetchMilestoneList={fetchMilestoneList}
 					/>
 				)}
 
@@ -60,7 +61,11 @@ export function MilestoneContainer() {
 				</StyledListHeader>
 				<ListBody>
 					{milestoneList.map(milestone => (
-						<MileListItem key={milestone.id} milestone={milestone} />
+						<MileListItem
+							key={milestone.id}
+							milestone={milestone}
+							fetchMilestoneList={fetchMilestoneList}
+						/>
 					))}
 				</ListBody>
 			</StyledWrapper>

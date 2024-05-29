@@ -31,7 +31,6 @@ async function getMilestones() {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
-			// credentials: 'include',
 		}).then(res => res.json());
 		const data = response;
 		return data;
