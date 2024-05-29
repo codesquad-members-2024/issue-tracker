@@ -7,11 +7,10 @@ import { NavTabs } from "../common/NavTabs";
 import { NewLabels } from "./NewLabels";
 import useFetch from "../../hooks/useFetch";
 
-const { VITE_SERVER } = import.meta.env;
 const LABELS_API = "/api/labels";
 
 export function Labels() {
-  const { state: labels, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${VITE_SERVER}${LABELS_API}`);
+  const { state: labels, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${LABELS_API}`);
 
   const [showNewLabels, setShowNewLabels] = useState(false);
 

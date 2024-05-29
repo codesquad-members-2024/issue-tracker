@@ -7,11 +7,10 @@ import { NewMilestones } from "./NewMilestones";
 import { MilestonesList } from "./MilestonesList";
 import useFetch from "../../hooks/useFetch";
 
-const { VITE_SERVER } = import.meta.env;
 const MILESTONES_API = "/api/milestones/open";
 
 export function Milestones() {
-  const { state: milestones, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${VITE_SERVER}${MILESTONES_API}`);
+  const { state: milestones, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${MILESTONES_API}`);
   
   const [showNewMilestones, setShowNewMilestones] = useState(false);
   return (
