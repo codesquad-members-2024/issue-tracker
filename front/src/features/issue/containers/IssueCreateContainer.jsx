@@ -1,21 +1,17 @@
-import { useState, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { IconXsquare } from '~/common/icons';
 import { IssueAside, IssueCommentEdit } from '~/features/issue/components';
 import { Button, InputTitleEdit } from '~/common/components';
-import { useUser } from '../../../common/hooks/useUser';
-import {
-	useLabelList,
-	useMilestoneList,
-	useCheckList,
-} from '~/features/issue/hooks';
-import { postIssueDetail } from '~/features/issue/apis';
 import { useNavigate } from 'react-router-dom';
+import { useCheck } from '~/features/issue/context/CheckProvider';
+import { postIssueDetail } from '~/features/issue/apis';
 
 const initialState = {
 	title: '',
 	content: '',
 };
+
 function issueReducer(state, action) {
 	switch (action.type) {
 		case 'SET_TITLE':
@@ -30,24 +26,27 @@ function issueReducer(state, action) {
 export function IssueCreateContainer() {
 	const navigate = useNavigate();
 	const [state, dispatch] = useReducer(issueReducer, initialState);
-	const [check, checkDispatch] = useCheckList();
+	const { check, checkDispatch } = useCheck();
 	console.log(check);
-	function getAssignees(assignees) {
-		console.log(assignees); //나쁜코드
-	}
 
-	function newIssue() {
+	async function OnCreateNewIssue() {
 		const issue = {
 			title: state.title,
 			content: state.content,
 			milestoneId: null,
-			issueAssignees: [],
-			issueLabels: [],
+			issueAssignees: check.selectedAssignees.map(assignee => ({
+				userLoginId: assignee.loginId,
+			})),
+			issueLabels: check.selectedLabels.map(label => ({
+				labelId: label.id,
+			})),
 		};
+
 		postIssueDetail(issue).then(id => {
 			navigate(`/issue/${id}`);
 		});
 	}
+
 	return (
 		<StyledWrapper>
 			<h2>새로운 이슈 작성</h2>
@@ -74,8 +73,7 @@ export function IssueCreateContainer() {
 						/>
 					</StyledInputWrapper>
 				</section>
-				{/* 사이드 메뉴 */}
-				<IssueAside getAssignees={getAssignees} />
+				<IssueAside />
 			</StyledContent>
 			<StyledFooter>
 				<Button
@@ -85,19 +83,20 @@ export function IssueCreateContainer() {
 					buttonText='작성 취소'
 					icon={<IconXsquare />}
 					onClick={() => {
-						console.log('취소 버튼 클릭');
+						navigate('/issues');
 					}}
 				/>
 				<Button
 					type='button'
 					size='large'
 					buttonText='완료'
-					onClick={() => {}}
+					onClick={OnCreateNewIssue}
 				/>
 			</StyledFooter>
 		</StyledWrapper>
 	);
 }
+
 const StyledWrapper = styled.div`
 	width: 100%;
 	h2 {

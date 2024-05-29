@@ -8,6 +8,7 @@ import {
 	useIssueStatus,
 	useCheckList,
 } from '~/features/issue/hooks';
+import { useCheck } from '../context/CheckProvider';
 import { Button, InputTitleEdit } from '~/common/components';
 import {
 	IconEdit,
@@ -33,11 +34,11 @@ export function IssueDetailContainer() {
 
 	const { issueDetail, loading, error, fetchIssueDetail } = useIssueDetail(id);
 	const { onOpenIssue, onCloseIssue, onDeleteIssue } = useIssueStatus();
+
 	useEffect(() => {
 		fetchIssueDetail();
 	}, []);
-	const [check, dispatchCheck] = useCheckList(id);
-
+	const { check, checkDispatch } = useCheck();
 	const [isClosed, setIsClosed] = useState(issueDetail?.closed);
 	useEffect(() => {
 		setIsClosed(issueDetail?.closed);
@@ -117,7 +118,7 @@ export function IssueDetailContainer() {
 		}
 	};
 	const isNewComment = detailState.newComment !== '';
-	const hasChanged = detailState.title !== issueDetail?.title;
+	// const hasChanged = detailState.title !== issueDetail?.title;
 
 	return (
 		<>

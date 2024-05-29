@@ -1,5 +1,5 @@
+import React, { useReducer, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useEffect, useRef, useReducer, useState } from 'react';
 import { IconPlus } from '~/common/icons';
 import { Label } from '~/common/components';
 import {
@@ -7,7 +7,7 @@ import {
 	Assignee,
 	PopoverLabel,
 } from '~/features/issue/components';
-import { useCheckList } from '~/features/issue/hooks';
+import { useCheck } from '../context/CheckProvider';
 
 function listArrayReducer(state, action) {
 	switch (action.type) {
@@ -27,11 +27,10 @@ function lableArrayReducer(state, action) {
 	}
 }
 
-export function IssueAside({ id, list, labels, getAssignees, ...props }) {
-	const [check, dispatchCheck] = useCheckList(id);
+export function IssueAside({ id, list, labels, ...props }) {
+	const { check, checkDispatch } = useCheck();
 	const listArray = useRef(list ? [...list] : []);
 	const lableArray = useRef(labels ? [...labels] : []);
-
 	const [, forceUpdate] = useReducer(listArrayReducer, []);
 	const [, forceUpdateLabel] = useReducer(lableArrayReducer, []);
 
@@ -40,8 +39,6 @@ export function IssueAside({ id, list, labels, getAssignees, ...props }) {
 		label: false,
 		milestone: false,
 	});
-
-	// 셀렉트박스 체크 여부
 
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
@@ -65,18 +62,15 @@ export function IssueAside({ id, list, labels, getAssignees, ...props }) {
 
 		if (checked) {
 			listArray.current = [...listArray.current, newAssignee];
-			// getAssignees(listArray.current);
 		} else {
 			listArray.current = listArray.current.filter(
 				assignee => assignee.loginId !== value
 			);
-			// getAssignees(listArray.current);
 		}
 
-		// Force a re-render
 		forceUpdate({ type: 'UPDATE', payload: listArray.current });
 
-		dispatchCheck({
+		checkDispatch({
 			type: 'setAssignees',
 			payload: newAssignee,
 		});
@@ -94,16 +88,14 @@ export function IssueAside({ id, list, labels, getAssignees, ...props }) {
 		if (checked) {
 			lableArray.current = [...lableArray.current, newLabel];
 		} else {
-			// !! 왜 label의 id로는 안되지?
 			lableArray.current = lableArray.current.filter(
 				label => label.name !== newLabel.name
 			);
 		}
 
-		// Force a re-render
 		forceUpdateLabel({ type: 'UPDATE', payload: lableArray.current });
 
-		dispatchCheck({
+		checkDispatch({
 			type: 'setLabels',
 			payload: newLabel,
 		});

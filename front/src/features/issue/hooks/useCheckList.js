@@ -10,6 +10,7 @@ export function useCheckList(id) {
 		selectedLabels: issueDetail?.labels ? [...issueDetail.labels] : [],
 		selectedMilestone: null,
 	};
+
 	function checkReducer(state, action) {
 		switch (action.type) {
 			case 'setAssignees':
