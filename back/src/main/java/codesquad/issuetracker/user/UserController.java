@@ -1,6 +1,7 @@
 package codesquad.issuetracker.user;
 
 import codesquad.issuetracker.config.LoginInterceptor;
+import codesquad.issuetracker.user.dto.response.UserShowDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

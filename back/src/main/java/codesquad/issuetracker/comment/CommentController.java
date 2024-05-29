@@ -1,5 +1,8 @@
 package codesquad.issuetracker.comment;
 
+import codesquad.issuetracker.comment.dto.request.CommentSaveDto;
+import codesquad.issuetracker.comment.dto.request.CommentUpdateDto;
+import codesquad.issuetracker.comment.dto.response.CommentShowDto;
 import codesquad.issuetracker.config.LoginInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,18 +25,19 @@ public class CommentController {
             HttpServletRequest request
     ) {
         commentSaveDto.setLoginId((String) request.getAttribute(LoginInterceptor.LOGIN_ID)); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
-        Comment createdComment = commentService.createComment(commentSaveDto.toServiceDto());
+        CommentShowDto createdComment = commentService.createComment(commentSaveDto.toServiceDto());
         URI location = uriComponentsBuilder.path("/comments/{id}")
                 .buildAndExpand(createdComment.getId())
                 .toUri();
         return ResponseEntity
                 .created(location)
-                .body(new CommentShowDto(createdComment));
+                .body(createdComment);
     }
 
     @PutMapping("/comments/{commentId}")
     public ResponseEntity<CommentShowDto> updateCommentById(@PathVariable Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
-        Comment updatedComment = commentService.updateCommentById(commentId, commentUpdateDto.getContent());
-        return ResponseEntity.ok(new CommentShowDto(updatedComment));
+        CommentShowDto updatedComment = commentService.updateCommentById(commentUpdateDto.toServiceDto(commentId));
+        return ResponseEntity
+                .ok(updatedComment);
     }
 }

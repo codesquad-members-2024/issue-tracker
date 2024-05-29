@@ -1,5 +1,7 @@
 package codesquad.issuetracker.comment;
 
+import codesquad.issuetracker.comment.dto.request.CommentServiceDto;
+import codesquad.issuetracker.comment.dto.response.CommentShowDto;
 import codesquad.issuetracker.exception.CommentNotFoundException;
 import codesquad.issuetracker.exception.UserNotFoundException;
 import codesquad.issuetracker.user.User;
@@ -17,20 +19,20 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public Comment createComment(CommentServiceDto commentServiceDto) {
-        return commentRepository.save(
+    public CommentShowDto createComment(CommentServiceDto commentServiceDto) {
+        return new CommentShowDto(commentRepository.save(
                 new Comment(commentServiceDto.getContent(),
                         commentServiceDto.getLoginId(),
                         commentServiceDto.getIssueId(),
                         commentServiceDto.getCreatedDate(),
                         getUserProfileImage(commentServiceDto.getLoginId())
-                )
+                ))
         );
     }
 
-    public Comment updateCommentById(Long commentId, String newContent) {
-        commentRepository.updateById(commentId, newContent);
-        return commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException(COMMENT_NOT_FOUND_ERROR_MESSAGE));
+    public CommentShowDto updateCommentById(CommentServiceDto commentServiceDto) {
+        commentRepository.updateById(commentServiceDto.getId(), commentServiceDto.getContent());
+        return new CommentShowDto(commentRepository.findById(commentServiceDto.getId()).orElseThrow(() -> new CommentNotFoundException(COMMENT_NOT_FOUND_ERROR_MESSAGE)));
     }
 
     public String getUserProfileImage(String loginId) {

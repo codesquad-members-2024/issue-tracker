@@ -1,6 +1,6 @@
 package codesquad.issuetracker.util;
 
-import codesquad.issuetracker.issue.IssueFilterDto;
+import codesquad.issuetracker.issue.dto.request.IssueFilterDto;
 import org.springframework.stereotype.Component;
 
 @Component

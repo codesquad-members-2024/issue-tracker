@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.issue.dto.request.IssueFilterDto;
 import codesquad.issuetracker.util.FilterQueryMaker;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

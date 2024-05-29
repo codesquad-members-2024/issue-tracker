@@ -1,12 +1,13 @@
-package codesquad.issuetracker.issue;
+package codesquad.issuetracker.issue.dto.response;
 
-import codesquad.issuetracker.comment.CommentShowDto;
+import codesquad.issuetracker.comment.dto.response.CommentShowDto;
+import codesquad.issuetracker.issue.Issue;
 import codesquad.issuetracker.label.Label;
-import codesquad.issuetracker.label.LabelShowDto;
+import codesquad.issuetracker.label.dto.response.LabelShowDto;
 import codesquad.issuetracker.milestone.Milestone;
-import codesquad.issuetracker.milestone.MilestoneShowDto;
-import codesquad.issuetracker.user.AssigneeShowDto;
+import codesquad.issuetracker.milestone.dto.response.MilestoneShowDto;
 import codesquad.issuetracker.user.User;
+import codesquad.issuetracker.user.dto.response.AssigneeShowDto;
 import codesquad.issuetracker.util.TimeCalculator;
 import lombok.Getter;
 
