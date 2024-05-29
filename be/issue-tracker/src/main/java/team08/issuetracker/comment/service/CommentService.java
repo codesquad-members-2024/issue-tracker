@@ -6,10 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import team08.issuetracker.comment.model.Comment;
 import team08.issuetracker.comment.model.dto.CommentCreationRequest;
-import team08.issuetracker.comment.model.dto.CommentResponse;
+import team08.issuetracker.comment.model.dto.CommentSummaryDto;
 import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
 import team08.issuetracker.comment.repository.CommentRepository;
 import team08.issuetracker.exception.comment.CommentNotFoundException;
+import team08.issuetracker.member.service.MemberService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+
+    private final MemberService memberService;
 
     private final CommentRepository commentRepository;
 
@@ -42,16 +45,24 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public List<Comment> getCommentsByIssueId(long issueId) {
+    private List<Comment> getCommentsByIssueId(long issueId) {
         return commentRepository.findByIssueId(issueId);
     }
 
     // 이슈에서 사용
-    public List<CommentResponse> getCommentByIssueId(@PathVariable long issueId) {
+    public List<CommentSummaryDto> getCommentSummaryDto(long issueId) {
         List<Comment> comments = getCommentsByIssueId(issueId);
 
         return comments.stream()
-                .map(CommentResponse::from)
+                .map(comment -> {
+                    String imageUrl = memberService.getProfileImageUrl(comment.getWriter());
+                    return new CommentSummaryDto(comment, imageUrl);
+                })
                 .collect(Collectors.toList());
+    }
+
+
+    public long getTotalCommentCounts(long issueId) {
+        return commentRepository.findByIssueId(issueId).size();
     }
 }

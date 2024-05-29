@@ -1,6 +1,5 @@
 package team08.issuetracker.milestone.repository;
 
-import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +20,6 @@ public interface MilestoneRepository extends ListCrudRepository<Milestone, Long>
     @Query("SELECT * FROM milestone WHERE is_open = :openState")
     List<Milestone> getAllMilestonesByOpenState(@Param("openState") boolean openState);
 
+//    @Query("SELECT * FROM milestone WHERE id = :issueId")
+//    Optional<Milestone> findByIssueId(@Param("issueId") Long issueId);
 }
