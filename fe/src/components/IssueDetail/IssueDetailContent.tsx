@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import SideBar from "./SideBar";
 import TextArea from "../common/TextArea";
 import ContentTable from "./ContentTable/ContentTable";
@@ -13,12 +13,9 @@ interface PropsType {
 const border = "component-border dark:component-border--dark";
 
 function IssueDetailContent({ issueData }: PropsType) {
-	const { assignees, comments, issue, labels, milestone } = issueData;
+	const { assignees, comments, issue } = issueData; // labels, milestone 추가
 	const [disabled, setDisabled] = useState("DISABLED");
 	const $content = useRef<HTMLTextAreaElement>(null);
-	// const assigneeIds = useRef<string[]>([]);
-	// const labelIds = useRef<number[]>([]);
-	// const milestoneId = useRef<number | null>(null);
 	const { member_id } = getLocalStorageItem("user");
 	const mutate = usePost(`/issue/${issue.id}/comment`, `issue/${issue.id}`);
 	// console.log(labels);
@@ -65,7 +62,7 @@ function IssueDetailContent({ issueData }: PropsType) {
 				</div>
 			</div>
 			<div className="mt-6 ml-5">
-				<SideBar assignees={assignees} issueId={issue.id}/>
+				<SideBar assignees={assignees} issueId={issue.id} />
 			</div>
 		</section>
 	);

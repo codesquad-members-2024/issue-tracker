@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
@@ -7,12 +7,12 @@ type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
 	handleFetch: (fetchedData: FetchedDataType, refetch: () => void) => void;
 	handleClearTimeOut: () => void;
-	labelIds?: React.MutableRefObject<number[]>; //TODO 옵셔널 삭제
+	// labelIds?: React.MutableRefObject<number[]>; //TODO 옵셔널 삭제
 }
 
-function LabelFilter({ handleFetch, handleClearTimeOut, labelIds }: ProsType) {
+function LabelFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 	const [open, setOpen] = useState(false);
-	const [idx, setIdx] = useState<number[]>([]);
+	// const [idx, setIdx] = useState<number[]>([]);
 	const checkedItems = useRef<{ [key: number]: number }>({});
 
 	const { data, refetch } = useGet("label", "/label", false);
@@ -36,9 +36,9 @@ function LabelFilter({ handleFetch, handleClearTimeOut, labelIds }: ProsType) {
 		delete checkedItems.current[idx];
 	};
 
-	useEffect(() => {
-		if (!open) setIdx(Object.values(checkedItems.current));
-	}, [open]);
+	// useEffect(() => {
+	// 	if (!open) setIdx(Object.values(checkedItems.current));
+	// }, [open]);
 
 	// useEffect(() => {
 	// 	labelIds.current = idx;
