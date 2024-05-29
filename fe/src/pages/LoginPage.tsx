@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { APiUtil } from "../common/Utils";
 import { openNotification } from "../common/Utils";
 
-const serverURL = import.meta.env.VITE_API_URL;
+// const serverURL = import.meta.env.VITE_API_URL;
 export interface LoginForm {
     id: string;
     password: string;
@@ -17,11 +17,10 @@ const LoginPage = () => {
         password: "",
     });
 
-    const handleOAoth = async() => {
-        const response = await fetch(serverURL + "OAuth/login")
-        // const data = await response.json()
-        console.log(response)
+    const handleOAoth = async () => {
+        return;
     }
+    
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

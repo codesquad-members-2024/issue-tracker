@@ -7,6 +7,9 @@ import useQueryHook from "../\bhooks/useQueryHook";
 import { Loading } from "../common/NotFound";
 import { APiUtil } from "../common/Utils";
 import { ModalComponent } from "../common/Modal";
+import { useEffect, useState } from "react";
+import { SideBarItemsForm, SidebarLabel, SidebarMilestone, SidebarUser } from "./NewPage";
+import Sidebar from "../common/Sidebar";
 
 interface Milestone {
     id: number;
@@ -55,6 +58,14 @@ export interface UserInfo {
     imgUrl: string;
 }
 
+const sideTable: {
+    [key: string]: keyof SideBarItemsForm;
+} = {
+    담당자: "assignees",
+    레이블: "labels",
+    마일스톤: "milestone",
+};
+
 const userString = sessionStorage.getItem("user");
 const userInfo: UserInfo | null = userString ? JSON.parse(userString) : null;
 
@@ -63,14 +74,39 @@ const IssueProduct = () => {
     const location = useLocation();
     const isOpen = location.state;
     const { productId } = useParams();
-
     const { data, isLoading } = useQueryHook(productId, `issues/${productId}`);
+
+    const [sideBarItems, setSideBarItems] = useState<SideBarItemsForm>({
+        assignees: [],
+        labels: [],
+        milestone: [],
+    });
+
+    useEffect(() => {
+        if (data) {
+            setSideBarItems((prev) => ({
+                ...prev,
+                assignees: data.assignees,
+                labels: data.labels,
+                milestone: data.milestone ? [data.milestone] : [], // milestone이 null이 아닌 경우에만 배열에 추가
+            }));
+        }
+    }, [data]);
+
     if (isLoading) return <div><Loading /></div>;
 
+    const handleListClick = (curData: SidebarLabel | SidebarMilestone | SidebarUser, tableName: string) => {
+        console.log(curData, tableName)
+    };
+
+    
     const handleDelete = async () => {
         await APiUtil.deleteData("issues", data.id);
         navigate("/issue");
     };
+
+    
+    
     return (
         <main className="w-[1280px] mx-auto">
             <Header />
@@ -87,7 +123,11 @@ const IssueProduct = () => {
                     productId={productId}
                 />
                 <div className="h-full">
-                    {/* <Sidebar /> */}
+                <Sidebar
+                    sideBarItems={sideBarItems}
+                    handleListClick={handleListClick}
+                    sideTable={sideTable}
+                />
 
                     <div className="w-full text-right text-red-500 my-4 p-2">
                         <DeleteOutlined />
