@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import team08.issuetracker.interceptor.LoginCheckInterceptor;
 
 @Configuration
-@Profile("!local")
+@Profile({"!local", "!prod"})
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
