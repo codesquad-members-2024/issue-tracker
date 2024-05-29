@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import AssigneeArea from "../NewIssue/SideBarArea/AssigneeArea";
-import LabelArea from "../NewIssue/SideBarArea/LabelArea";
-import MilestoneArea from "../NewIssue/SideBarArea/MilestoneArea";
+import AssigneeArea from "./SideBarArea/AssigneeArea";
+import LabelArea from "./SideBarArea/LabelArea";
+import MilestoneArea from "./SideBarArea/MilestoneArea";
 
 interface PropsType {
 	assigneeIds: React.MutableRefObject<string[]>;
