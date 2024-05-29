@@ -34,6 +34,7 @@ interface IssueDetailDataType {
 	milestone: Milestone[];
 }
 interface IssueComment {
+	id: number;
 	writer: string;
 	createdAt: string;
 	content: string;

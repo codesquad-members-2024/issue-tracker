@@ -37,11 +37,13 @@ function IssueDetailContent({ issueData }: PropsType) {
 	};
 	return (
 		<section className={`${border} border-t-[1px] flex`}>
-			<div className="mt-6 w-full">
-				<ContentTable issue={issue} memberId={member_id} />
+			<div className="mt-6 mb-24 w-full">
+				<ContentTable key={issue.id} issue={issue} memberId={member_id} />
 				<div className="mt-6">
-					{comments.map((comment, i) => (
-						<ContentTable key={i} comment={comment} memberId={member_id} />
+					{comments.map((comment) => (
+						<div key={comment.id} className="mt-3">
+							<ContentTable comment={comment} memberId={member_id} />
+						</div>
 					))}
 				</div>
 				<div className="mt-6">
