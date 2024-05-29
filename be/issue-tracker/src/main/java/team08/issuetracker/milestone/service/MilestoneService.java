@@ -54,9 +54,10 @@ public class MilestoneService {
                 .map(Milestone::getName)
                 .orElse(null);
 
-        IssueCountDto countDto = issueCountService.getCounts(id);
-
-        double progress = countDto.getMilestoneProgress();
+        Double progress = Optional.ofNullable(milestoneId)
+                .map(issueCountService::getCounts)
+                .map(IssueCountDto::getMilestoneProgress)
+                .orElse(null);
 
         return new MilestoneSummaryDto(name, progress);
     }
