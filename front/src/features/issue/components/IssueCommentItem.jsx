@@ -79,6 +79,7 @@ export function IssueCommentItem({
 					</span>
 				</StyledHeader>
 				{isEdit ? (
+					// TODO: 여기 value, IssueCommentEdit의 value와 연결되어 있음 -> 수정 필요
 					<IssueCommentEdit
 						value={comment}
 						placeholder={content}

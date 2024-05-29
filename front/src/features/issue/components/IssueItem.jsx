@@ -3,8 +3,15 @@ import { Link } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { IconMilestone } from '~/common/icons';
 import { CheckBox, Label } from '~/common/components';
+import { useUser } from '~/common/hooks';
 
 export function IssueItem({ issue }) {
+	const { userList } = useUser();
+	const writerImg = writer => {
+		const user = userList?.find(user => user.loginId === writer);
+		return user?.profileImage;
+	};
+
 	return (
 		<StyledWrapper>
 			<StyledCheckbox />
@@ -19,17 +26,19 @@ export function IssueItem({ issue }) {
 				))}
 			</StyledFlex>
 			<StyledDetail>
-				<p>#{issue.id}</p>
+				<p>#{issue?.id}</p>
 				<StyledAuthour>
-					이 이슈가 {issue.duration} 전, {issue?.writer}님에 의해
+					이 이슈가 {issue?.duration} 전, {issue?.writer}님에 의해
 					작성되었습니다.
 				</StyledAuthour>
-				{/* <StyledMilestone>
-					<IconMilestone />
-					<p>{issue?.milestone.name}</p>
-				</StyledMilestone> */}
+				{issue?.milestone?.name && (
+					<StyledMilestone>
+						<IconMilestone />
+						<p>{issue?.milestone?.name}</p>
+					</StyledMilestone>
+				)}
 			</StyledDetail>
-			<StyledUserImage src={issue?.profileImage} />
+			<StyledUserImage src={writerImg(issue?.writer)} />
 		</StyledWrapper>
 	);
 }
@@ -58,7 +67,6 @@ const StyledFlex = styled.div`
 	span {
 		color: ${({ theme }) => theme.color.brand.text.weak};
 	}
-
 	strong {
 		height: 24px;
 		font-weight: 500;
@@ -92,7 +100,6 @@ const StyledUserImage = styled.img`
 	top: 50%;
 	right: 54px;
 	transform: translateY(-50%);
-	border: 1px solid ${({ theme }) => theme.color.neutral.border.active};
 	border-radius: 50%;
 `;
 const StyledMilestone = styled.div`
