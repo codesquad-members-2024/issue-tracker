@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LoginController {
 
+    private static final String LOGIN_SUCCESS_MESSAGE = "로그인 성공!";
+    private static final String LOGIN_FAILURE_MESSAGE = "잘못된 로그인 정보 입니다.";
+
     private final LoginService loginService;
 
     @PostMapping("/login")
@@ -38,11 +41,11 @@ public class LoginController {
             String token = jwtUtil.createToken(loginId); // JWT 토큰 생성
             return ResponseEntity
                     .ok()
-                    .body(new LoginResponse(token, "로그인 성공!"));
+                    .body(new LoginResponse(token, LOGIN_SUCCESS_MESSAGE));
         }
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(new LoginResponse(null, "잘못된 로그인 정보 입니다."));
+                .body(new LoginResponse(null, LOGIN_FAILURE_MESSAGE));
     }
 }

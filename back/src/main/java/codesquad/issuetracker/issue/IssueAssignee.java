@@ -12,6 +12,6 @@ public class IssueAssignee {
 
     @Id
     private Long id;
-    private String userLoginId;
+    private String loginId;
     private Long issueId;
 }

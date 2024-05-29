@@ -1,5 +1,6 @@
 package codesquad.issuetracker.comment;
 
+import codesquad.issuetracker.config.LoginInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class CommentController {
             UriComponentsBuilder uriComponentsBuilder,
             HttpServletRequest request
     ) {
-        commentSaveDto.setLoginId((String) request.getAttribute("loginId")); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
+        commentSaveDto.setLoginId((String) request.getAttribute(LoginInterceptor.LOGIN_ID)); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
         Comment createdComment = commentService.createComment(commentSaveDto.toServiceDto());
         URI location = uriComponentsBuilder.path("/comments/{id}")
                 .buildAndExpand(createdComment.getId())

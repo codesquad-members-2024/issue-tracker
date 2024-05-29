@@ -17,6 +17,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class IssueService {
 
+    private static final String ISSUE_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 이슈입니다.";
+
     private final IssueRepository issueRepository;
     private final LabelRepository labelRepository;
     private final UserRepository userRepository;
@@ -39,7 +41,7 @@ public class IssueService {
 
     public List<User> getAssigneesForIssue(Issue issue) {
         List<String> assigneeNames = issue.getIssueAssignees().stream()
-                .map(IssueAssignee::getUserLoginId)
+                .map(IssueAssignee::getLoginId)
                 .toList();
         return userRepository.findAllById(assigneeNames);
     }
@@ -81,9 +83,9 @@ public class IssueService {
         return (List<Issue>) issueRepository.saveAll(issues);
     }
 
-    public Issue addAssigneesById(Long issueId, List<String> userLoginIds) {
+    public Issue addAssigneesById(Long issueId, List<String> loginIds) {
         Issue issue = getIssueById(issueId);
-        issue.addAssignee(userLoginIds);
+        issue.addAssignee(loginIds);
         return issueRepository.save(issue);
     }
 
@@ -99,9 +101,9 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
-    public void deleteAssigneesById(Long issueId, List<String> userLoginIds) {
+    public void deleteAssigneesById(Long issueId, List<String> loginIds) {
         Issue issue = getIssueById(issueId);
-        issue.deleteAssignee(userLoginIds);
+        issue.deleteAssignee(loginIds);
         issueRepository.save(issue);
     }
 
@@ -123,6 +125,6 @@ public class IssueService {
     }
 
     private Issue getIssueById(Long issueId) {
-        return issueRepository.findById(issueId).orElseThrow(() -> new IssueNotFoundException("존재하지 않는 이슈입니다."));
+        return issueRepository.findById(issueId).orElseThrow(() -> new IssueNotFoundException(ISSUE_NOT_FOUND_ERROR_MESSAGE));
     }
 }

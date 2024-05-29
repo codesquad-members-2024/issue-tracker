@@ -11,6 +11,10 @@ import java.util.List;
 @Repository
 public class IssueRepositoryCustomImpl implements IssueRepositoryCustom {
 
+    private static final String NO_ASSIGNEE = "-1";
+    private static final Long NO_LABEL = -1L;
+    private static final Long NO_MILESTONE = -1L;
+
     private final JdbcTemplate jdbcTemplate;
     private final FilterQueryMaker filterQueryMaker;
 
@@ -26,15 +30,15 @@ public class IssueRepositoryCustomImpl implements IssueRepositoryCustom {
         List<Object> params = new ArrayList<>(); // 쿼리에 필요한 파라미터 리스트
 
         String assigneeId = issueFilterDto.getAssignee();
-        if (assigneeId != null && !assigneeId.equals("-1")) {
+        if (assigneeId != null && !assigneeId.equals(NO_ASSIGNEE)) {
             params.add(assigneeId);
         }
         Long labelId = issueFilterDto.getLabelId();
-        if (labelId != null && labelId != -1) {
+        if (labelId != null && !labelId.equals(NO_LABEL)) {
             params.add(labelId);
         }
         Long milestoneId = issueFilterDto.getMilestoneId();
-        if (milestoneId != null && milestoneId != -1) {
+        if (milestoneId != null && !milestoneId.equals(NO_MILESTONE)) {
             params.add(milestoneId);
         }
         String writer = issueFilterDto.getWriter();

@@ -1,5 +1,6 @@
 package codesquad.issuetracker.user;
 
+import codesquad.issuetracker.config.LoginInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class UserController {
 
     @GetMapping("/users/login")
     public ResponseEntity<UserShowDto> getLoggedInUser(HttpServletRequest request) {
-        User user = userService.getUserById((String) request.getAttribute("loginId")); // 현재 로그인된 user 정보
+        User user = userService.getUserById((String) request.getAttribute(LoginInterceptor.LOGIN_ID)); // 현재 로그인된 user 정보
         return ResponseEntity
                 .ok(new UserShowDto(user));
     }

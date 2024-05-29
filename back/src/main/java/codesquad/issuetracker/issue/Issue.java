@@ -52,10 +52,10 @@ public class Issue {
         isClosed = true;
     }
 
-    public void addAssignee(List<String> userLoginIds) {
-        for (String userLoginId : userLoginIds) {
+    public void addAssignee(List<String> loginIds) {
+        for (String loginId : loginIds) {
             issueAssignees.add(IssueAssignee.builder()
-                    .userLoginId(userLoginId)
+                    .loginId(loginId)
                     .build()
             );
         }
@@ -74,8 +74,8 @@ public class Issue {
         this.milestoneId = milestoneId;
     }
 
-    public void deleteAssignee(List<String> userLoginIds) {
-        issueAssignees.removeIf(issueAssignee -> userLoginIds.contains(issueAssignee.getUserLoginId()));
+    public void deleteAssignee(List<String> loginIds) {
+        issueAssignees.removeIf(issueAssignee -> loginIds.contains(issueAssignee.getLoginId()));
     }
 
     public void deleteLabel(List<Long> labelIds) {

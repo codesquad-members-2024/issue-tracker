@@ -10,6 +10,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LabelService {
 
+    private static final String LABEL_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 라벨 입니다.";
+
     private final LabelRepository labelRepository;
 
     public Label createLabel(Label label) {
@@ -21,7 +23,7 @@ public class LabelService {
     }
 
     public Label getLabelById(Long labelId) {
-        return labelRepository.findById(labelId).orElseThrow(() -> new LabelNotFoundException("존재하지 않는 라벨 입니다."));
+        return labelRepository.findById(labelId).orElseThrow(() -> new LabelNotFoundException(LABEL_NOT_FOUND_ERROR_MESSAGE));
     }
 
     public Label updateLabelById(Label updatedLabel) {

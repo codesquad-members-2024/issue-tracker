@@ -17,7 +17,7 @@ public class MilestoneSaveDto {
     private String dueDate;
 
     public Milestone toEntity() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Milestone.DATE_TIME_FORMAT);
         Milestone.MilestoneBuilder milestoneBuilder = Milestone.builder()
                 .name(name)
                 .description(description);

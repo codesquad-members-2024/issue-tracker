@@ -15,6 +15,8 @@ import java.util.Set;
 // save와 update의 서로다른 생성자가 필요했습니다(id 존재 여부). 하지만 생성자 오버로딩을 하면 CrudRepository에서 어느 생성자를 사용할지 몰라 오류가 발생합니다. 때문에 @Builder를 사용했습니다.
 public class Milestone {
 
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     @Id
     private Long id;
     private String name;

@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.config.LoginInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class IssueController {
             UriComponentsBuilder uriComponentsBuilder,
             HttpServletRequest request
     ) {
-        issue.setWriter((String) request.getAttribute("loginId")); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
+        issue.setWriter((String) request.getAttribute(LoginInterceptor.LOGIN_ID)); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
         Issue createdIssue = issueService.createIssue(issue);
         URI location = uriComponentsBuilder.path("/issues/{id}")
                 .buildAndExpand(createdIssue.getId())
@@ -121,8 +122,8 @@ public class IssueController {
     }
 
     @PutMapping("/issues/{issueId}/assignee")
-    public ResponseEntity<IssueShowDto> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
-        Issue updatedIssue = issueService.addAssigneesById(issueId, userLoginIds);
+    public ResponseEntity<IssueShowDto> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> loginIds) {
+        Issue updatedIssue = issueService.addAssigneesById(issueId, loginIds);
         return ResponseEntity
                 .ok(new IssueShowDto(
                         updatedIssue,
@@ -154,8 +155,8 @@ public class IssueController {
     }
 
     @DeleteMapping("/issues/{issueId}/assignee")
-    public ResponseEntity<Void> deleteAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
-        issueService.deleteAssigneesById(issueId, userLoginIds);
+    public ResponseEntity<Void> deleteAssigneesById(@PathVariable Long issueId, @RequestBody List<String> loginIds) {
+        issueService.deleteAssigneesById(issueId, loginIds);
         return ResponseEntity
                 .noContent()
                 .build();
