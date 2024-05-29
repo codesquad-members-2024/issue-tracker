@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
@@ -7,12 +7,12 @@ type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
 	handleFetch: (fetchedData: FetchedDataType, refetch: () => void) => void;
 	handleClearTimeOut: () => void;
-	milestoneId?: React.MutableRefObject<number | null>; //TODO 옵셔널 삭제
+	// milestoneId?: React.MutableRefObject<number | null>; //TODO 옵셔널 삭제
 }
 
-function MilestoneFilter({ handleFetch, handleClearTimeOut, milestoneId }: ProsType) {
+function MilestoneFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 	const [open, setOpen] = useState(false);
-	const previousItem = useRef<HTMLInputElement | null>(null);
+	// const previousItem = useRef<HTMLInputElement | null>(null);
 
 	const { data, refetch } = useGet("milestone", "/milestone", false);
 	const milestones = data && data.milestones;
