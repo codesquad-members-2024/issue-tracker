@@ -1,18 +1,26 @@
 import styled from "styled-components";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import userIcon from "../../img/icon/userIcon.png";
-import { useContext, useEffect, useRef, useState } from "react";
+import { ForwardedRef, forwardRef, useEffect } from "react";
 import SidePopup from "./SidePopup";
-import useIssueStore, { Label, Milestone } from "../../hooks/stores/useIssueStore";
+import { Label, Milestone } from "../../hooks/stores/useIssueStore";
 import numberUtils from "../../utils/NumberUtils";
-import { useQuery, useQueryClient } from "react-query";
-import { sendLabelsRequest } from "../../api/LabelAPI";
-import { sendMilestonesRequest } from "../../api/MilestoneAPI";
-import { CreatorContext } from "../../contexts/CreatorContext";
-import { sendUsersReqeust } from "../../api/IssueAPI";
+import { PopupType } from "../../hooks/logics/useSidePopupLogic";
+import useSidebarLogic from "../../hooks/logics/useSidebarLogic";
 
-type SidebarKeys = "assignee" | "label" | "milestone";
 type SidebarType = "new-issue" | "detail";
+
+interface SidebarSectionProps {
+  title: string;
+  icon: string;
+  items: string[] | Label[] | Milestone[];
+  filterbarVisible: boolean;
+  onMenuClick: () => void;
+  ref: ForwardedRef<HTMLDivElement>;
+  popupType: PopupType;
+  sidebarType: SidebarType;
+  selectedItems: string[] | Label[] | Milestone[];
+}
 
 interface SidebarProps {
   assignees?: string[];
@@ -21,117 +29,98 @@ interface SidebarProps {
   sidebarType: SidebarType;
 }
 
+const renderAssignee = (item: string) => (
+  <AssigneeWrapper>
+    <img src={userIcon} />
+    {item}
+  </AssigneeWrapper>
+);
+
+const renderLabel = ({ bgColor, textColor, labelName }: Label) => (
+  <LabelBox bgColor={bgColor} textColor={textColor}>
+    {labelName}
+  </LabelBox>
+);
+
+const renderMilestone = ({ closedIssue, totalIssue, title }: Milestone) => (
+  <>
+    <ProgressBar>
+      <Progress percentage={numberUtils.parsePercentage(closedIssue || 0, totalIssue || 0)}></Progress>
+    </ProgressBar>
+    {title}
+  </>
+);
+
+const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(
+  (
+    { title, icon, items, filterbarVisible, onMenuClick, popupType, sidebarType, selectedItems }: SidebarSectionProps,
+    ref
+  ) => (
+    <Sector>
+      <SectorWrapper onClick={onMenuClick}>
+        <TitleWrapper>
+          <span>{title}</span>
+          <img src={icon} />
+        </TitleWrapper>
+        <ItemWrapper>
+          {selectedItems?.map((item) => {
+            if (popupType === "assignee") return renderAssignee(item as string);
+            if (popupType === "label") return renderLabel(item as Label);
+            if (popupType === "milestone" && item) return renderMilestone(item as Milestone);
+          })}
+        </ItemWrapper>
+      </SectorWrapper>
+      {filterbarVisible && items && (
+        <SidePopup
+          ref={ref}
+          popupType={popupType}
+          sidebarType={sidebarType}
+          items={items}
+          selectedItems={selectedItems}
+        />
+      )}
+    </Sector>
+  )
+);
+
 function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarProps) {
-  const [filterbarVisible, setFilterbarVisible] = useState<Record<SidebarKeys, boolean>>({
-    assignee: false,
-    label: false,
-    milestone: false,
-  });
-
-  const sidebarRefs = {
-    assignee: useRef<HTMLDivElement>(null),
-    label: useRef<HTMLDivElement>(null),
-    milestone: useRef<HTMLDivElement>(null),
-  };
-
-  const { data: users } = useQuery("users", sendUsersReqeust);
-  const { data: labels } = useQuery("labels", sendLabelsRequest);
-  const { data: milestones } = useQuery("milestones", () => sendMilestonesRequest("open"));
-
-  const handleRightMenuClick = (menu: SidebarKeys) => {
-    setFilterbarVisible((prev) => ({
-      ...prev,
-      [menu]: true,
-    }));
-  };
-
-  const handleClickOutside = ({ target }: Event) => {
-    Object.keys(sidebarRefs).forEach((key) => {
-      const ref = sidebarRefs[key as SidebarKeys];
-      if (ref.current && !ref.current.contains(target as Node)) {
-        setFilterbarVisible((prev) => ({
-          ...prev,
-          [key]: !prev[key as SidebarKeys],
-        }));
-      }
-    });
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const { filterbarVisible, handleRightMenuClick, sidebarRefs, users, labels, milestones } = useSidebarLogic();
 
   return (
     <Wrapper>
-      <Sector>
-        <SectorWrapper onClick={() => handleRightMenuClick("assignee")}>
-          <TitleWrapper>
-            <span>담당자</span>
-            <img src={plusIcon} />
-          </TitleWrapper>
-          <ItemWrapper>
-            {assignees?.map((assignee) => (
-              <AssigneeWrapper>
-                <img src={userIcon} />
-                {assignee}
-              </AssigneeWrapper>
-            ))}
-          </ItemWrapper>
-        </SectorWrapper>
-        {filterbarVisible.assignee && users && assignees && (
-          <SidePopup ref={sidebarRefs.assignee} popupType="assignee" sidebarType={sidebarType} items={users} selectedItems={assignees} />
-        )}
-      </Sector>
-      <Sector>
-        <SectorWrapper onClick={() => handleRightMenuClick("label")}>
-          <TitleWrapper>
-            <span>레이블</span>
-            <img src={plusIcon} />
-          </TitleWrapper>
-          <ItemWrapper>
-            {labelResponses?.map(({ labelName, bgColor, textColor }) => (
-              <LabelBox bgColor={bgColor} textColor={textColor}>
-                {labelName}
-              </LabelBox>
-            ))}
-          </ItemWrapper>
-        </SectorWrapper>
-        {filterbarVisible.label && labelResponses && (
-          <SidePopup ref={sidebarRefs.label} popupType="label" sidebarType={sidebarType} items={labels} selectedItems={labelResponses} />
-        )}
-      </Sector>
-      <Sector>
-        <SectorWrapper onClick={() => handleRightMenuClick("milestone")}>
-          <TitleWrapper>
-            <span>마일스톤</span>
-            <img src={plusIcon} />
-          </TitleWrapper>
-          <ItemWrapper>
-            {milestone && (
-              <>
-                <ProgressBar>
-                  <Progress
-                    percentage={numberUtils.parsePercentage(milestone.closedIssue || 0, milestone.totalIssue || 0)}
-                  ></Progress>
-                </ProgressBar>
-                <span>{milestone.title}</span>
-              </>
-            )}
-          </ItemWrapper>
-        </SectorWrapper>
-        {filterbarVisible.milestone && milestones && (
-          <SidePopup
-            ref={sidebarRefs.milestone}
-            popupType="milestone"
-            sidebarType={sidebarType}
-            items={milestones}
-            selectedItems={[milestone as Milestone]}
-          />
-        )}
-      </Sector>
+      <SidebarSection
+        title="담당자"
+        icon={plusIcon}
+        items={users}
+        filterbarVisible={filterbarVisible.assignee}
+        onMenuClick={() => handleRightMenuClick("assignee")}
+        ref={sidebarRefs.assignee}
+        popupType="assignee"
+        sidebarType={sidebarType}
+        selectedItems={assignees || []}
+      />
+      <SidebarSection
+        title="레이블"
+        icon={plusIcon}
+        items={labels}
+        filterbarVisible={filterbarVisible.label}
+        onMenuClick={() => handleRightMenuClick("label")}
+        ref={sidebarRefs.label}
+        popupType="label"
+        sidebarType={sidebarType}
+        selectedItems={labelResponses || []}
+      />
+      <SidebarSection
+        title="마일스톤"
+        icon={plusIcon}
+        items={milestones}
+        filterbarVisible={filterbarVisible.milestone}
+        onMenuClick={() => handleRightMenuClick("milestone")}
+        ref={sidebarRefs.milestone}
+        popupType="milestone"
+        sidebarType={sidebarType}
+        selectedItems={[milestone as Milestone]}
+      />
     </Wrapper>
   );
 }

@@ -27,7 +27,7 @@ const renderMilestone = (milestones: Milestone[], milestoneId: number) => {
 
 const IssueHeadline = React.forwardRef<HTMLDivElement, Headline>((props, ref) => {
   const { issueId, title, author, publishedAt, isClosed, labels: labelResponses, milestoneId } = props;
-  const { labels, milestones } = useIssueStore();
+  const { milestones } = useIssueStore();
   const navigate = useNavigate();
 
   return (

@@ -18,7 +18,7 @@ const popupPostionStyle = {
 
 function Filter() {
   const client = useQueryClient();
-  const { page, filterText, setFilterText, setPage, setIssues } = useIssueStore();
+  const { filterText, setFilterText, setPage, setIssues } = useIssueStore();
   const { labels, milestones } = useFilterLogic();
   const [filterbarVisible, setFilterbarVisible] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -36,7 +36,7 @@ function Filter() {
       setPage(1);
       client.invalidateQueries(`issues-1-${filterText}`);
     }
-  }
+  };
 
   useEffect(() => {
     if (searchRef.current) searchRef.current.value = filterText;
@@ -82,7 +82,9 @@ function Filter() {
             <span>이슈 작성</span>
           </NewIssueButton>
         </RightBox>
-        {filterbarVisible && <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />}
+        {filterbarVisible && (
+          <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />
+        )}
       </FilterTab>
     </>
   );

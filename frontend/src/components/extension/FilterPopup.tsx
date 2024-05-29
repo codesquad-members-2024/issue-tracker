@@ -1,4 +1,4 @@
-import { CSSProperties, Dispatch, SetStateAction, forwardRef, useState } from "react";
+import { CSSProperties, forwardRef } from "react";
 import styled from "styled-components";
 import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useQueryClient } from "react-query";
@@ -27,6 +27,8 @@ const TITLE_KEY = {
   milestone: "title",
 };
 
+const FIRST_PAGE = 1;
+
 const FilterPopup = forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
   const client = useQueryClient();
   const { filterType, items, customStyle } = props;
@@ -38,7 +40,7 @@ const FilterPopup = forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
 
       setFilterText(newFilterText);
       setIssues([]);
-      setPage(1);
+      setPage(FIRST_PAGE);
       client.invalidateQueries(`issues-1-${newFilterText}`);
     }
   };

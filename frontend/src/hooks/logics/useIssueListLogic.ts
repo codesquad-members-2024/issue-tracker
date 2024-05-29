@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import useIssueStore from "../stores/useIssueStore";
 import useInfiniteScroll from "@schnee/react-infinite-scroll";
 import { useQuery } from "react-query";
-import { sendIssuesRequest } from "../../api/IssueAPI";
 import { sendFiltersRequest, sendIssuesRequestByFilter } from "../../api/FilterAPI";
 import { useNavigate } from "react-router";
 
@@ -27,7 +26,7 @@ const useIssueListLogic = () => {
     setMilestones,
     setUsers,
     setFilterText,
-    setPage
+    setPage,
   } = useIssueStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const lastIssueRef = useRef(null);
