@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 public class Issue {
@@ -85,19 +84,5 @@ public class Issue {
 
     public void deleteMilestone() {
         this.milestoneId = null;
-    }
-
-    public boolean checkFilter(List<String> assigneeIds, List<Long> labelIds, Long milestoneId, String writer) {
-        Set<String> issueUserLoginIds = issueAssignees.stream().map(IssueAssignee::getUserLoginId).collect(Collectors.toSet());
-        boolean checkAssignee = assigneeIds == null || assigneeIds.stream().anyMatch(issueUserLoginIds::contains);
-
-        Set<Long> issueLabelIds = issueLabels.stream().map(IssueLabel::getLabelId).collect(Collectors.toSet());
-        boolean checkLabel = labelIds == null || labelIds.stream().anyMatch(issueLabelIds::contains);
-
-        boolean checkMilestone = milestoneId == null || this.milestoneId.equals(milestoneId);
-
-        boolean checkWriter = writer == null || this.writer.equals(writer);
-
-        return checkAssignee && checkLabel && checkMilestone && checkWriter;
     }
 }
