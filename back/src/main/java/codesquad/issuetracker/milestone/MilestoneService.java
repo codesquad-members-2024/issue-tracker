@@ -10,6 +10,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MilestoneService {
 
+    private static final String MILESTONE_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 마일스톤 입니다.";
+
     private final MilestoneRepository milestoneRepository;
 
     public Milestone createMilestone(Milestone milestone) {
@@ -21,7 +23,7 @@ public class MilestoneService {
     }
 
     public Milestone getMilestoneById(Long milestoneId) {
-        return milestoneRepository.findById(milestoneId).orElseThrow(() -> new MilestoneNotFoundException("존재하지 않는 마일스톤 입니다."));
+        return milestoneRepository.findById(milestoneId).orElseThrow(() -> new MilestoneNotFoundException(MILESTONE_NOT_FOUND_ERROR_MESSAGE));
     }
 
     public Milestone updateMilestoneById(Milestone milestone) {

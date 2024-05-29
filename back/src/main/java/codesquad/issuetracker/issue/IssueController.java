@@ -1,5 +1,6 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.config.LoginInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class IssueController {
             UriComponentsBuilder uriComponentsBuilder,
             HttpServletRequest request
     ) {
-        issue.setWriter((String) request.getAttribute("loginId")); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
+        issue.setWriter((String) request.getAttribute(LoginInterceptor.LOGIN_ID)); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
         Issue createdIssue = issueService.createIssue(issue);
         URI location = uriComponentsBuilder.path("/issues/{id}")
                 .buildAndExpand(createdIssue.getId())

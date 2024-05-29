@@ -12,6 +12,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
 
+    public static final String LOGIN_ID = "loginId";
+    private static final String AUTHORIZATION = "Authorization";
+
     private final JwtUtil jwtUtil;
 
     @Override
@@ -20,12 +23,12 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader(AUTHORIZATION);
         String accessToken = jwtUtil.getJwtTokenFromHeader(authorization);
 
         try {
             String token = jwtUtil.validateToken(accessToken); // JWT 토큰 검증
-            request.setAttribute("loginId", token); // loginId 값 저장
+            request.setAttribute(LOGIN_ID, token); // loginId 값 저장
             return true;
         } catch (Exception e) {
             log.info("인증되지 않은 토큰");

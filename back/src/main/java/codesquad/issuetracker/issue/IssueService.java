@@ -17,6 +17,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class IssueService {
 
+    private static final String ISSUE_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 이슈입니다.";
+
     private final IssueRepository issueRepository;
     private final LabelRepository labelRepository;
     private final UserRepository userRepository;
@@ -123,6 +125,6 @@ public class IssueService {
     }
 
     private Issue getIssueById(Long issueId) {
-        return issueRepository.findById(issueId).orElseThrow(() -> new IssueNotFoundException("존재하지 않는 이슈입니다."));
+        return issueRepository.findById(issueId).orElseThrow(() -> new IssueNotFoundException(ISSUE_NOT_FOUND_ERROR_MESSAGE));
     }
 }
