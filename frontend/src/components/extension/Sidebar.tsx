@@ -1,10 +1,14 @@
 import styled from "styled-components";
 import plusIcon from "../../img/icon/plusIcon_dark.svg";
 import userIcon from "../../img/icon/userIcon.png";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import SidePopup from "./SidePopup";
 import useIssueStore, { Label, Milestone } from "../../hooks/stores/useIssueStore";
 import numberUtils from "../../utils/NumberUtils";
+import { useQuery, useQueryClient } from "react-query";
+import { sendLabelsRequest } from "../../api/LabelAPI";
+import { sendMilestonesRequest } from "../../api/MilestoneAPI";
+import { CreatorContext } from "../../contexts/CreatorContext";
 
 type SidebarKeys = "assignee" | "label" | "milestone";
 type SidebarType = "new-issue" | "detail";
@@ -17,7 +21,8 @@ interface SidebarProps {
 }
 
 function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarProps) {
-  const { users, labels, milestones } = useIssueStore();
+  const { users } = useIssueStore();
+  const { assignees: assigneeContext, labels: labelContext, milestone: milestoneContext } = useContext(CreatorContext);
 
   const [filterbarVisible, setFilterbarVisible] = useState<Record<SidebarKeys, boolean>>({
     assignee: false,
@@ -30,6 +35,9 @@ function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarP
     label: useRef<HTMLDivElement>(null),
     milestone: useRef<HTMLDivElement>(null),
   };
+
+  const { data: labels } = useQuery("labels", sendLabelsRequest);
+  const { data: milestones } = useQuery("milestones", () => sendMilestonesRequest("open"));
 
   const handleRightMenuClick = (menu: SidebarKeys) => {
     setFilterbarVisible((prev) => ({

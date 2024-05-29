@@ -4,6 +4,9 @@ interface NewIssue {
   title: string;
   content: string;
   userId: string;
+  assignees: string[];
+  labels: number[];
+  milestone: number | null;
 }
 
 interface IssuesRequestProps {
@@ -100,7 +103,7 @@ export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) =
   }
 };
 
-export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
+export const postNewIssue = async ({ title, content, userId, assignees, labels, milestone }: NewIssue) => {
   try {
     const token = getAuthToken();
     const request = {
@@ -111,9 +114,12 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify({
-        title: title,
-        content: content,
         author: userId,
+        title,
+        content,
+        assignees,
+        labels,
+        milestone
       }),
     };
     const response = await fetch(`${SERVER}/issue`, request);
@@ -225,7 +231,7 @@ export const updateAssigneesInIssue = async (issueId: number | string, assignees
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};
 
 export const updateLabelsInIssue = async (issueId: number | string, labelIds: number[]) => {
   try {
@@ -271,4 +277,4 @@ export const updateMilestoneInIssue = async (issueId: number | string, milestone
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
   }
-}
+};

@@ -137,12 +137,10 @@ const SidePopup = React.forwardRef<HTMLDivElement, SidePopupProps>((props, ref) 
               setAssignees(checkedItems);
               break;
             case "label":
-              console.log("labels", checkedItems);
               requestItems = checkedItems;
               setLabels(requestItems);
               break;
             case "milestone":
-              console.log("milestone", checkedItems);
               requestItems = checkedItems.filter((item) => item);
               setMilestone(requestItems[0]);
               break;
