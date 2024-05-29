@@ -31,9 +31,18 @@ public class FilterController {
             @RequestParam(required = false) String state,
             @RequestParam(required = false) String writer,
             @RequestParam(required = false) String assignee,
-            @RequestParam(required = false) String commenter
+            @RequestParam(required = false) String commenter,
+            @RequestParam(required = false) Long label_id,
+            @RequestParam(required = false) Long milestone_id
     ) {
-        FilteredIssueRequest request = new FilteredIssueRequest(target, state, writer, assignee, commenter);
+        FilteredIssueRequest request = new FilteredIssueRequest(
+                target,
+                state,
+                writer,
+                assignee,
+                commenter,
+                label_id,
+                milestone_id);
 
         FilteredIssueResponse response = filterService.getFilteredIssues(request);
 
