@@ -50,7 +50,7 @@ function IssueCreator() {
             </ExtensionWrapper>
           </CommentWrapper>
         </FormWrapper>
-        <Sidebar />
+        <Sidebar sidebarType="new-issue" />
       </BodyWrapper>
       <BodyBoundary />
       <ButtonsWrapper>

@@ -6,6 +6,6 @@ export default {
   component: Sidebar,
 } as Meta;
 
-const Template: StoryFn = () => <Sidebar />;
+const Template: StoryFn = () => <Sidebar sidebarType="new-issue" />;
 
 export const DefaultSidebar = Template.bind({});

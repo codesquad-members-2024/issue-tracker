@@ -7,14 +7,16 @@ import useIssueStore, { Label, Milestone } from "../../hooks/stores/useIssueStor
 import numberUtils from "../../utils/NumberUtils";
 
 type SidebarKeys = "assignee" | "label" | "milestone";
+type SidebarType = "new-issue" | "detail";
 
 interface SidebarProps {
   assignees?: string[];
   labelResponses?: Label[];
   milestone?: Milestone | null;
+  sidebarType: SidebarType;
 }
 
-function Sidebar({ assignees, labelResponses, milestone }: SidebarProps) {
+function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarProps) {
   const { users, labels, milestones } = useIssueStore();
 
   const [filterbarVisible, setFilterbarVisible] = useState<Record<SidebarKeys, boolean>>({
@@ -72,7 +74,9 @@ function Sidebar({ assignees, labelResponses, milestone }: SidebarProps) {
             ))}
           </ItemWrapper>
         </SectorWrapper>
-        {filterbarVisible.assignee && <SidePopup ref={sidebarRefs.assignee} popupType="assignee" items={users} />}
+        {filterbarVisible.assignee && users && assignees && (
+          <SidePopup ref={sidebarRefs.assignee} popupType="assignee" items={users} selectedItems={assignees} />
+        )}
       </Sector>
       <Sector>
         <SectorWrapper onClick={() => handleRightMenuClick("label")}>
@@ -88,7 +92,9 @@ function Sidebar({ assignees, labelResponses, milestone }: SidebarProps) {
             ))}
           </ItemWrapper>
         </SectorWrapper>
-        {filterbarVisible.label && <SidePopup ref={sidebarRefs.label} popupType="label" items={labels} />}
+        {filterbarVisible.label && labelResponses && (
+          <SidePopup ref={sidebarRefs.label} popupType="label" items={labels} selectedItems={labelResponses} />
+        )}
       </Sector>
       <Sector>
         <SectorWrapper onClick={() => handleRightMenuClick("milestone")}>
@@ -109,8 +115,13 @@ function Sidebar({ assignees, labelResponses, milestone }: SidebarProps) {
             )}
           </ItemWrapper>
         </SectorWrapper>
-        {filterbarVisible.milestone && (
-          <SidePopup ref={sidebarRefs.milestone} popupType="milestone" items={milestones} />
+        {filterbarVisible.milestone && milestones && (
+          <SidePopup
+            ref={sidebarRefs.milestone}
+            popupType="milestone"
+            items={milestones}
+            selectedItems={[milestone as Milestone]}
+          />
         )}
       </Sector>
     </Wrapper>

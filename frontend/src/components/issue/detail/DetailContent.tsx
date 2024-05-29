@@ -23,7 +23,7 @@ function DetailContent() {
           <img src={plusIcon} /> 코멘트 작성
         </SubmitButton>
       </CommentWrapper>
-      <Sidebar assignees={assignees} labelResponses={labelResponses} milestone={milestone} />
+      <Sidebar assignees={assignees} labelResponses={labelResponses} milestone={milestone} sidebarType="detail" />
     </ContentWrapper>
   );
 }
