@@ -1,14 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Label, Milestone } from "../../hooks/stores/useIssueStore";
 import { updateAssigneesInIssue, updateLabelsInIssue, updateMilestoneInIssue } from "../../api/IssueAPI";
 import { useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
+import { CreatorContext } from "../../contexts/CreatorContext";
 
 type PopupType = "assignee" | "label" | "milestone";
+type SidebarType = "new-issue" | "detail";
 
 interface SidePopupProps {
   popupType: PopupType;
+  sidebarType: SidebarType;
   items?: string[] | Label[] | Milestone[];
   selectedItems: string[] | Label[] | Milestone[];
 }
@@ -85,7 +88,8 @@ const renderOptions = (
 
 const SidePopup = React.forwardRef<HTMLDivElement, SidePopupProps>((props, ref) => {
   const client = useQueryClient();
-  const { popupType, items, selectedItems } = props;
+  const { setAssignees, setLabels, setMilestone } = useContext(CreatorContext);
+  const { popupType, sidebarType, items, selectedItems } = props;
   const [checkedItems, setCheckedItems] = useState<any[]>(selectedItems);
   const prevRef = useRef<HTMLDivElement | null>(null);
   const { issueId } = useParams<{ issueId: string }>();
@@ -105,19 +109,42 @@ const SidePopup = React.forwardRef<HTMLDivElement, SidePopupProps>((props, ref) 
     return () => {
       if (prevRef.current && isRefObject(ref) && !ref.current) {
         let requestItems;
-        if (issueId) {
+        if (sidebarType === "detail") {
           switch (popupType) {
             case "assignee":
               requestItems = checkedItems;
-              updateAssigneesInIssue(issueId, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
+              updateAssigneesInIssue(issueId || 0, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
               break;
             case "label":
               requestItems = checkedItems.filter((item) => item).map(({ labelId }) => labelId);
-              updateLabelsInIssue(issueId, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
+              updateLabelsInIssue(issueId || 0, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
               break;
             case "milestone":
               requestItems = checkedItems.filter((item) => item).map(({ milestoneId }) => milestoneId);
-              updateMilestoneInIssue(issueId, requestItems[0]).then(() => client.invalidateQueries(`issue-${issueId}`));
+              updateMilestoneInIssue(issueId || 0, requestItems[0]).then(() =>
+                client.invalidateQueries(`issue-${issueId || 0}`)
+              );
+              break;
+            default:
+              return;
+          }
+        }
+
+        if (sidebarType === "new-issue") {
+          switch (popupType) {
+            case "assignee":
+              requestItems = checkedItems;
+              setAssignees(checkedItems);
+              break;
+            case "label":
+              console.log("labels", checkedItems);
+              requestItems = checkedItems;
+              setLabels(requestItems);
+              break;
+            case "milestone":
+              console.log("milestone", checkedItems);
+              requestItems = checkedItems.filter((item) => item);
+              setMilestone(requestItems[0]);
               break;
             default:
               return;

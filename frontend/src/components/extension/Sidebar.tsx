@@ -75,7 +75,7 @@ function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarP
           </ItemWrapper>
         </SectorWrapper>
         {filterbarVisible.assignee && users && assignees && (
-          <SidePopup ref={sidebarRefs.assignee} popupType="assignee" items={users} selectedItems={assignees} />
+          <SidePopup ref={sidebarRefs.assignee} popupType="assignee" sidebarType={sidebarType} items={users} selectedItems={assignees} />
         )}
       </Sector>
       <Sector>
@@ -93,7 +93,7 @@ function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarP
           </ItemWrapper>
         </SectorWrapper>
         {filterbarVisible.label && labelResponses && (
-          <SidePopup ref={sidebarRefs.label} popupType="label" items={labels} selectedItems={labelResponses} />
+          <SidePopup ref={sidebarRefs.label} popupType="label" sidebarType={sidebarType} items={labels} selectedItems={labelResponses} />
         )}
       </Sector>
       <Sector>
@@ -119,6 +119,7 @@ function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarP
           <SidePopup
             ref={sidebarRefs.milestone}
             popupType="milestone"
+            sidebarType={sidebarType}
             items={milestones}
             selectedItems={[milestone as Milestone]}
           />

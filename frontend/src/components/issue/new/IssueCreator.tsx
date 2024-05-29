@@ -6,6 +6,8 @@ import plusIcon from "../../../img/icon/plusIcon_dark.svg";
 import uploadIcon from "../../../img/icon/uploadIcon.svg";
 import Sidebar from "../../extension/Sidebar";
 import useIssueCreatorLogic from "../../../hooks/logics/useIssueCreatorLogic";
+import { useContext } from "react";
+import { CreatorContext } from "../../../contexts/CreatorContext";
 
 function IssueCreator() {
   const {
@@ -20,6 +22,7 @@ function IssueCreator() {
     handleCancel,
     handleSubmit,
   } = useIssueCreatorLogic();
+  const { assignees, labels, milestone } = useContext(CreatorContext);
 
   return (
     <Wrapper>
@@ -50,7 +53,7 @@ function IssueCreator() {
             </ExtensionWrapper>
           </CommentWrapper>
         </FormWrapper>
-        <Sidebar sidebarType="new-issue" />
+          <Sidebar assignees={assignees} labelResponses={labels} milestone={milestone} sidebarType="new-issue" />
       </BodyWrapper>
       <BodyBoundary />
       <ButtonsWrapper>

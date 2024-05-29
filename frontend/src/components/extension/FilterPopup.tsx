@@ -34,7 +34,7 @@ const FilterPopup = forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
 
   const handleCheckboxChange = (option: string, { target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
     if (checked) {
-      const newFilterText = `${filterText} ${filterType}:${option}`;
+      const newFilterText = `${filterText} ${filterType}:"${option}"`;
 
       setFilterText(newFilterText);
       setIssues([]);
