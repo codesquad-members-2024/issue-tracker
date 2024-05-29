@@ -1,8 +1,9 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import useUserStore from "../stores/useUserStore";
 import { useNavigate } from "react-router-dom";
 import { postNewIssue } from "../../api/IssueAPI";
 import useFileUpload from "@schnee/s3-file-upload";
+import { CreatorContext } from "../../contexts/CreatorContext";
 
 const IMAGE_DIRECTORY = process.env.REACT_APP_IMG_DIRECTORY;
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"];
@@ -12,6 +13,7 @@ const parseImageTag = (src: string) => `\n<img src="${src}" />\n`;
 
 const useIssueCreatorLogic = () => {
   const { userId } = useUserStore();
+  const { assignees, labels, milestone } = useContext(CreatorContext);
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,8 +38,18 @@ const useIssueCreatorLogic = () => {
   const handleSubmit = () => {
     const title = titleRef.current?.value;
     const content = commentRef.current?.value;
+    const labelIds = labels.map((label) => label.labelId);
+    const milestoneId = milestone?.milestoneId || null;
 
-    if (title && content) postNewIssue({ title, content, userId }).then((data) => navigate(`/issue/${data.issueId}`));
+    if (title && content)
+      postNewIssue({
+        title,
+        content,
+        userId,
+        assignees,
+        labels: labelIds,
+        milestone: milestoneId,
+      }).then((data) => navigate(`/issue/${data.issueId}`));
   };
   const handleUploadClick = () => fileInputRef.current?.click();
   const handleFileChange = async ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -50,8 +62,7 @@ const useIssueCreatorLogic = () => {
 
       const fileLocation = await upload(file, IMAGE_DIRECTORY);
 
-      if (commentRef.current)
-        commentRef.current.value += parseImageTag(fileLocation.Location);
+      if (commentRef.current) commentRef.current.value += parseImageTag(fileLocation.Location);
     } catch (error) {
       console.error(error);
     }
