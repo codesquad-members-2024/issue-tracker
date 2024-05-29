@@ -25,9 +25,10 @@ export function MilestonesContent({ milestones }) {
       {onEdit && (
         <NewMilestones
           actionType="updateMilestones"
+          closeNewMilestones={closeNewMilestones}
           milestoneId={selectedMilestones?.id}
           initialData={selectedMilestones}
-          closeNewMilestones={closeNewMilestones}
+          // {...{ closeNewLabels, fetchData, putData, deleteData }}
         />
       )}
       {milestones.length === 0 ? (

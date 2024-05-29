@@ -22,7 +22,7 @@ export function MilestonesList() {
           <span>닫힌 마일스톤({closedMilestonesList.length})</span>
         </StyledBtn>
       </MilestonesHeader>
-      <MilestonesContent milestones={milestonesToDisplay}/>
+      <MilestonesContent milestones={milestonesToDisplay} />
     </Wrap>
   );
 }
