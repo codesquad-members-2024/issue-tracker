@@ -38,6 +38,8 @@ const useIssueCreatorLogic = () => {
   const handleSubmit = () => {
     const title = titleRef.current?.value;
     const content = commentRef.current?.value;
+    const labelIds = labels.map((label) => label.labelId);
+    const milestoneId = milestone?.milestoneId || null;
 
     if (title && content)
       postNewIssue({
@@ -45,8 +47,8 @@ const useIssueCreatorLogic = () => {
         content,
         userId,
         assignees,
-        labels: labels.map((label) => label.labelId),
-        milestone: milestone?.milestoneId || null,
+        labels: labelIds,
+        milestone: milestoneId,
       }).then((data) => navigate(`/issue/${data.issueId}`));
   };
   const handleUploadClick = () => fileInputRef.current?.click();
