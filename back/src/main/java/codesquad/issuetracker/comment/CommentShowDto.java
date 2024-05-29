@@ -17,6 +17,6 @@ public class CommentShowDto {
         this.writer = comment.getLoginId();
         this.content = comment.getContent();
         this.duration = TimeCalculator.calculateTimeDifference(comment.getCreatedDate());
-        this.profileImage = "https://avatars.githubusercontent.com/u/126778700?s=40&v=4"; // 테스트용 데이터
+        this.profileImage = comment.getProfileImage();
     }
 }
