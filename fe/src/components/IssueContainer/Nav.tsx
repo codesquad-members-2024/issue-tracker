@@ -9,6 +9,8 @@ interface NavProps {
     resetFilterUI: boolean;
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
     handleResetFilterUI: () => void;
+    labelCount: number
+    openMilestoneCount: number
 }
 
 const ISSUES_FILTER = [
@@ -19,7 +21,7 @@ const ISSUES_FILTER = [
     { value: "닫힌 이슈", query: "is_open=false" },
 ];
 
-const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI}: NavProps) => {
+const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI, labelCount, openMilestoneCount}: NavProps) => {
 
     const [FilterState, FilterDispatch] = useContext(FilterContext);
     
@@ -45,7 +47,7 @@ const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI}: NavProps) 
                     </div>
                 </div>
                     <div className="flex gap-2">
-                        <LabelsAndMilestoneUI/>
+                        <LabelsAndMilestoneUI labelsCount={labelCount} milestoneCount={openMilestoneCount}/>
                         <Link
                             to="/new"
                             className="flex items-center border-none bg-blue-500 px-6 rounded-xl text-white text-xs w-[128px] justify-center"

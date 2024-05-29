@@ -11,6 +11,12 @@ const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
 
     const handleFocus = () => setActive(true);
     const handleBlur = () => setActive(false);
+    const addCommentText = (comment: string) => {
+        setIssueData(prev => ({
+            ...prev,
+            content: comment,
+        }))
+    }
 
     return (
         <div className="flex flex-col gap-2">
@@ -40,7 +46,7 @@ const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
                 </div>
             </div>
             <div>
-                <CommentBox height={"h-[400px]"} issueData={issueData} setIssueData={setIssueData}/>
+                <CommentBox height={"h-[400px]"} addCommentText={addCommentText}/>
             </div>
         </div>
     );

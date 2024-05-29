@@ -19,7 +19,6 @@ interface MilestoneFeedProps {
 }
 
 export const MilestoneFeed = ({ milestoneData }: MilestoneFeedProps) => {
-    console.log(milestoneData)
     const [isOpen, setOpen] = useState("OPEN");
     const isOpenInfo = milestoneData.filter(
         (curInfo) => curInfo.state === isOpen

@@ -1,28 +1,30 @@
-import { Label } from "../components/LabelsMilestones/Labels/LabelFeed";
-import { Milestone } from "../components/LabelsMilestones/Milestones/MilestoneFeed";
-import { DownCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { DownCircleOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+import { UserImgBox } from "./UserImgBox";
+import { SidebarLabel, SidebarMilestone, SidebarUser } from "../pages/NewPage";
+import CircleIcon from '../assets/free-icon-circle-3962612.png';
 
 interface DropDownListProps {
-    curKey: string;
-    data: (Label | Milestone)[];
-    handleClick: (curData: Label | Milestone) => void;
-    query: string;
+    curTableItem: string;
+    data: (SidebarLabel | SidebarMilestone | SidebarUser)[];
+    handleListClick: (curData: SidebarLabel | SidebarMilestone | SidebarUser, tableName: string) => void;
+    queryName: string;
     loading: boolean;
-    issueData: (Label | Milestone)[];
+    sideBarItems: (SidebarLabel | SidebarMilestone| SidebarUser)[];
 }
 
 const DropDownList = ({
-    curKey,
+    curTableItem,
     data,
-    handleClick,
-    query,
+    handleListClick,
+    queryName,
     loading,
-    issueData,
+    sideBarItems,
 }: DropDownListProps) => {
+    
     return (
         <div className="absolute bg-gray-100 dark:bg-darkModeBorderBG border border-gray-200 shadow-md z-10 mt-1 w-[230px] flex flex-col rounded-xl overflow-hidden">
-            <div className="m-2 ml-4 text-sm">{curKey} 설정</div>
+            <div className="m-2 ml-4 text-sm">{curTableItem} 설정</div>
             {loading && (
                 <Spin size="small">
                     <div className="p-8 bg-gray-200"></div>
@@ -32,10 +34,11 @@ const DropDownList = ({
                 data.map((curData, idx) => (
                     <div
                         key={idx}
-                        onClick={() => handleClick(curData)}
-                        className="flex-grow border-t-2 border-gray-200 px-6 flex items-center h-10 text-sm justify-between bg-white dark:bg-darkModeBorderBG"
+                        onClick={() => handleListClick(curData, curTableItem)}
+                        className={`${sideBarItems.find((item) => item.id === curData.id) && "font-bold"} flex-grow border-t-2 border-gray-200 px-6 flex items-center h-10 text-sm justify-between bg-white dark:bg-darkModeBorderBG`}
                     >
-                        {query === "labels" && (
+                        
+                        {queryName === "labels" && (
                             <div className="flex items-center gap-2">
                                 <div
                                     style={{
@@ -43,22 +46,25 @@ const DropDownList = ({
                                         height: "15px",
                                         borderRadius: "50%",
                                         backgroundColor:
-                                            (curData as Label).backgroundColor,
+                                            (curData as SidebarLabel).backgroundColor,
                                     }}
                                 />
-                                <div>{(curData as Label).name}</div>
+                                <div>{(curData as SidebarLabel).name}</div>
                             </div>
                         )}
-                        {query === "milestones" && (
-                            <div>{(curData as Milestone).title}</div>
+                        {queryName === "milestones" && (
+                            <div>{(curData as SidebarMilestone).title}</div>
                         )}
-                        {query === "assignees" && (
-                            <div>담당자 API 안나왔음</div>
+                        {queryName === "users" && (
+                            <div className="flex gap-2">
+                                <UserImgBox imgURL={(curData as SidebarUser).imgUrl} margin="auto" width="20px" height="20px"/>
+                                <p>{(curData as SidebarUser).id}</p>
+                            </div>
                         )}
-                        {issueData.find((item) => item.id === curData.id) ? (
+                        {sideBarItems.find((item) => item.id === curData.id) ? (
                             <DownCircleOutlined />
                         ) : (
-                            <MinusCircleOutlined />
+                            <img src={CircleIcon} alt="Circle Icon" className="w-[14px] h-[14px]"/>
                         )}
                     </div>
                 ))}

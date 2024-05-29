@@ -1,6 +1,5 @@
 import React from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
-import { Issue } from "./IssueFeed";
 import FilterUI from "../../common/FilterUI";
 import { Filter } from "../../common/FilterUI";
 import IssueStatusFilter from "./IssueStatusFilter";
@@ -32,32 +31,30 @@ const taskTable: TaskTable = {
 };
 
 interface FeedNavProps {
-    isOpen: string;
-    setOpen: React.Dispatch<React.SetStateAction<string>>;
-    issueInfo: Issue[];
+    setQuery: React.Dispatch<React.SetStateAction<string>>;
+    isOpen: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     resetFilterUI: boolean;
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
     isAllChecked: boolean;
     allCheckHandler: () => void;
     checkedItem: string[];
+    openIssueCount: number;
+    closedIssueCount: number;
 }
 
 const FeedNav = ({
+    setQuery,
     isOpen,
     setOpen,
-    issueInfo,
     resetFilterUI,
     setResetFilterUI,
     isAllChecked,
     allCheckHandler,
     checkedItem,
+    openIssueCount,
+    closedIssueCount,
 }: FeedNavProps) => {
-    const issuesLength = {
-        open: issueInfo.filter((curIssue) => curIssue.state === "OPEN").length,
-        closed: issueInfo.filter((curIssue) => curIssue.state === "CLOSED")
-            .length,
-    };
-
     return (
         <div className="h-[45px] bg-gray-200 dark:bg-darkModeBG flex text-sm rounded-t-lg">
             <div className="flex h-full w-[70%] items-center">
@@ -72,34 +69,40 @@ const FeedNav = ({
                 ) : (
                     <div>
                         <button
-                            className={`mr-6 ${isOpen === "OPEN" && "font-bold"}`}
-                            onClick={() => setOpen("OPEN")}
+                            className={`mr-6 ${isOpen && "font-bold"}`}
+                            onClick={() => {
+                                setOpen(true);
+                                setQuery("issues?state=OPEN");
+                            }}
                         >
-                            <InfoCircleOutlined /> 열린 이슈({issuesLength.open}
-                            )
+                            <InfoCircleOutlined /> 열린 이슈({openIssueCount})
                         </button>
                         <button
-                            className={`${isOpen === "CLOSED" && "font-bold"}`}
-                            onClick={() => setOpen("CLOSED")}
+                            className={`${!isOpen && "font-bold"}`}
+                            onClick={() => {
+                                setOpen(false);
+                                setQuery("issues?state=CLOSED");
+                            }}
                         >
-                            <CreditCardOutlined /> 닫힌 이슈(
-                            {issuesLength.closed})
+                            <CreditCardOutlined /> 닫힌 이슈({closedIssueCount})
                         </button>
                     </div>
                 )}
             </div>
             <div className="flex h-full w-[30%] items-center z-10">
-                {checkedItem.length
-                    ? <IssueStatusFilter checkedItem={checkedItem}/>
-                    : Object.keys(taskTable).map((key) => (
-                          <FilterUI
-                              key={key}
-                              filterInfo={taskTable[key]}
-                              filterType={key}
-                              resetFilterUI={resetFilterUI}
-                              setResetFilterUI={setResetFilterUI}
-                          />
-                      ))}
+                {checkedItem.length ? (
+                    <IssueStatusFilter checkedItem={checkedItem} />
+                ) : (
+                    Object.keys(taskTable).map((key) => (
+                        <FilterUI
+                            key={key}
+                            filterInfo={taskTable[key]}
+                            filterType={key}
+                            resetFilterUI={resetFilterUI}
+                            setResetFilterUI={setResetFilterUI}
+                        />
+                    ))
+                )}
             </div>
         </div>
     );

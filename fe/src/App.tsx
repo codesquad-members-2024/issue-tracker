@@ -12,14 +12,14 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<LoginPage />}></Route>
-                <Route path="/signUp" element={<SignUp />}></Route>
+                <Route path="/" element={<LoginPage />}/>
+                <Route path="/signUp" element={<SignUp />}/>
                 <Route element={<PrivateRoute />}>
-                    <Route path="/issue" element={<IssuePage />}></Route>
-                    <Route path="/issue/:productId" element={<IssueProduct />}></Route>
-                    <Route path="/labels" element={<LabelsPage />}></Route>
-                    <Route path="/milestones" element={<MilestonesPage />}></Route>
-                    <Route path="/new" element={<NewPage />}></Route>
+                    <Route path="/issue" element={<IssuePage />}/>
+                    <Route path="/issue/:productId" element={<IssueProduct />}/>
+                    <Route path="/labels" element={<LabelsPage />}/>
+                    <Route path="/milestones" element={<MilestonesPage />}/>
+                    <Route path="/new" element={<NewPage />}/>
                 </Route>
             </Routes>
         </BrowserRouter>

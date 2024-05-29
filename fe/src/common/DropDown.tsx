@@ -1,76 +1,68 @@
 import { useEffect, useState } from "react";
 import { APiUtil } from "./Utils";
-import { Label } from "../components/LabelsMilestones/Labels/LabelFeed";
-import { Milestone } from "../components/LabelsMilestones/Milestones/MilestoneFeed";
 import { PlusOutlined } from "@ant-design/icons";
-import { TableType } from "./Sidebar";
-import { NewIssueForm } from "../pages/NewPage";
+import { TableType } from "../pages/NewPage";
 import DropDownList from "./DropDownList";
 import Progressbar from "./Progressbar";
+import { UserImgBox } from "./UserImgBox";
+import { SidebarLabel, SidebarMilestone, SidebarUser, SideBarItemsForm } from "../pages/NewPage";
+
 
 interface DropDownProps {
-    curKey: keyof TableType;
+    curTableItem: keyof TableType;
     idx: number;
-    query: TableType[keyof TableType];
-    issueData: NewIssueForm
-    setIssueData: React.Dispatch<React.SetStateAction<NewIssueForm>>;
-    lastIdx: number
+    queryName: TableType[keyof TableType];
+    sideBarItems: SideBarItemsForm
+    handleListClick: (curData: SidebarLabel | SidebarMilestone | SidebarUser, tableName: string) => void;
+    lastIdx: number;
+    sideTable: { [key in TableType[keyof TableType]]: keyof SideBarItemsForm };
 }
 
-const sideTable: { [key in TableType[keyof TableType]]: keyof NewIssueForm } = {
-    assignees: "assigneeIds",
-    labels: "labelIds",
-    milestones: "milestoneId",
-};
-
-const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: DropDownProps) => {
+const DropDown = ({
+    curTableItem,
+    idx,
+    queryName,
+    sideBarItems,
+    handleListClick,
+    lastIdx,
+    sideTable
+}: DropDownProps) => {
     const [isOpen, setOpen] = useState(false);
-    const [data, setData] = useState<(Label | Milestone)[]>([]);
+    const [data, setData] = useState<(SidebarLabel | SidebarMilestone | SidebarUser)[]>([]);
     const [loading, setLoading] = useState(false);
 
     const toggleDropdown = () => setOpen(!isOpen);
-
-    const handleClick = (curData: Label | Milestone) => {
-        setIssueData((prev) => {
-            const key = sideTable[query];
-            const currentSideItem = prev[key] as (Label | Milestone)[];
-    
-            if (currentSideItem.find((item) => item.id === curData.id)) {
-                return {
-                    ...prev,
-                    [key]: currentSideItem.filter((item) => item.id !== curData.id),
-                };
-            }
-    
-            return {
-                ...prev,
-                [key]: [...currentSideItem, curData],
-            };
-        });
-        setOpen(false);
-    };
-    
 
     useEffect(() => {
         const fetchData = async () => {
             if (isOpen) {
                 setLoading(true);
                 try {
-                    const filterInfo = await APiUtil.getData(query);
-                    if (query === "labels" && filterInfo && filterInfo.labelResponses) {
+                    const filterInfo = await APiUtil.getData(queryName);
+                    if (
+                        queryName === "labels" &&
+                        filterInfo &&
+                        filterInfo.labelResponses
+                    ) {
                         setData(filterInfo.labelResponses);
-                    } else if (query === "milestones" && filterInfo && filterInfo.milestones) {
+                    } else if (
+                        queryName === "milestones" &&
+                        filterInfo &&
+                        filterInfo.milestones
+                    ) {
                         setData(filterInfo.milestones);
+                    } else {
+                        setData(filterInfo);
                     }
                 } finally {
                     setLoading(false);
                 }
             }
         };
-        
+
         fetchData();
-    }, [isOpen, query]);
-    
+    }, [isOpen, queryName]);
+
     return (
         <li
             className={`${
@@ -82,45 +74,64 @@ const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: Drop
                 key={idx}
                 className="flex justify-between my-2"
             >
-                <div>{curKey}</div>
+                <div>{curTableItem}</div>
                 <PlusOutlined />
             </div>
-            {(issueData[sideTable[query]] as (Label | Milestone)[]).map(
-                (curData, idx) => (
-                    <div key={idx} className="flex flex-col my-2">
-                        {query === "labels" && (
-                            <div className="flex">
-                                <div
-                                    className="rounded-xl px-3"
-                                    style={{
-                                        backgroundColor: (curData as Label)
-                                            .backgroundColor,
-                                        color: (curData as Label).textColor,
-                                    }}
-                                >
-                                    {(curData as Label).name}
-                                </div>
+            {(
+                sideBarItems[sideTable[curTableItem]] as (SidebarLabel | SidebarMilestone | SidebarUser)[]
+            ).map((curData, idx) => (
+                <div key={idx} className="flex flex-col my-2">
+                    {queryName === "labels" && (
+                        <div className="flex">
+                            <div
+                                className="rounded-xl px-3"
+                                style={{
+                                    backgroundColor: (curData as SidebarLabel)
+                                        .backgroundColor,
+                                    color: (curData as SidebarLabel).textColor,
+                                }}
+                            >
+                                {(curData as SidebarLabel).name}
                             </div>
-                        )}
-                        {query === "milestones" && (
-                            <>
-                                <Progressbar open={(curData as Milestone).openIssueCount} closed={(curData as Milestone).closedIssueCount} />
-                                <div className="text-right">{(curData as Milestone).title}</div>
-                            </>
-                        )}
-                        {query === "assignees" && <div>담당자 API 안나옴</div>}
-                    </div>
-                )
-            )}
+                        </div>
+                    )}
+                    {queryName === "milestones" && (
+                        <>
+                            <Progressbar
+                                open={(curData as SidebarMilestone).openIssueCount}
+                                closed={(curData as SidebarMilestone).closedIssueCount}
+                            />
+                            <div className="text-right">
+                                {(curData as SidebarMilestone).title}
+                            </div>
+                        </>
+                    )}
+                    {queryName === "users" && (
+                        <div className="flex gap-2">
+                            <UserImgBox
+                                imgURL={(curData as SidebarUser).imgUrl}
+                                margin="auto"
+                                width="20px"
+                                height="20px"
+                            />
+                            <p>{(curData as SidebarUser).id}</p>
+                        </div>
+                    )}
+                </div>
+            ))}
             {isOpen && (
                 <DropDownList
-                    curKey={curKey}
+                    curTableItem={curTableItem}
                     data={data}
-                    handleClick={handleClick}
-                    query={query}
+                    handleListClick={handleListClick}
+                    queryName={queryName}
                     loading={loading}
-                    issueData={
-                        issueData[sideTable[query]] as (Label | Milestone)[]
+                    sideBarItems={
+                        sideBarItems[sideTable[curTableItem]] as (
+                            | SidebarLabel
+                            | SidebarMilestone
+                            | SidebarUser
+                        )[]
                     }
                 />
             )}
@@ -129,8 +140,3 @@ const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: Drop
 };
 
 export default DropDown;
-
-// 같은 UI 다른 기능?
-// 보여주는 건 동일하니 handler, data만 콜백으로 넘겨주면됨
-// 그러면 data 타입이 동일해야하고 handle러 파라미터가 동일해야함
-// 

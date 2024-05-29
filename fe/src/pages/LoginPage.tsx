@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { APiUtil } from "../common/Utils";
 import { openNotification } from "../common/Utils";
 
+// const serverURL = import.meta.env.VITE_API_URL;
 export interface LoginForm {
     id: string;
     password: string;
@@ -15,6 +16,11 @@ const LoginPage = () => {
         id: "",
         password: "",
     });
+
+    const handleOAoth = async () => {
+        return;
+    }
+    
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -53,8 +59,8 @@ const LoginPage = () => {
                 >
                     Issue Tracker
                 </Link>
-                <button className="px-10 py-2 font-normal border-solid border-2 text-blue-500 border-blue-500 rounded-xl">
-                    GitHub 계정으로 로그인
+                <button onClick={handleOAoth} className="px-10 py-2 font-normal border-solid border-2 text-blue-500 border-blue-500 rounded-xl">
+                    Google 계정으로 로그인
                 </button>
                 <div className="p-4">or</div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
@@ -75,7 +81,7 @@ const LoginPage = () => {
                         placeholder="비밀번호"
                     />
                     <input
-                        className="px-10 py-2 font-normal border-solid border-2 text-white border-blue-500 rounded-xl bg-blue-500"
+                        className="px-10 py-2 font-normal border-solid border-2 text-white border-blue-500 rounded-xl bg-blue-500 cursor-pointer"
                         type="submit"
                         value="아이디로 로그인"
                     />
