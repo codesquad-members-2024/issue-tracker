@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import team08.issuetracker.filter.model.dto.FilteredIssueRequest;
 import team08.issuetracker.filter.model.dto.FilteredIssueResponse;
 import team08.issuetracker.issue.model.Issue;
+import team08.issuetracker.issue.model.dto.IssueCountResponse;
 import team08.issuetracker.issue.model.dto.IssueDetailResponse;
 import team08.issuetracker.issue.model.dto.update.AssigneeResponse;
+import team08.issuetracker.issue.repository.IssueRepository;
+import team08.issuetracker.issue.service.IssueService;
 import team08.issuetracker.label.model.Label;
 import team08.issuetracker.label.model.dto.LabelResponse;
 import team08.issuetracker.milestone.model.Milestone;
@@ -34,6 +37,8 @@ public class FilterService {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private final IssueService issueService;
+
     private final MilestoneRepository milestoneRepository;
 
     public FilteredIssueResponse getFilteredIssues(FilteredIssueRequest request) {
@@ -59,7 +64,9 @@ public class FilterService {
             detailIssues.add(detailIssue);
         }
 
-        return new FilteredIssueResponse(detailIssues);
+        IssueCountResponse issueCountResponse = issueService.getIssueCountResponse();
+
+        return new FilteredIssueResponse(issueCountResponse, detailIssues);
     }
 
 

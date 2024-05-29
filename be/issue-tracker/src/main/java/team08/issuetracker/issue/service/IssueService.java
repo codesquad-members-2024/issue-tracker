@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -72,15 +73,16 @@ public class IssueService {
                     ));
         }
 
-        long countTotalIssues = issueRepository.countTotalIssues();
-        long countOpenedIssues = issueRepository.countOpenedIssues();
-        long countClosedIssues = issueRepository.countClosedIssues();
-
-        IssueCountResponse issueCountResponse = new IssueCountResponse(countTotalIssues,
-                countOpenedIssues,
-                countClosedIssues);
+        IssueCountResponse issueCountResponse = getIssueCountResponse();
 
         return new IssueOverviewResponse(issueCountResponse, issueDetailResponse);
+    }
+
+    public IssueCountResponse getIssueCountResponse() {
+        return new IssueCountResponse(
+                issueRepository.countTotalIssues(),
+                issueRepository.countOpenedIssues(),
+                issueRepository.countClosedIssues());
     }
 
     private String getMilestoneName(Long milestoneId) {
