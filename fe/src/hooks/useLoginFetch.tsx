@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const SERVER = process.env.REACT_APP_EC2_SERVER;
 
 function useLoginFetch(url: string, body: Object | null) {
-	const [data, setData] = useState(null);
+	const [result, setResult] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<null | string>(null);
 
@@ -25,10 +25,12 @@ function useLoginFetch(url: string, body: Object | null) {
 					body: JSON.stringify(body),
 				});
 
-				if (!response.ok) throw new Error("에러!!"); //TODO 에러메세지 처리
+				if (!response.ok) throw new Error("에러!!");
 				const [, payload] = response.headers.get("Authorization")?.split(".") || [];
 				const result = window.atob(payload);
-				setData(JSON.parse(result));
+				localStorage.setItem("jwt", payload);
+				localStorage.setItem("user", result);
+				setResult(true);
 			} catch (err) {
 				if (err instanceof Error) setError("서버 점검");
 			} finally {
@@ -37,7 +39,7 @@ function useLoginFetch(url: string, body: Object | null) {
 		})();
 	}, [body, url]);
 
-	return [data, error, loading];
+	return [result, error, loading];
 }
 
 export default useLoginFetch;

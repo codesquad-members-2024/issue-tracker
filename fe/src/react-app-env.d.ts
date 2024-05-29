@@ -1,25 +1,56 @@
 /// <reference types="react-scripts" />
 
 //DB DATA TYPE
+//Issue
+interface IssueDataType {
+	issueCounts: IssueCounts;
+	issues: Issue[];
+}
+interface IssueCounts {
+	closedCount: number;
+	openedCount: number;
+	totalCount: number;
+}
 interface Issue {
 	id: number;
 	title: string;
-	open: boolean;
+	state: boolean;
 	content: string;
 	timestamp: string;
+	createdAt: string;
 	writer: string;
-	milestone_name: string;
-	comments: IssueComment[];
+	milestoneName: string;
+	assignees: Member[];
 	labels: Label[];
+	imageUrl: string;
 }
 
+//IssueDetail
+interface IssueDetailDataType {
+	assignees: Member[];
+	comments: IssueComment[];
+	issue: Issue;
+	labels: Label[];
+	milestone: Milestone[];
+}
 interface IssueComment {
-	id: number;
+	commentId: number;
 	writer: string;
-	timestamp: string;
+	createdAt: string;
 	content: string;
+	imageUrl: string;
 }
 
+//Milestone
+interface MilestonesDataType {
+	milestoneCounts: MilestoneCounts;
+	milestones: Milestone[];
+}
+interface MilestoneCounts {
+	closedCount: number;
+	openedCount: number;
+	totalCount: number;
+}
 interface Milestone {
 	id: number;
 	state: boolean;
@@ -31,17 +62,11 @@ interface Milestone {
 	milestoneProgress: number;
 }
 
-interface MilestoneCounts {
-	closedCount: number;
-	openedCount: number;
-	totalCount: number;
+//Label
+interface LabelDataType {
+	labelCount: { totalCount: number };
+	labels: Label[];
 }
-
-// interface MilestoneData { 추가 안해도 될것같은 느낌
-// 	milestoneCounts: MilestoneCounts;
-// 	milestones: Milestone[];
-// }
-
 interface Label {
 	id: number;
 	name: string;
@@ -50,7 +75,11 @@ interface Label {
 	textBright: boolean;
 }
 
-// interface LabelData {
-// 	labelCount: { totalCount: number };
-// 	labels: Label[];
-// }
+//Member
+interface MemberDataType {
+	members: Member[];
+}
+interface Member {
+	memberId: string;
+	profileImage: string;
+}

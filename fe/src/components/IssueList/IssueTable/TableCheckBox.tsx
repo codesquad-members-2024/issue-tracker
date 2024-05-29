@@ -1,20 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ReactComponent as CheckBoxActive } from "../../../svg/CheckBoxActive.svg";
 import { ReactComponent as CheckBoxInitial } from "../../../svg/CheckBoxInitial.svg";
-
-interface CheckboxState {
-	activeTotal: boolean;
-	clickTotal: boolean;
-	countCheckBox: number;
-}
+import { CheckboxContext } from "../../../provider/CheckboxProvider";
 
 interface PropsType {
-	state: CheckboxState;
-	dispatch: React.Dispatch<string>;
+	issueId: number;
+	checkedIssues: React.MutableRefObject<{ [key: number]: number }>;
 }
-
-function TableCheckBox({ state, dispatch }: PropsType) {
+function TableCheckBox({ issueId, checkedIssues }: PropsType) {
 	const [active, setActive] = useState(false);
+	const [state, dispatch] = useContext(CheckboxContext);
 
 	useEffect(() => {
 		if (state.activeTotal || state.clickTotal) {
@@ -23,7 +18,14 @@ function TableCheckBox({ state, dispatch }: PropsType) {
 	}, [state]);
 
 	const onClick = () => {
-		active ? dispatch("MINUS_COUNT") : dispatch("PLUS_COUNT");
+		if (active) {
+			dispatch({ type: "MINUS_COUNT" });
+			setActive(!active);
+			delete checkedIssues.current[issueId];
+			return;
+		}
+		dispatch({ type: "PLUS_COUNT" });
+		checkedIssues.current = { ...checkedIssues.current, [issueId]: issueId };
 		setActive(!active);
 	};
 	return (

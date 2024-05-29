@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "../utility/fetchData";
 
-const useGet = (queryKey: string, query: string) =>
+const useGet = (queryKey: string, query: string, enabled: boolean) =>
 	useQuery({
 		queryKey: [queryKey],
 		queryFn: () => fetchData(query),
-		enabled: false,
+		enabled,
 	});
 
 export default useGet;

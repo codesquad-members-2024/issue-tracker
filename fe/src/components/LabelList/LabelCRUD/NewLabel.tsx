@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
 import LabelInfo from "./LabelInfo";
+import usePost from "../../../hooks/usePost";
 
 interface DataType {
 	name: string;
@@ -11,30 +12,19 @@ interface DataType {
 }
 
 interface PropsType {
-	handleShowNewLabel: React.MouseEventHandler<HTMLButtonElement>;
-	setNewLabel: React.Dispatch<React.SetStateAction<boolean>>;
+	handleShowNewLabel: () => void;
 }
 
 const border = "border-[1px] rounded-2xl component-border dark:component-border--dark";
 
-function NewLabel({ handleShowNewLabel, setNewLabel }: PropsType) {
+function NewLabel({ handleShowNewLabel }: PropsType) {
 	const [name, setName] = useState("Lable");
 	const [textBright, setTextBright] = useState(true);
 	const [backgroundColor, setBgColor] = useState("#dfdeff");
 	const $description = useRef<HTMLInputElement>(null);
 	const [disabled, setDisabled] = useState("DISABLED");
 
-	// const queryClient = useQueryClient();
-	// const { mutate } = useMutation({
-	// 	mutationFn: (data: DataType) => fetchData("/label", { method: "POST", body: data }),
-	// 	onSuccess: () => {
-	// 		setNewLabel(false);
-	// 		queryClient.invalidateQueries({ queryKey: ["label"] });
-	// 	},
-	// 	onError: (e) => {
-	// 		console.error("생성에러", e);
-	// 	},
-	// });
+	const mutate = usePost("/label", "label", handleShowNewLabel);
 
 	const handleName = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		setName(target.value);
@@ -53,15 +43,16 @@ function NewLabel({ handleShowNewLabel, setNewLabel }: PropsType) {
 			description: $description.current?.value || "",
 			textBright,
 		};
-		console.log("바디", data); //DELETE
-		// 	mutate(data);
+		mutate(data);
 	};
 
 	return (
 		<div
 			className={`mt-5 w-full ${border} lg:h-[360px] h-[480px] min-w-[425px] bg-grayscale.50 dark:bg-grayscale.800 `}
 		>
-			<h2 className="font-bold text-xl m-8">새로운 레이블 추가</h2>
+			<h2 className="font-bold text-xl m-8 text-grayscale.900 dark:text-gray-50">
+				새로운 레이블 추가
+			</h2>
 			<div className="h-2/3 mx-8 flex flex-wrap">
 				<section className={`${border} w-[288px] h-[153px] flex justify-center items-center`}>
 					<InformationTag
