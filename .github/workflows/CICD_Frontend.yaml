@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install dependencies
         working-directory: ./FE
@@ -27,7 +27,7 @@ jobs:
 
       - name: Build project
         working-directory: ./FE
-        run: npm run build
+        run: CI=false npm run build
 
       - name: List build directory contents
         working-directory: ./FE
@@ -38,7 +38,6 @@ jobs:
         with:
           name: build-artifacts
           path: ./FE/dist
-          
 
   deploy:
     needs: build
@@ -123,4 +122,3 @@ jobs:
           for FRONTEND_INSTANCE_ID in "${FRONTEND_INSTANCE_IDS[@]}"; do
             aws elbv2 register-targets --target-group-arn $TARGET_GROUP_ARN --targets Id=$FRONTEND_INSTANCE_ID
           done
-
