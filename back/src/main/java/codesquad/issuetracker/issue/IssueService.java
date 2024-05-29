@@ -41,7 +41,7 @@ public class IssueService {
 
     public List<User> getAssigneesForIssue(Issue issue) {
         List<String> assigneeNames = issue.getIssueAssignees().stream()
-                .map(IssueAssignee::getUserLoginId)
+                .map(IssueAssignee::getLoginId)
                 .toList();
         return userRepository.findAllById(assigneeNames);
     }
@@ -83,9 +83,9 @@ public class IssueService {
         return (List<Issue>) issueRepository.saveAll(issues);
     }
 
-    public Issue addAssigneesById(Long issueId, List<String> userLoginIds) {
+    public Issue addAssigneesById(Long issueId, List<String> loginIds) {
         Issue issue = getIssueById(issueId);
-        issue.addAssignee(userLoginIds);
+        issue.addAssignee(loginIds);
         return issueRepository.save(issue);
     }
 
@@ -101,9 +101,9 @@ public class IssueService {
         return issueRepository.save(issue);
     }
 
-    public void deleteAssigneesById(Long issueId, List<String> userLoginIds) {
+    public void deleteAssigneesById(Long issueId, List<String> loginIds) {
         Issue issue = getIssueById(issueId);
-        issue.deleteAssignee(userLoginIds);
+        issue.deleteAssignee(loginIds);
         issueRepository.save(issue);
     }
 

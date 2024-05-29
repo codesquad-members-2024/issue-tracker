@@ -122,8 +122,8 @@ public class IssueController {
     }
 
     @PutMapping("/issues/{issueId}/assignee")
-    public ResponseEntity<IssueShowDto> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
-        Issue updatedIssue = issueService.addAssigneesById(issueId, userLoginIds);
+    public ResponseEntity<IssueShowDto> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> loginIds) {
+        Issue updatedIssue = issueService.addAssigneesById(issueId, loginIds);
         return ResponseEntity
                 .ok(new IssueShowDto(
                         updatedIssue,
@@ -155,8 +155,8 @@ public class IssueController {
     }
 
     @DeleteMapping("/issues/{issueId}/assignee")
-    public ResponseEntity<Void> deleteAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
-        issueService.deleteAssigneesById(issueId, userLoginIds);
+    public ResponseEntity<Void> deleteAssigneesById(@PathVariable Long issueId, @RequestBody List<String> loginIds) {
+        issueService.deleteAssigneesById(issueId, loginIds);
         return ResponseEntity
                 .noContent()
                 .build();
