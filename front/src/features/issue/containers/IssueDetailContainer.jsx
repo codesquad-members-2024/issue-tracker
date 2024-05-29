@@ -198,9 +198,9 @@ export function IssueDetailContainer() {
 											buttonType='outline'
 											buttonText='이슈 닫기'
 											icon={<IconArchive />}
-											onClick={() => {
-												onCloseIssue(issueDetail.id);
-												fetchIssueDetail();
+											onClick={async () => {
+												await onCloseIssue(issueDetail.id);
+												await fetchIssueDetail();
 												setIsClosed(prev => !prev);
 											}}
 										/>
