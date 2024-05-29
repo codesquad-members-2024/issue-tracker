@@ -21,7 +21,6 @@ function IssueTable({ queryParam, query }: PropsType) {
 	const checkedIssues = useRef<{ [key: number]: number }>({});
 
 	const { data, error, isLoading } = useGet(query, query, true);
-	console.log(data);
 	if (isLoading) return <Loading />;
 	if (error) return <div>에러 {error.message}</div>;
 
