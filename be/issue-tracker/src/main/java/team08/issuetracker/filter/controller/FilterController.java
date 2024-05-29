@@ -28,12 +28,12 @@ public class FilterController {
     @GetMapping
     ResponseEntity<?> getFilteredIssue(
             @RequestParam String target,
-            @RequestParam(required = false) String is_open,
+            @RequestParam(required = false) String state,
             @RequestParam(required = false) String writer,
             @RequestParam(required = false) String assignee,
             @RequestParam(required = false) String commenter
     ) {
-        FilteredIssueRequest request = new FilteredIssueRequest(target, is_open, writer, assignee, commenter);
+        FilteredIssueRequest request = new FilteredIssueRequest(target, state, writer, assignee, commenter);
 
         FilteredIssueResponse response = filterService.getFilteredIssues(request);
 
