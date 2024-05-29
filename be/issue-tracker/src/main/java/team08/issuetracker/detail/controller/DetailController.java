@@ -18,7 +18,6 @@ import team08.issuetracker.detail.service.DetailService;
 public class DetailController {
     private final DetailService detailService;
 
-    // GET 요청이 /1/detail
     @GetMapping("/{id}")
     ResponseEntity<IssueDetailDto> getIssueDetail(@PathVariable long id) {
 
