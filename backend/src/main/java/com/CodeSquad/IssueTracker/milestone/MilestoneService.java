@@ -126,7 +126,6 @@ public class MilestoneService {
         milestone.setTitle(milestoneRequest.title());
         milestone.setDescription(milestoneRequest.description());
         milestone.setDeadline(parseDeadline(milestoneRequest.deadline()));
-
         milestoneRepository.save(milestone);
     }
     public void closeMilestone(Long milestoneId) {
@@ -158,21 +157,25 @@ public class MilestoneService {
     public void incrementTotalIssue(Long milestoneId){
         getMilestoneById(milestoneId);
         milestoneRepository.incrementTotalIssue(milestoneId);
+        log.info("마일스톤의 총 이슈 증가: {}", milestoneId);
     }
 
     public void decrementTotalIssue(Long milestoneId){
         getMilestoneById(milestoneId);
         milestoneRepository.decrementTotalIssue(milestoneId);
+        log.info("마일스톤의 총 이슈 감소: {}", milestoneId);
     }
 
     public void incrementClosedIssue(Long milestoneId){
         getMilestoneById(milestoneId);
         milestoneRepository.incrementClosedIssue(milestoneId);
+        log.info("마일스톤의 닫힌 이슈 증가: {}", milestoneId);
     }
 
     public void decrementClosedIssue(Long milestoneId){
         getMilestoneById(milestoneId);
         milestoneRepository.decrementClosedIssue(milestoneId);
+        log.info("마일스톤의 닫힌 이슈 감소: {}", milestoneId);
     }
 
     public MilestoneInIssue getMilestoneInIssue(long issueId) {

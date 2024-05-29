@@ -5,3 +5,4 @@ server:
 
 jwt:
   secret-key: NZfLZ8BH1LqDVTzMoRN8Kd6uGv5FSu4oBjc5VeT7VtMKHgr/NeETzwxL0awVkgJWejbL6j1RxYLcFVPklnQBmA==
+  expiration-time: 86400000 # 1 day (milliseconds)

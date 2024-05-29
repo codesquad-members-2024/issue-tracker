@@ -11,20 +11,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/issues")
 public class IssuesController {
-
     private final IssueService issueService;
     private final static long PAGE_LIMIT = 15;
-
 
     public IssuesController(IssueService issueService) {
         this.issueService = issueService;
     }
-
-//    @GetMapping
-//    public ResponseEntity<List<IssueListResponse>> getAllIssues() {
-//        List<IssueListResponse> issues = issueService.getAllIssues();
-//        return new ResponseEntity<>(issues, HttpStatus.OK);
-//    }
 
     @GetMapping("/open")
     public ResponseEntity<List<IssueListResponse>> getOpenIssues(@RequestParam(value = "page", defaultValue = "1") long page) {

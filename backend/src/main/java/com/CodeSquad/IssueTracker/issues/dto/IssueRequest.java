@@ -15,8 +15,8 @@ public record IssueRequest(
         String author,
         Set<String> assignees,
         Set<Long> labels,
-        Long milestone
-) {
+        Long milestone)
+{
         public IssueRequest {
         // null인 경우 빈 컬렉션으로 초기화
         // milestoneId가 null인 경우는 서비스에 처리

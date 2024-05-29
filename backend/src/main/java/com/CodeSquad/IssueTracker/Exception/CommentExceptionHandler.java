@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class CommentExcpetionHandler {
+public class CommentExceptionHandler {
 
     @ExceptionHandler(AuthorNotMatchedException.class)
     public ResponseEntity<String> handleAuthorNotMatchedException(AuthorNotMatchedException ex) {

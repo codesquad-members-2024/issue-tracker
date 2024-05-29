@@ -5,7 +5,6 @@ import com.CodeSquad.IssueTracker.labels.dto.LabelDetailResponse;
 import com.CodeSquad.IssueTracker.labels.dto.LabelListResponse;
 import com.CodeSquad.IssueTracker.labels.dto.LabelRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,8 +15,11 @@ import java.util.Set;
 @Service
 public class LabelService {
 
-    @Autowired
-    private LabelRepository labelRepository;
+    private final LabelRepository labelRepository;
+
+    public LabelService(LabelRepository labelRepository) {
+        this.labelRepository = labelRepository;
+    }
 
     public List<Label> getAllLabels() {
         return (List<Label>) labelRepository.findAll();
@@ -85,7 +87,6 @@ public class LabelService {
                 throw new DuplicateLabelNameException("이미 존재하는 라벨 이름입니다: " + newLabel.labelName());
         }
     }
-
 
     public void updateLabel(Long id, LabelRequest updatedLabel) {
         log.info("라벨 id: {} 업데이트 요청: {}", id, updatedLabel);

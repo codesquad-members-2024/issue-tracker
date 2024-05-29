@@ -6,15 +6,11 @@ import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import com.CodeSquad.IssueTracker.user.utils.SHA256Util;
 import com.CodeSquad.IssueTracker.user.jwtlogin.JwtUtil;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,8 +25,6 @@ public class UserService {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
     }
-
-
 
     public void save(UserRegisterRequest userRegisterRequest) {
         User user = User.builder()
@@ -54,40 +48,6 @@ public class UserService {
         return userOptional.isPresent();
     }
 
-//    public void authenticate(LoginRequest loginRequest) {
-//        String userId = loginRequest.getUserId();
-//        String userPassword = loginRequest.getUserPassword();
-//
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> {
-//                    log.error("해당 유저가 존재하지 않습니다.: {}", userId);
-//                    return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
-//                });
-//
-//        if (!Objects.equals(user.getUserPassword(), userPassword)){
-//            log.warn("로그인 실패: {}", userId);
-//            throw new InvalidCredentialException("아이디나 비밀번호가 맞지 않습니다.");
-//        }
-//    }
-
-
-
-//    @Value("${server.servlet.session.timeout}")
-//    private int sessionTimeout;
-
-//    public void addLoginSession(LoginRequest loginRequest, HttpSession session) {
-//        session.setMaxInactiveInterval(sessionTimeout);
-//        session.setAttribute("userId", loginRequest.getUserId());
-//    }
-//
-//    public void isLoginRequestNotExists(LoginRequest loginRequest) {
-//        if (loginRequest == null){
-//            log.warn("로그인 실패: 로그인 데이터가 없습니다.");
-//            throw new InvalidCredentialException("로그인 데이터가 없습니다.");
-//        }
-//        log.info("로그인 시도");
-//    }
-
     public String authenticate(LoginRequest loginRequest) {
         String loginId = loginRequest.getUserId();
         String loginPassword = loginRequest.getUserPassword();
@@ -106,8 +66,6 @@ public class UserService {
         return jwtUtil.generateToken(loginId);
     }
 
-
-
     public void validateExistUser(String userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> {
@@ -116,7 +74,6 @@ public class UserService {
                 });
     }
 
-
     public List<String> getAllUserIds() {
         return userRepository.getAllUserIds();
     }
@@ -124,4 +81,37 @@ public class UserService {
     public Set<User> findAllByIds(Set<String> newAssigneeIds) {
         return userRepository.findAllById(newAssigneeIds);
     }
+
+//     세션 로그인 방식
+//        public void authenticate(LoginRequest loginRequest) {
+//        String userId = loginRequest.getUserId();
+//        String userPassword = loginRequest.getUserPassword();
+//
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> {
+//                    log.error("해당 유저가 존재하지 않습니다.: {}", userId);
+//                    return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
+//                });
+//
+//        if (!Objects.equals(user.getUserPassword(), userPassword)){
+//            log.warn("로그인 실패: {}", userId);
+//            throw new InvalidCredentialException("아이디나 비밀번호가 맞지 않습니다.");
+//        }
+//    }
+
+//    @Value("${server.servlet.session.timeout}")
+//    private int sessionTimeout;
+
+//    public void addLoginSession(LoginRequest loginRequest, HttpSession session) {
+//        session.setMaxInactiveInterval(sessionTimeout);
+//        session.setAttribute("userId", loginRequest.getUserId());
+//    }
+//
+//    public void isLoginRequestNotExists(LoginRequest loginRequest) {
+//        if (loginRequest == null){
+//            log.warn("로그인 실패: 로그인 데이터가 없습니다.");
+//            throw new InvalidCredentialException("로그인 데이터가 없습니다.");
+//        }
+//        log.info("로그인 시도");
+//    }
 }
