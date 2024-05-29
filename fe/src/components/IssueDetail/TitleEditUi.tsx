@@ -1,7 +1,7 @@
 import { EditOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { APiUtil } from "../../common/Utils";
-
+import { delay } from "../../common/Utils";
 interface TitleEditUiProps {
     title: string;
     handleTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -14,19 +14,23 @@ interface MutationPayload {
     productId: string | undefined
 }
 
+const TITLE_EDIT_DELAY = 500
+
 const TitleEditUi = ({title, handleTitleChange, setEditState, productId}: TitleEditUiProps) => {
     const queryClient = useQueryClient();
     const { mutate } = useMutation({
         mutationFn: async ({ title, productId }: MutationPayload) => {
             await APiUtil.modifyData("issues", {title: title}, productId);
+            
         },
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["issueDetail", productId]});
         },
     });
     
-    const handleClickModify = () => {
+    const handleClickModify = async() => {
         mutate({title, productId})
+        await delay(TITLE_EDIT_DELAY)
         setEditState(false)
     }
     return (

@@ -61,7 +61,7 @@ const LoginPage = () => {
                     Issue Tracker
                 </Link>
                 <button onClick={handleOAoth} className="px-10 py-2 font-normal border-solid border-2 text-blue-500 border-blue-500 rounded-xl">
-                    GitHub 계정으로 로그인
+                    Google 계정으로 로그인
                 </button>
                 <div className="p-4">or</div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
@@ -82,7 +82,7 @@ const LoginPage = () => {
                         placeholder="비밀번호"
                     />
                     <input
-                        className="px-10 py-2 font-normal border-solid border-2 text-white border-blue-500 rounded-xl bg-blue-500"
+                        className="px-10 py-2 font-normal border-solid border-2 text-white border-blue-500 rounded-xl bg-blue-500 cursor-pointer"
                         type="submit"
                         value="아이디로 로그인"
                     />

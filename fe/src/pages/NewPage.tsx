@@ -7,6 +7,8 @@ import { Label } from "../components/LabelsMilestones/Labels/LabelFeed";
 import { Milestone } from "../components/LabelsMilestones/Milestones/MilestoneFeed";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { APiUtil } from "../common/Utils";
+import { UserImgBox } from "../common/UserImgBox";
+import { UserInfo } from "./IssueDetailPage";
 export interface Users {
     id: number;
     username: string;
@@ -30,6 +32,10 @@ export interface NewIssueForm {
     labels: Label[];
     milestone: Milestone[];
 }
+
+const userString = sessionStorage.getItem("user");
+const userInfo: UserInfo | null = userString ? JSON.parse(userString) : null;
+
 // labels, milestone, assignees
 const NewPage = () => {
     const navigate = useNavigate();
@@ -73,7 +79,7 @@ const NewPage = () => {
             </h1>
             <section className="flex gap-2 justify-between mt-4 py-6 border-t-2 border-b-2">
                 <div className="items-center">
-                    <img src="/public/img/UserImage.png" alt="User Image" />
+                    <UserImgBox imgURL={userInfo?.imgUrl} margin="" width="50px" height="50px"/>
                 </div>
                 <div className="w-[912px]">
                     <NewIssue

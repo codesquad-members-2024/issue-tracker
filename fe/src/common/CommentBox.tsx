@@ -3,11 +3,12 @@ import FileUploader from "./FileUploader";
 interface CommentBoxProps {
     height: string;
     addCommentText: (comment:string) => void;
+    detailComment?: string
 }
 
-const CommentBox = ({height, addCommentText}: CommentBoxProps) => {
+const CommentBox = ({height, addCommentText, detailComment}: CommentBoxProps) => {
     const [isActive, setActive] = useState(false)
-    const [comment, setComment] = useState("")
+    const [comment, setComment] = useState(detailComment ? detailComment : "")
     const handleFocus = () => setActive(true);
     const handleBlur = () => setActive(false);
 

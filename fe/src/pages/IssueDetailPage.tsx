@@ -2,9 +2,11 @@ import { Header } from "../common/UtilUI";
 import { DeleteOutlined } from "@ant-design/icons";
 import CommentArea from "../components/IssueDetail/CommentArea";
 import TitleContainer from "../components/IssueDetail/TitleContainer";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useQueryHook from "../\bhooks/useQueryHook";
 import { Loading } from "../common/NotFound";
+import { APiUtil } from "../common/Utils";
+import { ModalComponent } from "../common/Modal";
 
 interface Milestone {
     id: number;
@@ -57,24 +59,43 @@ const userString = sessionStorage.getItem("user");
 const userInfo: UserInfo | null = userString ? JSON.parse(userString) : null;
 
 const IssueProduct = () => {
-    const location = useLocation()
-    const isOpen = location.state
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isOpen = location.state;
     const { productId } = useParams();
 
-    const { data, isLoading } = useQueryHook(productId, `issues/${productId}`)
+    const { data, isLoading } = useQueryHook(productId, `issues/${productId}`);
     if (isLoading) return <div><Loading /></div>;
 
+    const handleDelete = async () => {
+        await APiUtil.deleteData("issues", data.id);
+        navigate("/issue");
+    };
     return (
         <main className="w-[1280px] mx-auto">
             <Header />
-            <TitleContainer issueData={data} isOpen={isOpen} productId={productId}/>
+            <TitleContainer
+                issueData={data}
+                isOpen={isOpen}
+                productId={productId}
+            />
             <section className="flex justify-between">
-                <CommentArea commentsData={data?.comments} authorId={data?.authorId} userInfo={userInfo}/>
+                <CommentArea
+                    detailData={data}
+                    authorId={data?.authorId}
+                    userInfo={userInfo}
+                    productId={productId}
+                />
                 <div className="h-full">
                     {/* <Sidebar /> */}
-                    <button className="w-full text-right text-red-500 my-4 p-2">
-                        <DeleteOutlined /> 이슈 삭제
-                    </button>
+
+                    <div className="w-full text-right text-red-500 my-4 p-2">
+                        <DeleteOutlined />
+                        <ModalComponent
+                            type="이슈 삭제"
+                            callBack={() => handleDelete()}
+                        />
+                    </div>
                 </div>
             </section>
         </main>

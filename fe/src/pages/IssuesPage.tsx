@@ -18,16 +18,9 @@ const IssuePage = () => {
         queryKey: ["issues"],
         queryFn: () => APiUtil.getData(query),
     });
-    if (isLoading)
-        return (
-            <div><Loading /></div>
-        );
-    if (error)
-        return (
-            <div>{error.message}</div>
-        );
+    if (isLoading)return <div><Loading /></div>;
+    if (error) return <div>{error.message}</div>;
 
-        console.log(data)
     return (
         <main className="w-[1280px] mx-auto">
             <Header />

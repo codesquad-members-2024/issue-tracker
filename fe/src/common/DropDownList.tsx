@@ -22,7 +22,6 @@ const DropDownList = ({
     loading,
     issueData,
 }: DropDownListProps) => {
-    console.log(data)
     return (
         <div className="absolute bg-gray-100 dark:bg-darkModeBorderBG border border-gray-200 shadow-md z-10 mt-1 w-[230px] flex flex-col rounded-xl overflow-hidden">
             <div className="m-2 ml-4 text-sm">{curTableItem} 설정</div>

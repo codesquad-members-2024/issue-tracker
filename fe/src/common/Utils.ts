@@ -5,17 +5,19 @@ import { SignUpForm } from "../pages/SignUpPage";
 import { LoginForm } from "../pages/LoginPage";
 import { PostRequestFrom } from "../pages/NewPage";
 import { notification } from "antd";
-
+import { CommentCreateForm } from "../components/IssueDetail/CommentArea";
+const SNACK_BAR_DELAY = 2000
 interface TitleState {
     title: string;
-    // 다른 필드를 여기에 추가할 수 있습니다.
 }
+
+export type CreateDataType = FormState | LabelFormState | PostRequestFrom | SignUpForm | LoginForm | CommentCreateForm
+
 const serverURL = import.meta.env.VITE_API_URL;
 const token = sessionStorage.getItem('token')
 
 export const APiUtil = {
     async getData(tableName: string) {
-        console.log(serverURL + tableName)
         try {
             const response = await fetch(serverURL + tableName, {
                 
@@ -35,7 +37,7 @@ export const APiUtil = {
         }
     },
 
-    async createData(tableName: string, createData: FormState | LabelFormState | PostRequestFrom | SignUpForm | LoginForm) {
+    async createData(tableName: string, createData: CreateDataType) {
         
         const response = await fetch(serverURL + tableName, {
             method: "POST",
@@ -119,5 +121,10 @@ export const openNotification = (message: string) => {
         message: message,
         placement: "top",
     });
+
+    setTimeout(() => {
+        notification.destroy();
+    }, SNACK_BAR_DELAY);
 };
 
+export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))

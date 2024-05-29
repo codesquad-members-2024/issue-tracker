@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 interface UserImgBoxProps {
-    imgURL: string;
+    imgURL: string | undefined;
     margin: string;
     width: string;
     height: string;
@@ -22,7 +22,7 @@ export const UserImgBox = ({imgURL, margin, width, height}: UserImgBoxProps) => 
                     ),
                 }}
             >
-                {imgURL.includes("이미지") ? imgURL : DEFAULT_IMG_URL}
+                {imgURL?.includes("이미지") ? imgURL : DEFAULT_IMG_URL}
             </ReactMarkdown>
     );
 };

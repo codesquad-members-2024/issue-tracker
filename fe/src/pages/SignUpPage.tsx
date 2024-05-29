@@ -67,9 +67,10 @@ const SignUp = () => {
         const response = await fetch(
             serverURL + `users/checkUserId/${signUpForm.id}`
         );
+        if(signUpForm.id === "") return openNotification("아이디를 입력해주세요.");
         if (response.status === 200) {
             setIsIdUnique(true);
-            return openNotification("아이디를 사용 할 수 있습니다.");
+            return openNotification("사용 가능!");
         }
         return openNotification("아이디가 중복되었습니다.");
     };
@@ -122,7 +123,7 @@ const SignUp = () => {
                     <input
                         className={`${
                             !isFormValid && "bg-gray-200"
-                        } px-10 py-2 font-normal border-solid border-2 text-white rounded-xl bg-blue-500`}
+                        } px-10 py-2 font-normal border-solid border-2 text-white rounded-xl bg-blue-500 cursor-pointer`}
                         type="submit"
                         disabled={!isFormValid}
                         value="회원가입"
