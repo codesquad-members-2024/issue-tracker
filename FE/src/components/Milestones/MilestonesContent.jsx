@@ -6,18 +6,24 @@ import { ClosedIcon } from "@/icons/ClosedIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
 import { NewMilestones } from "./NewMilestones";
 
-export function MilestonesContent({ milestones }) {
+export function MilestonesContent(props) {
+  const { milestones, fetchData, putData, deleteData } = props;
   const [onEdit, setOnEdit] = useState(false);
-  const [selectedMilestones, setSelectedMilestones] = useState(null);
+  const [selectedMilestone, setSelectedMilestone] = useState(null);
 
-  const handleEditMilestones = (label) => {
+  const handleDelete = async (milestoneId) => {
+    await deleteData(milestoneId);
+    fetchData();
+  };
+
+  const handleEdit = (milestoneId) => {
     setOnEdit(true);
-    setSelectedMilestones(label);
+    setSelectedMilestone(milestoneId);
   };
 
   const closeNewMilestones = () => {
     setOnEdit(false);
-    setSelectedMilestones(null);
+    setSelectedMilestone(null);
   };
 
   return (
@@ -26,16 +32,16 @@ export function MilestonesContent({ milestones }) {
         <NewMilestones
           actionType="updateMilestones"
           closeNewMilestones={closeNewMilestones}
-          milestoneId={selectedMilestones?.id}
-          initialData={selectedMilestones}
-          // {...{ closeNewLabels, fetchData, putData, deleteData }}
+          milestoneId={selectedMilestone?.id}
+          initialData={selectedMilestone}
+          {...{ closeNewLabels, fetchData, putData, deleteData }}
         />
       )}
-      {milestones.length === 0 ? (
+      {milestones?.length === 0 ? (
         <Content />
       ) : (
-        milestones.map((milestone) => {
-          const {id, description, deadLine, title, countOfClosedIssue, countOfOpenIssue } = milestone;
+        milestones?.map((milestone) => {
+          const {id, description, deadline, title, countOfClosedIssue, countOfOpenIssue } = milestone;
           
           const totalIssues = countOfClosedIssue + countOfOpenIssue;
           const progress = totalIssues === 0 ? 0 : (countOfClosedIssue / totalIssues) * 100;
@@ -48,8 +54,8 @@ export function MilestonesContent({ milestones }) {
                     <StyledMilestonesIcon />
                     <span>{title}</span>
                   </div>
-                  <div className="deadLine">
-                    <span>{deadLine}</span>
+                  <div className="deadline">
+                    <span>{deadline}</span>
                   </div>
                 </div>
                 <div className="description">{description}</div>
@@ -60,11 +66,11 @@ export function MilestonesContent({ milestones }) {
                     <ClosedIcon />
                     <div>닫기</div>
                   </Button>
-                  <Button onClick={() => handleEditMilestones(milestone)}>
+                  <Button onClick={() => handleEdit(milestone)}>
                     <EditIcon />
                     <div>편집</div>
                   </Button>
-                  <Button className="delete">
+                  <Button className="delete" onClick={() => handleDelete(id)}>
                     <TrashIcon />
                     <div>삭제</div>
                   </Button>

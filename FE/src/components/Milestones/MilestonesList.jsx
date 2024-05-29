@@ -1,28 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { OpenIcon } from "@/icons/OpenIcon";
 import { MilestonesContent } from "./MilestonesContent";
-import { milestonesList, closedMilestonesList } from "@/test.json"; // test data
+import useFetch from "../../hooks/useFetch";
 
-export function MilestonesList() {
+const { VITE_SERVER } = import.meta.env;
+const CLOSED_MILESTONES_API = "/api/milestones/close";
+
+export function MilestonesList(props) {
+  const { milestones, fetchData, postData, putData, deleteData } = props;
+  const { state: closedMilestones, fetchData: fetchClosedData } = useFetch(`${VITE_SERVER}${CLOSED_MILESTONES_API}`);
+  
   const [isOpenMilestones, setIsOpenMilestones] = useState(true);
 
-  const milestonesToDisplay = isOpenMilestones ? milestonesList : closedMilestonesList;
+  useEffect(() => {
+    if (!isOpenMilestones) {
+      fetchClosedData();
+    }
+  }, [isOpenMilestones, fetchClosedData]);
+
+  const milestonesToDisplay = isOpenMilestones ? milestones : closedMilestones;
 
   return (
     <Wrap>
       <MilestonesHeader>
         <StyledBtn onClick={() => setIsOpenMilestones(true)} $active={isOpenMilestones}>
           <OpenIcon />
-          <span>열린 마일스톤({milestonesList.length})</span>
+          <span>열린 마일스톤({milestones?.length})</span>
         </StyledBtn>
-        <StyledBtn onClick={() => setIsOpenMilestones(!isOpenMilestones)} $active={!isOpenMilestones}>
+        <StyledBtn onClick={() => setIsOpenMilestones(false)} $active={!isOpenMilestones}>
           <ClosedIcon />
-          <span>닫힌 마일스톤({closedMilestonesList.length})</span>
+          <span>닫힌 마일스톤({closedMilestones?.length})</span>
         </StyledBtn>
       </MilestonesHeader>
-      <MilestonesContent milestones={milestonesToDisplay} />
+      <MilestonesContent milestones={milestonesToDisplay} {...{ fetchData, putData, deleteData }}/>
     </Wrap>
   );
 }
