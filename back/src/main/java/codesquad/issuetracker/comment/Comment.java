@@ -14,11 +14,13 @@ public class Comment {
     private String loginId;
     private Long issueId;
     private LocalDateTime createdDate;
+    private String profileImage;
 
-    public Comment(String content, String loginId, Long issueId, LocalDateTime createdDate) {
+    public Comment(String content, String loginId, Long issueId, LocalDateTime createdDate, String profileImage) {
         this.content = content;
         this.loginId = loginId;
         this.issueId = issueId;
         this.createdDate = createdDate;
+        this.profileImage = profileImage;
     }
 }
