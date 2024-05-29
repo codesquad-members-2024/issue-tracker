@@ -34,7 +34,7 @@ public class ExceptionControllerAdvice {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CommentNotFoundException.class)
+    @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundEx(UserNotFoundException e) {
         log.error("[UserNotFoundException] {}", e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
