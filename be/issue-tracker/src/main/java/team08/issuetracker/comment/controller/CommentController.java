@@ -16,7 +16,7 @@ import team08.issuetracker.comment.model.dto.CommentUpdateRequest;
 import team08.issuetracker.comment.model.dto.CommentUpdateResponse;
 import team08.issuetracker.comment.service.CommentService;
 
-@RestController // ResponseBody + Controller
+@RestController
 @RequestMapping("/issue/{issueId}/comment")
 @Slf4j
 @RequiredArgsConstructor
