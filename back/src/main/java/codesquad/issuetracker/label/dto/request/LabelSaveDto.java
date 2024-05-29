@@ -7,14 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LabelUpdateDto {
+public class LabelSaveDto {
 
     private String name;
     private String description;
     private String backgroundColor;
     private String textColor;
 
-    public LabelServiceDto toServiceDto(Long id) {
-        return new LabelServiceDto(id, name, description, backgroundColor, textColor);
+    public LabelServiceDto toServiceDto() {
+        return new LabelServiceDto(name, description, backgroundColor, textColor);
     }
 }

@@ -1,6 +1,8 @@
 package codesquad.issuetracker.label;
 
 import codesquad.issuetracker.exception.LabelNotFoundException;
+import codesquad.issuetracker.label.dto.request.LabelServiceDto;
+import codesquad.issuetracker.label.dto.response.LabelShowDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,8 @@ public class LabelService {
 
     private final LabelRepository labelRepository;
 
-    public Label createLabel(Label label) {
-        return labelRepository.save(label);
+    public LabelShowDto createLabel(LabelServiceDto labelServiceDto) {
+        return new LabelShowDto(labelRepository.save(labelServiceDto.toEntityForSave()));
     }
 
     public List<Label> getAllLabels() {
@@ -26,8 +28,8 @@ public class LabelService {
         return labelRepository.findById(labelId).orElseThrow(() -> new LabelNotFoundException(LABEL_NOT_FOUND_ERROR_MESSAGE));
     }
 
-    public Label updateLabelById(Label updatedLabel) {
-        return labelRepository.save(updatedLabel);
+    public LabelShowDto updateLabelById(LabelServiceDto labelServiceDto) {
+        return new LabelShowDto(labelRepository.save(labelServiceDto.toEntityForUpdate()));
     }
 
     public void deleteLabelById(Long labelId) {
