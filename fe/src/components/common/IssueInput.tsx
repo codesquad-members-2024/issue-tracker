@@ -8,7 +8,7 @@ interface PropsType {
 const moving = "scale-75 top-1 left-3.5";
 function IssueInput({ h, w, label, $title, handler }: PropsType) {
 	return (
-		<div className="relative">
+		<div className="relative w-full">
 			<input
 				id="input"
 				type="text"
