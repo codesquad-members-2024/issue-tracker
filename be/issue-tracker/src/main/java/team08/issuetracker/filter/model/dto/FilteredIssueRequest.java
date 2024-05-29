@@ -23,7 +23,7 @@ public class FilteredIssueRequest {
         boolean hasCondition = false;
 
         if (state != null) {
-            query.append(" WHERE is_open = ").append(state.equalsIgnoreCase("open"));
+            query.append(" WHERE is_open = ").append(state.equalsIgnoreCase("opened"));
             hasCondition = true;
         }
         if (writer != null) {
