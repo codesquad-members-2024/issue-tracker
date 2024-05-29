@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Getter
@@ -25,7 +25,7 @@ public class MilestoneUpdateDto {
 
         if (dueDate != null) {
             milestoneBuilder
-                    .dueDate(LocalDateTime.parse(dueDate, formatter));
+                    .dueDate(LocalDate.parse(dueDate, formatter));
         }
         return milestoneBuilder.build();
     }
