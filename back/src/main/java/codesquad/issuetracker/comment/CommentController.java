@@ -1,5 +1,8 @@
 package codesquad.issuetracker.comment;
 
+import codesquad.issuetracker.comment.dto.request.CommentSaveDto;
+import codesquad.issuetracker.comment.dto.request.CommentUpdateDto;
+import codesquad.issuetracker.comment.dto.response.CommentShowDto;
 import codesquad.issuetracker.config.LoginInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

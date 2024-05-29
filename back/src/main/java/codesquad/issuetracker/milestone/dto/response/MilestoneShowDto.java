@@ -1,5 +1,6 @@
-package codesquad.issuetracker.milestone;
+package codesquad.issuetracker.milestone.dto.response;
 
+import codesquad.issuetracker.milestone.Milestone;
 import lombok.Getter;
 
 import java.time.LocalDate;

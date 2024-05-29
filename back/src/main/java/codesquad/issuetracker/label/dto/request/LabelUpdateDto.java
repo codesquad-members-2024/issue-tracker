@@ -1,5 +1,6 @@
-package codesquad.issuetracker.label;
+package codesquad.issuetracker.label.dto.request;
 
+import codesquad.issuetracker.label.Label;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ public class LabelUpdateDto {
     private String description;
     private String backgroundColor;
     private String textColor;
-  
+
     public Label toEntity(Long id) {
         return new Label(id, name, description, backgroundColor, textColor);
     }

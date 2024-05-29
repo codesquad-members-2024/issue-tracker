@@ -1,5 +1,6 @@
-package codesquad.issuetracker.comment;
+package codesquad.issuetracker.comment.dto.response;
 
+import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.util.TimeCalculator;
 import lombok.Getter;
 

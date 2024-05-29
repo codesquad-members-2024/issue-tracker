@@ -1,5 +1,6 @@
-package codesquad.issuetracker.label;
+package codesquad.issuetracker.label.dto.response;
 
+import codesquad.issuetracker.label.Label;
 import lombok.Getter;
 
 @Getter

@@ -1,6 +1,7 @@
 package codesquad.issuetracker.issue;
 
 import codesquad.issuetracker.exception.IssueNotFoundException;
+import codesquad.issuetracker.issue.dto.request.IssueFilterDto;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelRepository;
 import codesquad.issuetracker.milestone.Milestone;

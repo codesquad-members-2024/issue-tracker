@@ -1,5 +1,7 @@
 package codesquad.issuetracker.label;
 
+import codesquad.issuetracker.label.dto.request.LabelUpdateDto;
+import codesquad.issuetracker.label.dto.response.LabelShowDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

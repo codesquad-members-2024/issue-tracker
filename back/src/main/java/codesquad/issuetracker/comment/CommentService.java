@@ -1,5 +1,6 @@
 package codesquad.issuetracker.comment;
 
+import codesquad.issuetracker.comment.dto.request.CommentServiceDto;
 import codesquad.issuetracker.exception.CommentNotFoundException;
 import codesquad.issuetracker.exception.UserNotFoundException;
 import codesquad.issuetracker.user.User;

@@ -1,5 +1,8 @@
 package codesquad.issuetracker.milestone;
 
+import codesquad.issuetracker.milestone.dto.request.MilestoneSaveDto;
+import codesquad.issuetracker.milestone.dto.request.MilestoneUpdateDto;
+import codesquad.issuetracker.milestone.dto.response.MilestoneShowDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

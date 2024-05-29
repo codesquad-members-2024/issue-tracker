@@ -1,4 +1,4 @@
-package codesquad.issuetracker.comment;
+package codesquad.issuetracker.comment.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
