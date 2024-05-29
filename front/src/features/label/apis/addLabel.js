@@ -22,11 +22,13 @@ export async function addLabel(label) {
 }
 
 export async function deleteLabel(lableId, labelName) {
+	const token = localStorage.getItem('token');
 	try {
 		const requestOptions = {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 		};
 		const response = await fetch(`${server}/labels/${lableId}`, requestOptions);
