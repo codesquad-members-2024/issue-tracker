@@ -53,20 +53,20 @@ public class IssueController {
     }
 
     @PatchMapping("/{issueId}/milestone")
-    public ResponseEntity<MilestoneResponse> editIssueMilestone(@PathVariable Long issueId,
+    public ResponseEntity<MilestoneResponse> updateIssueMilestone(@PathVariable Long issueId,
                                                         @RequestBody(required = false) IssueMilestoneRequest issueMilestoneRequest) {
         MilestoneResponse milestone = issueService.updateMilestoneIdForIssue(issueId, issueMilestoneRequest);
         return ResponseEntity.ok(milestone);
     }
 
-    @PostMapping("/{issueId}/labels")
+    @PatchMapping("/{issueId}/labels")
     public ResponseEntity<Void> updateLabelsToIssue(@PathVariable("issueId") Long issueId,
                                                     @RequestBody IssueLabelIdsRequest labelIdsRequest) {
         issueService.updateLabels(issueId, labelIdsRequest.labels());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{issueId}/assignees")
+    @PatchMapping("/{issueId}/assignees")
     public ResponseEntity<Void> updateAssigneesToIssue(@PathVariable("issueId") Long issueId,
                                                        @RequestBody IssueAssigneeIdsRequest assigneeIdsRequest) {
         issueService.updateAssignees(issueId, assigneeIdsRequest.assignees());
