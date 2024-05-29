@@ -29,7 +29,7 @@ export function LabelsContent(props) {
     <Wrap>
       <LabelsHeader>{labels?.countsOfLabels}개의 레이블</LabelsHeader>
       {loading && <h1>LOADING...</h1>}
-      {error && <h1>{error}</h1>}
+      {error && <h1>{error.message || error.toString()}</h1>}
       {onEdit && (
         <NewLabels
           actionType="updateLabels"
