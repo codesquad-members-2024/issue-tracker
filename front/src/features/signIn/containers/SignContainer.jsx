@@ -78,7 +78,6 @@ export function SignContainer() {
 		</>
 	);
 }
-const StyledForm = styled.form``;
 const StyledWrapper = styled.div`
 	width: 342px;
 	b {

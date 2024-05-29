@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from '../../../styles/theme';
-
+import { useUser } from '~/common/hooks';
 import {
 	useIssueDetail,
 	useIssueStatus,
@@ -37,6 +37,7 @@ export function IssueDetailContainer() {
 	const { onOpenIssue, onCloseIssue, onDeleteIssue } = useIssueStatus();
 	const { onAddAssignee, onDeleteAssignee } = useUpdateAssignee();
 	const { onAddLabel, onDeleteLabel } = useUpdateLabel();
+	const { writerImage } = useUser(issueDetail.writer);
 
 	useEffect(() => {
 		fetchIssueDetail();
@@ -239,6 +240,7 @@ export function IssueDetailContainer() {
 						<IssueCommentItem
 							issueId={id}
 							content={issueDetail.content}
+							writerImage={writerImage}
 							writer={issueDetail.writer}
 							duration={issueDetail.duration}
 							isWriter={true}
@@ -249,6 +251,7 @@ export function IssueDetailContainer() {
 								<IssueCommentItem
 									key={item.id + 1}
 									commentId={item.id}
+									profileImage={item.profileImage}
 									content={item.content}
 									duration={item.duration}
 									writer={item.writer}

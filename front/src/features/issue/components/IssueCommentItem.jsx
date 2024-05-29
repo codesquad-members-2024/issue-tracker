@@ -12,7 +12,9 @@ export function IssueCommentItem({
 	issueId,
 	fetchIssueDetail,
 	duration,
+	writerImage,
 	commentId,
+	profileImage,
 }) {
 	const [comment, setComment] = useState(content);
 	const [isEdit, setIsEdit] = useState(false);
@@ -50,10 +52,7 @@ export function IssueCommentItem({
 			<StyledWrapper>
 				<StyledHeader>
 					<span className='info'>
-						<img
-							src='https://avatars.githubusercontent.com/u/58014235?v=4'
-							alt='양시미'
-						/>
+						<img src={profileImage || writerImage} alt={writer} />
 						<h3>{writer}</h3>
 						<p>{duration} 전</p>
 					</span>

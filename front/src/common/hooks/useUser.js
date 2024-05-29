@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getUserList } from '~/common/apis';
 
-export const useUser = () => {
+export const useUser = target => {
 	const [userList, setUser] = useState(null);
 	const fetchUser = async () => {
 		try {
@@ -13,9 +13,11 @@ export const useUser = () => {
 			// setLoading(false);
 		}
 	};
-
+	const writerImage = userList?.find(
+		user => user.loginId === target
+	)?.profileImage;
 	useEffect(() => {
 		fetchUser();
 	}, []);
-	return { userList, fetchUser };
+	return { userList, fetchUser, writerImage };
 };

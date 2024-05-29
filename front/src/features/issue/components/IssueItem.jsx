@@ -3,15 +3,8 @@ import { Link } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { IconMilestone } from '~/common/icons';
 import { CheckBox, Label } from '~/common/components';
-import { useUser } from '~/common/hooks';
 
-export function IssueItem({ issue }) {
-	const { userList } = useUser();
-	const writerImg = writer => {
-		const user = userList?.find(user => user.loginId === writer);
-		return user?.profileImage;
-	};
-
+export function IssueItem({ issue, onChange, checked, profileImage }) {
 	return (
 		<StyledWrapper>
 			<StyledCheckbox />
@@ -38,7 +31,7 @@ export function IssueItem({ issue }) {
 					</StyledMilestone>
 				)}
 			</StyledDetail>
-			<StyledUserImage src={writerImg(issue?.writer)} />
+			<StyledUserImage src={profileImage} />
 		</StyledWrapper>
 	);
 }

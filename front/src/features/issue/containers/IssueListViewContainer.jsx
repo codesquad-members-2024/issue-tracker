@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Input } from 'antd';
 
+import { useUser } from '~/common/hooks';
 import { IssueItem } from '../components/IssueItem';
 import {
 	useIssueList,
@@ -36,9 +37,12 @@ export function IssueListViewContainer() {
 		fetchMilestoneList,
 	} = useMilestoneList();
 
+	const { userList } = useUser();
+
 	const [searchValue, setSearchValue] = useState('');
 	const [queryString, setQueryString] = useState('');
 	const navigate = useNavigate();
+
 	const onChangeFilter = (e, prefix) => {
 		setSearchValue(value =>
 			e.target.checked ? `${value} ${prefix}:${e.target.value},` : ''
@@ -167,7 +171,17 @@ export function IssueListViewContainer() {
 				{/* {loading && <Loading size='large' />} */}
 
 				{issueList?.map((issue, index) => (
-					<IssueItem key={issue.id} issue={issue} index={issue[index]} />
+					<IssueItem
+						key={issue.id}
+						issue={issue}
+						index={issue[index]}
+						onChange={handleCheck}
+						checked={checked}
+						profileImage={
+							userList?.find(user => user.loginId === issue.writer)
+								?.profileImage
+						}
+					/>
 				))}
 			</StyledList>
 		</StyledWrapper>
