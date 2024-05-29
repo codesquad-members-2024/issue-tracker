@@ -17,6 +17,7 @@ interface Issue {
 	state: boolean;
 	content?: string;
 	timestamp: string;
+	createdAt: string;
 	writer: string;
 	milestoneName: string;
 	assignees: [];
