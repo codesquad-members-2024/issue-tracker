@@ -29,10 +29,13 @@ function IssueDetailTitle({ issue, commentLegth }: PropsType) {
 		setDisabled("DISABLED");
 	};
 	const handleTitle = () => {
-		console.log($title.current?.value);
+		setDisabled("DISABLED");
+		setTimeout(() => {
+			setShowTitleEditor((prev) => !prev);
+		}, 300);
 		mutateTitle({ title: $title.current?.value || "" });
-		setShowTitleEditor(!showTitleEditor);
 	};
+
 	return (
 		<section className="mt-10 mb-5">
 			<div className={`flex justify-between mb-5 ${showTitleEditor ? "hidden" : "block"}`}>
@@ -42,7 +45,7 @@ function IssueDetailTitle({ issue, commentLegth }: PropsType) {
 						#{issue.id}
 					</span>
 				</h1>
-				<div className="flex items-center">
+				<div className="flex items-center"> 
 					<div className="mr-3">
 						<Button
 							size="S"

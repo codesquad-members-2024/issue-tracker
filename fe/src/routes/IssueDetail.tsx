@@ -15,7 +15,7 @@ function IssueDetail() {
 		<div className="w-screen h-screen flex items-center justify-center overflow-auto">
 			<div className="h-[95%] w-[85%]">
 				<Header />
-				<IssueDetailTitle issue={data.issue} commentLegth={data.comments.length} />
+				<IssueDetailTitle issue={data.issue} commentLegth={data.comments.length}/>
 				<IssueDetailContent issueData={data} />
 			</div>
 		</div>
