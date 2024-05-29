@@ -1,4 +1,3 @@
-import getLocalStorageItem from "../../../utility/getLocalStorageItem";
 import getTimeStamp from "../../../utility/getTimeStamp";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
@@ -8,11 +7,11 @@ const border = "component-border dark:component-border--dark";
 interface PropsType {
 	issue?: Issue;
 	comment?: IssueComment;
+	memberId: string;
 }
 
-function ContentTable({ issue, comment }: PropsType) {
+function ContentTable({ issue, comment, memberId }: PropsType) {
 	const data: Issue | IssueComment = (issue ? issue : comment)!;
-	const { member_id } = getLocalStorageItem("user");
 	return (
 		<div className={`${border} border-[1px] rounded-2xl`}>
 			<div className={`h-[64px] ${border} border-b-[1px] flex items-center justify-between`}>
@@ -26,7 +25,7 @@ function ContentTable({ issue, comment }: PropsType) {
 					</span>
 				</div>
 				<div className="mr-5 flex items-center justify-between">
-					{data.writer === member_id && (
+					{data.writer === memberId && (
 						<div className="mr-3">
 							<InformationTag text="작성자" icon={null} fillColor="#FEFEFE" textBright={false} />
 						</div>

@@ -19,26 +19,30 @@ interface IssueDataType {
 	writer: string;
 	content: string;
 	createdAt: string;
-	file: null;
+	file: null; //TODO 파일첨부
 	milestoneId: number | null;
 	labelIds: number[];
 	assigneeIds: string[];
 }
-
+interface CommentDataType {
+	writer: string;
+	content: string;
+	uploadedFile: null; //TODO 파일첨부
+}
 interface ResponseType {
 	[key: string]: number | string;
 }
 
-type DataType = MilestonePostDataType | LabelPostDataType | IssueDataType;
+type DataType = MilestonePostDataType | LabelPostDataType | IssueDataType | CommentDataType;
 type Handler = (data?: ResponseType) => void;
 
-const usePost = (query: string, queryKey: string, handler: Handler) => {
+const usePost = (query: string, queryKey: string, handler?: Handler) => {
 	const [labelOrMilestone] = queryKey.split("?");
 	const queryClient = useQueryClient();
 	const { mutate } = useMutation({
 		mutationFn: (data: DataType) => fetchData(query, { method: "POST", body: data }),
 		onSuccess: (data) => {
-			handler(data);
+			if (handler) handler(data);
 			queryClient.invalidateQueries({ queryKey: [queryKey] });
 			if (labelOrMilestone === "milestone" || labelOrMilestone === "label")
 				queryClient.invalidateQueries({ queryKey: ["count"] });

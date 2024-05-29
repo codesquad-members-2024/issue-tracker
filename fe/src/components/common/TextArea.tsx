@@ -5,13 +5,14 @@ import Button from "./Button";
 
 interface PropsType {
 	h: string;
-	$ref?: React.RefObject<HTMLTextAreaElement>; //DELETE  옵셔널
+	$ref?: React.RefObject<HTMLTextAreaElement>;
+	handler?: () => void;
 }
 
 const moving = "scale-75 top-2 left-0";
 const DELAY = 2000;
 
-function TextArea({ h, $ref }: PropsType) {
+function TextArea({ h, $ref, handler }: PropsType) {
 	const [value, setValue] = useState("");
 	const [isVisible, setIsVisible] = useState(true);
 	const ButtonMemo = useMemo(
@@ -23,7 +24,10 @@ function TextArea({ h, $ref }: PropsType) {
 		[]
 	);
 
-	const onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => setValue(value);
+	const onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => {
+		setValue(value);
+		if (handler) handler();
+	};
 
 	useEffect(() => {
 		setIsVisible(true);
