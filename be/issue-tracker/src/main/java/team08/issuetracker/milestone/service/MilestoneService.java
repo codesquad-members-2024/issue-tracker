@@ -1,5 +1,6 @@
 package team08.issuetracker.milestone.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,8 +49,8 @@ public class MilestoneService {
 
         Long milestoneId = issue.getMilestoneId();
 
-        String name = milestoneRepository
-                .findById(milestoneId)
+        String name = Optional.ofNullable(milestoneId)
+                .flatMap(milestoneRepository::findById)
                 .map(Milestone::getName)
                 .orElse(null);
 
