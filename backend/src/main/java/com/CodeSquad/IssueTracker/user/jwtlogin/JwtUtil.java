@@ -3,6 +3,7 @@ package com.CodeSquad.IssueTracker.user.jwtlogin;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +13,16 @@ import java.util.Date;
 public class JwtUtil {
     @Value("${jwt.secret-key}")
     private String secretKey;
+    @Value("${jwt.expiration-time}")
+    private long expirationTime;
 
-    private static final long EXPIRATION_TIME = 86400000; // 1 day
+    private static final String HEADER_STRING = "Authorization";
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     public String generateToken(String userId) {
         return Jwts.builder()
                 .setSubject(userId)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
@@ -30,5 +34,13 @@ public class JwtUtil {
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    public String getTokenFromHeader(HttpServletRequest request) {
+        String header = request.getHeader(HEADER_STRING);
+        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+            return null;
+        }
+        return header.replace(TOKEN_PREFIX, "");
     }
 }

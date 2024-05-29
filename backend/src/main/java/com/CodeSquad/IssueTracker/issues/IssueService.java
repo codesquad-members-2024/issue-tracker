@@ -195,6 +195,7 @@ public class IssueService {
                 .milestone(milestoneInIssue)
                 .build();
     }
+
     public void validateIssueListPage(long page) {
         if (page < 1) {
             throw new InvalidIssuePageException("page는 1 이상의 정수여야 합니다.");
@@ -254,8 +255,6 @@ public class IssueService {
 
         issueRepository.save(issue);
     }
-
-
 
     private void validateIssueRequest(IssueRequest issueRequest) {
         userService.validateExistUser(issueRequest.author());
