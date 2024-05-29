@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import SideBar from "../common/SideBar";
+import { useEffect, useRef, useState } from "react";
+import SideBar from "./SideBar";
 import TextArea from "../common/TextArea";
 import ContentTable from "./ContentTable/ContentTable";
 import Button from "../common/Button";
@@ -16,15 +16,13 @@ function IssueDetailContent({ issueData }: PropsType) {
 	const { assignees, comments, issue, labels, milestone } = issueData;
 	const [disabled, setDisabled] = useState("DISABLED");
 	const $content = useRef<HTMLTextAreaElement>(null);
-	const assigneeIds = useRef<string[]>(assignees.map(({ memberId }) => memberId));
-	const labelIds = useRef<number[]>([]);
-	const milestoneId = useRef<number | null>(null);
+	// const assigneeIds = useRef<string[]>([]);
+	// const labelIds = useRef<number[]>([]);
+	// const milestoneId = useRef<number | null>(null);
 	const { member_id } = getLocalStorageItem("user");
 	const mutate = usePost(`/issue/${issue.id}/comment`, `issue/${issue.id}`);
-
-	console.log(assignees.map(({ memberId }) => memberId));
-	console.log(labels);
-	console.log(milestone);
+	// console.log(labels);
+	// console.log(milestone);
 	const handleCommentBtnState = () => {
 		if ($content.current?.value) {
 			setDisabled("DEFAULT");
@@ -67,7 +65,7 @@ function IssueDetailContent({ issueData }: PropsType) {
 				</div>
 			</div>
 			<div className="mt-6 ml-5">
-				<SideBar labelIds={labelIds} assigneeIds={assigneeIds} milestoneId={milestoneId} />
+				<SideBar assignees={assignees} issueId={issue.id}/>
 			</div>
 		</section>
 	);

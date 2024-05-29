@@ -19,7 +19,7 @@ interface IssueStateDataType {
 }
 
 interface PatchDataType {
-	[key: string]: string | null;
+	[key: string]: string | null | string[];
 }
 
 type MutateType = (data?: DataType) => void;
