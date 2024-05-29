@@ -10,4 +10,8 @@ import lombok.Setter;
 public class CommentUpdateDto {
 
     private String content;
+
+    public CommentServiceDto toServiceDto(Long id) {
+        return new CommentServiceDto(id, content);
+    }
 }
