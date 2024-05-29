@@ -27,7 +27,6 @@ export function IssueCreateContainer() {
 	const navigate = useNavigate();
 	const [state, dispatch] = useReducer(issueReducer, initialState);
 	const { check, checkDispatch } = useCheck();
-	console.log(check);
 
 	async function OnCreateNewIssue() {
 		const issue = {
@@ -43,7 +42,7 @@ export function IssueCreateContainer() {
 		};
 
 		postIssueDetail(issue).then(id => {
-			navigate(`/issue/${id}`);
+			navigate(`/issues/${id}`);
 		});
 	}
 

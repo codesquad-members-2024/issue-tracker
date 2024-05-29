@@ -112,7 +112,6 @@ export function IssueAside({
 
 	useEffect(() => {
 		if (list && listArray.current) {
-			console.log('unmount');
 			const addedAssignees = listArray.current.filter(
 				assignee => !list.some(item => item.loginId === assignee.loginId)
 			);

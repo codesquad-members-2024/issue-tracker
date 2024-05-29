@@ -44,8 +44,6 @@ export function IssueDetailContainer() {
 
 	const { check, checkDispatch } = useCheck();
 
-	// console.log(check);
-
 	const [isClosed, setIsClosed] = useState(issueDetail?.closed);
 	useEffect(() => {
 		setIsClosed(issueDetail?.closed);
