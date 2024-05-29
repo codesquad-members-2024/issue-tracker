@@ -2,27 +2,22 @@ import { ReactComponent as Logo } from "../svg/LogoLarge.svg";
 import { useEffect, useRef, useState } from "react";
 import useLoginFetch from "../hooks/useLoginFetch";
 
+interface PropsType {
+	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
 interface Data {
 	memberId: string;
 	password: string;
 }
 
-interface Props {
-	setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function Login({ setIsLogin }: Props) {
+function Login({ setIsLoggedIn }: PropsType) {
 	const [validId, setValidId] = useState(false);
 	const [validPw, setValidPw] = useState(false);
 	const [loginData, setLoginData] = useState<null | Data>(null);
-	const [data, error] = useLoginFetch("/member/login", loginData); //TODO 에러처리
+	const [result, error] = useLoginFetch("/member/login", loginData);
 
 	const idRef = useRef<HTMLInputElement>(null);
 	const pwRef = useRef<HTMLInputElement>(null);
-
-	useEffect(() => {
-		if (data) setIsLogin(true);
-	}, [data, setIsLogin]);
 
 	const onIdBlur = () => {
 		const { validity, value } = idRef.current as HTMLInputElement;
@@ -41,6 +36,11 @@ function Login({ setIsLogin }: Props) {
 			password: pwRef.current.value,
 		});
 	};
+
+	useEffect(() => {
+		const jwt = localStorage.getItem("jwt");
+		if (jwt) setIsLoggedIn(true);
+	}, [result, setIsLoggedIn]);
 
 	return (
 		<div className="w-full h-full flex items-center justify-center">

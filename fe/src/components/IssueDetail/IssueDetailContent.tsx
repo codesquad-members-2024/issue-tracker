@@ -1,4 +1,4 @@
-import SideBar from "../common/SideBar";
+import SideBar from "../NewIssue/SideBar";
 import TextArea from "../common/TextArea";
 import ContentTable from "./ContentTable/ContentTable";
 
@@ -54,9 +54,7 @@ function IssueDetailContent({ issue, timeSince }: PropsType) {
 					<TextArea h="h-[184px]" />
 				</div>
 			</div>
-			<div className="mt-6 ml-5">
-				<SideBar />
-			</div>
+			<div className="mt-6 ml-5">{/* <SideBar /> */}</div>
 		</section>
 	);
 }

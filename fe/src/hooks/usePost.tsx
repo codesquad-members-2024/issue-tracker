@@ -13,15 +13,35 @@ interface LabelPostDataType {
 	backgroundColor: string;
 	textBright: boolean;
 }
-type DataType = MilestonePostDataType | LabelPostDataType;
 
-const usePost = (query: string, queryKey: string, handler: () => void) => {
+interface IssueDataType {
+	title: string;
+	writer: string;
+	content: string;
+	createdAt: string;
+	file: null;
+	milestoneId: number | null;
+	labelIds: number[];
+	assigneeIds: string[];
+}
+
+interface ResponseType {
+	[key: string]: number | string;
+}
+
+type DataType = MilestonePostDataType | LabelPostDataType | IssueDataType;
+type Handler = (data?: ResponseType) => void;
+
+const usePost = (query: string, queryKey: string, handler: Handler) => {
+	const [labelOrMilestone] = queryKey.split("?");
 	const queryClient = useQueryClient();
 	const { mutate } = useMutation({
 		mutationFn: (data: DataType) => fetchData(query, { method: "POST", body: data }),
-		onSuccess: () => {
-			handler();
+		onSuccess: (data) => {
+			handler(data);
 			queryClient.invalidateQueries({ queryKey: [queryKey] });
+			if (labelOrMilestone === "milestone" || labelOrMilestone === "label")
+				queryClient.invalidateQueries({ queryKey: ["count"] });
 		},
 		onError: (e) => {
 			console.error("생성에러", e);

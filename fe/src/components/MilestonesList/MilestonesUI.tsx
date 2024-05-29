@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../common/Button";
 import TabButton from "../common/TabButton";
 import NewMilestone from "./MilestoneCRUD/NewMilestone";
+import useGet from "../../hooks/useGet";
 
 interface PropsType {
 	queryKey: string;
@@ -10,11 +11,18 @@ interface PropsType {
 function MilestonesUI({ queryKey }: PropsType) {
 	const [newMilestone, setNewMilestone] = useState(false);
 	const handleShowNewMilestone = () => setNewMilestone(!newMilestone);
+	const { data } = useGet("count", "/count", true);
+	const { totalLabelCounts=0, totalMilestoneCounts=0 } =  data || {};
 
 	return (
 		<>
 			<div className="mt-10 flex justify-between min-w-[425p x]">
-				<TabButton position="UI_BAR" click="right" />
+				<TabButton
+					position="UI_BAR"
+					click="right"
+					leftCount={totalLabelCounts}
+					rightCount={totalMilestoneCounts}
+				/>
 				<Button
 					onClick={newMilestone ? () => {} : handleShowNewMilestone}
 					size="S"

@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 
 interface PropsType {
 	position: string;
-	leftCount?: number; //TODO 수정 무조건 값는 값
-	rightCount?: number;
+	leftCount: number;
+	rightCount: number;
 	click?: string;
+	state?: string | null;
 }
 interface PositionType {
 	[key: string]: {
@@ -57,7 +58,7 @@ const LINK: LinkType = {
 		left: "/labels",
 		right: "/milestone/",
 	},
-	ISSUE: { left: "/", right: "/" },
+	ISSUE: { left: "/?state=opened", right: "/?state=closed" },
 	MILESTONE: {
 		left: "/milestone?state=opened",
 		right: "/milestone?state=closed",
@@ -66,16 +67,23 @@ const LINK: LinkType = {
 
 const borderTotal = "component-border dark:component-border--dark border-[1px] rounded-xl";
 const borderRight = "component-border dark:component-border--dark border-r-[1px]";
+const bgColor = "bg-grayscale.200 dark:bg-grayscale.700";
+const clickedBgColor = "bg-grayscale.100 dark:bg-grayscale.900";
 
-function TabButton({ position, leftCount, rightCount, click }: PropsType) {
+function TabButton({ position, leftCount, rightCount, click, state }: PropsType) {
 	const [left, setLeft] = useState("DEFAULT");
 	const [right, setRight] = useState("DEFAULT");
 
 	useEffect(() => {
-		if (click === "left") setLeft("SELECTED");
-		if (click === "right") setRight("SELECTED");
-		if (position === "MILESTONE" || position === "ISSUE") setLeft("SELECTED");
-	}, [click, position]);
+		if (click === "left" || state === "opened") {
+			setLeft("SELECTED");
+			setRight("DEFAULT");
+		}
+		if (click === "right" || state === "closed") {
+			setRight("SELECTED");
+			setLeft("DEFAULT");
+		}
+	}, [click, position, state]);
 
 	const onLeftClick = () => {
 		setLeft("SELECTED");
@@ -91,14 +99,12 @@ function TabButton({ position, leftCount, rightCount, click }: PropsType) {
 		<div
 			className={`${POSITION[position].border ? borderTotal : ""} ${
 				POSITION[position].size
-			} flex items-center`}
+			} flex items-center w-[300px]`}
 		>
 			<Link
 				to={LINK[position].left}
-				className={`flex items-center w-1/2 h-full rounded-l-xl ${
-					left === "SELECTED" && position === "UI_BAR"
-						? "bg-grayscale.200 dark:bg-grayscale.700"
-						: "bg-grayscale.100 dark:bg-grayscale.900 "
+				className={`flex items-center w-[49%] h-full rounded-l-xl ${
+					left === "SELECTED" && position === "UI_BAR" ? bgColor : clickedBgColor
 				}`}
 			>
 				<Button
@@ -113,10 +119,8 @@ function TabButton({ position, leftCount, rightCount, click }: PropsType) {
 			<div className={`${POSITION[position].border ? borderRight : ""} h-full`}></div>
 			<Link
 				to={LINK[position].right}
-				className={`flex items-center w-[49.6%] h-full  rounded-r-xl ${
-					right === "SELECTED" && position === "UI_BAR"
-						? "bg-grayscale.200 dark:bg-grayscale.700"
-						: "bg-grayscale.100 dark:bg-grayscale.900"
+				className={`flex items-center w-[50.6%] h-full  rounded-r-xl ${
+					right === "SELECTED" && position === "UI_BAR" ? bgColor : clickedBgColor
 				}`}
 			>
 				<Button

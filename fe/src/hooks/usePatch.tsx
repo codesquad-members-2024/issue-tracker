@@ -14,7 +14,11 @@ interface LabelPatchDataType {
 	textBright: boolean;
 }
 
-type DataType = MilestonePatchDataType | LabelPatchDataType;
+interface IssueStateDataType {
+	issueIds: number[];
+}
+
+type DataType = MilestonePatchDataType | LabelPatchDataType | IssueStateDataType;
 type MutateType = (data?: DataType) => void;
 
 const usePatch = (query: string, queryKey: string, handler?: () => void) => {

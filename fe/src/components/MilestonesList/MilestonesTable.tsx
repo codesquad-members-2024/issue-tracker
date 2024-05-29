@@ -1,6 +1,7 @@
 import TabButton from "../common/TabButton";
 import Milestone from "./Milestone";
 import useGet from "../../hooks/useGet";
+import Loading from "../common/Loading";
 
 interface PropsType {
 	queryParam: null | string;
@@ -12,7 +13,7 @@ const border = "component-border dark:component-border--dark";
 function MilestonesTable({ queryParam, queryKey }: PropsType) {
 	const query = `${queryParam ? `/milestone?state=${queryParam}` : "/milestone"}`;
 	const { data, error, isLoading } = useGet(queryKey, query, true);
-	if (isLoading) return <div>로딩</div>;
+	if (isLoading) return <Loading />;
 	if (error) return <div>에러 {error.message}</div>;
 
 	const { milestones, milestoneCounts }: MilestonesDataType = data;
@@ -24,6 +25,7 @@ function MilestonesTable({ queryParam, queryKey }: PropsType) {
 					position="MILESTONE"
 					leftCount={milestoneCounts.openedCount}
 					rightCount={milestoneCounts.closedCount}
+					state={queryParam}
 				/>
 			</header>
 			<ul>

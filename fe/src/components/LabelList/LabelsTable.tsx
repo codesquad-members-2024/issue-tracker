@@ -1,11 +1,12 @@
 import useGet from "../../hooks/useGet";
+import Loading from "../common/Loading";
 import Label from "./Label";
 
 const border = "component-border dark:component-border--dark";
 
 function LabelsTable() {
 	const { data, error, isLoading } = useGet("label", "/label", true);
-	if (isLoading) return <div>로딩</div>;
+	if (isLoading) return <Loading />;
 	if (error) return <div>에러 {error.message}</div>;
 
 	const { labelCount, labels }: LabelDataType = data;

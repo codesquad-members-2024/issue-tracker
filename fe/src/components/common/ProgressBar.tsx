@@ -8,9 +8,10 @@ interface ProgressWithInfoProps {
 	closedIssueCount: number;
 	percent: number;
 }
-
-// const ProgressWithLabel = withLabel(ProgressBar); //<ProgressWithLabel>"그룹프로젝트:이슈트래커"</ProgressWithLabel>
-const ProgressWithInfo = (props: ProgressWithInfoProps) => withInfo(ProgressBar, props);
+interface ProgressWithLabelProps {
+	percent: number;
+	name: string;
+}
 
 const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 	return (
@@ -26,16 +27,17 @@ const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 	);
 };
 
-// function withLabel<T extends ChildrenType>(Component: React.FC<T>) {
-// 	return ({ children, ...rest }: T) => (
-// 		<>
-// 			<Component {...rest} />
-// 			<label className="text-xs text-grayscale.900 dark:text-grayscale.50 font-medium">
-// 				{children}
-// 			</label>
-// 		</>
-// 	);
-// }
+function withLabel(Component: React.FC<PercentType>, { percent, name }: ProgressWithLabelProps) {
+	console.log();
+	return (
+		<>
+			<Component percent={percent} />
+			<label className="text-xs text-grayscale.900 dark:text-grayscale.50 font-medium mt-2">
+				{name}
+			</label>
+		</>
+	);
+}
 
 function withInfo(
 	Component: React.FC<PercentType>,
@@ -45,7 +47,7 @@ function withInfo(
 		<>
 			<Component percent={percent} />
 			<div className="text-xs text-grayscale.600 dark:text-grayscale.500 flex justify-between mt-2">
-				<span>{percent}</span>
+				<span>{`${percent}%`}</span>
 				<div>
 					<span className="mr-2">열린 이슈 {openedIssueCount}</span>
 					<span>닫힌 이슈 {closedIssueCount}</span>
@@ -55,4 +57,7 @@ function withInfo(
 	);
 }
 
-export { ProgressWithInfo };
+const ProgressWithLabel = (props: ProgressWithLabelProps) => withLabel(ProgressBar, props); //<ProgressWithLabel>"그룹프로젝트:이슈트래커"</ProgressWithLabel>
+const ProgressWithInfo = (props: ProgressWithInfoProps) => withInfo(ProgressBar, props);
+
+export { ProgressWithInfo, ProgressWithLabel };

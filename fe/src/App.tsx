@@ -25,19 +25,21 @@ function App() {
 
 function AppRoute() {
 	const [darkMode] = useContext(ThemeContext);
-	const [isLogin, setIsLogin] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	return (
 		<div
 			className={`${darkMode} w-screen h-screen bg-grayscale.100 flex justify-center items-center dark:bg-grayscale.900`}
 		>
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={isLogin ? <Main /> : <Login setIsLogin={setIsLogin} />} />
-					{/* <Route path="/login" element={isLogin ? <Main /> : <Login setIsLogin={setIsLogin} />} /> */}
+					<Route
+						path="/:filter?"
+						element={isLoggedIn ? <Main /> : <Login setIsLoggedIn={setIsLoggedIn} />}
+					/>
 					<Route path="/issue" element={<NewIssue />} />
 					<Route path="/issue/:id" element={<IssueDetail />} />
 					<Route path="/labels" element={<Labels />} />
-					<Route path="/milestone/:state?" element={<Milestones />} />
+					<Route path="/milestone" element={<Milestones />} />
 				</Routes>
 			</BrowserRouter>
 		</div>

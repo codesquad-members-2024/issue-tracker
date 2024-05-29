@@ -1,18 +1,28 @@
 /// <reference types="react-scripts" />
 
 //DB DATA TYPE
+//Issue
+interface IssueDataType {
+	issueCounts: IssueCounts;
+	issues: Issue[];
+}
+interface IssueCounts {
+	closedCount: number;
+	openedCount: number;
+	totalCount: number;
+}
 interface Issue {
 	id: number;
 	title: string;
-	open: boolean;
-	content: string;
+	state: boolean;
+	content?: string;
 	timestamp: string;
 	writer: string;
-	milestone_name: string;
-	comments: IssueComment[];
+	milestoneName: string;
+	assignees: [];
+	comments?: IssueComment[];
 	labels: Label[];
 }
-
 interface IssueComment {
 	id: number;
 	writer: string;
@@ -20,6 +30,16 @@ interface IssueComment {
 	content: string;
 }
 
+//Milestone
+interface MilestonesDataType {
+	milestoneCounts: MilestoneCounts;
+	milestones: Milestone[];
+}
+interface MilestoneCounts {
+	closedCount: number;
+	openedCount: number;
+	totalCount: number;
+}
 interface Milestone {
 	id: number;
 	state: boolean;
@@ -31,17 +51,11 @@ interface Milestone {
 	milestoneProgress: number;
 }
 
-interface MilestoneCounts {
-	closedCount: number;
-	openedCount: number;
-	totalCount: number;
+//Label
+interface LabelDataType {
+	labelCount: { totalCount: number };
+	labels: Label[];
 }
-
-interface MilestonesDataType { 
-	milestoneCounts: MilestoneCounts;
-	milestones: Milestone[];
-}
-
 interface Label {
 	id: number;
 	name: string;
@@ -50,7 +64,11 @@ interface Label {
 	textBright: boolean;
 }
 
-interface LabelDataType {
-	labelCount: { totalCount: number };
-	labels: Label[];
+//Member
+interface MemberDataType {
+	members: Member[];
+}
+interface Member {
+	memberId: string;
+	profileImage: string;
 }
