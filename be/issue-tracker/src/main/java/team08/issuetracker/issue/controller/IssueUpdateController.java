@@ -40,7 +40,6 @@ public class IssueUpdateController {
         return ResponseEntity.ok(response);
     }
 
-
     @PatchMapping("/{id}/content")
     public ResponseEntity<IssueUpdateResponse> updateIssueContent(@PathVariable long id,
                                                                   @RequestBody IssueContentUpdateRequest issueContentUpdateRequest) {
@@ -88,7 +87,6 @@ public class IssueUpdateController {
 
         return ResponseEntity.ok(response);
     }
-
 
     @PatchMapping("/{id}/open")
     public ResponseEntity<IssueUpdateResponse> openIssue(@PathVariable long id) {
