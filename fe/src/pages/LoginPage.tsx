@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { APiUtil } from "../common/Utils";
 import { openNotification } from "../common/Utils";
 
+const serverURL = import.meta.env.VITE_API_URL;
 export interface LoginForm {
     id: string;
     password: string;
@@ -15,6 +16,12 @@ const LoginPage = () => {
         id: "",
         password: "",
     });
+
+    const handleOAoth = async() => {
+        const response = await fetch(serverURL + "OAuth/login")
+        // const data = await response.json()
+        console.log(response)
+    }
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -53,7 +60,7 @@ const LoginPage = () => {
                 >
                     Issue Tracker
                 </Link>
-                <button className="px-10 py-2 font-normal border-solid border-2 text-blue-500 border-blue-500 rounded-xl">
+                <button onClick={handleOAoth} className="px-10 py-2 font-normal border-solid border-2 text-blue-500 border-blue-500 rounded-xl">
                     GitHub 계정으로 로그인
                 </button>
                 <div className="p-4">or</div>

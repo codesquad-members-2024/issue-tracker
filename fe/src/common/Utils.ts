@@ -5,13 +5,20 @@ import { SignUpForm } from "../pages/SignUpPage";
 import { LoginForm } from "../pages/LoginPage";
 import { PostRequestFrom } from "../pages/NewPage";
 import { notification } from "antd";
+
+interface TitleState {
+    title: string;
+    // 다른 필드를 여기에 추가할 수 있습니다.
+}
 const serverURL = import.meta.env.VITE_API_URL;
 const token = sessionStorage.getItem('token')
 
 export const APiUtil = {
     async getData(tableName: string) {
+        console.log(serverURL + tableName)
         try {
             const response = await fetch(serverURL + tableName, {
+                
                 headers: {
                     "content-type": "application/json",
                     "Authorization": token ? `Bearer ${token}` : "",
@@ -29,6 +36,7 @@ export const APiUtil = {
     },
 
     async createData(tableName: string, createData: FormState | LabelFormState | PostRequestFrom | SignUpForm | LoginForm) {
+        
         const response = await fetch(serverURL + tableName, {
             method: "POST",
             headers: {
@@ -40,7 +48,7 @@ export const APiUtil = {
         return response
     },
 
-    async modifyData(tableName: string, modifyData: FormState | LabelFormState, id: number) {
+    async modifyData(tableName: string, modifyData: FormState | LabelFormState | TitleState, id: number | string | undefined) {
         await fetch(serverURL + `${tableName}/${id}`, {
             method: "PUT",
             headers: {
@@ -89,8 +97,8 @@ export const changeColor = ({ setColor, setFormData }: ChangeColorProps) => {
     }));
 };
 
-export const getDateDifference = (createdAt: string) => {
-    const createdDate = new Date(createdAt);
+export const getDateDifference = (createdAt: string | undefined) => {
+    const createdDate = new Date(createdAt as string);
     const nowDate = new Date();
 
     const betweenTime = Math.floor((nowDate.getTime() - createdDate.getTime()) / 1000 / 60);

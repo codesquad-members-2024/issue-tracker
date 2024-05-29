@@ -1,18 +1,18 @@
-// import CommentBox from "../../common/CommentBox";
+import CommentBox from "../../common/CommentBox";
 import { CommentCard } from "./CommentCard";
-import { Comment } from "./TitleContainer";
+import { Comment, UserInfo } from "../../pages/IssueDetailPage";
 
 interface CommentAreaProps {
-    commentData: Comment[];
+    commentsData: Comment[] | undefined;
+    authorId: string | undefined
+    userInfo: UserInfo | null
 }
-const CommentArea = ({ commentData }: CommentAreaProps) => {
+const CommentArea = ({ commentsData, authorId, userInfo }: CommentAreaProps) => {
     // const [comment, setComment] = useState({ description: "" });
-
-
     return (
         <div className="h-full">
-            {commentData.length && commentData.map((curData, idx) => (
-                <CommentCard commentInfo={curData} key={idx} />
+            {commentsData?.length && commentsData.map((curData, idx) => (
+                <CommentCard key={idx} commentInfo={curData} userInfo={userInfo} authorId={authorId}/>
             ))}
             {/* <CommentBox
                 height="h-[200px]"

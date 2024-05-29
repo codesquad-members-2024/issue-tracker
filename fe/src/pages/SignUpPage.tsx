@@ -84,7 +84,6 @@ const SignUp = () => {
     };
 
     useEffect(() => {
-        console.log(signUpForm)
         setIsFormValid(checkValue() && isIdUnique);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isIdUnique, signUpForm]);
@@ -97,7 +96,7 @@ const SignUp = () => {
             >
                 Issue Tracker
             </Link>
-            <UserImgBox imgURL={signUpForm.imgUrl} />
+            <UserImgBox imgURL={signUpForm.imgUrl} margin="auto" width="50px" height="50px"/>
             <FileUploader addImgUrl={addImgUrl}/>
             <div className="flex flex-col items-center">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">

@@ -7,34 +7,41 @@ import { Label } from "../components/LabelsMilestones/Labels/LabelFeed";
 import { Milestone } from "../components/LabelsMilestones/Milestones/MilestoneFeed";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { APiUtil } from "../common/Utils";
-
+export interface Users {
+    id: number;
+    username: string;
+    createdAt: string;
+    imgUrl: string;
+    role: string
+}
 export interface PostRequestFrom {
     userId: string;
     title: string;
     content: string;
-    assigneeIds: string[];
+    assigneeIds: number[];
     labelIds: number[];
-    milestoneId: number;
+    milestoneId: number | null;
 }
 export interface NewIssueForm {
     userId: string;
     title: string;
     content: string;
-    assigneeIds: string[];
-    labelIds: Label[];
-    milestoneId: Milestone[];
+    assignees: Users[];
+    labels: Label[];
+    milestone: Milestone[];
 }
-
+// labels, milestone, assignees
 const NewPage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    // const userName = sessionStorage.getItem("user")
     const [newIssueForm, setNewsIssueForm] = useState<NewIssueForm>({
         userId: "user1",
         title: "",
         content: "",
-        assigneeIds: [],
-        labelIds: [],
-        milestoneId: [],
+        assignees: [],
+        labels: [],
+        milestone: [],
     });
 
     const { mutate } = useMutation({
@@ -49,10 +56,9 @@ const NewPage = () => {
     const handleCreate = () => {
         const newData: PostRequestFrom = {
             ...newIssueForm,
-            assigneeIds: [],
-            labelIds: newIssueForm.labelIds ? newIssueForm.labelIds.map((cur: Label) => cur.id) : [],
-            // 마일스톤 없으면 뭘 주지?
-            milestoneId: newIssueForm.milestoneId[0]?.id 
+            assigneeIds: newIssueForm.assignees ? newIssueForm.assignees.map((cur: Users) => cur.id) : [],
+            labelIds: newIssueForm.labels ? newIssueForm.labels.map((cur: Label) => cur.id) : [],
+            milestoneId: !newIssueForm.milestone ? null : newIssueForm.milestone[0]?.id 
         };
         mutate(newData)
         navigate("/issue")

@@ -8,27 +8,39 @@ import { useQuery } from "@tanstack/react-query";
 import { Loading } from "../common/NotFound";
 
 const IssuePage = () => {
-    const [isOpen, setOpen] = useState<string>("OPEN");
+    const [query, setQuery] = useState("issues?state=OPEN");
+    const [isOpen, setOpen] = useState(true);
     const [resetFilterUI, setResetFilterUI] = useState(false);
 
     const handleResetFilterUI = () => setResetFilterUI(true);
-
-    const { data, isLoading } = useQuery({
+    
+    const { data, isLoading, error} = useQuery({
         queryKey: ["issues"],
-        queryFn: () => APiUtil.getData("issues?state=OPEN"),
+        queryFn: () => APiUtil.getData(query),
     });
-    if (isLoading) return <div><Loading/></div>;
+    if (isLoading)
+        return (
+            <div><Loading /></div>
+        );
+    if (error)
+        return (
+            <div>{error.message}</div>
+        );
 
+        console.log(data)
     return (
         <main className="w-[1280px] mx-auto">
-            <Header/>
+            <Header />
             <FilterProvider>
                 <Nav
+                    labelCount={data.labelCount}
+                    openMilestoneCount={data.openMilestoneCount}
                     resetFilterUI={resetFilterUI}
                     setResetFilterUI={setResetFilterUI}
                     handleResetFilterUI={handleResetFilterUI}
                 />
                 <IssueFeed
+                    setQuery={setQuery}
                     isOpen={isOpen}
                     setOpen={setOpen}
                     issueInfo={data}

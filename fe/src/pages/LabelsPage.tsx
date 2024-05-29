@@ -13,7 +13,7 @@ const LabelsPage = () => {
         queryFn: () => APiUtil.getData("labels"),
     });
     if (isLoading) return <div><Loading/></div>;
-
+    console.log(data)
     return (
         <main className="w-[1280px] mx-auto">
             <Header />

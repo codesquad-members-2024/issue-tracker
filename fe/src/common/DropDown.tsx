@@ -7,33 +7,36 @@ import { TableType } from "./Sidebar";
 import { NewIssueForm } from "../pages/NewPage";
 import DropDownList from "./DropDownList";
 import Progressbar from "./Progressbar";
+import { UserImgBox } from "./UserImgBox";
+import { Users } from "../pages/NewPage";
+// labels, milestone, assignees
 
 interface DropDownProps {
-    curKey: keyof TableType;
+    curTableItem: keyof TableType;
     idx: number;
-    query: TableType[keyof TableType];
+    queryName: TableType[keyof TableType];
     issueData: NewIssueForm
     setIssueData: React.Dispatch<React.SetStateAction<NewIssueForm>>;
     lastIdx: number
 }
 
 const sideTable: { [key in TableType[keyof TableType]]: keyof NewIssueForm } = {
-    assignees: "assigneeIds",
-    labels: "labelIds",
-    milestones: "milestoneId",
+    users: "assignees",
+    labels: "labels",
+    milestones: "milestone",
 };
 
-const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: DropDownProps) => {
+const DropDown = ({ curTableItem, idx, queryName, issueData, setIssueData, lastIdx }: DropDownProps) => {
     const [isOpen, setOpen] = useState(false);
-    const [data, setData] = useState<(Label | Milestone)[]>([]);
+    const [data, setData] = useState<(Label | Milestone| Users)[]>([]);
     const [loading, setLoading] = useState(false);
 
     const toggleDropdown = () => setOpen(!isOpen);
 
-    const handleClick = (curData: Label | Milestone) => {
+    const handleClick = (curData: Label | Milestone | Users) => {
         setIssueData((prev) => {
-            const key = sideTable[query];
-            const currentSideItem = prev[key] as (Label | Milestone)[];
+            const key = sideTable[queryName];
+            const currentSideItem = prev[key] as (Label | Milestone | Users)[];
     
             if (currentSideItem.find((item) => item.id === curData.id)) {
                 return {
@@ -56,11 +59,13 @@ const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: Drop
             if (isOpen) {
                 setLoading(true);
                 try {
-                    const filterInfo = await APiUtil.getData(query);
-                    if (query === "labels" && filterInfo && filterInfo.labelResponses) {
+                    const filterInfo = await APiUtil.getData(queryName);
+                    if (queryName === "labels" && filterInfo && filterInfo.labelResponses) {
                         setData(filterInfo.labelResponses);
-                    } else if (query === "milestones" && filterInfo && filterInfo.milestones) {
+                    } else if (queryName === "milestones" && filterInfo && filterInfo.milestones) {
                         setData(filterInfo.milestones);
+                    } else {
+                        setData(filterInfo);
                     }
                 } finally {
                     setLoading(false);
@@ -69,7 +74,8 @@ const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: Drop
         };
         
         fetchData();
-    }, [isOpen, query]);
+        console.log(issueData)
+    }, [isOpen, queryName]);
     
     return (
         <li
@@ -82,13 +88,13 @@ const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: Drop
                 key={idx}
                 className="flex justify-between my-2"
             >
-                <div>{curKey}</div>
+                <div>{curTableItem}</div>
                 <PlusOutlined />
             </div>
-            {(issueData[sideTable[query]] as (Label | Milestone)[]).map(
+            {(issueData[sideTable[queryName]] as (Label | Milestone | Users)[]).map(
                 (curData, idx) => (
                     <div key={idx} className="flex flex-col my-2">
-                        {query === "labels" && (
+                        {queryName === "labels" && (
                             <div className="flex">
                                 <div
                                     className="rounded-xl px-3"
@@ -102,25 +108,30 @@ const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: Drop
                                 </div>
                             </div>
                         )}
-                        {query === "milestones" && (
+                        {queryName === "milestones" && (
                             <>
                                 <Progressbar open={(curData as Milestone).openIssueCount} closed={(curData as Milestone).closedIssueCount} />
                                 <div className="text-right">{(curData as Milestone).title}</div>
                             </>
                         )}
-                        {query === "assignees" && <div>담당자 API 안나옴</div>}
+                        {queryName === "users" && (
+                            <div className="flex gap-2">
+                                <UserImgBox imgURL={(curData as Users).imgUrl} margin="auto" width="20px" height="20px"/>
+                                <p>{(curData as Users).id}</p>
+                            </div>
+                        )}
                     </div>
                 )
             )}
             {isOpen && (
                 <DropDownList
-                    curKey={curKey}
+                curTableItem={curTableItem}
                     data={data}
                     handleClick={handleClick}
-                    query={query}
+                    queryName={queryName}
                     loading={loading}
                     issueData={
-                        issueData[sideTable[query]] as (Label | Milestone)[]
+                        issueData[sideTable[queryName]] as (Label | Milestone | Users)[]
                     }
                 />
             )}
@@ -129,8 +140,3 @@ const DropDown = ({ curKey, idx, query, issueData, setIssueData, lastIdx }: Drop
 };
 
 export default DropDown;
-
-// 같은 UI 다른 기능?
-// 보여주는 건 동일하니 handler, data만 콜백으로 넘겨주면됨
-// 그러면 data 타입이 동일해야하고 handle러 파라미터가 동일해야함
-// 

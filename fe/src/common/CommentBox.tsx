@@ -1,24 +1,22 @@
-import { useState } from "react";
-import { NewIssueForm } from "../pages/NewPage";
+import { useEffect, useState } from "react";
 import FileUploader from "./FileUploader";
 interface CommentBoxProps {
     height: string;
-    issueData: NewIssueForm;
-    setIssueData: React.Dispatch<React.SetStateAction<NewIssueForm>>;
+    addCommentText: (comment:string) => void;
 }
 
-const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
+const CommentBox = ({height, addCommentText}: CommentBoxProps) => {
     const [isActive, setActive] = useState(false)
-
+    const [comment, setComment] = useState("")
     const handleFocus = () => setActive(true);
     const handleBlur = () => setActive(false);
 
-    const addImgUrl = (url: string) => {
-        setIssueData(prev => ({
-            ...prev,
-            content: `${prev.content}\n![이미지](${url})`,
-        }))
-    }
+    const addImgUrl = (url: string) => setComment((prev) => `${prev}\n${url}`)
+    
+    useEffect(() => {
+        addCommentText(comment)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [comment])
     return (
         <div
             className={`${
@@ -35,19 +33,16 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
                 } h-full bg-gray-200 dark:bg-darkModeBorderBG w-full outline-none rounded-xl`}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                value={issueData.content}
+                value={comment}
                 onChange={(e) => {
-                    setIssueData({
-                        ...issueData,
-                        content: e.target.value,
-                    });
+                    setComment(e.target.value);
                 }}
             />
             <div className="relative">
                 <div
                     className={`text-sm font-normal bottom-0 right-6 absolute transition-opacity duration-500`}
                 >
-                    띄어쓰기 포함 {issueData.content.length}자
+                    띄어쓰기 포함 {comment.length}자
                 </div>
             </div>
             <FileUploader addImgUrl={addImgUrl} />
