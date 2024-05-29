@@ -3,25 +3,48 @@ import getTimeStamp from "../../../utility/getTimeStamp";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
 import ContentEditor from "./ContentEditor";
-
-const border = "component-border dark:component-border--dark";
+import usePatch from "../../../hooks/usePatch";
 
 interface PropsType {
 	issue?: Issue;
 	comment?: IssueComment;
 	memberId: string;
+	issueId: number;
 }
 
-function ContentTable({ issue, comment, memberId }: PropsType) {
+const border = "component-border dark:component-border--dark";
+const STATE_DELAY = 300;
+
+function ContentTable({ issue, comment, memberId, issueId }: PropsType) {
 	const [editor, setEditor] = useState(false);
+	const [isDisabled, setIsDisabled] = useState("DEFAULT");
 	const preRef = useRef<HTMLPreElement>(null);
 	const data: Issue | IssueComment = (issue ? issue : comment)!;
 	const preHeight = useRef<number>(0);
 	const [contentValue, setContentValue] = useState(data.content);
+	const mutateIssueContent = usePatch(`/issue/${issueId}/content`, `issue/${issueId}`);
+	const mutateCommentContent = usePatch(
+		`/issue/${issueId}/comment/${comment && comment.commentId}`,
+		`issue/${issueId}`
+	);
 
 	useEffect(() => {
 		preHeight.current = preRef.current?.getBoundingClientRect().height || 100;
 	}, []);
+
+	const handleEdit = () => {
+		setIsDisabled("DISABLED");
+		issue
+			? mutateIssueContent({ content: contentValue })
+			: mutateCommentContent({
+					content: contentValue,
+					uploadedFile: null, // TODO 파일
+			  });
+		setTimeout(() => {
+			setEditor(!editor);
+			setIsDisabled("DEFAULT");
+		}, STATE_DELAY);
+	};
 
 	return (
 		<div className={`${border} border-[1px] rounded-2xl w-full`}>
@@ -46,9 +69,9 @@ function ContentTable({ issue, comment, memberId }: PropsType) {
 							size="S"
 							type="GHOST"
 							icon="PEN"
-							text="편집"
-							state={"DEFAULT"}
-							onClick={() => setEditor(!editor)}
+							text={editor ? "완료" : "편집"}
+							state={isDisabled}
+							onClick={handleEdit}
 						/>
 						<Button size="S" type="GHOST" icon="SMLILE" text="반응" state="DEFAULT" />
 					</div>

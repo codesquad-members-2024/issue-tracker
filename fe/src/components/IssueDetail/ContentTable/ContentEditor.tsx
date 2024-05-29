@@ -21,7 +21,6 @@ function ContentEditor({ preHeight, content, setContentValue }: PropsType) {
 		[]
 	);
 	useEffect(() => {
-		console.log(content);
 		setIsVisible(true);
 		const timer = setTimeout(() => {
 			setIsVisible(false);
@@ -46,7 +45,7 @@ function ContentEditor({ preHeight, content, setContentValue }: PropsType) {
 					height: `${preHeight}px`,
 				}}
 			></textarea>
-			<div className="flex mt-[50px]">
+			<div className="flex mt-[60px]">
 				<div className="flex items-center absolute right-8 bottom-16">
 					{isVisible && (
 						<p className="text-xs mt-1 mr-3 text-grayscale.600 dark:text-grayscale.500">

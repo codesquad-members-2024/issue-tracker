@@ -10,6 +10,8 @@ interface PropsType {
 	commentLegth: number;
 }
 
+const STATE_DELAY = 300;
+
 function IssueDetailTitle({ issue, commentLegth }: PropsType) {
 	const $title = useRef<HTMLInputElement>(null);
 	const [disabled, setDisabled] = useState("DISABLED");
@@ -30,9 +32,7 @@ function IssueDetailTitle({ issue, commentLegth }: PropsType) {
 	};
 	const handleTitle = () => {
 		setDisabled("DISABLED");
-		setTimeout(() => {
-			setShowTitleEditor((prev) => !prev);
-		}, 300);
+		setTimeout(() => setShowTitleEditor((prev) => !prev), STATE_DELAY);
 		mutateTitle({ title: $title.current?.value || "" });
 	};
 
@@ -45,7 +45,7 @@ function IssueDetailTitle({ issue, commentLegth }: PropsType) {
 						#{issue.id}
 					</span>
 				</h1>
-				<div className="flex items-center"> 
+				<div className="flex items-center">
 					<div className="mr-3">
 						<Button
 							size="S"
