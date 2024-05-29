@@ -1,6 +1,5 @@
 package team08.issuetracker.issue.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -10,22 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.issue.IssueIdNotFoundException;
-import team08.issuetracker.exception.label.LabelNotFoundException;
 import team08.issuetracker.exception.member.MemberIdNotFoundException;
-import team08.issuetracker.exception.milestone.MilestoneIdNotFoundException;
 import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountResponse;
 import team08.issuetracker.issue.model.dto.IssueOverviewResponse;
 import team08.issuetracker.issue.model.dto.IssueSummaryDto;
 import team08.issuetracker.issue.model.dto.update.AssigneeResponse;
-import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
-import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueCreationRequest;
-import team08.issuetracker.issue.model.dto.update.IssueLabelUpdateRequest;
-import team08.issuetracker.issue.model.dto.update.IssueMilestoneUpdateRequest;
 import team08.issuetracker.issue.model.dto.IssueDetailResponse;
-import team08.issuetracker.issue.model.dto.update.IssueTitleUpdateRequest;
 import team08.issuetracker.issue.ref.Assignee;
 import team08.issuetracker.issue.ref.IssueAttachedLabel;
 import team08.issuetracker.issue.repository.AssigneeRepository;
@@ -54,28 +46,36 @@ public class IssueService {
     private static final String CLOSE_STATE_QUERY = "closed";
 
     public IssueOverviewResponse getAllIssuesWithCounts(String state) {
+
         boolean openState = convertStateQueryToOpenState(state);
 
-        List<IssueDetailResponse> issueDetailResponse = new ArrayList<>();
+        List<Issue> issues = issueRepository.getAllIssuesByOpenState(openState);
 
-        for (Issue issue : issueRepository.getAllIssuesByOpenState(openState)) {
-
-            String milestoneName = getMilestoneName(issue.getMilestoneId());
-
-            List<AssigneeResponse> assigneeResponses = getAssigneeResponses(issue);
-
-            List<LabelResponse> labelResponses = getLabelResponses(issue);
-
-            issueDetailResponse.add(
-                    IssueDetailResponse.of(
-                            issue.getId(), issue.getTitle(), issue.getWriter(), issue.isOpen(), milestoneName,
-                            issue.getCreatedAt(), assigneeResponses, labelResponses
-                    ));
-        }
+        List<IssueDetailResponse> issueDetailResponses = issues.stream()
+                .map(this::convertToIssueDetailResponse)
+                .toList();
 
         IssueCountResponse issueCountResponse = getIssueCountResponse();
 
-        return new IssueOverviewResponse(issueCountResponse, issueDetailResponse);
+        return new IssueOverviewResponse(issueCountResponse, issueDetailResponses);
+    }
+
+    private IssueDetailResponse convertToIssueDetailResponse(Issue issue) {
+        String milestoneName = getMilestoneName(issue.getMilestoneId());
+
+        List<AssigneeResponse> assigneeResponses = getAssigneeResponses(issue);
+
+        List<LabelResponse> labelResponses = getLabelResponses(issue);
+
+        return IssueDetailResponse.of(
+                issue.getId(),
+                issue.getTitle(),
+                issue.getWriter(),
+                issue.isOpen(),
+                milestoneName,
+                issue.getCreatedAt(),
+                assigneeResponses,
+                labelResponses);
     }
 
     public IssueCountResponse getIssueCountResponse() {
@@ -166,87 +166,6 @@ public class IssueService {
     }
 
     @Transactional
-    public Issue updateIssueTitle(Long id, IssueTitleUpdateRequest issueTitleUpdateRequest) {
-        Issue issue = getIssueById(id);
-
-        issue.updateTitle(issueTitleUpdateRequest);
-
-        return issueRepository.save(issue);
-    }
-
-    @Transactional
-    public Issue updateIssueContent(Long id, IssueContentUpdateRequest issueContentUpdateRequest) {
-        Issue issue = getIssueById(id);
-
-        issue.updateContent(issueContentUpdateRequest);
-
-        return issueRepository.save(issue);
-    }
-
-    @Transactional
-    public Issue updateIssueAssignee(Long id, IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
-        Issue issue = getIssueById(id);
-
-        validateAssigneeIds(issueAssigneeUpdateRequest);
-
-        issue.updateAssignee(issueAssigneeUpdateRequest);
-
-        return issueRepository.save(issue);
-    }
-
-    @Transactional
-    public Issue updateIssueLabel(Long id, IssueLabelUpdateRequest issueLabelUpdateRequest) {
-        Issue issue = getIssueById(id);
-
-        validateLabelIds(issueLabelUpdateRequest);
-
-        issue.updateIssueAttachedLabel(issueLabelUpdateRequest);
-
-        return issueRepository.save(issue);
-    }
-
-    @Transactional
-    public Issue updateIssueMilestone(Long id, IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
-        Issue issue = getIssueById(id);
-
-        validateMilestoneId(issueMilestoneUpdateRequest);
-
-        issue.updateMilestone(issueMilestoneUpdateRequest);
-
-        return issueRepository.save(issue);
-    }
-
-    @Transactional
-    public Set<Long> updateMultipleIssueStateToOpen(Set<Long> ids) {
-        ids.forEach(this::updateIssueStateToOpen);
-        return ids;
-    }
-
-    @Transactional
-    public Set<Long> updateMultipleIssueStateToClose(Set<Long> ids) {
-        ids.forEach(this::updateIssueStateToClose);
-        return ids;
-    }
-
-    @Transactional
-    public Issue updateIssueStateToOpen(Long id) {
-        Issue issue = getIssueById(id);
-
-        issue.open();
-
-        return issueRepository.save(issue);
-    }
-
-    @Transactional
-    public Issue updateIssueStateToClose(Long id) {
-        Issue issue = getIssueById(id);
-
-        issue.close();
-
-        return issueRepository.save(issue);
-    }
-
-    @Transactional
     public void deleteIssue(Long id) {
         Issue issue = getIssueById(id);
         issueRepository.delete(issue);
@@ -256,32 +175,6 @@ public class IssueService {
         return issueRepository
                 .findById(id)
                 .orElseThrow(IssueIdNotFoundException::new);
-    }
-
-    private void validateAssigneeIds(IssueAssigneeUpdateRequest issueAssigneeUpdateRequest) {
-        boolean memberNotFound = issueAssigneeUpdateRequest.assigneeIds().stream()
-                .anyMatch(assigneeId -> !memberRepository.existsById(assigneeId));
-
-        if (memberNotFound) {
-            throw new MemberIdNotFoundException();
-        }
-    }
-
-    private void validateLabelIds(IssueLabelUpdateRequest issueLabelUpdateRequest) {
-        boolean labelNotFound = issueLabelUpdateRequest.labelIds().stream()
-                .anyMatch(labelId -> !labelRepository.existsById(labelId));
-
-        if (labelNotFound) {
-            throw new LabelNotFoundException();
-        }
-    }
-
-    private void validateMilestoneId(IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
-        Long milestoneId = issueMilestoneUpdateRequest.milestoneId();
-
-        if (!milestoneRepository.existsById(milestoneId)) {
-            throw new MilestoneIdNotFoundException();
-        }
     }
 
     private boolean convertStateQueryToOpenState(String state) {
