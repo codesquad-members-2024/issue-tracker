@@ -31,7 +31,7 @@ export function LabelRegister({
 		try {
 			await putLabel(label.id, preview);
 			await fetchLabelList();
-			await setIsEdit(prev => !prev);
+			setIsEdit(prev => !prev);
 		} catch (error) {
 			console.error('Error adding label');
 		}

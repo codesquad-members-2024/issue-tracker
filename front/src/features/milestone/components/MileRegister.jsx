@@ -3,7 +3,6 @@ import { useState, useEffect, useReducer } from 'react';
 import { IconPlus, IconXsquare, IconEdit } from '~/common/icons';
 import { Input } from 'antd';
 import { Button } from '~/common/components';
-import { useMilestoneList } from '~/features/issue/hooks';
 import { postMilestone, putMilestone } from '~/features/milestone/apis';
 
 function milestoneReducer(state, action) {
