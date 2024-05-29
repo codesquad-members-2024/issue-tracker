@@ -1,11 +1,11 @@
 name: Deploy Spring Application to EC2
 
-# feat/member에 대한 브랜치 push가 수행되었을 때 동작
+# Trigger workflow on push to specified branches
 on:
   push:
     branches: [ "be-dev", "main" ]
 
-# 워크플로우가 저장소의 콘텐츠를 읽을 수 있는 권한을 갖도록 설정
+# Set permissions for the workflow
 permissions:
   contents: read
 
@@ -31,6 +31,14 @@ jobs:
           echo "${{ secrets.YAML }}" > application.yaml
         shell: bash
 
+      - name: Decode and save keystore.p12
+        run: |
+          cd ./be/issue-tracker/src/main/resources
+          mkdir -p ssl
+          cd ssl
+          echo "${{ secrets.ENCODED_KEYSTORE_P12 }}" | base64 -d > keystore.p12
+        shell: bash
+
       - name: Grant execute permission for gradlew
         run: |
           cd ./be/issue-tracker
@@ -41,7 +49,6 @@ jobs:
           cd ./be/issue-tracker
           ./gradlew clean build -x test
 
-      # Dockerfile을 통해 이미지를 빌드하고, 이를 Docker repo로 push
       - name: Docker build & push to Docker repo
         run: |
           cd ./be/issue-tracker 
@@ -49,7 +56,6 @@ jobs:
           docker build --build-arg DEPENDENCY=build/dependency -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }} --platform linux/amd64 .
           docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}
 
-      # 서버에 접속 후 Docker 이미지 가져와서 배포
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
@@ -59,10 +65,8 @@ jobs:
           script: |
             echo ${{ secrets.DOCKER_PASSWORD }} | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
             sudo docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
-            # 기존에 실행 중인 컨테이너 중지 및 삭제
             if [ $(sudo docker ps -q -f "name=spring-server") ]; then
-                sudo docker stop spring-server
+              sudo docker stop spring-server
               sudo docker rm spring-server
             fi
-            # 새로운 컨테이너 실행
             sudo docker run -d -p 80:80 -p 8080:8080 -p 443:443 --name spring-server ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
