@@ -21,7 +21,6 @@ public class Milestone {
     private Long id;
     private String name;
     private String description;
-    private LocalDate createTime;
     private LocalDate dueDate;
     private boolean isClosed;
     @MappedCollection(idColumn = "milestone_id")

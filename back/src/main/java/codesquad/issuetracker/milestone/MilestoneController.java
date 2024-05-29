@@ -20,13 +20,13 @@ public class MilestoneController {
 
     @PostMapping("/milestones")
     public ResponseEntity<MilestoneShowDto> createMilestone(@RequestBody MilestoneSaveDto milestoneSaveDto, UriComponentsBuilder uriComponentsBuilder) {
-        Milestone createdMilestone = milestoneService.createMilestone(milestoneSaveDto.toEntity());
+        MilestoneShowDto createdMilestone = milestoneService.createMilestone(milestoneSaveDto.toServiceDto());
         URI location = uriComponentsBuilder.path("/milestones/{id}")
                 .buildAndExpand(createdMilestone.getId())
                 .toUri();
         return ResponseEntity
                 .created(location)
-                .body(new MilestoneShowDto(createdMilestone));
+                .body(createdMilestone);
     }
 
     @GetMapping("/milestones")
@@ -35,7 +35,8 @@ public class MilestoneController {
         List<MilestoneShowDto> allMilestoneShowDto = allMilestones.stream()
                 .map(milestone -> new MilestoneShowDto(milestone))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(allMilestoneShowDto);
+        return ResponseEntity
+                .ok(allMilestoneShowDto);
     }
 
     @GetMapping("/milestones/{milestoneId}")
@@ -47,8 +48,9 @@ public class MilestoneController {
 
     @PutMapping("/milestones/{milestoneId}")
     public ResponseEntity<MilestoneShowDto> updateMilestoneById(@PathVariable Long milestoneId, @RequestBody MilestoneUpdateDto milestoneUpdateDto) {
-        Milestone updatedMilestone = milestoneService.updateMilestoneById(milestoneUpdateDto.toEntity(milestoneId));
-        return ResponseEntity.ok(new MilestoneShowDto(updatedMilestone));
+        MilestoneShowDto updatedMilestone = milestoneService.updateMilestoneById(milestoneUpdateDto.toServiceDto(milestoneId));
+        return ResponseEntity
+                .ok(updatedMilestone);
     }
 
     @DeleteMapping("/milestones/{milestoneId}")

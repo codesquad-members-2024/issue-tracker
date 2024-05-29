@@ -1,6 +1,8 @@
 package codesquad.issuetracker.milestone;
 
 import codesquad.issuetracker.exception.MilestoneNotFoundException;
+import codesquad.issuetracker.milestone.dto.request.MilestoneServiceDto;
+import codesquad.issuetracker.milestone.dto.response.MilestoneShowDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,8 @@ public class MilestoneService {
 
     private final MilestoneRepository milestoneRepository;
 
-    public Milestone createMilestone(Milestone milestone) {
-        return milestoneRepository.save(milestone);
+    public MilestoneShowDto createMilestone(MilestoneServiceDto milestoneServiceDto) {
+        return new MilestoneShowDto(milestoneRepository.save(milestoneServiceDto.toEntityForSave()));
     }
 
     public List<Milestone> getAllMilestones() {
@@ -26,8 +28,8 @@ public class MilestoneService {
         return milestoneRepository.findById(milestoneId).orElseThrow(() -> new MilestoneNotFoundException(MILESTONE_NOT_FOUND_ERROR_MESSAGE));
     }
 
-    public Milestone updateMilestoneById(Milestone milestone) {
-        return milestoneRepository.save(milestone);
+    public MilestoneShowDto updateMilestoneById(MilestoneServiceDto milestoneServiceDto) {
+        return new MilestoneShowDto(milestoneRepository.save(milestoneServiceDto.toEntityForUpdate()));
     }
 
     public void deleteMilestoneById(Long milestoneId) {
