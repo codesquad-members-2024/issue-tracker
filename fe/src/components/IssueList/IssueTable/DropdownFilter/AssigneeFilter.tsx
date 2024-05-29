@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
@@ -7,12 +7,12 @@ type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
 	handleFetch: (fetchedData: FetchedDataType, refetch: () => void) => void;
 	handleClearTimeOut: () => void;
-	assigneeIds?: React.MutableRefObject<string[]>; //TODO 옵셔널 삭제
+	// assigneeIds?: React.MutableRefObject<string[]>; //TODO 옵셔널 삭제
 }
 
-function AssigneeFilter({ handleFetch, handleClearTimeOut, assigneeIds }: ProsType) {
+function AssigneeFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 	const [open, setOpen] = useState(false);
-	const [idx, setIdx] = useState<number[]>([]);
+	// const [idx, setIdx] = useState<number[]>([]);
 	const checkedItems = useRef<{ [key: number]: number }>({});
 
 	const { data, refetch } = useGet("member", "/member/list", false);
@@ -35,9 +35,9 @@ function AssigneeFilter({ handleFetch, handleClearTimeOut, assigneeIds }: ProsTy
 		delete checkedItems.current[idx];
 	};
 
-	useEffect(() => {
-		if (!open) setIdx(Object.values(checkedItems.current));
-	}, [open]);
+	// useEffect(() => {
+	// 	if (!open) setIdx(Object.values(checkedItems.current));
+	// }, [open]);
 
 	// useEffect(() => {
 	// 	assigneeIds.current = idx.map((i) => members[i].memberId);
