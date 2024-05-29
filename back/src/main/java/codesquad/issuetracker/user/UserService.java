@@ -9,6 +9,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+    public static final String USER_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 회원 입니다.";
+
     private final UserRepository userRepository;
 
     public List<User> getAllUsers() {
