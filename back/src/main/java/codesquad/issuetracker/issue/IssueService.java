@@ -34,14 +34,14 @@ public class IssueService {
         List<Long> labelIds = issue.getIssueLabels().stream()
                 .map(IssueLabel::getLabelId)
                 .toList();
-        return (List<Label>) labelRepository.findAllById(labelIds);
+        return labelRepository.findAllById(labelIds);
     }
 
     public List<User> getAssigneesForIssue(Issue issue) {
         List<String> assigneeNames = issue.getIssueAssignees().stream()
                 .map(IssueAssignee::getUserLoginId)
                 .toList();
-        return (List<User>) userRepository.findAllById(assigneeNames);
+        return userRepository.findAllById(assigneeNames);
     }
 
     public Optional<Milestone> getMilestoneForIssue(Issue issue) {
