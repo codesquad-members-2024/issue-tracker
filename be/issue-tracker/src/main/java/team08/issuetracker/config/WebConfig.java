@@ -8,9 +8,18 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import team08.issuetracker.interceptor.LoginCheckInterceptor;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @Profile({"!local"})
 public class WebConfig implements WebMvcConfigurer {
+
+    private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
+            "https://issue-tracker-team08.site",    // 배포 Domain 주소
+            "http://192.168.1.34:3000",             // 개발용 Domain 주소
+            "http://192.168.35.157:3000"            // 개발용 Domain 주소
+    );
 
     @Autowired
     LoginCheckInterceptor loginCheckInterceptor;
@@ -25,10 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(
-                        "https://issue-tracker-team08.site",    // 배포 Domain 주소
-                        "http://192.168.1.34:3000",             // 개발용 Domain 주소
-                        "http://192.168.35.157:3000")           // 개발용 Domain 주소
+                .allowedOrigins(ALLOWED_ORIGINS.toArray(new String[0]))
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization", "Set-Cookie")
