@@ -67,14 +67,14 @@ public class MemberController {
      *   - intercepter 사용하여 로그인 쿠키 토큰 검증하기
      *   - jwtService의 validate 분리하기
      * */
-    @GetMapping("/validate")
-    public ResponseEntity<?> validateToken(@CookieValue(name = TOKEN_NAME) String jwtToken) {
-        if (!jwtService.parseJwtToken(jwtToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 토큰");
-        }
-
-        return ResponseEntity.ok("검증 성공");
-    }
+//    @GetMapping("/validate")
+//    public ResponseEntity<?> validateToken(@CookieValue(name = TOKEN_NAME) String jwtToken) {
+//        if (!jwtService.parseJwtToken(jwtToken)) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 토큰");
+//        }
+//
+//        return ResponseEntity.ok("검증 성공");
+//    }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logoutMember() {
