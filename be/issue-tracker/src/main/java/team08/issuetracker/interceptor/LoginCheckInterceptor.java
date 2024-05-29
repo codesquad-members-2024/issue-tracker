@@ -19,24 +19,24 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         this.jwtService = jwtService;
     }
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-
-        // 쿠키에서 JWT 토큰 가져오기
-        String jwtToken = null;
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("jwt-token".equals(cookie.getName())) {
-                    jwtToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        if (jwtToken == null || !jwtService.parseJwtToken(jwtToken)) {
-            throw new UnauthorizedAccessException();
-        }
-
-        return true;
-    }
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+//
+//        // 쿠키에서 JWT 토큰 가져오기
+//        String jwtToken = null;
+//        if (request.getCookies() != null) {
+//            for (Cookie cookie : request.getCookies()) {
+//                if ("jwt-token".equals(cookie.getName())) {
+//                    jwtToken = cookie.getValue();
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if (jwtToken == null || !jwtService.parseJwtToken(jwtToken)) {
+//            throw new UnauthorizedAccessException();
+//        }
+//
+//        return true;
+//    }
 }
