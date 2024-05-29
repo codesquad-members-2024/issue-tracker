@@ -18,28 +18,28 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         this.jwtService = jwtService;
     }
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        // 쿠키에서 JWT 토큰 가져오기
-        String jwtToken = null;
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("jwt-token".equals(cookie.getName())) {
-                    jwtToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        // jwt 토큰 없거나 유효하지 않으면 로그인페이지로 리다이렉트
-        if (jwtToken == null || !jwtService.parseJwtToken(jwtToken)) {
-            response.sendRedirect("/member/login");
-            log.error("error : {}", "jwt 토큰 없거나 유효하지 않으면 로그인페이지로 리다이렉트");
-            return false;
-        }
-
-        return true;
-
-    }
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//
+//        // 쿠키에서 JWT 토큰 가져오기
+//        String jwtToken = null;
+//        if (request.getCookies() != null) {
+//            for (Cookie cookie : request.getCookies()) {
+//                if ("jwt-token".equals(cookie.getName())) {
+//                    jwtToken = cookie.getValue();
+//                    break;
+//                }
+//            }
+//        }
+//
+//        // jwt 토큰 없거나 유효하지 않으면 로그인페이지로 리다이렉트
+//        if (jwtToken == null || !jwtService.parseJwtToken(jwtToken)) {
+//            response.sendRedirect("/member/login");
+//            log.error("error : {}", "jwt 토큰 없거나 유효하지 않으면 로그인페이지로 리다이렉트");
+//            return false;
+//        }
+//
+//        return true;
+//
+//    }
 }
