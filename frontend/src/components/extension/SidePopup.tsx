@@ -1,20 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Label, Milestone } from "../../hooks/stores/useIssueStore";
-import { updateAssigneesInIssue, updateLabelsInIssue, updateMilestoneInIssue } from "../../api/IssueAPI";
-import { useParams } from "react-router-dom";
-import { useQueryClient } from "react-query";
-import { CreatorContext } from "../../contexts/CreatorContext";
-
-type PopupType = "assignee" | "label" | "milestone";
-type SidebarType = "new-issue" | "detail";
-
-interface SidePopupProps {
-  popupType: PopupType;
-  sidebarType: SidebarType;
-  items?: string[] | Label[] | Milestone[];
-  selectedItems: string[] | Label[] | Milestone[];
-}
+import useSidePopupLogic, { PopupType, SidePopupProps } from "../../hooks/logics/useSidePopupLogic";
 
 const HEADER_NAME = {
   assignee: "담당자",
@@ -25,10 +11,6 @@ const HEADER_NAME = {
 const TITLE_KEY = {
   label: "labelName",
   milestone: "title",
-};
-
-const isRefObject = (ref: any): ref is React.MutableRefObject<HTMLDivElement | null> => {
-  return "current" in ref;
 };
 
 const isChecked = (item: any, selectedItem: any): boolean => {
@@ -65,7 +47,7 @@ const getOptionName = (item: string | object, popupType: PopupType): string => {
       return JSON.stringify(item);
     case "label":
     case "milestone":
-      return item[TITLE_KEY[popupType] as keyof typeof item];
+      return item && item[TITLE_KEY[popupType] as keyof typeof item];
     default:
       return "";
   }
@@ -87,72 +69,8 @@ const renderOptions = (
 );
 
 const SidePopup = React.forwardRef<HTMLDivElement, SidePopupProps>((props, ref) => {
-  const client = useQueryClient();
-  const { setAssignees, setLabels, setMilestone } = useContext(CreatorContext);
-  const { popupType, sidebarType, items, selectedItems } = props;
-  const [checkedItems, setCheckedItems] = useState<any[]>(selectedItems);
-  const prevRef = useRef<HTMLDivElement | null>(null);
-  const { issueId } = useParams<{ issueId: string }>();
-
-  const handleItemChange = (item: any) => {
-    setCheckedItems((prevCheckedItems) => {
-      const isCheckedItem = prevCheckedItems.some((checkedItem) => isChecked(item, checkedItem));
-      if (isCheckedItem) {
-        return prevCheckedItems.filter((checkedItem) => !isChecked(item, checkedItem));
-      } else {
-        return [...prevCheckedItems, item];
-      }
-    });
-  };
-
-  useEffect(() => {
-    return () => {
-      if (prevRef.current && isRefObject(ref) && !ref.current) {
-        let requestItems;
-        if (sidebarType === "detail") {
-          switch (popupType) {
-            case "assignee":
-              requestItems = checkedItems;
-              updateAssigneesInIssue(issueId || 0, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
-              break;
-            case "label":
-              requestItems = checkedItems.filter((item) => item).map(({ labelId }) => labelId);
-              updateLabelsInIssue(issueId || 0, requestItems).then(() => client.invalidateQueries(`issue-${issueId}`));
-              break;
-            case "milestone":
-              requestItems = checkedItems.filter((item) => item).map(({ milestoneId }) => milestoneId);
-              updateMilestoneInIssue(issueId || 0, requestItems[0]).then(() =>
-                client.invalidateQueries(`issue-${issueId || 0}`)
-              );
-              break;
-            default:
-              return;
-          }
-        }
-
-        if (sidebarType === "new-issue") {
-          switch (popupType) {
-            case "assignee":
-              requestItems = checkedItems;
-              setAssignees(checkedItems);
-              break;
-            case "label":
-              requestItems = checkedItems;
-              setLabels(requestItems);
-              break;
-            case "milestone":
-              requestItems = checkedItems.filter((item) => item);
-              setMilestone(requestItems[0]);
-              break;
-            default:
-              return;
-          }
-        }
-      }
-
-      if (isRefObject(ref) && prevRef.current !== ref.current) prevRef.current = ref.current;
-    };
-  }, [ref, checkedItems]);
+  const { popupType, items } = props;
+  const { checkedItems, handleItemChange } = useSidePopupLogic(props, ref);
 
   return (
     <Wrapper ref={ref}>

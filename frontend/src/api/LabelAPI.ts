@@ -13,7 +13,7 @@ const getAuthToken = () => localStorage.getItem("token");
 
 export const sendLabelsRequest = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getAuthToken();
     const response = await fetch(`${SERVER}/labels`, {
       credentials: "include",
       headers: {
@@ -32,7 +32,7 @@ export const sendLabelsRequest = async () => {
 
 export const postNewLabel = async (labelContent: LabelContent) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getAuthToken();
     const request = {
       method: "POST",
       headers: {
@@ -55,7 +55,7 @@ export const postNewLabel = async (labelContent: LabelContent) => {
 
 export const sendPutLabelRequest = async (labelId: number, labelContent: LabelContent) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getAuthToken();
     const request = {
       method: "PUT",
       headers: {
@@ -78,7 +78,7 @@ export const sendPutLabelRequest = async (labelId: number, labelContent: LabelCo
 
 export const sendDeleteLabelRequest = async (labelId: number) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getAuthToken();
     const request = {
       method: "DELETE",
       credentials: "include" as RequestCredentials,
