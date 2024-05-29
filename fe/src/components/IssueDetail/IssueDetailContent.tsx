@@ -13,10 +13,10 @@ function IssueDetailContent({ issueData }: PropsType) {
 	return (
 		<section className={`${border} border-t-[1px] flex`}>
 			<div className="mt-6 w-full">
-				<ContentTable isWriter={true} issue={issue} />
+				<ContentTable issue={issue} />
 				<div className="mt-6">
 					{comments.map((comment, i) => (
-						<ContentTable key={i} isWriter={false} comment={comment} />
+						<ContentTable key={i} comment={comment} />
 					))}
 				</div>
 				<div className="mt-6">
