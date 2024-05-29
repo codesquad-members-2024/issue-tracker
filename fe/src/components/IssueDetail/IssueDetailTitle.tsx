@@ -1,6 +1,5 @@
 import Button from "../common/Button";
 import InformationTag from "../common/InformationTag";
-
 import getTimeStamp from "../../utility/getTimeStamp";
 
 interface PropsType {

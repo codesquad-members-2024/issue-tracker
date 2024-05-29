@@ -15,20 +15,29 @@ interface Issue {
 	id: number;
 	title: string;
 	state: boolean;
-	content?: string;
+	content: string;
 	timestamp: string;
 	createdAt: string;
 	writer: string;
 	milestoneName: string;
-	assignees: [];
-	comments?: IssueComment[];
+	assignees: Member[];
 	labels: Label[];
+	imageUrl: string;
+}
+
+//IssueDetail
+interface IssueDetailDataType {
+	assignees: Member[];
+	comments: IssueComment[];
+	issue: Issue;
+	labels: Label[];
+	milestone: Milestone[];
 }
 interface IssueComment {
-	id: number;
 	writer: string;
-	timestamp: string;
+	createdAt: string;
 	content: string;
+	imageUrl: string;
 }
 
 //Milestone
