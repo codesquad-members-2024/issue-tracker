@@ -9,6 +9,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { sendLabelsRequest } from "../../api/LabelAPI";
 import { sendMilestonesRequest } from "../../api/MilestoneAPI";
 import { CreatorContext } from "../../contexts/CreatorContext";
+import { sendUsersReqeust } from "../../api/IssueAPI";
 
 type SidebarKeys = "assignee" | "label" | "milestone";
 type SidebarType = "new-issue" | "detail";
@@ -21,9 +22,6 @@ interface SidebarProps {
 }
 
 function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarProps) {
-  const { users } = useIssueStore();
-  const { assignees: assigneeContext, labels: labelContext, milestone: milestoneContext } = useContext(CreatorContext);
-
   const [filterbarVisible, setFilterbarVisible] = useState<Record<SidebarKeys, boolean>>({
     assignee: false,
     label: false,
@@ -36,6 +34,7 @@ function Sidebar({ assignees, labelResponses, milestone, sidebarType }: SidebarP
     milestone: useRef<HTMLDivElement>(null),
   };
 
+  const { data: users } = useQuery("users", sendUsersReqeust);
   const { data: labels } = useQuery("labels", sendLabelsRequest);
   const { data: milestones } = useQuery("milestones", () => sendMilestonesRequest("open"));
 

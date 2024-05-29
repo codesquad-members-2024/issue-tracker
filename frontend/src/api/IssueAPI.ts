@@ -77,6 +77,28 @@ export const sendIssueRequestById = async (issueId: number | string) => {
   }
 };
 
+export const sendUsersReqeust = async () => {
+  try {
+    const token = getAuthToken();
+    const response = await fetch(`${SERVER}/users`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
 export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) => {
   try {
     const token = getAuthToken();
