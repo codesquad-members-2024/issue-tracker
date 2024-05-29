@@ -11,7 +11,7 @@ public class ErrorResponse {
         this.errorMessage = e.getMessage();
     }
 
-    public static ErrorResponse from(Exception e) {
+    public static ErrorResponse from(RuntimeException e) {
         return new ErrorResponse(e);
     }
 
