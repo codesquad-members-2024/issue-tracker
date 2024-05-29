@@ -7,6 +7,11 @@ body {
     height: 100%;
     width: 100%;
     background-color: #F3F4F6;
+    -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 #root {
@@ -17,4 +22,3 @@ body {
 button {
     cursor: pointer !important;
 }
-
