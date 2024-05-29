@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor)
                 .addPathPatterns("/**") // 모든 경로에 인터셉터 적용하기
-                .excludePathPatterns("/", "/member/login", "/member/logout", "/css/**", "/js/**"); // 홈, 로그인, 로그아웃, 정적 리소스는 인터셉터 제외
+                .excludePathPatterns("/member/login", "/member/logout"); //로그인, 로그아웃 인터셉터 제외
     }
 
     @Override
