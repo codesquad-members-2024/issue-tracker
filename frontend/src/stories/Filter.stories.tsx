@@ -1,6 +1,9 @@
-import { Meta, StoryFn } from '@storybook/react';
-import Filter from '../components/filter/Filter';
-import { MemoryRouter } from 'react-router-dom';
+import { Meta, StoryFn } from "@storybook/react";
+import Filter from "../components/filter/Filter";
+import { MemoryRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default {
   title: "Components/Filter",
@@ -8,10 +11,12 @@ export default {
   decorators: [
     (Story: StoryFn) => (
       <MemoryRouter>
-        <Story />
+        <QueryClientProvider client={queryClient}>
+          <Story />
+        </QueryClientProvider>
       </MemoryRouter>
-    )
-  ]
+    ),
+  ],
 } as Meta;
 
 const Template: StoryFn = () => <Filter />;

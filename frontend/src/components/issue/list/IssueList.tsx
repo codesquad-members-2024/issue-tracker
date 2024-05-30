@@ -23,7 +23,7 @@ function IssueList() {
     setIssues,
     setFilterText,
     lastIssueRef,
-    filterQuery: { isLoading },
+    userQuery: { isLoading },
   } = useIssueListLogic();
 
   if (isLoading) return <Loading />;

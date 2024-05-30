@@ -6,7 +6,7 @@ import useLabelEdit from '../../hooks/logics/useLabelEdit';
 
 type EditType = "new" | "edit";
 
-interface LabelEditBoxProps {
+export interface LabelEditBoxProps {
   editType: EditType;
   labelId?: number;
   content?: LabelDetailType;
