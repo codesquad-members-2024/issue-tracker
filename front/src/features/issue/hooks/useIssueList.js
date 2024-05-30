@@ -35,7 +35,7 @@ export const useIssueList = () => {
 	};
 
 	useEffect(() => {
-		fetchIssueList(false);
+		fetchIssueList();
 	}, []);
 
 	return {

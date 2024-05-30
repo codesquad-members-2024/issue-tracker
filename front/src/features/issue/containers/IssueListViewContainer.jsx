@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Input } from 'antd';
@@ -9,6 +9,7 @@ import {
 	useIssueList,
 	useLabelList,
 	useMilestoneList,
+	useIssueStatus,
 } from '~/features/issue/hooks';
 import { LabelMilestoneCounterProvider } from '~/context/LabelMilestoneCounter';
 
@@ -33,10 +34,7 @@ export function IssueListViewContainer() {
 	const { Search } = Input;
 	const { issueList, fetchIssueList, openCounts, closedCounts } =
 		useIssueList();
-
-	// useEffect(() => {
-	// 	fetchIssueList();
-	// }, [fetchIssueList]);
+	const { onOpenIssue, onCloseIssue, loading } = useIssueStatus();
 
 	const { labelList, loading: labelLoading, fetchLabelList } = useLabelList();
 	const {
@@ -62,7 +60,7 @@ export function IssueListViewContainer() {
 
 	// TODO: 검색어를 이용한 이슈 필터링
 	const onSearch = queryString => {
-		console.log(queryString);
+		// console.log(queryString);
 		navigate(`/issues?search=${queryString}`);
 	};
 
@@ -85,7 +83,6 @@ export function IssueListViewContainer() {
 		} else {
 			setChecked(prev => prev.filter(id => id !== Number(value)));
 		}
-		console.log(checked);
 	};
 	useEffect(() => {
 		if (checked.length === issueList.length) {
@@ -95,6 +92,27 @@ export function IssueListViewContainer() {
 		}
 	}, [checked, issueList]);
 
+	const [statusType, setStatusType] = useState('');
+
+	const handleDetail = async (e, type, ids) => {
+		ids = checked;
+		type = statusType;
+		if (e.target.open) {
+			return;
+		} else {
+			if (type === 'open') {
+				await onOpenIssue(...ids);
+				await fetchIssueList();
+				setCheckAll(false);
+				setChecked([]);
+			} else {
+				await onCloseIssue(...ids);
+				await fetchIssueList();
+				setCheckAll(false);
+				setChecked([]);
+			}
+		}
+	};
 	return (
 		<StyledWrapper>
 			<StyledSearch>
@@ -130,7 +148,7 @@ export function IssueListViewContainer() {
 						<p>{checked.length}개 이슈 선택</p>
 					) : (
 						<>
-							<Button
+							<StyledTab
 								type='button'
 								size='medium'
 								buttonType='ghost'
@@ -138,10 +156,9 @@ export function IssueListViewContainer() {
 								buttonText={`열린 이슈(${openCounts})`}
 								onClick={() => {
 									fetchIssueList(false);
-									console.log(openCounts);
 								}}
 							/>
-							<Button
+							<StyledTab
 								type='button'
 								size='medium'
 								buttonType='ghost'
@@ -149,88 +166,125 @@ export function IssueListViewContainer() {
 								buttonText={`닫힌 이슈(${closedCounts})`}
 								onClick={() => {
 									fetchIssueList(true);
-									console.log(openCounts);
 								}}
 							/>
 						</>
 					)}
 				</StyledCheckAll>
 				<StyledDropList>
-					<details>
-						<summary>
-							담당자
-							<IconChevronDown />
-						</summary>
-						<StyledDropdowns dropdownTitle='담당자 필터'>
-							<InputRadio listName={'assignees'} value={'담당자가 없는 이슈'} />
-							<InputRadio
-								listName={'assignees'}
-								value={'melroh629'}
-								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-							/>
-							<InputRadio
-								listName={'assignees'}
-								value={'guest=1243'}
-								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-							/>
-						</StyledDropdowns>
-					</details>
-					<details>
-						<summary>
-							레이블
-							<IconChevronDown onClick={fetchLabelList} />
-						</summary>
-						<StyledDropdowns dropdownTitle='레이블 필터'>
-							<InputRadio listName={'labels'} value={'레이블이 없는 이슈'} />
-							{labelLoading && <Loading size='small' />}
-							{labelList?.map(label => (
+					{checked.length > 0 ? (
+						<details onToggle={e => handleDetail(e)}>
+							<summary>
+								상태 수정
+								<IconChevronDown />
+							</summary>
+							<StyledDropdowns dropdownTitle='담당자 필터'>
 								<InputRadio
-									key={label.id}
-									id={label.id}
-									listName={'labels'}
-									value={label.name}
-									bgColor={label.backgroundColor}
-									fontColor={label.textColor}
-									onChange={e => onChangeFilter(e, 'label')}
+									listName='issueStatus'
+									value='선택한 이슈 열기'
+									id='open'
+									onChange={e => {
+										setStatusType(e.target.id);
+									}}
 								/>
-							))}
-						</StyledDropdowns>
-					</details>
-					<details>
-						<summary>
-							마일스톤
-							<IconChevronDown onClick={fetchMilestoneList} />
-						</summary>
-						<StyledDropdowns dropdownTitle='마일스톤 필터'>
-							{milestoneList?.map(milestone => (
 								<InputRadio
-									key={milestone.id}
-									id={milestone.id}
-									listName={'milestones'}
-									value={milestone.name}
-									onChange={e => onChangeFilter(e, 'milestone')}
+									listName='issueStatus'
+									value='선택한 이슈 닫기'
+									id='close'
+									onChange={e => {
+										setStatusType(e.target.id);
+									}}
 								/>
-							))}
-						</StyledDropdowns>
-					</details>
-					<details>
-						<summary>
-							작성자 <IconChevronDown />
-						</summary>
-						<StyledDropdowns dropdownTitle='작성자 필터'>
-							<InputRadio listName={'writer'} value={'담당자가 없는 이슈'} />
-							<InputRadio
-								listName={'writer'}
-								value={'melroh629'}
-								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-							/>
-							<InputRadio
-								listName={'writer'}
-								value={'guest=1243'}
-								src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-							/>
-						</StyledDropdowns>
-					</details>
+							</StyledDropdowns>
+						</details>
+					) : (
+						<>
+							<details>
+								<summary>
+									담당자
+									<IconChevronDown />
+								</summary>
+								<StyledDropdowns dropdownTitle='담당자 필터'>
+									<InputRadio
+										listName={'assignees'}
+										value={'담당자가 없는 이슈'}
+									/>
+									<InputRadio
+										listName={'assignees'}
+										value={'melroh629'}
+										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+									/>
+									<InputRadio
+										listName={'assignees'}
+										value={'guest=1243'}
+										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+									/>
+								</StyledDropdowns>
+							</details>
+							<details>
+								<summary>
+									레이블
+									<IconChevronDown onClick={fetchLabelList} />
+								</summary>
+								<StyledDropdowns dropdownTitle='레이블 필터'>
+									<InputRadio
+										listName={'labels'}
+										value={'레이블이 없는 이슈'}
+									/>
+									{labelLoading && <Loading size='small' />}
+									{labelList?.map(label => (
+										<InputRadio
+											key={label.id}
+											id={label.id}
+											listName={'labels'}
+											value={label.name}
+											bgColor={label.backgroundColor}
+											fontColor={label.textColor}
+											onChange={e => onChangeFilter(e, 'label')}
+										/>
+									))}
+								</StyledDropdowns>
+							</details>
+							<details>
+								<summary>
+									마일스톤
+									<IconChevronDown onClick={fetchMilestoneList} />
+								</summary>
+								<StyledDropdowns dropdownTitle='마일스톤 필터'>
+									{milestoneList?.map(milestone => (
+										<InputRadio
+											key={milestone.id}
+											id={milestone.id}
+											listName={'milestones'}
+											value={milestone.name}
+											onChange={e => onChangeFilter(e, 'milestone')}
+										/>
+									))}
+								</StyledDropdowns>
+							</details>
+							<details>
+								<summary>
+									작성자 <IconChevronDown />
+								</summary>
+								<StyledDropdowns dropdownTitle='작성자 필터'>
+									<InputRadio
+										listName={'writer'}
+										value={'담당자가 없는 이슈'}
+									/>
+									<InputRadio
+										listName={'writer'}
+										value={'melroh629'}
+										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+									/>
+									<InputRadio
+										listName={'writer'}
+										value={'guest=1243'}
+										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
+									/>
+								</StyledDropdowns>
+							</details>
+						</>
+					)}
 				</StyledDropList>
 			</StyledFilter>
 			<StyledList>
@@ -337,3 +391,4 @@ const StyledList = styled.div`
 	border-radius: 0 0 16px 16px;
 	overflow: hidden;
 `;
+const StyledTab = styled(Button)``;

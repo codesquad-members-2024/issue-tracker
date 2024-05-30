@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { IconMilestone } from '~/common/icons';
+import { IconMilestone, IconArchive } from '~/common/icons';
 import { CheckBox, Label } from '~/common/components';
 
 export function IssueItem({ issue, onChange, checked, profileImage }) {
@@ -14,7 +14,11 @@ export function IssueItem({ issue, onChange, checked, profileImage }) {
 				onChange={onChange}
 			/>
 			<StyledFlex>
-				<ExclamationCircleOutlined />
+				{issue?.closed ? (
+					<ExclamationCircleOutlined style={{ color: '#007AFF' }} />
+				) : (
+					<IconArchive style={{ color: '#6E7191' }} />
+				)}
 				<StyledIssueTitle to={`/issues/${issue?.id}`}>
 					{issue?.title}
 				</StyledIssueTitle>

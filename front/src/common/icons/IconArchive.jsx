@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export function IconArchive({ rest }) {
+export function IconArchive({ className, ...rest }) {
 	return (
-		<StyledWrapper {...rest}>
+		<StyledWrapper className={className} {...rest}>
 			<svg
 				width='16'
 				height='16'
