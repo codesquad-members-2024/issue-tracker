@@ -1,14 +1,10 @@
 package com.CodeSquad.IssueTracker.user.utils;
 
-import com.CodeSquad.IssueTracker.user.User;
-import com.CodeSquad.IssueTracker.user.UserRepository;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.List;
 
 public class SHA256Util {
 

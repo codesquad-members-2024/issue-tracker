@@ -4,6 +4,5 @@ public record MilestoneInIssue(
         Long milestoneId,
         String title,
         Long totalIssue,
-        Long closedIssue
-){
-}
+        Long closedIssue)
+{ }

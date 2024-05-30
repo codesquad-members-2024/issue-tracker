@@ -40,21 +40,10 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+  
     @GetMapping("/users")
     public ResponseEntity<List<String>> getUserListForIssued() {
         List<String> userIdList = userService.getAllUserIds();
         return ResponseEntity.ok(userIdList);
     }
-
-//    세션 로그인 방식
-//        @PostMapping("/login")
-//    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
-//                                       HttpServletRequest request) {
-//        userService.isLoginRequestNotExists(loginRequest);
-//        userService.authenticate(loginRequest);
-//        userService.addLoginSession(loginRequest, request.getSession());
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 }

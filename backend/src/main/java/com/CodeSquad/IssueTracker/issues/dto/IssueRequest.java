@@ -26,4 +26,5 @@ public record IssueRequest(
         if (labels == null) {
                 labels = Set.of();
         }
-}}
+        }
+}
