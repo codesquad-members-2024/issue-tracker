@@ -31,6 +31,13 @@ jobs:
           cd front
           npm install
 
+      - name: Set environment variables
+        run: |
+          echo "VITE_S3_BUCKET_NAME=${{ secrets.VITE_S3_BUCKET_NAME }}" >> $GITHUB_ENV
+          echo "VITE_S3_REGION=${{ secrets.VITE_S3_REGION }}" >> $GITHUB_ENV
+          echo "VITE_AWS_ACCESS_KEY_ID=${{ secrets.VITE_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "VITE_AWS_SECRET_ACCESS_KEY=${{ secrets.VITE_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+
       - name: Build
         run: |
           cd front
@@ -47,7 +54,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./front/build/ s3://fe-issue-tracker-s3/ --acl public-read --delete
+          aws s3 sync ./front/dist/ s3://fe-issue-tracker-s3/ --acl public-read --delete
 
       - name: Notify Slack
         if: success()
