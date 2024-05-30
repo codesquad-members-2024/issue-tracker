@@ -9,6 +9,7 @@ import MilestoneList from "../components/milestone/MilestoneList";
 import { LabelProvider } from "../contexts/LabelContext";
 import { MilestoneProvider } from "../contexts/MilestoneContext";
 import { CreatorProvider } from "../contexts/CreatorContext";
+import AuthCallback from "../components/login/AuthCallback";
 
 export const router = createBrowserRouter([
   {
@@ -50,5 +51,9 @@ export const router = createBrowserRouter([
         <MilestoneList />
       </MilestoneProvider>
     ),
+  },
+  {
+    path: "/callback",
+    element: <AuthCallback />,
   },
 ]);
