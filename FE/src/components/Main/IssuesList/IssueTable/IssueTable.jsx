@@ -3,12 +3,11 @@ import { useState } from "react";
 import { IssueTableHeader } from "./IssueTableHeader";
 import { IssueTableContent } from "./IssueTableContent";
 import useFetch from "../../../../hooks/useFetch";
-
-const CLOSED_ISSUES_API = "/api/issues/close";
+import API_ENDPOINTS from "@/config/config";
 
 export function IssueTable(props) {
   const { issues, fetchData: fetchOpenIssues } = props;
-  const { state: closedIssues, fetchData: fetchClosedIssues } = useFetch(CLOSED_ISSUES_API);
+  const { state: closedIssues, fetchData: fetchClosedIssues } = useFetch(`${API_ENDPOINTS.closedIssues}`);
 
   const [checkedCount, setCheckedCount] = useState(0);
   const [isChecked, setIsChecked] = useState(false);

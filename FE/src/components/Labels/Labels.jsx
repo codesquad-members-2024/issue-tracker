@@ -5,12 +5,12 @@ import { ContentNavStyles } from "@/styles/commonStyles";
 import { LabelsContent } from "./LabelsContent";
 import { NavTabs } from "../common/NavTabs";
 import { NewLabels } from "./NewLabels";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "@/hooks/useFetch";
+import API_ENDPOINTS from "@/config/config";
 
-const LABELS_API = "/api/labels";
 
 export function Labels() {
-  const { state: labels, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${LABELS_API}`);
+  const { state: labels, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${API_ENDPOINTS.labels}`);
 
   const [showNewLabels, setShowNewLabels] = useState(false);
 

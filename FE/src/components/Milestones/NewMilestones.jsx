@@ -2,8 +2,7 @@ import styled from "styled-components";
 import { CommonBtnStyles } from "@/styles/commonStyles";
 import { useReducer, useEffect } from "react";
 import { postData, putData } from "@/api/api";
-
-const MILESTONES_API = "/api/milestones";
+import API_ENDPOINTS from "@/config/config";
 
 const initialState = {
   milestoneTitle: "",
@@ -50,7 +49,7 @@ export function NewMilestones(props) {
       description: milestoneDescription,
     };
 
-    actionType === "createMilestones" ? await postData(MILESTONES_API, newMilestone) : await putData(MILESTONES_API, milestoneId, newMilestone);
+    actionType === "createMilestones" ? await postData(`${API_ENDPOINTS.milestones}`, newMilestone) : await putData(`${API_ENDPOINTS.milestones}`, milestoneId, newMilestone);
     closeNewMilestones();
     fetchData();
   };

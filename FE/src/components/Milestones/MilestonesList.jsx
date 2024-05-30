@@ -4,12 +4,11 @@ import { ClosedIcon } from "@/icons/ClosedIcon";
 import { OpenIcon } from "@/icons/OpenIcon";
 import { MilestonesContent } from "./MilestonesContent";
 import useFetch from "../../hooks/useFetch";
-
-const CLOSED_MILESTONES_API = "/api/milestones/close";
+import API_ENDPOINTS from "@/config/config";
 
 export function MilestonesList(props) {
   const { milestones, fetchData: fetchOpenMilestones } = props;
-  const { state: closedMilestones, fetchData: fetchClosedMilestones } = useFetch(CLOSED_MILESTONES_API);
+  const { state: closedMilestones, fetchData: fetchClosedMilestones } = useFetch(`${API_ENDPOINTS.closeMilestones}`);
 
   const [isOpenMilestones, setIsOpenMilestones] = useState(true);
 

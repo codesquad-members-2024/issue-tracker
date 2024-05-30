@@ -6,8 +6,7 @@ import { ClosedIcon } from "@/icons/ClosedIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
 import { NewMilestones } from "./NewMilestones";
 import { deleteData } from "@/api/api";
-
-const MILESTONES_API = "/api/milestones";
+import API_ENDPOINTS from "@/config/config";
 
 export function MilestonesContent(props) {
   const { milestones, fetchData } = props;
@@ -15,7 +14,7 @@ export function MilestonesContent(props) {
   const [selectedMilestone, setSelectedMilestone] = useState(null);
 
   const handleDelete = async (milestoneId) => {
-    await deleteData(MILESTONES_API, milestoneId);
+    await deleteData(`${API_ENDPOINTS.milestones}`, milestoneId);
     fetchData();
   };
 

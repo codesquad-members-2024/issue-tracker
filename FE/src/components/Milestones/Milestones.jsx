@@ -6,11 +6,10 @@ import { NavTabs } from "../common/NavTabs";
 import { NewMilestones } from "./NewMilestones";
 import { MilestonesList } from "./MilestonesList";
 import useFetch from "../../hooks/useFetch";
-
-const OPEN_MILESTONES_API = "/api/milestones/open";
+import API_ENDPOINTS from "@/config/config";
 
 export function Milestones() {
-  const { state: milestones, loading, error, fetchData: fetchOpenMilestones } = useFetch(OPEN_MILESTONES_API);
+  const { state: milestones, loading, error, fetchData: fetchOpenMilestones } = useFetch(`${API_ENDPOINTS.openIssues}`);
   // const { postData, putData, deleteData } = useFetch(MILESTONES_API);
   const [showNewMilestones, setShowNewMilestones] = useState(false);
   
