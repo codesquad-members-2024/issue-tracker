@@ -9,6 +9,7 @@ import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.model.dto.MemberCreationResponse;
 import team08.issuetracker.member.model.dto.MemberCreationRequest;
 import team08.issuetracker.member.model.dto.MemberLoginRequest;
+import team08.issuetracker.member.model.dto.MemberLogoutResponse;
 import team08.issuetracker.member.model.dto.MemberOverviewResponse;
 import team08.issuetracker.member.service.MemberService;
 
@@ -78,15 +79,17 @@ public class MemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logoutMember() {
-
         ResponseCookie responseCookie = ResponseCookie.from(TOKEN_NAME, "")
                 .maxAge(0)
                 .path("/")
                 .build();
 
+        MemberLogoutResponse response = new MemberLogoutResponse();
+
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-                .build();
+                .body(response);
     }
+
 }
