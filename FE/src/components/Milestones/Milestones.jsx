@@ -9,8 +9,7 @@ import useFetch from "../../hooks/useFetch";
 import API_ENDPOINTS from "@/config/config";
 
 export function Milestones() {
-  const { state: milestones, loading, error, fetchData: fetchOpenMilestones } = useFetch(`${API_ENDPOINTS.openIssues}`);
-  // const { postData, putData, deleteData } = useFetch(MILESTONES_API);
+  const { state: milestones, loading, error, fetchData: fetchOpenMilestones } = useFetch(`${API_ENDPOINTS.openMilestones}`);
   const [showNewMilestones, setShowNewMilestones] = useState(false);
   
   return (
