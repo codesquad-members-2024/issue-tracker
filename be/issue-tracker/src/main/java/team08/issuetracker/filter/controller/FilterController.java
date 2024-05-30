@@ -32,8 +32,8 @@ public class FilterController {
             @RequestParam(required = false) String writer,
             @RequestParam(required = false) String assignee,
             @RequestParam(required = false) String commenter,
-            @RequestParam(required = false) Long label_id,
-            @RequestParam(required = false) Long milestone_id
+            @RequestParam(name = "label_id", required = false) Long labelId,
+            @RequestParam(name = "milestone_id", required = false) Long milestoneId
     ) {
         FilteredIssueRequest request = new FilteredIssueRequest(
                 target,
@@ -41,8 +41,8 @@ public class FilterController {
                 writer,
                 assignee,
                 commenter,
-                label_id,
-                milestone_id);
+                labelId,
+                milestoneId);
 
         FilteredIssueResponse response = filterService.getFilteredIssues(request);
 

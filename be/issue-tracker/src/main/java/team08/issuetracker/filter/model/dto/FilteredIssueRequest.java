@@ -1,19 +1,14 @@
 package team08.issuetracker.filter.model.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public class FilteredIssueRequest {
-    private final String target;
-    private final String state;
-    private final String writer;
-    private final String assignee;
-    private final String commenter;
-    private final Long labelId;
-    private final Long milestoneId;
-
+public record FilteredIssueRequest(
+        String target,
+        String state,
+        String writer,
+        String assignee,
+        String commenter,
+        Long labelId,
+        Long milestoneId
+) {
     public String toQuery() {
         StringBuilder query = new StringBuilder("SELECT * FROM ");
         query.append(target);
@@ -65,8 +60,6 @@ public class FilteredIssueRequest {
                 query.append("milestone_id = ").append(milestoneId);
             }
         }
-
-        System.out.println(query);
 
         return query.toString();
     }
