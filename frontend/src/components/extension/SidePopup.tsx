@@ -33,7 +33,7 @@ const renderSelectOption = (
 ) => (
   <SelectOption key={option} onClick={() => onChange({ target: { checked: !isChecked } } as React.ChangeEvent<HTMLInputElement>)}>
     <span>{option}</span>
-    <input type="checkbox" checked={isChecked} onChange={onChange} />
+    <input type="checkbox" checked={isChecked} />
   </SelectOption>
 );
 
