@@ -16,11 +16,11 @@ public class Comment {
     private LocalDateTime createdAt;
     private String uploadedFile;
 
-    public Comment(String writer, Long issueId, String content, String uploadedFile) {
+    public Comment(String writer, Long issueId, String content, LocalDateTime createdAt, String uploadedFile) {
         this.writer = writer;
         this.issueId = issueId;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = createdAt;
         this.uploadedFile = uploadedFile;
     }
 
