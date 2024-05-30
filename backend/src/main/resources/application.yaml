@@ -1,3 +1,8 @@
+github:
+  client:
+    id: Ov23liO8Ca6R78HtYa0U
+    secret: 37fd4d8254de51ea8eb7e8a09059c8f143794460
+
 server:
   servlet:
     session:

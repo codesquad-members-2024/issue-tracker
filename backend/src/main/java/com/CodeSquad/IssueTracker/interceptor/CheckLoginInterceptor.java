@@ -21,13 +21,16 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
             return true; // OPTIONS 요청은 바로 통과시킴
         }
 
-        String token = request.getHeader("Authorization");
-        if (token == null || !token.startsWith("Bearer ")) {
-            throw new UserNotLoginException("토큰이 없거나 잘못되었습니다.");
+        String token = jwtUtil.getTokenFromHeader(request);
+        if (token == null) {
+
+            throw new UserNotLoginException("토큰이 없습니다.");
         }
 
         try {
-            String userId = jwtUtil.validateToken(token.substring(7));
+            String userId = jwtUtil.validateToken(token);
+            // 토큰 검증 성공 시 추가 작업 수행 (예: 사용자 정보 설정 등)
+            request.setAttribute("userId", userId);
         } catch (Exception e) {
             throw new UserNotLoginException("토큰이 유효하지 않습니다.");
         }
