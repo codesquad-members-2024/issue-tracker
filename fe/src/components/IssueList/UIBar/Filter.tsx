@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import DropdownPanel from "../../common/DropdownPanel";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import filterTarget from "../../../helper/filterTarget";
-import { FilterTextContext } from "../../../provider/FilterTextProvider";
+import setFilterLeftSide from "../../../helper/setFilterLeftSide";
+import { FilterStateContext } from "../../../provider/FilterStateProvider";
 
 const textColor = "text-grayscale.700 dark:text-grayscale.400";
 const border = "component-border dark:component-border--dark";
@@ -18,9 +18,8 @@ const contents = [
 
 function Filter() {
 	const navigate = useNavigate();
-	const [filterText, setFilterText] = useContext(FilterTextContext);
+	const [filterText, setFilterText, paramRef] = useContext(FilterStateContext);
 	const [open, setOpen] = useState(false);
-	const paramRef = useRef(new URLSearchParams());
 
 	const onToggle = (event: React.MouseEvent) => {
 		event.preventDefault();
@@ -33,7 +32,7 @@ function Filter() {
 	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
 		target.checked = false;
 		setOpen(false);
-		filterTarget(idx, navigate, setFilterText, paramRef);
+		setFilterLeftSide(idx, navigate, setFilterText, paramRef);
 	};
 
 	const handleFilterTextKeyDown = () => {

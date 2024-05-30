@@ -1,18 +1,22 @@
-import { useState, useRef } from "react";
+import { useContext, useState } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
+import setFilterRightSide from "../../../../helper/setFilterRightSide";
+import { useNavigate } from "react-router-dom";
+import { FilterStateContext } from "../../../../provider/FilterStateProvider";
 
 type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
 	handleFetch: (fetchedData: FetchedDataType, refetch: () => void) => void;
 	handleClearTimeOut: () => void;
+	paramRef: React.MutableRefObject<URLSearchParams>;
 }
 
-function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
+function WriterFilter({ handleFetch, handleClearTimeOut, paramRef }: ProsType) {
+	const navigate = useNavigate();
+	const [, setFilterText] = useContext(FilterStateContext);
 	const [open, setOpen] = useState(false);
-	// const [idx, setIdx] = useState<number[]>([]);
-	const checkedItems = useRef<{ [key: number]: number }>({});
 
 	const { data, refetch } = useGet("member", "/member/list", false);
 	const members = data && data.members;
@@ -23,20 +27,17 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 		event.preventDefault();
 		setOpen(!open);
 	};
-	const handleCheckedItems = (
-		{ target: { checked } }: React.ChangeEvent<HTMLInputElement>,
-		idx: number
-	) => {
-		if (checked) {
-			checkedItems.current[idx] = idx;
-			return;
-		}
-		delete checkedItems.current[idx];
+	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+		target.checked = false;
+		setOpen(false);
+		// setFilterRightSide(
+		// 	`writer=${contents[idx]}`,
+		// 	`writer:${contents[idx]}`,
+		// 	navigate,
+		// 	setFilterText,
+		// 	paramRef
+		// );
 	};
-
-	// useEffect(() => {
-	// 	if (!open) setIdx(Object.values(checkedItems.current));
-	// }, [open]);
 
 	return (
 		<div

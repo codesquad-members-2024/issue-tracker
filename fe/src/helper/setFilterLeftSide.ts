@@ -8,10 +8,11 @@ type FilterTarget = (
 	idx: number,
 	navigate: NavigateFunction,
 	setFilterText: React.Dispatch<React.SetStateAction<string>>,
-	paramRef: React.MutableRefObject<URLSearchParams>
+	paramRef: React.RefObject<URLSearchParams>
 ) => void;
 
-const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: params }) => {
+const setFilterLeftSide: FilterTarget = (idx, navigate, setFilterText, paramRef) => {
+	const params = paramRef.current!;
 	const { member_id } = getLocalStorageItem("user");
 	const deleteMultipleParams = () => {
 		params.delete("writer");
@@ -62,4 +63,4 @@ const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: par
 	navigate(`/filter?target=issue&${params.toString()}`);
 };
 
-export default filterTarget;
+export default setFilterLeftSide;

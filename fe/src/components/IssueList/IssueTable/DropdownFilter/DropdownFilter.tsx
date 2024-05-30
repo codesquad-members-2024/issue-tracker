@@ -10,6 +10,7 @@ const FETCH_TIME = 200;
 
 function DropdownFilter() {
 	const timeoutId = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const paramRef = useRef(new URLSearchParams());
 
 	const handleFetch = (fetchedData: FetchedDataType, refetch: () => void) => {
 		timeoutId.current = setTimeout(() => {
@@ -25,7 +26,7 @@ function DropdownFilter() {
 
 	return (
 		<div className="h-full justify-between w-[390px] hidden lg:flex">
-			<WriterFilter handleFetch={handleFetch} handleClearTimeOut={handleClearTimeOut} />
+			<WriterFilter handleFetch={handleFetch} handleClearTimeOut={handleClearTimeOut} paramRef={paramRef}/>
 			<LabelFilter handleFetch={handleFetch} handleClearTimeOut={handleClearTimeOut} />
 			<MilestoneFilter handleFetch={handleFetch} handleClearTimeOut={handleClearTimeOut} />
 			<AssigneeFilter handleFetch={handleFetch} handleClearTimeOut={handleClearTimeOut} />
