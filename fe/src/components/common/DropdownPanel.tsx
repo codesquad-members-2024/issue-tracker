@@ -50,7 +50,12 @@ function DropdownPanel({ top, title, contents, imgs, color, handler, isState }: 
 									/>
 								)}
 								{color && (
-									<div className={`w-[20px] h-[20px] rounded-full ml-3 bg-[${color[i]}]`}></div>
+									<div
+										className={`w-[20px] h-[20px] rounded-full ml-3`}
+										style={{
+											backgroundColor: `${color[i]}`,
+										}}
+									></div>
 								)}
 								<span className="ml-2 text-grayscale.700 dark:text-grayscale.400">{content}</span>
 							</label>

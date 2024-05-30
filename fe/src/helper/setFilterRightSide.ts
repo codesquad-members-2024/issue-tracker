@@ -15,14 +15,29 @@ const setWriterFilter: FilterTarget = (query, filterText, navigate, setFilterTex
 	params.set(writerKey, writer);
 
 	setFilterText((prev) => {
-		const currWriter = prev.match(/writer:.+/g)?.[0];
-		if (currWriter) return prev.replace(currWriter, filterText);
+		const currWriter = prev.match(/writer:[^\s]+/g)?.[0];
+		console.log(prev);
+		if (currWriter) return prev.replaceAll(currWriter, filterText);
 		return `${prev} ${filterText}`;
 	});
 
 	navigate(`/filter?target=issue&${params.toString()}`);
 };
 
-const setLabelFilter: FilterTarget = (query, filterText, navigate, setFilterText, paramRef) => {};
+const setLabelFilter: FilterTarget = (query, filterText, navigate, setFilterText, paramRef) => {
+	const params = paramRef.current!;
+	params.delete("label_id");
+	const [labelIdKey, labelId] = query.split("=");
+	params.set(labelIdKey, labelId);
 
-export { setWriterFilter };
+	setFilterText((prev) => {
+		const currWriter = prev.match(/label:[^\s]+/g)?.[0];
+		console.log(prev);
+		if (currWriter) return prev.replaceAll(currWriter, filterText);
+		return `${prev} ${filterText}`;
+	});
+
+	navigate(`/filter?target=issue&${params.toString()}`);
+};
+
+export { setWriterFilter, setLabelFilter };

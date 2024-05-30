@@ -1,48 +1,50 @@
-import { useState, useRef } from "react";
+import { useState, useContext } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
+import { setLabelFilter } from "../../../../helper/setFilterRightSide";
+import { useNavigate } from "react-router-dom";
+import { FilterStateContext } from "../../../../provider/FilterStateProvider";
 
 type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
 	handleFetch: (fetchedData: FetchedDataType, refetch: () => void) => void;
 	handleClearTimeOut: () => void;
-	// labelIds?: React.MutableRefObject<number[]>; //TODO 옵셔널 삭제
 }
 
 function LabelFilter({ handleFetch, handleClearTimeOut }: ProsType) {
+	const navigate = useNavigate();
+	const [, setFilterText, paramRef] = useContext(FilterStateContext);
 	const [open, setOpen] = useState(false);
-	// const [idx, setIdx] = useState<number[]>([]);
-	const checkedItems = useRef<{ [key: number]: number }>({});
 
 	const { data, refetch } = useGet("label", "/label", false);
 	const labels = data && data.labels;
-	const contents = labels && labels.map(({ name }: { name: string }) => name);
-	const colors =
-		labels && labels.map(({ backgroundColor }: { backgroundColor: string }) => backgroundColor);
+	const contents = labels && [
+		"레이블이 없는 이슈",
+		...labels.map(({ name }: { name: string }) => name),
+	];
+	const colors = labels && [
+		"#ffffff",
+		...labels.map(({ backgroundColor }: { backgroundColor: string }) => backgroundColor),
+	];
 
 	const onToggle = (event: React.MouseEvent) => {
 		event.preventDefault();
 		setOpen(!open);
 	};
-	const handleCheckedItems = (
-		{ target: { checked } }: React.ChangeEvent<HTMLInputElement>,
-		idx: number
-	) => {
-		if (checked) {
-			checkedItems.current[idx] = idx;
-			return;
-		}
-		delete checkedItems.current[idx];
+	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+		target.checked = false;
+		setOpen(false);
+		const currId = idx && labels[idx - 1].id;
+		const currIdx = idx && idx - 1;
+		setLabelFilter(
+			`label_id=${currId}`,
+			`label:${contents[currIdx] === "레이블이 없는 이슈" ? "no" : contents[currIdx]}`,
+			navigate,
+			setFilterText,
+			paramRef
+		);
 	};
-
-	// useEffect(() => {
-	// 	if (!open) setIdx(Object.values(checkedItems.current));
-	// }, [open]);
-
-	// useEffect(() => {
-	// 	labelIds.current = idx;
-	// }, [idx, labelIds]);
 
 	return (
 		<div

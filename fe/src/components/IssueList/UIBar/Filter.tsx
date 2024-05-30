@@ -63,7 +63,7 @@ function Filter() {
 				</details>
 				<div className="relative w-[80%] h-full ">
 					<input
-						className={`absolute top-0 h-full w-full ${textColor} rounded-r-xl pl-9 bg-grayscale.200 dark:bg-grayscale.700 focus:input-text--focus`}
+						className={`truncate pr-2 absolute top-0 h-full w-full ${textColor} rounded-r-xl pl-9 bg-grayscale.200 dark:bg-grayscale.700 focus:input-text--focus`}
 						type="text"
 						placeholder="Search all issue"
 						value={filterText}
