@@ -2,9 +2,14 @@ import styled from "styled-components";
 import { useState } from "react";
 import { IssueTableHeader } from "./IssueTableHeader";
 import { IssueTableContent } from "./IssueTableContent";
-import { issues, closedIssues } from "@/test.json"; // test data
+import useFetch from "../../../../hooks/useFetch";
 
-export function IssueTable() {
+const CLOSED_ISSUES_API = "/api/issues/close";
+
+export function IssueTable(props) {
+  const { issues, fetchData: fetchOpenIssues } = props;
+  const { state: closedIssues, fetchData: fetchClosedIssues } = useFetch(CLOSED_ISSUES_API);
+
   const [checkedCount, setCheckedCount] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
@@ -19,7 +24,7 @@ export function IssueTable() {
       const updatedItems = new Set(prevItems);
       updatedItems.has(issueId) ? updatedItems.delete(issueId) : updatedItems.add(issueId);
       setCheckedCount(updatedItems.size);
-      setIsChecked(updatedItems.size > 0); // check 되면 이슈선택 Header로 변경 
+      setIsChecked(updatedItems.size > 0); // Check 되면 이슈선택 Header로 변경
       return updatedItems;
     });
   };
@@ -28,12 +33,11 @@ export function IssueTable() {
     <StyledDiv>
       <IssueTableHeader
         checkedCount={checkedCount}
-        isChecked={isChecked}
-        onCheckedChange={handleCheckboxChange}
-        isOpenIssues={isOpenIssues}
-        setIsOpenIssues={setIsOpenIssues}
-        openIssueCount={issues.length}
-        closedIssueCount={closedIssues.length}
+        isChecked={isChecked} onCheckedChange={handleCheckboxChange}
+        isOpenIssues={isOpenIssues} setIsOpenIssues={setIsOpenIssues}
+        openIssueCount={issues?.length}
+        closedIssueCount={closedIssues?.length}
+        {...{fetchOpenIssues, fetchClosedIssues}}
       />
       <IssueTableContent
         checkedItems={checkedItems}

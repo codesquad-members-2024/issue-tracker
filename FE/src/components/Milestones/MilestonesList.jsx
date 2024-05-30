@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { OpenIcon } from "@/icons/OpenIcon";
@@ -13,15 +13,14 @@ export function MilestonesList(props) {
 
   const [isOpenMilestones, setIsOpenMilestones] = useState(true);
 
-  useEffect(() => {
-    if (!isOpenMilestones) {
-      fetchClosedMilestones();
-    }
-  }, [isOpenMilestones, fetchClosedMilestones]);
-
   const handleOpenMilestonesClick = () => {
     setIsOpenMilestones(true);
     fetchOpenMilestones();
+  };
+
+  const handleClosedMilestonesClick = () => {
+    setIsOpenMilestones(false);
+    fetchClosedMilestones();
   };
 
   const milestonesToDisplay = isOpenMilestones ? milestones : closedMilestones;
@@ -33,7 +32,7 @@ export function MilestonesList(props) {
           <OpenIcon />
           <span>열린 마일스톤({milestones?.length || 0})</span>
         </StyledBtn>
-        <StyledBtn onClick={() => setIsOpenMilestones(false)} $active={!isOpenMilestones}>
+        <StyledBtn onClick={handleClosedMilestonesClick} $active={!isOpenMilestones}>
           <ClosedIcon />
           <span>닫힌 마일스톤({closedMilestones?.length || 0})</span>
         </StyledBtn>
@@ -42,7 +41,6 @@ export function MilestonesList(props) {
     </Wrap>
   );
 }
-
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -57,6 +55,7 @@ const MilestonesHeader = styled.div`
   display: flex;
   align-items: center;
   margin-left: 20px;
+  gap: 20px;
 `;
 
 const StyledBtn = styled.button`
