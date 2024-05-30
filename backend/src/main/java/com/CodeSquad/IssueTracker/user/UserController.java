@@ -1,8 +1,10 @@
 package com.CodeSquad.IssueTracker.user;
 
+import com.CodeSquad.IssueTracker.user.dto.CurrentUserResponse;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import com.CodeSquad.IssueTracker.user.jwtlogin.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,9 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
-    public UserController(UserService userService, JwtUtil jwtUtil) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/registration")
@@ -45,5 +45,11 @@ public class UserController {
     public ResponseEntity<List<String>> getUserListForIssued() {
         List<String> userIdList = userService.getAllUserIds();
         return ResponseEntity.ok(userIdList);
+    }
+
+    @GetMapping("/currentUser")
+    public ResponseEntity<CurrentUserResponse> getChecking(HttpServletRequest request) {
+        CurrentUserResponse currentUserResponse = userService.getCurrentUser(request);
+        return ResponseEntity.ok(currentUserResponse);
     }
 }
