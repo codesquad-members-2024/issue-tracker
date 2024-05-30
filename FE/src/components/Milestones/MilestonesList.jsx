@@ -55,6 +55,7 @@ const MilestonesHeader = styled.div`
   display: flex;
   align-items: center;
   margin-left: 20px;
+  gap: 20px;
 `;
 
 const StyledBtn = styled.button`

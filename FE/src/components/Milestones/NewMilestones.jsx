@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { CommonBtnStyles } from "@/styles/commonStyles";
 import { useReducer, useEffect } from "react";
-import { postData, putData } from '@/api/api';
+import { postData, putData } from "@/api/api";
 
 const MILESTONES_API = "/api/milestones";
 
@@ -66,7 +66,7 @@ export function NewMilestones(props) {
               <input
                 type="text"
                 id="title"
-                value={milestoneTitle}
+                value={milestoneTitle || ""}
                 placeholder="마일스톤의 이름을 입력하세요"
                 onChange={(e) => dispatch({ type: "SET_MILESTONE_TITLE", payload: e.target.value })}
               />
@@ -76,7 +76,7 @@ export function NewMilestones(props) {
               <input
                 type="text"
                 id="deadline"
-                value={milestoneDeadline}
+                value={milestoneDeadline || ""}
                 placeholder="YYYY-MM-DD"
                 onChange={(e) => dispatch({ type: "SET_MILESTONE_DEADLINE", payload: e.target.value })}
               />
