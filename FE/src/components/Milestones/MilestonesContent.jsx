@@ -5,14 +5,17 @@ import { TrashIcon } from "@/icons/TrashIcon";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
 import { NewMilestones } from "./NewMilestones";
+import { deleteData } from "@/api/api";
+
+const MILESTONES_API = "/api/milestones";
 
 export function MilestonesContent(props) {
-  const { milestones, fetchData, putData, deleteData } = props;
+  const { milestones, fetchData } = props;
   const [onEdit, setOnEdit] = useState(false);
   const [selectedMilestone, setSelectedMilestone] = useState(null);
 
   const handleDelete = async (milestoneId) => {
-    await deleteData(milestoneId);
+    await deleteData(MILESTONES_API, milestoneId);
     fetchData();
   };
 
@@ -34,7 +37,7 @@ export function MilestonesContent(props) {
           closeNewMilestones={closeNewMilestones}
           milestoneId={selectedMilestone?.id}
           initialData={selectedMilestone}
-          {...{ closeNewMilestones, fetchData, putData, deleteData }}
+          {...{ closeNewMilestones, fetchData }}
         />
       )}
       {milestones?.length === 0 ? (

@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { CommonBtnStyles } from "@/styles/commonStyles";
 import { useReducer, useEffect } from "react";
+import { postData, putData } from '@/api/api';
+
+const MILESTONES_API = "/api/milestones";
 
 const initialState = {
   milestoneTitle: "",
@@ -29,7 +32,7 @@ const milestoneReducer = (state, action) => {
 };
 
 export function NewMilestones(props) {
-  const { postData, fetchData, putData, actionType, milestoneId, initialData, closeNewMilestones } = props;
+  const { fetchData, actionType, milestoneId, initialData, closeNewMilestones } = props;
 
   const [state, dispatch] = useReducer(milestoneReducer, initialState);
   const { milestoneTitle, milestoneDeadline, milestoneDescription } = state;
@@ -47,7 +50,7 @@ export function NewMilestones(props) {
       description: milestoneDescription,
     };
 
-    actionType === "createMilestones" ? await postData(newMilestone) : await putData(milestoneId, newMilestone);
+    actionType === "createMilestones" ? await postData(MILESTONES_API, newMilestone) : await putData(MILESTONES_API, milestoneId, newMilestone);
     closeNewMilestones();
     fetchData();
   };

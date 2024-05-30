@@ -7,9 +7,8 @@ import useFetch from "../../hooks/useFetch";
 
 const CLOSED_MILESTONES_API = "/api/milestones/close";
 
-
 export function MilestonesList(props) {
-  const { milestones, fetchData: fetchOpenMilestones, putData, deleteData } = props;
+  const { milestones, fetchData: fetchOpenMilestones } = props;
   const { state: closedMilestones, fetchData: fetchClosedMilestones } = useFetch(CLOSED_MILESTONES_API);
 
   const [isOpenMilestones, setIsOpenMilestones] = useState(true);
@@ -39,10 +38,11 @@ export function MilestonesList(props) {
           <span>닫힌 마일스톤({closedMilestones?.length || 0})</span>
         </StyledBtn>
       </MilestonesHeader>
-      <MilestonesContent milestones={milestonesToDisplay} {...{ fetchData: fetchOpenMilestones, putData, deleteData }}/>
+      <MilestonesContent milestones={milestonesToDisplay} {...{ fetchData: fetchOpenMilestones }}/>
     </Wrap>
   );
 }
+
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
