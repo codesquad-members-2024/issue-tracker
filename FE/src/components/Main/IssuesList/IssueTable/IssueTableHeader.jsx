@@ -22,9 +22,19 @@ const headerFilters = [
 ];
 
 export function IssueTableHeader(props) {
-  const { checkedCount, isChecked, onCheckedChange, isOpenIssues, setIsOpenIssues, openIssueCount, closedIssueCount } = props;
-  // openIssueCount, closedIssueCount 삭제 예정 ?
+  const { checkedCount, isChecked, onCheckedChange, isOpenIssues, setIsOpenIssues, openIssueCount, closedIssueCount, fetchOpenIssues, fetchClosedIssues } = props;
+
   const handleChecked = () => onCheckedChange(!isChecked);
+
+  const handleOpenIssuesClick = () => {
+    setIsOpenIssues(true);
+    fetchOpenIssues();
+  };
+
+  const handleClosedIssuesClick = () => {
+    setIsOpenIssues(false);
+    fetchClosedIssues();
+  };
 
   return (
     <Header>
@@ -39,21 +49,17 @@ export function IssueTableHeader(props) {
             <div>{checkedCount}개 이슈 선택</div>
           </Left>
           <Right>
-            <DropdownContainer
-              id="select"
-              label="상태변경"
-              items={selectPopupItems}
-            />
+            <DropdownContainer id="select" label="상태변경" items={selectPopupItems}/>
           </Right>
         </Wrap>
       ) : (
         <Wrap>
           <Left>
-            <StyledIssueBtn onClick={() => setIsOpenIssues(true)} $active={isOpenIssues}>
+            <StyledIssueBtn onClick={handleOpenIssuesClick} $active={isOpenIssues}>
               <OpenIcon />
               <div className="open">열린 이슈({openIssueCount})</div>
             </StyledIssueBtn>
-            <StyledIssueBtn onClick={() => setIsOpenIssues(!isOpenIssues)} $active={!isOpenIssues}>
+            <StyledIssueBtn onClick={handleClosedIssuesClick} $active={!isOpenIssues}>
               <ClosedIcon />
               <div className="closed">닫힌 이슈({closedIssueCount})</div>
             </StyledIssueBtn>
