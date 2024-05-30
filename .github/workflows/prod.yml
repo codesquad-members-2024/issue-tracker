@@ -54,9 +54,9 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./front/dist/ s3://fe-issue-tracker-s3/ --acl public-read --delete
+          aws s3 sync ./front/build/ s3://fe-issue-tracker-s3/ --acl public-read --delete
 
       - name: Notify Slack
         if: success()
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"배포가 성공적으로 완료되었습니다!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"배포가 성공적으로 완료되었습니다!🥳"}' ${{ secrets.SLACK_WEBHOOK_URL }}
