@@ -1,11 +1,14 @@
 package com.CodeSquad.IssueTracker.user.gitLogin;
 
+import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
 import com.CodeSquad.IssueTracker.user.User;
 import com.CodeSquad.IssueTracker.user.UserRepository;
 import com.CodeSquad.IssueTracker.user.jwtlogin.JwtUtil;
+import com.CodeSquad.IssueTracker.user.utils.RandomIdGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -20,16 +23,18 @@ public class GitHubOauthService {
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final GitHubUserRepository gitHubUserRepository;
     private final ConcurrentHashMap<String, String> accessTokenCache = new ConcurrentHashMap<>();
 
     public GitHubOauthService(@Value("${github.client.id}") String clientId,
                               @Value("${github.client.secret}") String clientSecret,
-                              RestTemplate restTemplate, JwtUtil jwtUtil, UserRepository userRepository) {
+                              RestTemplate restTemplate, JwtUtil jwtUtil, UserRepository userRepository, GitHubUserRepository gitHubUserRepository) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.restTemplate = restTemplate;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.gitHubUserRepository = gitHubUserRepository;
     }
 
     public String getAccessToken(String code) {
@@ -97,6 +102,30 @@ public class GitHubOauthService {
         }
 
         return user;
+    }
+
+    @Transactional
+    public User saveOrGetGithubUser(String gitHubUserId) {
+        GitHubUser gitHubUser = gitHubUserRepository.findById(gitHubUserId)
+                .orElseGet(() -> {
+                    String randomId = RandomIdGenerator.generateRandomId();
+
+                    userRepository.save(User.builder()
+                            .userId(randomId)
+                            .isNew(true)
+                            .build());
+
+                    GitHubUser newUser = GitHubUser.builder()
+                            .githubId(gitHubUserId)
+                            .userId(randomId)
+                            .build();
+
+                    gitHubUserRepository.insertGitHubUser(newUser.githubId(), newUser.userId());
+                    return newUser;
+                });
+
+        return userRepository.findById(gitHubUser.userId())
+                                                    .orElseThrow(() -> new UserNotFoundException("해당하는 유저가 없습니다."));
     }
 
     public String generateJwtToken(User user) {

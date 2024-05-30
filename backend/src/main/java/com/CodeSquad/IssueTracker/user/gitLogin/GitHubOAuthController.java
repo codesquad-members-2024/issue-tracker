@@ -28,11 +28,12 @@ public class GitHubOAuthController {
 
     @GetMapping("/callback")
     public ResponseEntity<String> githubCallback(@RequestParam("code") String code) {
-        String accessToken = gitHubOauthService.getAccessToken(code);
-        String gitHubUserId = gitHubOauthService.getUserLogin(accessToken);
+            String accessToken = gitHubOauthService.getAccessToken(code);
+            String gitHubUserId = gitHubOauthService.getUserLogin(accessToken);
 
-        User user = gitHubOauthService.saveUserAndGenerateToken(gitHubUserId, accessToken);
-        String jwtToken = gitHubOauthService.generateJwtToken(user);
+            User user = gitHubOauthService.saveOrGetGithubUser(gitHubUserId);
+            // User user = gitHubOauthService.saveUserAndGenerateToken(gitHubUserId, accessToken);
+            String jwtToken = gitHubOauthService.generateJwtToken(user);
 
         return ResponseEntity.ok(jwtToken);
     }

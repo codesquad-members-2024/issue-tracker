@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class RandomIdGenerator {
     private static final String[] ADJECTIVES = {
-            "Quick", "Lazy", "Happy", "Sad", "Brave", "Clever", "Witty", "Calm", "Eager", "Silly"
+            "Quick", "Lazy", "Happy", "Sad", "Brave", "Young", "Witty", "Calm", "Eager", "Silly"
     };
 
     private static final String[] NOUNS = {
-            "Lion", "Tiger", "Elephant", "Giraffe", "Panda", "Fox", "Wolf", "Bear", "Eagle", "Shark"
+            "Lion", "Tiger", "Cat", "Giraffe", "Panda", "Fox", "Wolf", "Bear", "Eagle", "Shark"
     };
 
     public static String generateRandomId() {
