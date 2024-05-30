@@ -5,14 +5,24 @@ type FilterTarget = (
 	filterText: string,
 	navigate: NavigateFunction,
 	setFilterText: React.Dispatch<React.SetStateAction<string>>,
-	paramRef: React.MutableRefObject<URLSearchParams>
+	paramRef: React.RefObject<URLSearchParams>
 ) => void;
 
-const setFilterRightSide: FilterTarget = (query, filterText, navigate, setFilterText,  { current: params }) => {
-	console.log(query);
-	console.log(filterText);
-  // params.set("writer", "closed");
-	// navigate(`/filter?target=issue&${params.toString()}`);
+const setWriterFilter: FilterTarget = (query, filterText, navigate, setFilterText, paramRef) => {
+	const params = paramRef.current!;
+	params.delete("writer");
+	const [writerKey, writer] = query.split("=");
+	params.set(writerKey, writer);
+
+	setFilterText((prev) => {
+		const currWriter = prev.match(/writer:.+/g)?.[0];
+		if (currWriter) return prev.replace(currWriter, filterText);
+		return `${prev} ${filterText}`;
+	});
+
+	navigate(`/filter?target=issue&${params.toString()}`);
 };
 
-export default setFilterRightSide;
+const setLabelFilter: FilterTarget = (query, filterText, navigate, setFilterText, paramRef) => {};
+
+export { setWriterFilter };

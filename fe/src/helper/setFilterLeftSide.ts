@@ -38,7 +38,7 @@ const setFilterLeftSide: FilterTarget = (idx, navigate, setFilterText, paramRef)
 			deleteMultipleParams();
 			params.append("writer", member_id);
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/writer:@me|assignee:@me|commenter:@me/g, "").trim();
+				const deletedStr = prev.replace(/writer:.+|assignee:.+|commenter:.+/g, "").trim();
 				return `${deletedStr} writer:@me`.trim();
 			});
 		},
@@ -46,7 +46,7 @@ const setFilterLeftSide: FilterTarget = (idx, navigate, setFilterText, paramRef)
 			deleteMultipleParams();
 			params.append("assignee", member_id);
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/writer:@me|assignee:@me|commenter:@me/g, "").trim();
+				const deletedStr = prev.replace(/writer:.+|assignee:.+|commenter:.+/g, "").trim();
 				return `${deletedStr} assignee:@me`;
 			});
 		},
@@ -54,7 +54,7 @@ const setFilterLeftSide: FilterTarget = (idx, navigate, setFilterText, paramRef)
 			deleteMultipleParams();
 			params.append("commenter", member_id);
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/writer:@me|assignee:@me|commenter:@me/g, "").trim();
+				const deletedStr = prev.replace(/writer:.+|assignee:.+|commenter:.+/g, "").trim();
 				return `${deletedStr} commenter:@me`;
 			});
 		},

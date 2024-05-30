@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
-import setFilterRightSide from "../../../../helper/setFilterRightSide";
+import { setWriterFilter } from "../../../../helper/setFilterRightSide";
 import { useNavigate } from "react-router-dom";
 import { FilterStateContext } from "../../../../provider/FilterStateProvider";
 
@@ -10,12 +10,11 @@ type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
 	handleFetch: (fetchedData: FetchedDataType, refetch: () => void) => void;
 	handleClearTimeOut: () => void;
-	paramRef: React.MutableRefObject<URLSearchParams>;
 }
 
-function WriterFilter({ handleFetch, handleClearTimeOut, paramRef }: ProsType) {
+function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 	const navigate = useNavigate();
-	const [, setFilterText] = useContext(FilterStateContext);
+	const [, setFilterText, paramRef] = useContext(FilterStateContext);
 	const [open, setOpen] = useState(false);
 
 	const { data, refetch } = useGet("member", "/member/list", false);
@@ -30,13 +29,13 @@ function WriterFilter({ handleFetch, handleClearTimeOut, paramRef }: ProsType) {
 	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
 		target.checked = false;
 		setOpen(false);
-		// setFilterRightSide(
-		// 	`writer=${contents[idx]}`,
-		// 	`writer:${contents[idx]}`,
-		// 	navigate,
-		// 	setFilterText,
-		// 	paramRef
-		// );
+		setWriterFilter(
+			`writer=${contents[idx]}`,
+			`writer:${contents[idx]}`,
+			navigate,
+			setFilterText,
+			paramRef
+		);
 	};
 
 	return (
