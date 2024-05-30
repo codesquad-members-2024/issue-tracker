@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import DropdownPanel from "../../common/DropdownPanel";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import filterTarget from "../../../helper/filterTarget";
+import { FilterTextContext } from "../../../provider/FilterTextProvider";
 
 const textColor = "text-grayscale.700 dark:text-grayscale.400";
 const border = "component-border dark:component-border--dark";
@@ -17,8 +18,8 @@ const contents = [
 
 function Filter() {
 	const navigate = useNavigate();
+	const [filterText, setFilterText] = useContext(FilterTextContext);
 	const [open, setOpen] = useState(false);
-	const [filterText, setFilterText] = useState("is:issue");
 	const paramRef = useRef(new URLSearchParams());
 
 	const onToggle = (event: React.MouseEvent) => {
@@ -36,7 +37,7 @@ function Filter() {
 	};
 
 	const handleFilterTextKeyDown = () => {
-		console.log(filterText.split(" "));//TODO 필터창에 엔터시 필터처리
+		console.log(filterText.split(" ")); //TODO 필터창에 엔터시 필터처리
 	};
 
 	return (
