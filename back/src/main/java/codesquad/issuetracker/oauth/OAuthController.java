@@ -6,10 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +36,14 @@ public class OAuthController {
         // 클라이언트에 jwt 토큰 반환
         JwtUtil jwtUtil = new JwtUtil();
         String token = jwtUtil.createToken(githubUserData.getLogin()); // JWT 토큰 생성
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "http://fe-issue-tracker-s3.s3-website.ap-northeast-2.amazonaws.com/login/oauth/github/callback"); // 리다이렉트할 주소 설정
+        headers.add("Content-Type", "text/html; charset=utf-8"); // 적절한 Content-Type 설정
+
         return ResponseEntity
-                .ok()
+                .status(HttpStatus.FOUND)
+                .headers(headers)
                 .body(new LoginResponse(token, GITHUB_LOGIN_SUCCESS_MESSAGE));
     }
 
