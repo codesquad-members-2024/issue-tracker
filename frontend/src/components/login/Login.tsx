@@ -46,14 +46,19 @@ const Logo = styled.img`
 `;
 
 const GithubLoginButton = styled.a`
+  box-sizing: border-box;
   width: 320px;
   height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #7e7e7e;
   border-radius: 16px;
   padding: 0 24px;
   color: #7e7e7e;
   background-color: transparent;
   font-size: 20px;
+  text-decoration: none;
   cursor: pointer;
 `;
 
