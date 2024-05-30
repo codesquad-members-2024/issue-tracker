@@ -3,11 +3,11 @@ import ProfileMenu from "./ProfileMenu/ProfileMenu";
 import { ReactComponent as LogoBlack } from "../../svg/LogoBlack.svg";
 import { ReactComponent as LogoWhite } from "../../svg/LogoWhite.svg";
 import { useContext, useMemo, useState } from "react";
-import { ThemeContext } from "../../provider/ThemeProvider";
+import { TopContext } from "../../provider/TopProvider";
 import getLocalStorageItem from "../../utility/getLocalStorageItem";
 
 function Header() {
-	const [darkMode] = useContext(ThemeContext);
+	const [darkMode] = useContext(TopContext);
 	const [isVisible, setIsVisible] = useState(false);
 	const user = getLocalStorageItem("user");
 

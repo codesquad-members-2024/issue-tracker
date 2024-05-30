@@ -1,20 +1,20 @@
 import { ReactComponent as Logo } from "../svg/LogoLarge.svg";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import useLoginFetch from "../hooks/useLoginFetch";
+import { TopContext } from "../provider/TopProvider";
+import fetchData from "../utility/fetchData";
 
-interface PropsType {
-	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}
 interface Data {
 	memberId: string;
 	password: string;
 }
 
-function Login({ setIsLoggedIn }: PropsType) {
+function Login() {
 	const [validId, setValidId] = useState(false);
 	const [validPw, setValidPw] = useState(false);
 	const [loginData, setLoginData] = useState<null | Data>(null);
 	const [result, error] = useLoginFetch("/member/login", loginData);
+	const [, , , setIsLoggedIn] = useContext(TopContext);
 
 	const idRef = useRef<HTMLInputElement>(null);
 	const pwRef = useRef<HTMLInputElement>(null);
@@ -37,6 +37,11 @@ function Login({ setIsLoggedIn }: PropsType) {
 		});
 	};
 
+	const handleOauth = () => {
+		fetchData("/oauth");
+		// setIsLoggedIn(true); // TODO 나중에 확인
+	};
+
 	useEffect(() => {
 		const jwt = localStorage.getItem("jwt");
 		if (jwt) setIsLoggedIn(true);
@@ -46,7 +51,9 @@ function Login({ setIsLoggedIn }: PropsType) {
 		<div className="w-full h-full flex items-center justify-center">
 			<div className="w-[400px] h-[600px] flex items-center justify-center flex-col text-grayscale.600">
 				<Logo className="animated-path mb-20" />
-				<button className="btn-large btn-outline mb-4">GitHub 계정으로 로그인</button>
+				<button className="btn-large btn-outline mb-4" onClick={handleOauth}>
+					GitHub 계정으로 로그인
+				</button>
 				or
 				<div className="relative flex items-center justify-center flex-col">
 					<input

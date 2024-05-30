@@ -31,7 +31,7 @@ interface IssueDetailDataType {
 	comments: IssueComment[];
 	issue: Issue;
 	labels: Label[];
-	milestone: Milestone[];
+	milestone: Milestone;
 }
 interface IssueComment {
 	commentId: number;

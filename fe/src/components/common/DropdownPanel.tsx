@@ -7,13 +7,11 @@ interface PropsType {
 	contents: string[];
 	imgs?: string[];
 	color?: string[];
-	data?: Milestone[] | Label[] | Member[]; //TODO 필터용 판낼을 따로 만들어야할듯
 	handler?: (e: React.ChangeEvent<HTMLInputElement>, idx: number) => void;
 	isState?: boolean;
 }
 
-//id도 데이터 담아야해서
-function DropdownPanel({ top, title, contents, imgs, color, data, handler, isState }: PropsType) {
+function DropdownPanel({ top, title, contents, imgs, color, handler, isState }: PropsType) {
 	return (
 		<div
 			className={`absolute ${top} w-[240px] ${border} border-[1px] rounded-xl z-20 shadow-modal dark:shadow-dark`}

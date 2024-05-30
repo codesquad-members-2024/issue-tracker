@@ -7,7 +7,8 @@ import useGet from "../../hooks/useGet";
 function LabelUI() {
 	const [newLabel, setNewLabel] = useState(false);
 	const handleShowNewLabel = () => setNewLabel(!newLabel);
-	const { data } = useGet("count", "/count", true);
+	const { data, error } = useGet("count", "/count", true);
+	if (error) return <div>값을 불러오지 못했습니다</div>;
 	const { totalLabelCounts = 0, totalMilestoneCounts = 0 } = data || {};
 
 	return (

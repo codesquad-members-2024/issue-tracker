@@ -18,12 +18,16 @@ interface IssueStateDataType {
 	issueIds: number[];
 }
 
-interface PatchDataType {
-	[key: string]: string | null | string[];
+interface IssueDetailDataType {
+	[key: string]: string | null | string[] | number[];
 }
 
 type MutateType = (data?: DataType) => void;
-type DataType = MilestonePatchDataType | LabelPatchDataType | IssueStateDataType | PatchDataType;
+type DataType =
+	| MilestonePatchDataType
+	| LabelPatchDataType
+	| IssueStateDataType
+	| IssueDetailDataType;
 
 const usePatch = (query: string, queryKey: string, handler?: () => void) => {
 	const queryClient = useQueryClient();

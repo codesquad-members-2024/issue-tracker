@@ -16,11 +16,12 @@ function Main() {
 	const [searchParams] = useSearchParams();
 	const queryParamState = searchParams.get("state");
 
+
 	const query = createAPI(searchParams, window.location);
 	return (
 		<div className="w-screen h-screen flex items-center justify-center overflow-auto">
 			<div className="h-[95%] w-[85%]">
-				<Header />
+				<Header/>
 				<UIBar />
 				<CheckboxProvider>
 					<IssueTable queryParam={queryParamState} query={query} />

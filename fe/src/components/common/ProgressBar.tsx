@@ -18,9 +18,12 @@ const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 		<>
 			<div className="w-[224px] h-[8px] bg-grayscale.200 rounded-xl">
 				<div
-					className={`transition-[width] h-full w-[${percent}%] bg-accent.blue ${
+					className={`transition-[width] h-full bg-accent.blue ${
 						percent === 100 ? "rounded-xl" : "rounded-l-xl"
 					} `}
+					style={{
+						width: `${percent}%`,
+					}}
 				></div>
 			</div>
 		</>
@@ -28,7 +31,6 @@ const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 };
 
 function withLabel(Component: React.FC<PercentType>, { percent, name }: ProgressWithLabelProps) {
-	console.log();
 	return (
 		<>
 			<Component percent={percent} />
