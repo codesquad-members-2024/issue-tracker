@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-interface CreatorFormProps {
+export interface CreatorFormProps {
   labelText: string;
   height: string;
   onChange: () => void;

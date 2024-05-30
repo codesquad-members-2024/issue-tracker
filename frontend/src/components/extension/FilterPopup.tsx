@@ -7,7 +7,7 @@ type FilterBarKeys = "assignee" | "label" | "milestone" | "author";
 
 type FilterType = "aboutMe" | FilterBarKeys;
 
-interface FilterbarProps {
+export interface FilterbarProps {
   filterType: FilterType;
   onClose?: (menu: FilterBarKeys) => void;
   items?: string[] | object[];

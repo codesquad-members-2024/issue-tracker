@@ -4,10 +4,13 @@ import useInfiniteScroll from "@schnee/react-infinite-scroll";
 import { useQuery } from "react-query";
 import { sendFiltersRequest, sendIssuesRequestByFilter } from "../../api/FilterAPI";
 import { useNavigate } from "react-router";
+import useUserStore from "../stores/useUserStore";
+import { sendCurrentUserRequest } from "../../api/LoginAPI";
 
 export type IssueType = "open" | "close";
 
 const FIRST_PAGE = 1;
+const CURRENT_USER_KEY = "currentUser";
 const ISSUE_NUMBER_KEY = "issueNumberResponse";
 const LABELS_KEY = "labelListResponse";
 const MILESTONES_KEY = "milestoneListResponse";
@@ -28,6 +31,7 @@ const useIssueListLogic = () => {
     setFilterText,
     setPage,
   } = useIssueStore();
+  const { setUserId } = useUserStore();
   const [focusedTab, setFocusedTab] = useState<IssueType>("open");
   const lastIssueRef = useRef(null);
   const navigate = useNavigate();
@@ -41,6 +45,11 @@ const useIssueListLogic = () => {
     }
   };
 
+  const userQuery = useQuery("currentUser", sendCurrentUserRequest, {
+    onSuccess: (data) => setUserId(data[CURRENT_USER_KEY]),
+    onError: () => navigate("/login"),
+  });
+
   const filterQuery = useQuery("filters", sendFiltersRequest, {
     onSuccess: (data) => {
       setIssueCounts(data[ISSUE_NUMBER_KEY]);
@@ -49,7 +58,7 @@ const useIssueListLogic = () => {
       setUsers(data[USERS_KEY]);
     },
     onError: () => navigate("/login"),
-    enabled: issues.length === 0,
+    enabled: issues.length === 0 && userQuery.isSuccess,
   });
 
   useQuery(issueQueryKey, () => sendIssuesRequestByFilter(filterText, page), {
@@ -81,7 +90,7 @@ const useIssueListLogic = () => {
     setIssues,
     setFilterText,
     lastIssueRef,
-    filterQuery,
+    userQuery,
   };
 };
 
