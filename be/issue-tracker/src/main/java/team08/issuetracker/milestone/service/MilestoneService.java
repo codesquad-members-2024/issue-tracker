@@ -59,7 +59,7 @@ public class MilestoneService {
                 .map(IssueCountDto::getMilestoneProgress)
                 .orElse(null);
 
-        return new MilestoneSummaryDto(name, progress);
+        return new MilestoneSummaryDto(milestoneId, name, progress);
     }
 
     @Transactional
