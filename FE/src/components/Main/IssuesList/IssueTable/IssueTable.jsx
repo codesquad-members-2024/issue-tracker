@@ -7,7 +7,7 @@ import API_ENDPOINTS from "@/config/config";
 
 export function IssueTable(props) {
   const { issues, fetchData: fetchOpenIssues } = props;
-  const { state: closedIssues, fetchData: fetchClosedIssues } = useFetch(`${API_ENDPOINTS.closedIssues}`);
+  const { state: closedIssues, fetchData: fetchClosedIssues } = useFetch(`${API_ENDPOINTS.closeIssues}`);
 
   const [checkedCount, setCheckedCount] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
