@@ -1,11 +1,15 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { IconCheck, IconCheckActive, IconCheckDisabled } from '~/common/icons';
 
-export function CheckBox({ className }) {
+export function CheckBox({ className, checked, onChange, value, name }) {
 	return (
 		<StyledWrapper className={className}>
-			<HiddenCheckbox type='checkbox' />
+			<HiddenCheckbox
+				type='checkbox'
+				name={name}
+				onChange={onChange}
+				value={value}
+				checked={checked}
+			/>
 		</StyledWrapper>
 	);
 }

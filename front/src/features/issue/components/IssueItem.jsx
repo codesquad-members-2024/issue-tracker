@@ -7,7 +7,12 @@ import { CheckBox, Label } from '~/common/components';
 export function IssueItem({ issue, onChange, checked, profileImage }) {
 	return (
 		<StyledWrapper>
-			<StyledCheckbox />
+			<StyledCheckbox
+				name='issue'
+				value={issue?.id}
+				checked={checked.includes(issue?.id)}
+				onChange={onChange}
+			/>
 			<StyledFlex>
 				<ExclamationCircleOutlined />
 				<StyledIssueTitle to={`/issues/${issue?.id}`}>

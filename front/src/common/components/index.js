@@ -17,3 +17,4 @@ export * from './InputSelect';
 export * from './InputRadioGroup';
 export * from './InputSelectGroup';
 export * from './InputCheckGroup';
+export * from './Empty';

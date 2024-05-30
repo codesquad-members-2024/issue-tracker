@@ -18,17 +18,25 @@ import {
 	InputRadio,
 	Tabs,
 	Loading,
+	Button,
+	Empty,
 } from '~/common/components';
-import { IconPlus, IconChevronDown } from '~/common/icons';
+import {
+	IconPlus,
+	IconChevronDown,
+	IconArchive,
+	IconAlertCircle,
+} from '~/common/icons';
 import { getAuth } from '../../../common/apis';
 
 export function IssueListViewContainer() {
 	const { Search } = Input;
-	const { issueList, loading, error, fetchIssueList } = useIssueList();
-	useEffect(() => {
-		fetchIssueList();
-	}, []);
-	const [issue, setIssue] = useState([]);
+	const { issueList, fetchIssueList, openCounts, closedCounts, setCounts } =
+		useIssueList();
+
+	// useEffect(() => {
+	// 	fetchIssueList();
+	// }, [fetchIssueList]);
 
 	const { labelList, loading: labelLoading, fetchLabelList } = useLabelList();
 	const {
@@ -58,6 +66,35 @@ export function IssueListViewContainer() {
 		navigate(`/issues?search=${queryString}`);
 	};
 
+	const [checkAll, setCheckAll] = useState(false);
+	const [checked, setChecked] = useState([]);
+
+	const handleAllCheck = e => {
+		setCheckAll(e.target.checked);
+		if (e.target.checked) {
+			setChecked(issueList.map(issue => issue.id));
+		} else {
+			setChecked([]);
+		}
+	};
+
+	const handleCheck = e => {
+		const { checked, value } = e.target;
+		if (checked) {
+			setChecked(prev => [...prev, Number(value)]);
+		} else {
+			setChecked(prev => prev.filter(id => id !== Number(value)));
+		}
+		console.log(checked);
+	};
+	useEffect(() => {
+		if (checked.length === issueList.length) {
+			setCheckAll(true);
+		} else {
+			setCheckAll(false);
+		}
+	}, [checked, issueList]);
+
 	return (
 		<StyledWrapper>
 			<StyledSearch>
@@ -84,10 +121,40 @@ export function IssueListViewContainer() {
 			</StyledSearch>
 			<StyledFilter>
 				<StyledCheckAll>
-					<CheckBox />
-
-					<span>열린이슈</span>
-					<span>닫힌이슈</span>
+					<CheckBox
+						onChange={handleAllCheck}
+						checked={checkAll}
+						value='전체선택'
+					/>
+					{checked.length > 0 ? (
+						<p>{checked.length}개 이슈 선택</p>
+					) : (
+						<>
+							<Button
+								type='button'
+								size='medium'
+								buttonType='ghost'
+								icon={<IconAlertCircle />}
+								// 열린이슈 , 닫힌 이슈 카운트 이슈
+								buttonText={`열린 이슈(${openCounts})`}
+								onClick={() => {
+									fetchIssueList(false);
+									console.log(openCounts);
+								}}
+							/>
+							<Button
+								type='button'
+								size='medium'
+								buttonType='ghost'
+								icon={<IconArchive />}
+								buttonText={`닫힌 이슈(${closedCounts})`}
+								onClick={() => {
+									fetchIssueList(true);
+									console.log(openCounts);
+								}}
+							/>
+						</>
+					)}
 				</StyledCheckAll>
 				<StyledDropList>
 					<details>
@@ -169,7 +236,7 @@ export function IssueListViewContainer() {
 			</StyledFilter>
 			<StyledList>
 				{/* {loading && <Loading size='large' />} */}
-
+				{issueList?.length < 1 && <Empty text='이슈가 없습니다' />}
 				{issueList?.map((issue, index) => (
 					<IssueItem
 						key={issue.id}
@@ -233,6 +300,10 @@ const StyledFilter = styled.div`
 const StyledCheckAll = styled.div`
 	display: flex;
 	column-gap: 8px;
+	align-items: center;
+	button {
+		min-width: 0;
+	}
 `;
 const StyledDropList = styled.div`
 	display: flex;
