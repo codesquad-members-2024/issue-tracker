@@ -5,8 +5,7 @@ import { RightPanel } from "../IssueDetail/RightPanel";
 import { CommonBtnStyles } from "@/styles/commonStyles";
 import { useNavigate } from "react-router-dom";
 import { postData } from "@/api/api";
-
-const ISSUES_API = "/api/issues";
+import API_ENDPOINTS from "@/config/config";
 
 export function NewIssue() {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ export function NewIssue() {
 
   const handleSubmit = async () => {
     try {
-      await postData(ISSUES_API, {
+      await postData(`${API_ENDPOINTS.issues}`, {
         title: "title1",
         contents: "contents1",
         writer: "1", // test data
