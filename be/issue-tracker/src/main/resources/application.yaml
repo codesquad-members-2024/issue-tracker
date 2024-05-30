@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    active: local #default
+  application:
+    name: issue-tracker
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/issue-tracker
+    username: sa
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+#  datasource:
+---
+
+jwt:
+  secret: "code_squad_team_08" # JWT 서명에 사용될 비밀값
+  expirationTime: 3600000 # 토큰의 만료 시간 (밀리초 단위, 여기서는 1시간)
