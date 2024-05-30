@@ -19,7 +19,7 @@ export function ImageUpload({ handleUploadSuccess }) {
 		const region = import.meta.env.VITE_APP_S3_REGION;
 		const accessKeyId = import.meta.env.VITE_APP_S3_ACCESS_KEY_ID;
 		const secretAccessKey = import.meta.env.VITE_APP_S3_SECRET_ACCESS_KEY;
-		console.log(window.AWS);
+
 		window.AWS.config.update({
 			region,
 			accessKeyId,
