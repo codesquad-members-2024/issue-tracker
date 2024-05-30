@@ -1,28 +1,21 @@
 import { ChangeEvent, useState, useEffect, useMemo } from "react";
 import { ReactComponent as Grip } from "../../svg/Grip.svg";
-
-import Button from "./Button";
+import FileUploadButton from "./FileUploadButton";
 
 interface PropsType {
 	h: string;
 	$ref?: React.RefObject<HTMLTextAreaElement>;
 	handler?: () => void;
+	uploadedFile?: React.MutableRefObject<string | null>;
 }
 
 const moving = "scale-75 top-2 left-0";
 const DELAY = 2000;
 
-function TextArea({ h, $ref, handler }: PropsType) {
+function TextArea({ h, $ref, handler, uploadedFile }: PropsType) {
 	const [value, setValue] = useState("");
 	const [isVisible, setIsVisible] = useState(true);
-	const ButtonMemo = useMemo(
-		() => (
-			<div className="flex items-center border-t-2 border-dashed h-[52px] rounded-b-xl absolute w-full bottom-0">
-				<Button size="S" type="GHOST" icon="CLIP" text="파일 첨부하기" state="DEFAULT" />
-			</div>
-		),
-		[]
-	);
+	const ButtonMemo = useMemo(() => <FileUploadButton uploadedFile={uploadedFile}/>, []);
 
 	const onChange = ({ target: { value: textAreaValue } }: ChangeEvent<HTMLTextAreaElement>) => {
 		setValue(textAreaValue);
