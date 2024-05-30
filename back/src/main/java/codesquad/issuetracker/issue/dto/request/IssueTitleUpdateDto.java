@@ -1,4 +1,4 @@
-package codesquad.issuetracker.issue;
+package codesquad.issuetracker.issue.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class IssueContentUpdateDto {
+public class IssueTitleUpdateDto {
 
-    private String content;
+    private String title;
 }

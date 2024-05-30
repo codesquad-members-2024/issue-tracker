@@ -1,5 +1,7 @@
 package codesquad.issuetracker.issue;
 
+import codesquad.issuetracker.exception.IssueNotFoundException;
+import codesquad.issuetracker.issue.dto.request.IssueFilterDto;
 import codesquad.issuetracker.label.Label;
 import codesquad.issuetracker.label.LabelRepository;
 import codesquad.issuetracker.milestone.Milestone;
@@ -10,11 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class IssueService {
+
+    private static final String ISSUE_NOT_FOUND_ERROR_MESSAGE = "존재하지 않는 이슈입니다.";
 
     private final IssueRepository issueRepository;
     private final LabelRepository labelRepository;
@@ -33,32 +37,35 @@ public class IssueService {
         List<Long> labelIds = issue.getIssueLabels().stream()
                 .map(IssueLabel::getLabelId)
                 .toList();
-        return (List<Label>) labelRepository.findAllById(labelIds);
+        return labelRepository.findAllById(labelIds);
     }
 
     public List<User> getAssigneesForIssue(Issue issue) {
         List<String> assigneeNames = issue.getIssueAssignees().stream()
-                .map(IssueAssignee::getUserLoginId)
+                .map(IssueAssignee::getLoginId)
                 .toList();
-        return (List<User>) userRepository.findAllById(assigneeNames);
+        return userRepository.findAllById(assigneeNames);
     }
 
-    public Milestone getMilestoneForIssue(Issue issue) {
-        return milestoneRepository.findById(issue.getMilestoneId()).get();
+    public Optional<Milestone> getMilestoneForIssue(Issue issue) {
+        if (issue.getMilestoneId() == null) {
+            return Optional.empty();
+        }
+        return milestoneRepository.findById(issue.getMilestoneId());
     }
 
     public Issue getIssue(Long issueId) {
-        return issueRepository.findById(issueId).get();
+        return getIssueById(issueId);
     }
 
     public Issue updateIssueTitleById(Long issueId, String newTitle) {
         issueRepository.updateTitleById(issueId, newTitle);
-        return issueRepository.findById(issueId).get();
+        return getIssueById(issueId);
     }
 
     public Issue updateIssueContentById(Long issueId, String newContent) {
         issueRepository.updateContentById(issueId, newContent);
-        return issueRepository.findById(issueId).get();
+        return getIssueById(issueId);
     }
 
     public void deleteIssueById(Long issueId) {
@@ -66,57 +73,59 @@ public class IssueService {
     }
 
     public List<Issue> openIssuesById(List<Long> ids) {
-        List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
-        return (List<Issue>) issueRepository.saveAll(issues.stream()
-                .peek(Issue::open)
-                .collect(Collectors.toList()));
+        List<Issue> issues = issueRepository.findAllById(ids);
+        issues.forEach(Issue::open);
+        return (List<Issue>) issueRepository.saveAll(issues);
     }
 
     public List<Issue> closeIssuesById(List<Long> ids) {
-        List<Issue> issues = (List<Issue>) issueRepository.findAllById(ids);
-        return (List<Issue>) issueRepository.saveAll(issues.stream()
-                .peek(Issue::close)
-                .collect(Collectors.toList()));
+        List<Issue> issues = issueRepository.findAllById(ids);
+        issues.forEach(Issue::close);
+        return (List<Issue>) issueRepository.saveAll(issues);
     }
 
-    public Issue addAssigneesById(Long issueId, List<String> userLoginIds) {
-        Issue issue = issueRepository.findById(issueId).get();
-        issue.addAssignee(userLoginIds);
+    public Issue addAssigneesById(Long issueId, List<String> loginIds) {
+        Issue issue = getIssueById(issueId);
+        issue.addAssignee(loginIds);
         return issueRepository.save(issue);
     }
 
     public Issue addLabelsById(Long issueId, List<Long> labelIds) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.addLabel(labelIds);
         return issueRepository.save(issue);
     }
 
     public Issue addMilestoneById(Long issueId, Long milestoneId) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.addMilestone(milestoneId);
         return issueRepository.save(issue);
     }
 
-    public void deleteAssigneesById(Long issueId, List<String> userLoginIds) {
-        Issue issue = issueRepository.findById(issueId).get();
-        issue.deleteAssignee(userLoginIds);
+    public void deleteAssigneesById(Long issueId, List<String> loginIds) {
+        Issue issue = getIssueById(issueId);
+        issue.deleteAssignee(loginIds);
         issueRepository.save(issue);
     }
 
     public void deleteLabelsById(Long issueId, List<Long> labelIds) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.deleteLabel(labelIds);
         issueRepository.save(issue);
     }
 
     public void deleteMilestoneById(Long issueId) {
-        Issue issue = issueRepository.findById(issueId).get();
+        Issue issue = getIssueById(issueId);
         issue.deleteMilestone();
         issueRepository.save(issue);
     }
 
-    public List<Issue> getFilteredIssues(List<String> assigneeIds, List<Long> labelIds, Long milestoneId, String writer) {
-        List<Issue> issues = (List<Issue>) issueRepository.findAll();
-        return issues.stream().filter(issue -> issue.checkFilter(assigneeIds, labelIds, milestoneId, writer)).collect(Collectors.toList());
+    public List<Issue> getFilteredIssues(IssueFilterDto issueFilterDto) {
+        List<Long> filteredIssueIds = issueRepository.findIssuesByFilter(issueFilterDto);
+        return issueRepository.findAllById(filteredIssueIds);
+    }
+
+    private Issue getIssueById(Long issueId) {
+        return issueRepository.findById(issueId).orElseThrow(() -> new IssueNotFoundException(ISSUE_NOT_FOUND_ERROR_MESSAGE));
     }
 }

@@ -1,5 +1,6 @@
-package codesquad.issuetracker.comment;
+package codesquad.issuetracker.comment.dto.response;
 
+import codesquad.issuetracker.comment.Comment;
 import codesquad.issuetracker.util.TimeCalculator;
 import lombok.Getter;
 
@@ -17,6 +18,6 @@ public class CommentShowDto {
         this.writer = comment.getLoginId();
         this.content = comment.getContent();
         this.duration = TimeCalculator.calculateTimeDifference(comment.getCreatedDate());
-        this.profileImage = "https://avatars.githubusercontent.com/u/126778700?s=40&v=4"; // 테스트용 데이터
+        this.profileImage = comment.getProfileImage();
     }
 }

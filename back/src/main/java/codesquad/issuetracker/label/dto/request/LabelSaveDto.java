@@ -1,21 +1,20 @@
-package codesquad.issuetracker.label;
+package codesquad.issuetracker.label.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class LabelUpdateDto {
-    @Id
+public class LabelSaveDto {
+
     private String name;
     private String description;
     private String backgroundColor;
     private String textColor;
-  
-    public Label toEntity(Long id) {
-        return new Label(id, name, description, backgroundColor, textColor);
+
+    public LabelServiceDto toServiceDto() {
+        return new LabelServiceDto(name, description, backgroundColor, textColor);
     }
 }

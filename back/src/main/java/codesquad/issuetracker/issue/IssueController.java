@@ -1,6 +1,11 @@
 package codesquad.issuetracker.issue;
 
-import codesquad.issuetracker.user.User;
+import codesquad.issuetracker.config.LoginInterceptor;
+import codesquad.issuetracker.issue.dto.request.IssueContentUpdateDto;
+import codesquad.issuetracker.issue.dto.request.IssueFilterDto;
+import codesquad.issuetracker.issue.dto.request.IssueTitleUpdateDto;
+import codesquad.issuetracker.issue.dto.response.IssueShowDto;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +24,24 @@ public class IssueController {
     private final IssueService issueService;
 
     @PostMapping("/issues")
-    public ResponseEntity<Issue> createIssue(
+    public ResponseEntity<IssueShowDto> createIssue(
             @RequestBody Issue issue,
             UriComponentsBuilder uriComponentsBuilder,
-            @SessionAttribute(name = "LOGIN USER", required = false) User user
+            HttpServletRequest request
     ) {
-        issue.setWriter(user.getLoginId());
+        issue.setWriter((String) request.getAttribute(LoginInterceptor.LOGIN_ID)); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
         Issue createdIssue = issueService.createIssue(issue);
         URI location = uriComponentsBuilder.path("/issues/{id}")
                 .buildAndExpand(createdIssue.getId())
                 .toUri();
         return ResponseEntity
                 .created(location)
-                .body(createdIssue);
+                .body(new IssueShowDto(
+                        createdIssue,
+                        issueService.getLabelsForIssue(createdIssue),
+                        issueService.getAssigneesForIssue(createdIssue),
+                        issueService.getMilestoneForIssue(createdIssue))
+                );
     }
 
     @GetMapping("/issues")
@@ -58,15 +68,25 @@ public class IssueController {
     }
 
     @PutMapping("/issues/{issueId}/title")
-    public ResponseEntity<Issue> updateIssueTitleById(@PathVariable Long issueId, @RequestBody IssueTitleUpdateDto issueTitleUpdateDto) {
+    public ResponseEntity<IssueShowDto> updateIssueTitleById(@PathVariable Long issueId, @RequestBody IssueTitleUpdateDto issueTitleUpdateDto) {
         Issue updatedIssue = issueService.updateIssueTitleById(issueId, issueTitleUpdateDto.getTitle());
-        return ResponseEntity.ok(updatedIssue);
+        return ResponseEntity
+                .ok(new IssueShowDto(
+                        updatedIssue,
+                        issueService.getLabelsForIssue(updatedIssue),
+                        issueService.getAssigneesForIssue(updatedIssue),
+                        issueService.getMilestoneForIssue(updatedIssue)));
     }
 
     @PutMapping("/issues/{issueId}/content")
-    public ResponseEntity<Issue> updateIssueContentById(@PathVariable Long issueId, @RequestBody IssueContentUpdateDto issueContentUpdateDto) {
+    public ResponseEntity<IssueShowDto> updateIssueContentById(@PathVariable Long issueId, @RequestBody IssueContentUpdateDto issueContentUpdateDto) {
         Issue updatedIssue = issueService.updateIssueContentById(issueId, issueContentUpdateDto.getContent());
-        return ResponseEntity.ok(updatedIssue);
+        return ResponseEntity
+                .ok(new IssueShowDto(
+                        updatedIssue,
+                        issueService.getLabelsForIssue(updatedIssue),
+                        issueService.getAssigneesForIssue(updatedIssue),
+                        issueService.getMilestoneForIssue(updatedIssue)));
     }
 
     @DeleteMapping("/issues/{issueId}")
@@ -78,38 +98,69 @@ public class IssueController {
     }
 
     @PutMapping("/issues/open")
-    public ResponseEntity<List<Issue>> openIssuesById(@RequestBody List<Long> issueIds) {
+    public ResponseEntity<List<IssueShowDto>> openIssuesById(@RequestBody List<Long> issueIds) {
         List<Issue> openedIssues = issueService.openIssuesById(issueIds);
-        return ResponseEntity.ok(openedIssues);
+        return ResponseEntity
+                .ok(openedIssues.stream()
+                        .map(issue -> new IssueShowDto(
+                                issue,
+                                issueService.getLabelsForIssue(issue),
+                                issueService.getAssigneesForIssue(issue),
+                                issueService.getMilestoneForIssue(issue)
+                        ))
+                        .collect(Collectors.toList()));
     }
 
     @PutMapping("/issues/close")
-    public ResponseEntity<List<Issue>> closeIssuesById(@RequestBody List<Long> issueIds) {
+    public ResponseEntity<List<IssueShowDto>> closeIssuesById(@RequestBody List<Long> issueIds) {
         List<Issue> closedIssues = issueService.closeIssuesById(issueIds);
-        return ResponseEntity.ok(closedIssues);
+        return ResponseEntity
+                .ok(closedIssues.stream()
+                        .map(issue -> new IssueShowDto(
+                                issue,
+                                issueService.getLabelsForIssue(issue),
+                                issueService.getAssigneesForIssue(issue),
+                                issueService.getMilestoneForIssue(issue)
+                        ))
+                        .collect(Collectors.toList()));
     }
 
     @PutMapping("/issues/{issueId}/assignee")
-    public ResponseEntity<Issue> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
-        Issue updatedIssue = issueService.addAssigneesById(issueId, userLoginIds);
-        return ResponseEntity.ok(updatedIssue);
+    public ResponseEntity<IssueShowDto> addAssigneesById(@PathVariable Long issueId, @RequestBody List<String> loginIds) {
+        Issue updatedIssue = issueService.addAssigneesById(issueId, loginIds);
+        return ResponseEntity
+                .ok(new IssueShowDto(
+                        updatedIssue,
+                        issueService.getLabelsForIssue(updatedIssue),
+                        issueService.getAssigneesForIssue(updatedIssue),
+                        issueService.getMilestoneForIssue(updatedIssue)));
     }
 
     @PutMapping("/issues/{issueId}/label")
-    public ResponseEntity<Issue> addLabelsById(@PathVariable Long issueId, @RequestBody List<Long> labelIds) {
+    public ResponseEntity<IssueShowDto> addLabelsById(@PathVariable Long issueId, @RequestBody List<Long> labelIds) {
         Issue updatedIssue = issueService.addLabelsById(issueId, labelIds);
-        return ResponseEntity.ok(updatedIssue);
+        return ResponseEntity
+                .ok(new IssueShowDto(
+                        updatedIssue,
+                        issueService.getLabelsForIssue(updatedIssue),
+                        issueService.getAssigneesForIssue(updatedIssue),
+                        issueService.getMilestoneForIssue(updatedIssue)));
     }
 
     @PutMapping("/issues/{issueId}/milestone")
-    public ResponseEntity<Issue> addMilestoneById(@PathVariable Long issueId, @RequestBody Long milestoneId) {
+    public ResponseEntity<IssueShowDto> addMilestoneById(@PathVariable Long issueId, @RequestBody Long milestoneId) {
         Issue updatedIssue = issueService.addMilestoneById(issueId, milestoneId);
-        return ResponseEntity.ok(updatedIssue);
+        return ResponseEntity
+                .ok(new IssueShowDto(
+                        updatedIssue,
+                        issueService.getLabelsForIssue(updatedIssue),
+                        issueService.getAssigneesForIssue(updatedIssue),
+                        issueService.getMilestoneForIssue(updatedIssue)));
     }
 
     @DeleteMapping("/issues/{issueId}/assignee")
-    public ResponseEntity<Void> deleteAssigneesById(@PathVariable Long issueId, @RequestBody List<String> userLoginIds) {
-        issueService.deleteAssigneesById(issueId, userLoginIds);
+    public ResponseEntity<Void> deleteAssigneesById(@PathVariable Long issueId, @RequestBody List<String> loginIds) {
+        issueService.deleteAssigneesById(issueId, loginIds);
         return ResponseEntity
                 .noContent()
                 .build();
@@ -132,13 +183,8 @@ public class IssueController {
     }
 
     @GetMapping("/issues/filter")
-    public ResponseEntity<List<IssueShowDto>> filter(@ModelAttribute IssueQueryParamsDto queryParams) {
-        List<Issue> filteredIssues = issueService.getFilteredIssues(
-                queryParams.getAssigneeIds(),
-                queryParams.getLabelIds(),
-                queryParams.getMilestoneId(),
-                queryParams.getWriter()
-        );
+    public ResponseEntity<List<IssueShowDto>> filter(@ModelAttribute IssueFilterDto issueFilterDto) {
+        List<Issue> filteredIssues = issueService.getFilteredIssues(issueFilterDto);
         return ResponseEntity
                 .ok(filteredIssues.stream()
                         .map(issue -> new IssueShowDto(

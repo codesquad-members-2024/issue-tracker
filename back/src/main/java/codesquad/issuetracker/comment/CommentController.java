@@ -1,6 +1,10 @@
 package codesquad.issuetracker.comment;
 
-import codesquad.issuetracker.user.User;
+import codesquad.issuetracker.comment.dto.request.CommentSaveDto;
+import codesquad.issuetracker.comment.dto.request.CommentUpdateDto;
+import codesquad.issuetracker.comment.dto.response.CommentShowDto;
+import codesquad.issuetracker.config.LoginInterceptor;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +19,13 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comments")
-    public ResponseEntity<Comment> createComment(
-            @RequestBody Comment comment,
+    public ResponseEntity<CommentShowDto> createComment(
+            @RequestBody CommentSaveDto commentSaveDto,
             UriComponentsBuilder uriComponentsBuilder,
-            @SessionAttribute(name = "LOGIN USER", required = false) User user
+            HttpServletRequest request
     ) {
-        comment.setLoginId(user.getLoginId());
-        Comment createdComment = commentService.createComment(comment);
+        commentSaveDto.setLoginId((String) request.getAttribute(LoginInterceptor.LOGIN_ID)); // HttpServletRequest에 저장한 "loginId" 값 사용, 현재 로그인 한 사용자 id
+        CommentShowDto createdComment = commentService.createComment(commentSaveDto.toServiceDto());
         URI location = uriComponentsBuilder.path("/comments/{id}")
                 .buildAndExpand(createdComment.getId())
                 .toUri();
@@ -31,8 +35,9 @@ public class CommentController {
     }
 
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<Comment> updateCommentById(@PathVariable Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
-        Comment updatedComment = commentService.updateCommentById(commentId, commentUpdateDto.getContent());
-        return ResponseEntity.ok(updatedComment);
+    public ResponseEntity<CommentShowDto> updateCommentById(@PathVariable Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
+        CommentShowDto updatedComment = commentService.updateCommentById(commentUpdateDto.toServiceDto(commentId));
+        return ResponseEntity
+                .ok(updatedComment);
     }
 }

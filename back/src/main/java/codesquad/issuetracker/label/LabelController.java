@@ -1,5 +1,8 @@
 package codesquad.issuetracker.label;
 
+import codesquad.issuetracker.label.dto.request.LabelSaveDto;
+import codesquad.issuetracker.label.dto.request.LabelUpdateDto;
+import codesquad.issuetracker.label.dto.response.LabelShowDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +19,8 @@ public class LabelController {
     private final LabelService labelService;
 
     @PostMapping("/labels")
-    public ResponseEntity<Label> createLabel(@RequestBody Label label, UriComponentsBuilder uriComponentsBuilder) {
-        Label createdLabel = labelService.createLabel(label);
+    public ResponseEntity<LabelShowDto> createLabel(@RequestBody LabelSaveDto labelSaveDto, UriComponentsBuilder uriComponentsBuilder) {
+        LabelShowDto createdLabel = labelService.createLabel(labelSaveDto.toServiceDto());
         URI location = uriComponentsBuilder.path("/labels/{id}")
                 .buildAndExpand(createdLabel.getId())
                 .toUri();
@@ -32,7 +35,8 @@ public class LabelController {
         List<LabelShowDto> allLabelShowDto = allLabels.stream()
                 .map(label -> new LabelShowDto(label))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(allLabelShowDto);
+        return ResponseEntity
+                .ok(allLabelShowDto);
     }
 
     @GetMapping("/labels/{labelId}")
@@ -43,9 +47,10 @@ public class LabelController {
     }
 
     @PutMapping("/labels/{labelId}")
-    public ResponseEntity<Label> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
-        Label updatedLabel = labelService.updateLabelById(labelUpdateDto.toEntity(labelId));
-        return ResponseEntity.ok(updatedLabel);
+    public ResponseEntity<LabelShowDto> updateLabelById(@PathVariable Long labelId, @RequestBody LabelUpdateDto labelUpdateDto) {
+        LabelShowDto updatedLabel = labelService.updateLabelById(labelUpdateDto.toServiceDto(labelId));
+        return ResponseEntity
+                .ok(updatedLabel);
     }
 
     @DeleteMapping("/labels/{labelId}")
