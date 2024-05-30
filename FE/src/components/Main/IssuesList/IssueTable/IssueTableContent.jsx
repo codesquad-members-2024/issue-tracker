@@ -28,7 +28,7 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange, issues 
                       <div className="title">{title}</div>
                     </StyledLink>
                     <div>
-                      {labels.map((label) => (
+                      {labels?.map((label) => (
                         <Label key={label.id} color={label.color}>
                           {label.name}
                         </Label>

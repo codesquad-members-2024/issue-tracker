@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState } from "react";
 import { IssueTableHeader } from "./IssueTableHeader";
 import { IssueTableContent } from "./IssueTableContent";
-// import { issues, closedIssues } from "@/test.json"; // test data
 import useFetch from "../../../../hooks/useFetch";
 
 const CLOSED_ISSUES_API = "/api/issues/close";

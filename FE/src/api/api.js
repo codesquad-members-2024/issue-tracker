@@ -24,11 +24,16 @@ async function putData(url, id, data) {
       },
       body: JSON.stringify(data),
     });
+
+    const responseData = await response.json(); 
+
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
+    return responseData; 
   } catch (error) {
     console.log(error);
+    throw new Error("Failed to update data"); 
   }
 }
 
