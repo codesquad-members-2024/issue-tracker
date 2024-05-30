@@ -27,10 +27,10 @@ public class FilterQueryMaker {
         if (issueFilterDto.getAssignee() != null) {
             if (issueFilterDto.getAssignee().equals("-1")) {
                 queryJoin += makeQueryLeftJoin("issue_assignee", "ia");
-                queryWhere += makeQueryWhere("ia.user_login_id IS NULL");
+                queryWhere += makeQueryWhere("ia.login_id IS NULL");
             } else {
                 queryJoin += makeQueryJoin("issue_assignee", "ia");
-                queryWhere += makeQueryWhere("ia.user_login_id = ?");
+                queryWhere += makeQueryWhere("ia.login_id = ?");
             }
         }
 

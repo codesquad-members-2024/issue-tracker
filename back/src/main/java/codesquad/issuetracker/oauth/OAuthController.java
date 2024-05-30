@@ -34,10 +34,10 @@ public class OAuthController {
 
         // 클라이언트에 jwt 토큰 반환
         JwtUtil jwtUtil = new JwtUtil();
-        String token = jwtUtil.createToken(githubUserData.getLogin()); // JWT 토큰 생성
+        String jwtToken = jwtUtil.createToken(githubUserData.getLogin()); // JWT 토큰 생성
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "http://fe-issue-tracker-s3.s3-website.ap-northeast-2.amazonaws.com/login/oauth/github/callback?token=" + token); // 리다이렉트할 주소 설정
+        headers.add("Location", "http://fe-issue-tracker-s3.s3-website.ap-northeast-2.amazonaws.com/login/oauth/github/callback?token=" + jwtToken); // 리다이렉트할 주소 설정
 
         return ResponseEntity
                 .status(HttpStatus.FOUND)
