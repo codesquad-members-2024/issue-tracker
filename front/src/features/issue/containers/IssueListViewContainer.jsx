@@ -31,7 +31,7 @@ import { getAuth } from '../../../common/apis';
 
 export function IssueListViewContainer() {
 	const { Search } = Input;
-	const { issueList, fetchIssueList, openCounts, closedCounts, setCounts } =
+	const { issueList, fetchIssueList, openCounts, closedCounts } =
 		useIssueList();
 
 	// useEffect(() => {
@@ -135,7 +135,6 @@ export function IssueListViewContainer() {
 								size='medium'
 								buttonType='ghost'
 								icon={<IconAlertCircle />}
-								// 열린이슈 , 닫힌 이슈 카운트 이슈
 								buttonText={`열린 이슈(${openCounts})`}
 								onClick={() => {
 									fetchIssueList(false);
