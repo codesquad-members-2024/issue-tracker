@@ -7,11 +7,11 @@ import lombok.Getter;
 public class ErrorResponse {
     private final String errorMessage;
 
-    public ErrorResponse(Exception e) {
+    public ErrorResponse(RuntimeException e) {
         this.errorMessage = e.getMessage();
     }
 
-    public static ErrorResponse from(Exception e) {
+    public static ErrorResponse from(RuntimeException e) {
         return new ErrorResponse(e);
     }
 

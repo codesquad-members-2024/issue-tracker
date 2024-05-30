@@ -17,6 +17,10 @@ import java.util.stream.Collectors;
 public class LabelService {
     private final LabelRepository labelRepository;
 
+    public long getTotalMilestoneCounts() {
+        return labelRepository.count();
+    }
+
     public LabelListWithCountResponse getLabelsWithCount() {
         LabelCountResponse labelCount = fetchLabelCount();
 
@@ -67,4 +71,18 @@ public class LabelService {
     private LabelCountResponse fetchLabelCount() {
         return new LabelCountResponse(labelRepository.countLabels());
     }
+
+//    // 이슈 상세에서 사용
+//    public List<LabelSummaryDto> getLabelSummaryDto(long issueId) {
+//        List<Label> labels = getLabelsByIssueId(issueId);
+//        log.error(labels.toString());
+//
+//        return labels.stream()
+//                .map(LabelSummaryDto::new)
+//                .collect(Collectors.toList());
+//    }
+//
+//    private List<Label> getLabelsByIssueId(long issueId) {
+//        return labelRepository.findByIssueId(issueId);
+//    }
 }

@@ -39,3 +39,9 @@ out/
 
 ### applicaion.yaml 설정
 application.yaml
+
+### keystore.p12 파일
+keystore.p12
+
+
+

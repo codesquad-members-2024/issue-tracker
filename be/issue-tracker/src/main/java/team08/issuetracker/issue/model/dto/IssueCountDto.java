@@ -15,7 +15,8 @@ public class IssueCountDto {
     }
 
     private void setMilestoneProgress() {
-        this.milestoneProgress = Math.round(((double) closedIssueCount / (openedIssueCount + closedIssueCount)) * 100 / 5) * 5;
+        long totalIssueCount = openedIssueCount + closedIssueCount;
+        this.milestoneProgress = Math.round(((double) closedIssueCount / totalIssueCount) * 100 / 5) * 5;
     }
 
 }
