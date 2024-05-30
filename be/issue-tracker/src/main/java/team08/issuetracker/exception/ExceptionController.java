@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import team08.issuetracker.exception.comment.CommentNotFoundException;
 import team08.issuetracker.exception.interceptor.UnauthorizedAccessException;
 import team08.issuetracker.exception.issue.InvalidIssueTitleUpdateFormException;
+import team08.issuetracker.exception.issue.IssueAlreadyClosedException;
+import team08.issuetracker.exception.issue.IssueAlreadyOpenedException;
 import team08.issuetracker.exception.issue.IssueQueryStateException;
 import team08.issuetracker.exception.member.InvalidRegisterFormException;
 
@@ -119,6 +121,20 @@ public class ExceptionController {
 
     @ExceptionHandler(IssueQueryStateException.class)
     public ResponseEntity<ErrorResponse> handleIssueQueryStateException(IssueQueryStateException e) {
+        ErrorResponse response = ErrorResponse.from(e);
+        log.error(response.toString());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(IssueAlreadyClosedException.class)
+    public ResponseEntity<ErrorResponse> handleIIssueAlreadyClosedException(IssueAlreadyClosedException e) {
+        ErrorResponse response = ErrorResponse.from(e);
+        log.error(response.toString());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(IssueAlreadyOpenedException.class)
+    public ResponseEntity<ErrorResponse> handleIIssueAlreadyClosedException(IssueAlreadyOpenedException e) {
         ErrorResponse response = ErrorResponse.from(e);
         log.error(response.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
