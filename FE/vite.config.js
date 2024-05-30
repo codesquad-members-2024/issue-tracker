@@ -13,9 +13,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    sourcemap: true, //이거
-  },
   server: {
     port: 3000,
   },

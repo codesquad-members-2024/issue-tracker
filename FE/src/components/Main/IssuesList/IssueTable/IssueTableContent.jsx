@@ -30,7 +30,7 @@ export function IssueTableContent({ checkedItems, onIssueCheckboxChange, issues 
                     <div>
                       {labels?.map((label) => (
                         <Label key={label.id} color={label.color}>
-                          {label.name}
+                          {label.title}
                         </Label>
                       ))}
                     </div>
