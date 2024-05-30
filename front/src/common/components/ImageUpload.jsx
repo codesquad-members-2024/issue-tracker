@@ -25,7 +25,7 @@ export function ImageUpload({ handleUploadSuccess }) {
 			accessKeyId,
 			secretAccessKey,
 		});
-		console.log(bucketName, path, region, accessKeyId);
+		console.log(bucketName, path);
 		const upload = new window.AWS.S3.ManagedUpload({
 			params: {
 				Bucket: bucketName,
