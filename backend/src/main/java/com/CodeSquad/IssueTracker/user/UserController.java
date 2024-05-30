@@ -47,8 +47,8 @@ public class UserController {
         return ResponseEntity.ok(userIdList);
     }
 
-    @GetMapping("/currentUser")
-    public ResponseEntity<CurrentUserResponse> getChecking(HttpServletRequest request) {
+    @GetMapping("/currentuser")
+    public ResponseEntity<CurrentUserResponse> getCurrentUserId(HttpServletRequest request) {
         CurrentUserResponse currentUserResponse = userService.getCurrentUser(request);
         return ResponseEntity.ok(currentUserResponse);
     }
