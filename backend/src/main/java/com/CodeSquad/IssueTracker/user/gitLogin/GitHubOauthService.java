@@ -108,7 +108,10 @@ public class GitHubOauthService {
     public User saveOrGetGithubUser(String gitHubUserId) {
         GitHubUser gitHubUser = gitHubUserRepository.findById(gitHubUserId)
                 .orElseGet(() -> {
-                    String randomId = RandomIdGenerator.generateRandomId();
+                    String randomId;
+                    do {
+                        randomId = RandomIdGenerator.generateRandomId();
+                    } while (userRepository.existsById(randomId));
 
                     userRepository.save(User.builder()
                             .userId(randomId)
