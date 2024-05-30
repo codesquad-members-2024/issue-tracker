@@ -31,8 +31,7 @@ public class GitHubOAuthController {
             String accessToken = gitHubOauthService.getAccessToken(code);
             String gitHubUserId = gitHubOauthService.getUserLogin(accessToken);
 
-            User user = gitHubOauthService.saveOrGetGithubUser(gitHubUserId);
-            // User user = gitHubOauthService.saveUserAndGenerateToken(gitHubUserId, accessToken);
+            User user = gitHubOauthService.saveOrGetGithubUser(gitHubUserId, accessToken);
             String jwtToken = gitHubOauthService.generateJwtToken(user);
 
         return ResponseEntity.ok(jwtToken);
