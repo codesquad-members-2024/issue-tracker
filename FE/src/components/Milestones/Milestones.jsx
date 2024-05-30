@@ -7,7 +7,7 @@ import { NewMilestones } from "./NewMilestones";
 import { MilestonesList } from "./MilestonesList";
 import useFetch from "../../hooks/useFetch";
 
-const MILESTONES_API = "/api/milestone";
+const MILESTONES_API = "/api/milestones";
 const OPEN_MILESTONES_API = "/api/milestones/open";
 
 export function Milestones() {
