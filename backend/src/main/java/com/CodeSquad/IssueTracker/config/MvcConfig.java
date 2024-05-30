@@ -18,10 +18,11 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         registry.addInterceptor(new CheckLoginInterceptor(jwtUtil))
             .order(1)
             .addPathPatterns("/**")
-            .excludePathPatterns("/login", "/registration/**");
+            .excludePathPatterns("/login", "/registration/**", "/issue/check", "/auth/github/**", "/favicon.ico", "/error");
     }
 
     @Override
