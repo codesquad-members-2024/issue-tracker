@@ -2,10 +2,12 @@ package com.CodeSquad.IssueTracker.user;
 import com.CodeSquad.IssueTracker.Exception.user.InvalidCredentialException;
 import com.CodeSquad.IssueTracker.Exception.user.UserIdAlreadyExistException;
 import com.CodeSquad.IssueTracker.Exception.user.UserNotFoundException;
+import com.CodeSquad.IssueTracker.user.dto.CurrentUserResponse;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import com.CodeSquad.IssueTracker.user.utils.SHA256Util;
 import com.CodeSquad.IssueTracker.user.jwtlogin.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,4 +83,16 @@ public class UserService {
     public Set<User> findAllByIds(Set<String> newAssigneeIds) {
         return userRepository.findAllById(newAssigneeIds);
     }
+
+    public CurrentUserResponse getCurrentUser(HttpServletRequest request) {
+        String token = jwtUtil.getTokenFromHeader(request);
+        String extractedUserId = jwtUtil.validateToken(token);
+        if (extractedUserId != null) {
+            return CurrentUserResponse.builder()
+                    .currentUser(extractedUserId)
+                    .build();
+        }
+        return null;
+    }
+
 }
