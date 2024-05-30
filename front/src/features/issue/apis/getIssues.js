@@ -21,3 +21,20 @@ export async function getIssues() {
 		throw new Error('이슈 목록 조회에 실패했습니다.');
 	}
 }
+
+export async function getFilteredIssues(query) {
+	try {
+		const token = localStorage.getItem('token');
+		const response = await fetch(`${server}/issues/filter?${query}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}).then(res => res.json());
+		const data = response;
+		return data;
+	} catch (error) {
+		console.error(error);
+		throw new Error('필터링된 이슈 목록 조회에 실패했습니다.');
+	}
+}

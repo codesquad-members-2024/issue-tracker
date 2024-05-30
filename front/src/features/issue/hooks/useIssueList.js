@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getIssues } from '~/features/issue/apis/getIssues';
+import { getIssues, getFilteredIssues } from '~/features/issue/apis';
 
 export const useIssueList = () => {
 	const [issueList, setIssueDetail] = useState([]);
@@ -34,6 +34,22 @@ export const useIssueList = () => {
 		}
 	};
 
+	const fetchFilteredIssueList = async query => {
+		setLoading(true);
+		try {
+			const data = await getFilteredIssues(query);
+			setCounts({
+				open: data.filter(issue => !issue.closed).length,
+				closed: data.filter(issue => issue.closed).length,
+			});
+			setIssueDetail(data);
+		} catch (error) {
+			setError(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
 		fetchIssueList();
 	}, []);
@@ -43,6 +59,7 @@ export const useIssueList = () => {
 		loading,
 		error,
 		fetchIssueList,
+		fetchFilteredIssueList,
 		openCounts: counts.open,
 		closedCounts: counts.closed,
 	};

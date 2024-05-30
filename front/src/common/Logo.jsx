@@ -23,8 +23,8 @@ const fill = keyframes`
 
 const StyledWrapper = styled.div`
 	svg {
-		width: 200px;
-		height: 40px;
+		min-width: 200px;
+		max-height: 40px;
 	}
 
 	path {

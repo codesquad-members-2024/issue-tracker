@@ -15,9 +15,9 @@ export function IssueItem({ issue, onChange, checked, profileImage }) {
 			/>
 			<StyledFlex>
 				{issue?.closed ? (
-					<ExclamationCircleOutlined style={{ color: '#007AFF' }} />
-				) : (
 					<IconArchive style={{ color: '#6E7191' }} />
+				) : (
+					<ExclamationCircleOutlined style={{ color: '#007AFF' }} />
 				)}
 				<StyledIssueTitle to={`/issues/${issue?.id}`}>
 					{issue?.title}

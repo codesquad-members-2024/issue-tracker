@@ -31,11 +31,18 @@ import {
 import { getAuth } from '../../../common/apis';
 
 export function IssueListViewContainer() {
+	const navigate = useNavigate();
 	const { Search } = Input;
-	const { issueList, fetchIssueList, openCounts, closedCounts } =
-		useIssueList();
-	const { onOpenIssue, onCloseIssue, loading } = useIssueStatus();
+	const {
+		issueList,
+		fetchIssueList,
+		fetchFilteredIssueList,
+		openCounts,
+		closedCounts,
+	} = useIssueList();
 
+	const { onOpenIssue, onCloseIssue, loading } = useIssueStatus();
+	const { userList } = useUser();
 	const { labelList, loading: labelLoading, fetchLabelList } = useLabelList();
 	const {
 		milestoneList,
@@ -43,26 +50,43 @@ export function IssueListViewContainer() {
 		fetchMilestoneList,
 	} = useMilestoneList();
 
-	const { userList } = useUser();
+	const [searchValue, setSearchValue] = useState({
+		assignee: '',
+		label: '',
+		milestone: '',
+		writer: '',
+		query: '',
+	});
+	useEffect(() => {
+		const query = Object.entries(searchValue)
+			.filter(([key, val]) => val && key !== 'query')
+			.map(([key, val]) => `${key}=${val}`)
+			.join('&');
 
-	const [searchValue, setSearchValue] = useState('');
-	const [queryString, setQueryString] = useState('');
-	const navigate = useNavigate();
+		if (query) {
+			fetchFilteredIssueList(query);
+		}
+	}, [searchValue]);
 
-	const onChangeFilter = (e, prefix) => {
-		setSearchValue(value =>
-			e.target.checked ? `${value} ${prefix}:${e.target.value},` : ''
-		);
-		setQueryString(value =>
-			e.target.checked ? `${value} ${prefix} = ${e.target.id},` : ''
-		);
+	const onChangeFilter = e => {
+		const { name, id } = e.target;
+		const value = id || (e.target.value === '없음' ? -1 : e.target.value);
+		setSearchValue(prev => ({ ...prev, [name]: value }));
 	};
 
-	// TODO: 검색어를 이용한 이슈 필터링
-	const onSearch = queryString => {
-		// console.log(queryString);
-		navigate(`/issues?search=${queryString}`);
+	const onSearch = () => {
+		const query = Object.entries(searchValue)
+			.filter(([key, val]) => val && key !== 'query')
+			.map(([key, val]) => `${key}=${val}`)
+			.join('&');
+		navigate(`/issues?search=${query}`);
 	};
+
+	const getSearchPlaceholder = () =>
+		Object.entries(searchValue)
+			.filter(([key, val]) => val && key !== 'query')
+			.map(([key, val]) => `${key}:${val}`)
+			.join(' ');
 
 	const [checkAll, setCheckAll] = useState(false);
 	const [checked, setChecked] = useState([]);
@@ -113,17 +137,22 @@ export function IssueListViewContainer() {
 			}
 		}
 	};
+
 	return (
 		<StyledWrapper>
 			<StyledSearch>
 				<div className='tab'>
 					<Search
-						value={searchValue}
-						placeholder='input search text'
-						allowClear
-						onSearch={() => {
-							onSearch(queryString);
+						value={getSearchPlaceholder()}
+						onChange={e => {
+							setSearchValue(prev => ({ ...prev, query: e.target.value }));
 						}}
+						placeholder='이슈 검색'
+						allowClear={{
+							showClearIcon: true,
+							backSpace: true,
+						}}
+						onSearch={onSearch}
 						style={{ width: 560 }}
 					/>
 				</div>
@@ -178,7 +207,7 @@ export function IssueListViewContainer() {
 								상태 수정
 								<IconChevronDown />
 							</summary>
-							<StyledDropdowns dropdownTitle='담당자 필터'>
+							<StyledDropdowns dropdownTitle='이슈 상태 변경'>
 								<InputRadio
 									listName='issueStatus'
 									value='선택한 이슈 열기'
@@ -206,19 +235,20 @@ export function IssueListViewContainer() {
 								</summary>
 								<StyledDropdowns dropdownTitle='담당자 필터'>
 									<InputRadio
-										listName={'assignees'}
+										listName='assignee'
 										value={'담당자가 없는 이슈'}
+										id='-1'
+										onChange={onChangeFilter}
 									/>
-									<InputRadio
-										listName={'assignees'}
-										value={'melroh629'}
-										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-									/>
-									<InputRadio
-										listName={'assignees'}
-										value={'guest=1243'}
-										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-									/>
+									{userList?.map(user => (
+										<InputRadio
+											key={user.loginId}
+											listName='assignee'
+											value={user.loginId}
+											src={user.profileImage}
+											onChange={onChangeFilter}
+										/>
+									))}
 								</StyledDropdowns>
 							</details>
 							<details>
@@ -228,19 +258,21 @@ export function IssueListViewContainer() {
 								</summary>
 								<StyledDropdowns dropdownTitle='레이블 필터'>
 									<InputRadio
-										listName={'labels'}
+										listName='labelId'
 										value={'레이블이 없는 이슈'}
+										id='-1'
+										onChange={onChangeFilter}
 									/>
 									{labelLoading && <Loading size='small' />}
 									{labelList?.map(label => (
 										<InputRadio
 											key={label.id}
 											id={label.id}
-											listName={'labels'}
+											listName='labelId'
 											value={label.name}
 											bgColor={label.backgroundColor}
 											fontColor={label.textColor}
-											onChange={e => onChangeFilter(e, 'label')}
+											onChange={onChangeFilter}
 										/>
 									))}
 								</StyledDropdowns>
@@ -251,13 +283,19 @@ export function IssueListViewContainer() {
 									<IconChevronDown onClick={fetchMilestoneList} />
 								</summary>
 								<StyledDropdowns dropdownTitle='마일스톤 필터'>
+									<InputRadio
+										listName='milestoneId'
+										value={'마일스톤이 없는 이슈'}
+										id='-1'
+										onChange={onChangeFilter}
+									/>
 									{milestoneList?.map(milestone => (
 										<InputRadio
 											key={milestone.id}
 											id={milestone.id}
-											listName={'milestones'}
+											listName='milestoneId'
 											value={milestone.name}
-											onChange={e => onChangeFilter(e, 'milestone')}
+											onChange={onChangeFilter}
 										/>
 									))}
 								</StyledDropdowns>
@@ -267,20 +305,15 @@ export function IssueListViewContainer() {
 									작성자 <IconChevronDown />
 								</summary>
 								<StyledDropdowns dropdownTitle='작성자 필터'>
-									<InputRadio
-										listName={'writer'}
-										value={'담당자가 없는 이슈'}
-									/>
-									<InputRadio
-										listName={'writer'}
-										value={'melroh629'}
-										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-									/>
-									<InputRadio
-										listName={'writer'}
-										value={'guest=1243'}
-										src={'https://avatars.githubusercontent.com/u/77464050?v=4'}
-									/>
+									{userList?.map(user => (
+										<InputRadio
+											key={`writer-${user.loginId}`}
+											listName='writer'
+											value={user.loginId}
+											src={user.profileImage}
+											onChange={onChangeFilter}
+										/>
+									))}
 								</StyledDropdowns>
 							</details>
 						</>

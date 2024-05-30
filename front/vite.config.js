@@ -13,8 +13,10 @@ export default defineConfig({
 		port: 5173,
 		open: true,
 	},
+	sourcemap: true,
 	build: {
 		outDir: 'build',
+		sourcemap: true,
 		rollupOptions: {
 			output: {
 				manualChunks: {
