@@ -12,10 +12,10 @@ function LabelDetail({ labelId, labelName, description, textColor, bgColor }: La
     <>
       {isToEdit ? (
         <LabelEditBox
-          type="edit"
+          editType="edit"
           labelId={labelId}
           content={{ labelId, labelName, description, textColor, bgColor }}
-          handleCancelClick={toggleEdit}
+          closeEditBox={toggleEdit}
         />
       ) : (
         <Wrapper>

@@ -6,11 +6,11 @@ import useLabelEdit from '../../hooks/logics/useLabelEdit';
 
 type EditType = "new" | "edit";
 
-interface LabelEditBoxProps {
-  type: EditType;
+export interface LabelEditBoxProps {
+  editType: EditType;
   labelId?: number;
   content?: LabelDetailType;
-  handleCancelClick: () => void;
+  closeEditBox: () => void;
 }
 
 const defaultContent = {
@@ -21,7 +21,7 @@ const defaultContent = {
   bgColor: "#FFFFFF",
 };
 
-function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCancelClick }: LabelEditBoxProps) {
+function LabelEditBox({ editType, labelId = 0, content = defaultContent, closeEditBox }: LabelEditBoxProps) {
   const {
     labelName,
     description,
@@ -32,11 +32,11 @@ function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCance
     handleBgColorChange,
     handleTextColorChange,
     handleSubmitClick,
-  } = useLabelEdit(type, labelId, content, handleCancelClick);
+  } = useLabelEdit(editType, labelId, content, closeEditBox);
 
   return (
-    <Wrapper type={type}>
-      <Title>{type === "new" ? "새로운 레이블 추가" : "레이블 편집"}</Title>
+    <Wrapper type={editType}>
+      <Title>{editType === "new" ? "새로운 레이블 추가" : "레이블 편집"}</Title>
       <Content>
         <LabelPreviewBox>
           <LabelPreview bgColor={bgColor} textColor={textColor}>
@@ -65,7 +65,7 @@ function LabelEditBox({ type, labelId = 0, content = defaultContent, handleCance
         </FormWrapper>
       </Content>
       <ButtonWrapper>
-        <CancelButton onClick={handleCancelClick}>
+        <CancelButton onClick={closeEditBox}>
           <CancelImage src={plusIcon} />
           취소
         </CancelButton>

@@ -22,12 +22,12 @@ function LabelList() {
       <LabelHeader />
       {isToAdd && (
         <EditBoxWrapper>
-          <LabelEditBox type="new" handleCancelClick={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} />
+          <LabelEditBox editType="new" closeEditBox={() => setLabelState({ ...labelState, isToAdd: !isToAdd })} />
         </EditBoxWrapper>
       )}
       <LabelTable>
         <LabelTab>
-          <span>{labels.length}개의 레이블</span>
+          <span>{labels?.length || 0}개의 레이블</span>
         </LabelTab>
         <ScrollableArea>
           {labels.map((label: LabelDetailType) => (

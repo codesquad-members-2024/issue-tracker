@@ -21,8 +21,9 @@ function IssueList() {
     setFocusedTab,
     issues,
     setIssues,
+    setFilterText,
     lastIssueRef,
-    filterQuery: { isLoading },
+    userQuery: { isLoading },
   } = useIssueListLogic();
 
   if (isLoading) return <Loading />;
@@ -33,6 +34,7 @@ function IssueList() {
         focusedTab={focusedTab}
         handleFocusedTabClick={(tabDescription: IssueType) => {
           setFocusedTab(tabDescription);
+          setFilterText(`is:${tabDescription}`);
           if (tabDescription !== focusedTab) setIssues([]);
         }}
       />

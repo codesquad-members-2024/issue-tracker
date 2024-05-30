@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import CreatorForm from "../new/CreatorForm";
-import Sidebar from "../Sidebar";
-import useIssueDetailLogic from "../../../hooks/logics/useIssueDetailLogic";
+import Sidebar from "../../extension/Sidebar";
 import Comment from "./Comment";
 import plusIcon from "../../../img/icon/plusIcon.svg";
+import useCommentLogic from "../../../hooks/logics/useCommentLogic";
 
 function DetailContent() {
-  const { issueContent, commentRef, isCommentSubmitable, handleCommentChange, handleCommentSubmit } =
-    useIssueDetailLogic();
-  const { author, comments } = issueContent || {};
+  const { issueContent, commentRef, isCommentSubmitable, handleCommentChange, handleCommentSubmit } = useCommentLogic();
+  const { author, comments, labels: labelResponses, milestone, assignees } = issueContent || {};
 
   return (
     <ContentWrapper>
@@ -24,7 +23,7 @@ function DetailContent() {
           <img src={plusIcon} /> 코멘트 작성
         </SubmitButton>
       </CommentWrapper>
-      <Sidebar />
+      <Sidebar assignees={assignees} labelResponses={labelResponses} milestone={milestone} sidebarType="detail" />
     </ContentWrapper>
   );
 }

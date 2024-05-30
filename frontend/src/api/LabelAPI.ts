@@ -9,9 +9,17 @@ export interface LabelContent {
 
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
+const getAuthToken = () => localStorage.getItem("token");
+
 export const sendLabelsRequest = async () => {
   try {
-    const response = await fetch(`${SERVER}/labels`, { credentials: "include" });
+    const token = getAuthToken();
+    const response = await fetch(`${SERVER}/labels`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
@@ -24,10 +32,12 @@ export const sendLabelsRequest = async () => {
 
 export const postNewLabel = async (labelContent: LabelContent) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify(labelContent),
@@ -45,10 +55,12 @@ export const postNewLabel = async (labelContent: LabelContent) => {
 
 export const sendPutLabelRequest = async (labelId: number, labelContent: LabelContent) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify(labelContent),
@@ -66,9 +78,13 @@ export const sendPutLabelRequest = async (labelId: number, labelContent: LabelCo
 
 export const sendDeleteLabelRequest = async (labelId: number) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "DELETE",
       credentials: "include" as RequestCredentials,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
     const response = await fetch(`${SERVER}/label/${labelId}`, request);
 

@@ -4,6 +4,9 @@ interface NewIssue {
   title: string;
   content: string;
   userId: string;
+  assignees: string[];
+  labels: number[];
+  milestone: number | null;
 }
 
 interface IssuesRequestProps {
@@ -12,13 +15,13 @@ interface IssuesRequestProps {
 }
 
 interface CommentRequestProps {
-  issueId: number;
+  issueId: number | string;
   author: string;
   content: string;
 }
 
 interface TitleEditProps {
-  issueId: number;
+  issueId: number | string;
   title: string;
 }
 
@@ -30,9 +33,17 @@ const ISSUE_ERROR_MESSAGE: { [key: number]: string } = {
 const PAGE_FORMAT_ERROR_MESSAGE = "페이지의 형식이 맞지 않습니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
+const getAuthToken = () => localStorage.getItem("token");
+
 export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps) => {
   try {
-    const response = await fetch(`${SERVER}/issues/${issueType}?page=${page}`, { credentials: "include" });
+    const token = getAuthToken();
+    const response = await fetch(`${SERVER}/issues/${issueType}?page=${page}`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.status === 400) throw new Error(PAGE_FORMAT_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
@@ -46,7 +57,35 @@ export const sendIssuesRequest = async ({ issueType, page }: IssuesRequestProps)
 
 export const sendIssueRequestById = async (issueId: number | string) => {
   try {
-    const response = await fetch(`${SERVER}/issue/${issueId}`, { credentials: "include" });
+    const token = getAuthToken();
+    const response = await fetch(`${SERVER}/issue/${issueId}`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
+export const sendUsersReqeust = async () => {
+  try {
+    const token = getAuthToken();
+    const response = await fetch(`${SERVER}/users`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
@@ -62,10 +101,12 @@ export const sendIssueRequestById = async (issueId: number | string) => {
 
 export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify({ title: title }),
@@ -84,18 +125,23 @@ export const sendTitleEditRequest = async ({ issueId, title }: TitleEditProps) =
   }
 };
 
-export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
+export const postNewIssue = async ({ title, content, userId, assignees, labels, milestone }: NewIssue) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify({
-        title: title,
-        content: content,
         author: userId,
+        title,
+        content,
+        assignees,
+        labels,
+        milestone
       }),
     };
     const response = await fetch(`${SERVER}/issue`, request);
@@ -114,10 +160,12 @@ export const postNewIssue = async ({ title, content, userId }: NewIssue) => {
 
 export const postNewComment = async ({ issueId, author, content }: CommentRequestProps) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify({ author, content }),
@@ -136,11 +184,15 @@ export const postNewComment = async ({ issueId, author, content }: CommentReques
   }
 };
 
-export const openIssue = async (issueId: number) => {
+export const openIssue = async (issueId: number | string) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "PATCH",
       credentials: "include" as RequestCredentials,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/open`, request);
 
@@ -156,11 +208,15 @@ export const openIssue = async (issueId: number) => {
   }
 };
 
-export const closeIssue = async (issueId: number) => {
+export const closeIssue = async (issueId: number | string) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "PATCH",
       credentials: "include" as RequestCredentials,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
     const response = await fetch(`${SERVER}/issue/${issueId}/close`, request);
 
@@ -168,6 +224,75 @@ export const closeIssue = async (issueId: number) => {
       const errorMessage = ISSUE_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
       throw new Error(errorMessage);
     }
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
+export const updateAssigneesInIssue = async (issueId: number | string, assignees: string[]) => {
+  try {
+    const token = getAuthToken();
+    const request = {
+      method: "PATCH",
+      credentials: "include" as RequestCredentials,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ assignees }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/assignees`, request);
+
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
+export const updateLabelsInIssue = async (issueId: number | string, labelIds: number[]) => {
+  try {
+    const token = getAuthToken();
+    const request = {
+      method: "PATCH",
+      credentials: "include" as RequestCredentials,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ labels: labelIds }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/labels`, request);
+
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
+export const updateMilestoneInIssue = async (issueId: number | string, milestoneId: number) => {
+  try {
+    const token = getAuthToken();
+    const request = {
+      method: "PATCH",
+      credentials: "include" as RequestCredentials,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ milestoneId }),
+    };
+    const response = await fetch(`${SERVER}/issue/${issueId}/milestone`, request);
+
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
     return response;
   } catch (error) {

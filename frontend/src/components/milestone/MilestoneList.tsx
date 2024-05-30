@@ -38,16 +38,16 @@ function MilestoneList() {
       <MilestoneHeader />
       {isToAdd && (
         <EditBoxWrapper>
-          <MilestoneEditBox type="new" closeEditBox={() => setIsToAdd(!isToAdd)} />
+          <MilestoneEditBox editType="new" closeEditBox={() => setIsToAdd(!isToAdd)} />
         </EditBoxWrapper>
       )}
       <MilestoneTable>
         <MilestoneTab>
           <MilestoneTypeText isFocused={focusedTab === "open"} onClick={() => setFocusedTab("open")}>
-            열린 마일스톤({(openMilestones && openMilestones.length) || 0})
+            열린 마일스톤({openMilestones?.length || 0})
           </MilestoneTypeText>
           <MilestoneTypeText isFocused={focusedTab === "close"} onClick={() => setFocusedTab("close")}>
-            닫힌 마일스톤({(closeMilestones && closeMilestones.length) || 0})
+            닫힌 마일스톤({closeMilestones?.length || 0})
           </MilestoneTypeText>
         </MilestoneTab>
         <ScrollableArea>

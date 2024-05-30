@@ -18,7 +18,7 @@ function MilestoneDetail(props: MilestoneDetailType) {
   return (
     <>
       {isToEdit ? (
-        <MilestoneEditBox type="edit" milestoneId={milestoneId} content={props} closeEditBox={toggleEdit} />
+        <MilestoneEditBox editType="edit" milestoneId={milestoneId} content={props} closeEditBox={toggleEdit} />
       ) : (
         <Wrapper>
           <MilestoneBody>

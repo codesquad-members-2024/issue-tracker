@@ -5,7 +5,7 @@ interface MilestoneStateParams {
   milestoneId: number;
 }
 
-interface MilestoneContent {
+export interface MilestoneContent {
   title: string;
   deadline: string | undefined;
   description: string | undefined;
@@ -19,9 +19,17 @@ const SERVER = process.env.REACT_APP_SERVER;
 
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
+const getAuthToken = () => localStorage.getItem("token");
+
 export const sendMilestonesRequest = async (milestoneType: MilestoneType) => {
   try {
-    const response = await fetch(`${SERVER}/milestones/${milestoneType}`, { credentials: "include" });
+    const token = getAuthToken();
+    const response = await fetch(`${SERVER}/milestones/${milestoneType}`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
@@ -34,10 +42,12 @@ export const sendMilestonesRequest = async (milestoneType: MilestoneType) => {
 
 export const postNewMilestone = async (milestoneContent: MilestoneContent) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify(milestoneContent),
@@ -55,9 +65,13 @@ export const postNewMilestone = async (milestoneContent: MilestoneContent) => {
 
 export const toggleMilestoneState = async ({ milestoneType, milestoneId }: MilestoneStateParams) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "PATCH",
       credentials: "include" as RequestCredentials,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
     const response = await fetch(`${SERVER}/milestone/${milestoneId}/${milestoneType}`, request);
 
@@ -72,9 +86,13 @@ export const toggleMilestoneState = async ({ milestoneType, milestoneId }: Miles
 
 export const deleteMilestone = async (milestoneId: number) => {
   try {
+    const token = getAuthToken();
     const request = {
       method: "DELETE",
       credentials: "include" as RequestCredentials,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
     const response = await fetch(`${SERVER}/milestone/${milestoneId}`, request);
 
@@ -91,10 +109,12 @@ export const sendPutMilestoneRequest = async (milestone: Milestone) => {
   try {
     const { milestoneId, title, deadline, description } = milestone;
     const milestoneContent = { title, deadline, description };
+    const token = getAuthToken();
     const request = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       credentials: "include" as RequestCredentials,
       body: JSON.stringify(milestoneContent),

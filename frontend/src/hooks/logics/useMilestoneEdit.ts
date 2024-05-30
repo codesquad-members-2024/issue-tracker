@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { postNewMilestone, sendPutMilestoneRequest } from "../../api/MilestoneAPI";
+import { MilestoneContent, postNewMilestone, sendPutMilestoneRequest } from "../../api/MilestoneAPI";
 import dateUtils from "../../utils/DateUtils";
 import { MilestoneDetailType } from "../../contexts/MilestoneContext";
 
 type EditType = "new" | "edit";
 
 export interface MilestoneEditBoxProps {
-  type: EditType;
+  editType: EditType;
   milestoneId?: number;
   content?: MilestoneDetailType;
   closeEditBox: () => void;
 }
+
+const NAME_ERROR_MESSAGE = "이름을 입력해주세요.";
+const DATE_ERROR_MESSAGE = "정확한 형식의 날짜를 입력해주세요. (YYYY. MM. DD)";
 
 const defaultContent = {
   milestoneId: 0,
@@ -23,7 +26,12 @@ const defaultContent = {
   isClosed: false,
 };
 
-const useMilestoneEdit = ({ type, milestoneId = 0, content = defaultContent, closeEditBox }: MilestoneEditBoxProps) => {
+const useMilestoneEdit = ({
+  editType,
+  milestoneId = 0,
+  content = defaultContent,
+  closeEditBox,
+}: MilestoneEditBoxProps) => {
   const client = useQueryClient();
   const titleRef = useRef<HTMLInputElement>(null);
   const deadlineRef = useRef<HTMLInputElement>(null);
@@ -44,26 +52,26 @@ const useMilestoneEdit = ({ type, milestoneId = 0, content = defaultContent, clo
     },
   });
 
+  const fetchOnSubmit = (milestoneContent: MilestoneContent) =>
+    editType === "new" ? fetchNewMilestone(milestoneContent) : fetchPutMilestone({ milestoneId, ...milestoneContent });
   const handleSubmitClick = () => {
     const title = titleRef.current?.value;
     const deadline = deadlineRef.current?.value;
     const description = descriptionRef.current?.value;
 
     if (!title) {
-      setErrorMessage("이름을 입력해주세요.");
+      setErrorMessage(NAME_ERROR_MESSAGE);
       return;
     }
 
-    if (!dateUtils.isValidDateText(deadline)) {
-      setErrorMessage("정확한 형식의 날짜를 입력해주세요. (YYYY. MM. DD)");
+    if (deadline !== "" && !dateUtils.isValidDateText(deadline)) {
+      setErrorMessage(DATE_ERROR_MESSAGE);
       return;
     }
 
     const parsedDeadline = dateUtils.parseDateText(deadline);
 
-    type === "new"
-      ? fetchNewMilestone({ title, deadline: parsedDeadline, description })
-      : fetchPutMilestone({ milestoneId, title, deadline: parsedDeadline, description });
+    fetchOnSubmit({ title, deadline: parsedDeadline, description });
   };
 
   useEffect(() => {
@@ -75,7 +83,7 @@ const useMilestoneEdit = ({ type, milestoneId = 0, content = defaultContent, clo
     if (descriptionRef.current) descriptionRef.current.value = description;
   }, [content]);
 
-  return { type, titleRef, deadlineRef, descriptionRef, errorMessage, closeEditBox, handleSubmitClick };
+  return { editType, titleRef, deadlineRef, descriptionRef, errorMessage, closeEditBox, handleSubmitClick };
 };
 
 export default useMilestoneEdit;
