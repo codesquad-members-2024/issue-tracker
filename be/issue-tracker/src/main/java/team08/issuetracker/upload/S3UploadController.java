@@ -19,7 +19,7 @@ public class S3UploadController {
     private final S3UploadService s3UploadService;
 
     @PostMapping
-    public ResponseEntity<String> create(
+    public ResponseEntity<UploadResponse> create(
             @RequestPart(value = "uploadImg", required = false) MultipartFile multipartFile) {
 
         String fileUrl = "";
@@ -29,9 +29,10 @@ public class S3UploadController {
                 fileUrl = s3UploadService.upload(multipartFile, "images"); // S3 버킷의 images 디렉토리 안에 저장됨
                 log.info("Img Uploaded! {}", fileUrl);
             } catch (IOException e) {
-                return ResponseEntity.ok("fail");
+                return ResponseEntity.ok(new UploadResponse("upload Failed"));
             }
         }
-        return ResponseEntity.ok(fileUrl);
+        UploadResponse response = new UploadResponse(fileUrl);
+        return ResponseEntity.ok(response);
     }
 }
