@@ -34,11 +34,8 @@ function WritingIssue() {
 	});
 
 	const handleTitle = () => {
-		if ($title.current?.value) {
-			setDisabled("DEFAULT");
-			return;
-		}
-		setDisabled("DISABLED");
+		const { value: titleValue } = $title.current || {};
+		setDisabled(titleValue ? "DEFAULT" : "DISABLED");
 	};
 
 	const handleAddData = () => {

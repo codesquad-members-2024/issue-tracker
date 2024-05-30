@@ -24,8 +24,8 @@ function TextArea({ h, $ref, handler }: PropsType) {
 		[]
 	);
 
-	const onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => {
-		setValue(value);
+	const onChange = ({ target: { value: textAreaValue } }: ChangeEvent<HTMLTextAreaElement>) => {
+		setValue(textAreaValue);
 		if (handler) handler();
 	};
 

@@ -46,10 +46,13 @@ function MilestoneEditor({ milestone, handleShowEditor, queryKey }: PropsType) {
 	};
 
 	const handleUpdateData = () => {
+		const name = $name.current?.value || milestone.name;
+		const description = $description.current?.value || milestone.description;
+		const completeDate = $completeDate.current?.value || milestone.completeDate;
 		const data: DataType = {
-			name: $name.current?.value || milestone.name,
-			description: $description.current?.value || milestone.description,
-			completeDate: $completeDate.current?.value || milestone.completeDate,
+			name,
+			description,
+			completeDate,
 		};
 		mutate(data);
 	};
