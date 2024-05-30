@@ -131,8 +131,10 @@ public class IssueUpdateService {
     private void validateMilestoneId(IssueMilestoneUpdateRequest issueMilestoneUpdateRequest) {
         Long milestoneId = issueMilestoneUpdateRequest.milestoneId();
 
-        if (!milestoneRepository.existsById(milestoneId)) {
-            throw new MilestoneIdNotFoundException();
+        if (milestoneId != null) {
+            if (!milestoneRepository.existsById(milestoneId)) {
+                throw new MilestoneIdNotFoundException();
+            }
         }
     }
 
