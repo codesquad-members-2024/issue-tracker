@@ -35,8 +35,6 @@ function AssigneeFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
 		target.checked = false;
 		setOpen(false);
-
-		console.log("??", contents[idx]);
 		setFilter(
 			`assignee=${contents[idx]}`,
 			`assignee:${contents[idx] === "담당자가 없는 이슈" ? "no" : contents[idx]}`,
