@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -31,6 +31,11 @@ export function SignContainer() {
 		message.info('현재 준비중인 기능이에요 🥲');
 	};
 
+	function githubLogin() {
+		window.location.href =
+			'https://github.com/login/oauth/authorize?client_id=Ov23ctgKI08kimQTAXXt';
+	}
+
 	return (
 		<>
 			{contextHolder}
@@ -40,7 +45,7 @@ export function SignContainer() {
 					type='button'
 					size='large'
 					buttonType='outline'
-					onClick={notReady}
+					onClick={githubLogin}
 					buttonText='GitHub 계정으로 로그인'
 				/>
 				<b>or</b>
@@ -89,6 +94,9 @@ const StyledWrapper = styled.div`
 const StyledLogo = styled(Logo)`
 	width: 100%;
 	margin-bottom: 64px;
+	svg {
+		width: 100%;
+	}
 `;
 const StyledButton = styled(Button)`
 	width: 100%;
