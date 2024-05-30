@@ -16,9 +16,9 @@ export function MilestonesContent(props) {
     fetchData();
   };
 
-  const handleEdit = (milestoneId) => {
+  const handleEdit = (milestone) => {
     setOnEdit(true);
-    setSelectedMilestone(milestoneId);
+    setSelectedMilestone(milestone);
   };
 
   const closeNewMilestones = () => {
@@ -34,15 +34,14 @@ export function MilestonesContent(props) {
           closeNewMilestones={closeNewMilestones}
           milestoneId={selectedMilestone?.id}
           initialData={selectedMilestone}
-          {...{ closeNewLabels, fetchData, putData, deleteData }}
+          {...{ closeNewMilestones, fetchData, putData, deleteData }}
         />
       )}
       {milestones?.length === 0 ? (
         <Content />
       ) : (
         milestones?.map((milestone) => {
-          const {id, description, deadline, title, countOfClosedIssue, countOfOpenIssue } = milestone;
-          
+          const { id, description, deadline, title, countOfClosedIssue, countOfOpenIssue } = milestone;
           const totalIssues = countOfClosedIssue + countOfOpenIssue;
           const progress = totalIssues === 0 ? 0 : (countOfClosedIssue / totalIssues) * 100;
 

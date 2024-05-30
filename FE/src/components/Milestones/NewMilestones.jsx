@@ -41,65 +41,64 @@ export function NewMilestones(props) {
   }, [initialData]);
 
   const handleSubmit = async () => {
-    const NewMilestone = {
+    const newMilestone = {
       title: milestoneTitle,
       deadline: milestoneDeadline,
       description: milestoneDescription,
     };
 
-    actionType === "createMilestones" ? await postData(NewMilestone) : await putData(milestoneId, NewMilestone);
+    actionType === "createMilestones" ? await postData(newMilestone) : await putData(milestoneId, newMilestone);
     closeNewMilestones();
     fetchData();
   };
 
   return (
-    <>
-      <Wrap $actionType={actionType}>
-        <h3>{actionType === "createMilestones" ? "새로운 마일스톤 추가": "마일스톤 편집"}</h3>
-        <Content>
-          <MilestonesDescript>
-            <StyledTop>
-              <TopMilestonesWrapper>
-                <label htmlFor="title">이름</label>
-                <input
-                  type="text"
-                  id="title"
-                  value={milestoneTitle}
-                  placeholder="마일스톤의 이름을 입력하세요"
-                  onChange={(e) =>dispatch({ type: "SET_MILESTONE_TITLE", payload: e.target.value })}
-                />
-              </TopMilestonesWrapper>
-              <TopMilestonesWrapper>
-                <label htmlFor="deadline">완료일(선택)</label>
-                <input
-                  type="text"
-                  id="deadline"
-                  value={milestoneDeadline}
-                  placeholder="YYYY-MM-DD"
-                  onChange={(e) =>dispatch({ type: "SET_MILESTONE_DEADLINE", payload: e.target.value })}
-                />
-              </TopMilestonesWrapper>
-            </StyledTop>
-            <MilestonesWrapper>
-              <label htmlFor="description">설명(선택)</label>
+    <Wrap $actionType={actionType}>
+      <h3>{actionType === "createMilestones" ? "새로운 마일스톤 추가" : "마일스톤 편집"}</h3>
+      <Content>
+        <MilestonesDescript>
+          <StyledTop>
+            <TopMilestonesWrapper>
+              <label htmlFor="title">이름</label>
               <input
                 type="text"
-                id="description"
-                value={milestoneDescription}
-                placeholder="마일스톤에 대한 설명을 입력하세요"
-                onChange={(e) =>dispatch({ type: "SET_MILESTONE_DESCRIPTION", payload: e.target.value })}
+                id="title"
+                value={milestoneTitle}
+                placeholder="마일스톤의 이름을 입력하세요"
+                onChange={(e) => dispatch({ type: "SET_MILESTONE_TITLE", payload: e.target.value })}
               />
-            </MilestonesWrapper>
-          </MilestonesDescript>
-        </Content>
-        <Buttons>
-          <CancelButton onClick={closeNewMilestones}>x 취소</CancelButton>
-          <CompleteButton onClick={handleSubmit}>+ 완료</CompleteButton>
-        </Buttons>
-      </Wrap>
-    </>
+            </TopMilestonesWrapper>
+            <TopMilestonesWrapper>
+              <label htmlFor="deadline">완료일(선택)</label>
+              <input
+                type="text"
+                id="deadline"
+                value={milestoneDeadline}
+                placeholder="YYYY-MM-DD"
+                onChange={(e) => dispatch({ type: "SET_MILESTONE_DEADLINE", payload: e.target.value })}
+              />
+            </TopMilestonesWrapper>
+          </StyledTop>
+          <MilestonesWrapper>
+            <label htmlFor="description">설명(선택)</label>
+            <input
+              type="text"
+              id="description"
+              value={milestoneDescription}
+              placeholder="마일스톤에 대한 설명을 입력하세요"
+              onChange={(e) => dispatch({ type: "SET_MILESTONE_DESCRIPTION", payload: e.target.value })}
+            />
+          </MilestonesWrapper>
+        </MilestonesDescript>
+      </Content>
+      <Buttons>
+        <CancelButton onClick={closeNewMilestones}>x 취소</CancelButton>
+        <CompleteButton onClick={handleSubmit}>+ 완료</CompleteButton>
+      </Buttons>
+    </Wrap>
   );
 }
+
 
 const Wrap = styled.div`
   margin: ${(props) =>

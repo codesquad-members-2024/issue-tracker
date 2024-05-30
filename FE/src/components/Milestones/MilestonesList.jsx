@@ -7,37 +7,42 @@ import useFetch from "../../hooks/useFetch";
 
 const CLOSED_MILESTONES_API = "/api/milestones/close";
 
+
 export function MilestonesList(props) {
-  const { milestones, fetchData, postData, putData, deleteData } = props;
-  const { state: closedMilestones, fetchData: fetchClosedData } = useFetch(`${CLOSED_MILESTONES_API}`);
-  
+  const { milestones, fetchData: fetchOpenMilestones, putData, deleteData } = props;
+  const { state: closedMilestones, fetchData: fetchClosedMilestones } = useFetch(CLOSED_MILESTONES_API);
+
   const [isOpenMilestones, setIsOpenMilestones] = useState(true);
 
   useEffect(() => {
     if (!isOpenMilestones) {
-      fetchClosedData();
+      fetchClosedMilestones();
     }
-  }, [isOpenMilestones, fetchClosedData]);
+  }, [isOpenMilestones, fetchClosedMilestones]);
+
+  const handleOpenMilestonesClick = () => {
+    setIsOpenMilestones(true);
+    fetchOpenMilestones();
+  };
 
   const milestonesToDisplay = isOpenMilestones ? milestones : closedMilestones;
 
   return (
     <Wrap>
       <MilestonesHeader>
-        <StyledBtn onClick={() => setIsOpenMilestones(true)} $active={isOpenMilestones}>
+        <StyledBtn onClick={handleOpenMilestonesClick} $active={isOpenMilestones}>
           <OpenIcon />
-          <span>열린 마일스톤({milestones?.length})</span>
+          <span>열린 마일스톤({milestones?.length || 0})</span>
         </StyledBtn>
         <StyledBtn onClick={() => setIsOpenMilestones(false)} $active={!isOpenMilestones}>
           <ClosedIcon />
-          <span>닫힌 마일스톤({closedMilestones?.length})</span>
+          <span>닫힌 마일스톤({closedMilestones?.length || 0})</span>
         </StyledBtn>
       </MilestonesHeader>
-      <MilestonesContent milestones={milestonesToDisplay} {...{ fetchData, putData, deleteData }}/>
+      <MilestonesContent milestones={milestonesToDisplay} {...{ fetchData: fetchOpenMilestones, putData, deleteData }}/>
     </Wrap>
   );
 }
-
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;

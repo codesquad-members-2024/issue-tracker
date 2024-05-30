@@ -7,12 +7,14 @@ import { NewMilestones } from "./NewMilestones";
 import { MilestonesList } from "./MilestonesList";
 import useFetch from "../../hooks/useFetch";
 
-const MILESTONES_API = "/api/milestones/open";
+const MILESTONES_API = "/api/milestone";
+const OPEN_MILESTONES_API = "/api/milestones/open";
 
 export function Milestones() {
-  const { state: milestones, loading, error, fetchData, postData, putData, deleteData } = useFetch(`${MILESTONES_API}`);
-  
+  const { state: milestones, loading, error, fetchData: fetchOpenMilestones } = useFetch(OPEN_MILESTONES_API);
+  const { postData, putData, deleteData } = useFetch(MILESTONES_API);
   const [showNewMilestones, setShowNewMilestones] = useState(false);
+
   return (
     <>
       <Header />
@@ -24,13 +26,13 @@ export function Milestones() {
       </Nav>
       {showNewMilestones && (
         <NewMilestones
-          {...{ fetchData, postData }}
+          {...{ fetchData: fetchOpenMilestones, postData }}
           closeNewMilestones={() => setShowNewMilestones(false)}
           actionType="createMilestones"
         />
       )}
       <MilestonesList
-        {...{ milestones, loading, error, fetchData, putData, deleteData }}
+        {...{ milestones, loading, error, fetchData: fetchOpenMilestones, putData, deleteData }}
       />
     </>
   );
