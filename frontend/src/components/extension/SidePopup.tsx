@@ -31,7 +31,7 @@ const renderSelectOption = (
   isChecked: boolean,
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 ) => (
-  <SelectOption key={option}>
+  <SelectOption key={option} onClick={() => onChange({ target: { checked: !isChecked } } as React.ChangeEvent<HTMLInputElement>)}>
     <span>{option}</span>
     <input type="checkbox" checked={isChecked} onChange={onChange} />
   </SelectOption>
@@ -98,6 +98,8 @@ const Wrapper = styled.div`
 const ScrollableArea = styled.div`
   max-height: 30em;
   overflow-y: scroll;
+  cursor: pointer;
+
   &::-webkit-scrollbar {
     display: none;
   }
