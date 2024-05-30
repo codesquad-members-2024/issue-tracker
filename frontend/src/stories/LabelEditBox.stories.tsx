@@ -1,9 +1,10 @@
-import { StoryFn } from "@storybook/react/*";
+import { Meta, StoryFn } from "@storybook/react/*";
 import LabelEditBox, { LabelEditBoxProps } from "../components/label/LabelEditBox";
 
 export default {
   title: "Label/LabelEditBox",
-};
+  component: LabelEditBox
+} as Meta;
 
 const Template: StoryFn<LabelEditBoxProps> = (args) => <LabelEditBox {...args} />;
 
