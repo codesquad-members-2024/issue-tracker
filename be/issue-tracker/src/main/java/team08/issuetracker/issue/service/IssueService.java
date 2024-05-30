@@ -9,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.issue.IssueIdNotFoundException;
+import team08.issuetracker.exception.issue.IssueQueryStateException;
 import team08.issuetracker.exception.member.MemberIdNotFoundException;
-import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountResponse;
 import team08.issuetracker.issue.model.dto.IssueOverviewResponse;
@@ -184,6 +184,6 @@ public class IssueService {
         if (state.equals(CLOSE_STATE_QUERY)) {
             return false;
         }
-        throw new MilestoneQueryStateException(); // todo Exception 바꿔야함
+        throw new IssueQueryStateException();
     }
 }
