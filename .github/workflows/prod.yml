@@ -33,6 +33,8 @@ jobs:
 
           - name: Set environment variables
           run: |
+          - name: Set environment variables
+          run: |
             echo "VITE_APP_S3_BUCKET_NAME=${{ secrets.VITE_APP_S3_BUCKET_NAME }}" >> $GITHUB_ENV
             echo "VITE_APP_S3_REGION=${{ secrets.VITE_APP_S3_REGION }}" >> $GITHUB_ENV
             echo "VITE_APP_S3_ACCESS_KEY_ID=${{ secrets.VITE_APP_S3_ACCESS_KEY_ID }}" >> $GITHUB_ENV
