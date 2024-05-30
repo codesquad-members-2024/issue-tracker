@@ -1,7 +1,6 @@
 package codesquad.issuetracker.oauth;
 
 import codesquad.issuetracker.login.JwtUtil;
-import codesquad.issuetracker.login.LoginResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class OAuthController {
     private final OAuthService oauthService;
 
     @GetMapping("/login/oauth/github/callback")
-    public ResponseEntity<LoginResponse> githubOAuthCallback(@RequestParam String code) throws JsonProcessingException {
+    public ResponseEntity<Void> githubOAuthCallback(@RequestParam String code) throws JsonProcessingException {
         OAuthToken oAuthToken = getOAuthToken(code);
         GithubUserData githubUserData = getGithubUserData(oAuthToken);
         oauthService.saveUserIfNotExist(githubUserData.getLogin(), githubUserData.getAvatarUrl());
@@ -38,13 +37,12 @@ public class OAuthController {
         String token = jwtUtil.createToken(githubUserData.getLogin()); // JWT 토큰 생성
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "http://fe-issue-tracker-s3.s3-website.ap-northeast-2.amazonaws.com/login/oauth/github/callback"); // 리다이렉트할 주소 설정
-        headers.add("Content-Type", "text/html; charset=utf-8"); // 적절한 Content-Type 설정
+        headers.add("Location", "http://fe-issue-tracker-s3.s3-website.ap-northeast-2.amazonaws.com/login/oauth/github/callback?token=" + token); // 리다이렉트할 주소 설정
 
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .headers(headers)
-                .body(new LoginResponse(token, GITHUB_LOGIN_SUCCESS_MESSAGE));
+                .build();
     }
 
     private OAuthToken getOAuthToken(String code) throws JsonProcessingException {
