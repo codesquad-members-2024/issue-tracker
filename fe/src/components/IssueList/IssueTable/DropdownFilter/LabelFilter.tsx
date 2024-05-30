@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
-import { setLabelFilter } from "../../../../helper/setFilterRightSide";
+import { setFilter } from "../../../../helper/setFilterRightSide";
 import { useNavigate } from "react-router-dom";
 import { FilterStateContext } from "../../../../provider/FilterStateProvider";
 
@@ -36,13 +36,14 @@ function LabelFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 		target.checked = false;
 		setOpen(false);
 		const currId = idx && labels[idx - 1].id;
-		const currIdx = idx && idx - 1;
-		setLabelFilter(
+		setFilter(
 			`label_id=${currId}`,
-			`label:${contents[currIdx] === "레이블이 없는 이슈" ? "no" : contents[currIdx]}`,
+			`label:${contents[idx] === "레이블이 없는 이슈" ? "no" : contents[idx]}`,
 			navigate,
 			setFilterText,
-			paramRef
+			paramRef,
+			"label_id",
+			/label:[^\s]+/g
 		);
 	};
 

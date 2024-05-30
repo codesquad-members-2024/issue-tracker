@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
-import { setWriterFilter } from "../../../../helper/setFilterRightSide";
+import { setFilter } from "../../../../helper/setFilterRightSide";
 import { useNavigate } from "react-router-dom";
 import { FilterStateContext } from "../../../../provider/FilterStateProvider";
 
@@ -29,12 +29,14 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
 		target.checked = false;
 		setOpen(false);
-		setWriterFilter(
+		setFilter(
 			`writer=${contents[idx]}`,
 			`writer:${contents[idx]}`,
 			navigate,
 			setFilterText,
-			paramRef
+			paramRef,
+			"writer",
+			/writer:[^\s]+/g
 		);
 	};
 

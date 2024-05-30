@@ -5,18 +5,27 @@ type FilterTarget = (
 	filterText: string,
 	navigate: NavigateFunction,
 	setFilterText: React.Dispatch<React.SetStateAction<string>>,
-	paramRef: React.RefObject<URLSearchParams>
+	paramRef: React.RefObject<URLSearchParams>,
+	deleteParam: string,
+	regex: RegExp
 ) => void;
 
-const setWriterFilter: FilterTarget = (query, filterText, navigate, setFilterText, paramRef) => {
+const setFilter: FilterTarget = (
+	query,
+	filterText,
+	navigate,
+	setFilterText,
+	paramRef,
+	deleteParam,
+	regex
+) => {
 	const params = paramRef.current!;
-	params.delete("writer");
-	const [writerKey, writer] = query.split("=");
-	params.set(writerKey, writer);
+	params.delete(deleteParam);
+	const [key, value] = query.split("=");
+	params.set(key, value);
 
 	setFilterText((prev) => {
-		const currWriter = prev.match(/writer:[^\s]+/g)?.[0];
-		console.log(prev);
+		const currWriter = prev.match(regex)?.[0];
 		if (currWriter) return prev.replaceAll(currWriter, filterText);
 		return `${prev} ${filterText}`;
 	});
@@ -24,20 +33,4 @@ const setWriterFilter: FilterTarget = (query, filterText, navigate, setFilterTex
 	navigate(`/filter?target=issue&${params.toString()}`);
 };
 
-const setLabelFilter: FilterTarget = (query, filterText, navigate, setFilterText, paramRef) => {
-	const params = paramRef.current!;
-	params.delete("label_id");
-	const [labelIdKey, labelId] = query.split("=");
-	params.set(labelIdKey, labelId);
-
-	setFilterText((prev) => {
-		const currWriter = prev.match(/label:[^\s]+/g)?.[0];
-		console.log(prev);
-		if (currWriter) return prev.replaceAll(currWriter, filterText);
-		return `${prev} ${filterText}`;
-	});
-
-	navigate(`/filter?target=issue&${params.toString()}`);
-};
-
-export { setWriterFilter, setLabelFilter };
+export { setFilter };
