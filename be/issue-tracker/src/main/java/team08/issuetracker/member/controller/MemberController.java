@@ -77,10 +77,14 @@ public class MemberController {
 //        return ResponseEntity.ok("검증 성공");
 //    }
 
+    @CrossOrigin(exposedHeaders = {"Set-Cookie"})
     @PostMapping("/logout")
-    public ResponseEntity<?> logoutMember() {
+    public ResponseEntity<MemberLogoutResponse> logoutMember() {
         ResponseCookie responseCookie = ResponseCookie.from(TOKEN_NAME, "")
                 .maxAge(0)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
                 .path("/")
                 .build();
 
