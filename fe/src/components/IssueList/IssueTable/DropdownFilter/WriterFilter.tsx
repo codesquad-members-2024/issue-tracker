@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
@@ -39,7 +39,6 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 			/writer:[^\s]+/g
 		);
 	};
-
 	return (
 		<div
 			className="flex flex-col justify-center h-full"
@@ -55,6 +54,7 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 					<ChevronDown className="mt-1 ml-3 stroke-grayscale.600 dark:stroke-grayscale.500" />
 				</summary>
 				<DropdownPanel
+					key="writer"
 					top="top-[55px]"
 					title="작성자 필터"
 					contents={contents}
