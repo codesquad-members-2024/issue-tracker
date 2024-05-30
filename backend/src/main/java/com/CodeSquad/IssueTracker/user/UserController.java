@@ -3,7 +3,6 @@ package com.CodeSquad.IssueTracker.user;
 import com.CodeSquad.IssueTracker.user.dto.LoginRequest;
 import com.CodeSquad.IssueTracker.user.dto.UserRegisterRequest;
 import com.CodeSquad.IssueTracker.user.jwtlogin.JwtUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +38,4 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    세션 로그인 방식
-//        @PostMapping("/login")
-//    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest,
-//                                       HttpServletRequest request) {
-//        userService.isLoginRequestNotExists(loginRequest);
-//        userService.authenticate(loginRequest);
-//        userService.addLoginSession(loginRequest, request.getSession());
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 }

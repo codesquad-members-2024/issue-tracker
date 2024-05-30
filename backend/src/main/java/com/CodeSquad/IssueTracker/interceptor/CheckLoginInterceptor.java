@@ -4,7 +4,6 @@ import com.CodeSquad.IssueTracker.Exception.user.UserNotLoginException;
 import com.CodeSquad.IssueTracker.user.jwtlogin.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class CheckLoginInterceptor implements HandlerInterceptor {
@@ -21,11 +20,6 @@ public class CheckLoginInterceptor implements HandlerInterceptor {
         if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
             return true; // OPTIONS 요청은 바로 통과시킴
         }
-
-//        HttpSession session = request.getSession();
-//        if (session.getAttribute("userId") == null) {
-//            throw new UserNotLoginException("로그인이 필요합니다.");
-//        }
 
         String token = request.getHeader("Authorization");
         if (token == null || !token.startsWith("Bearer ")) {

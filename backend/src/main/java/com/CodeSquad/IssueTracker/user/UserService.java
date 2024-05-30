@@ -49,8 +49,8 @@ public class UserService {
     }
 
     public String authenticate(LoginRequest loginRequest) {
-        String loginId = loginRequest.getUserId();
-        String loginPassword = loginRequest.getUserPassword();
+        String loginId = loginRequest.userId();
+        String loginPassword = loginRequest.userPassword();
 
         User userInfo = userRepository.findById(loginId)
                 .orElseThrow(() -> {
@@ -81,37 +81,4 @@ public class UserService {
     public Set<User> findAllByIds(Set<String> newAssigneeIds) {
         return userRepository.findAllById(newAssigneeIds);
     }
-
-//     세션 로그인 방식
-//        public void authenticate(LoginRequest loginRequest) {
-//        String userId = loginRequest.getUserId();
-//        String userPassword = loginRequest.getUserPassword();
-//
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> {
-//                    log.error("해당 유저가 존재하지 않습니다.: {}", userId);
-//                    return new UserNotFoundException("해당 유저가 존재하지 않습니다.");
-//                });
-//
-//        if (!Objects.equals(user.getUserPassword(), userPassword)){
-//            log.warn("로그인 실패: {}", userId);
-//            throw new InvalidCredentialException("아이디나 비밀번호가 맞지 않습니다.");
-//        }
-//    }
-
-//    @Value("${server.servlet.session.timeout}")
-//    private int sessionTimeout;
-
-//    public void addLoginSession(LoginRequest loginRequest, HttpSession session) {
-//        session.setMaxInactiveInterval(sessionTimeout);
-//        session.setAttribute("userId", loginRequest.getUserId());
-//    }
-//
-//    public void isLoginRequestNotExists(LoginRequest loginRequest) {
-//        if (loginRequest == null){
-//            log.warn("로그인 실패: 로그인 데이터가 없습니다.");
-//            throw new InvalidCredentialException("로그인 데이터가 없습니다.");
-//        }
-//        log.info("로그인 시도");
-//    }
 }
