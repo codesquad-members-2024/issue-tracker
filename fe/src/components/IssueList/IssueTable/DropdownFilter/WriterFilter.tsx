@@ -26,7 +26,10 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 		event.preventDefault();
 		setOpen(!open);
 	};
-	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+	const handleWriterCheckedItems = (
+		{ target }: React.ChangeEvent<HTMLInputElement>,
+		idx: number
+	) => {
 		target.checked = false;
 		setOpen(false);
 		setFilter(
@@ -59,7 +62,7 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 					title="작성자 필터"
 					contents={contents}
 					imgs={imgs}
-					handler={handleCheckedItems}
+					handler={(e, i) => handleWriterCheckedItems(e, i)}
 				/>
 			</details>
 			{open && (

@@ -20,7 +20,7 @@ function AssigneeFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 	const { data, refetch } = useGet("assignee", "/member/list", false);
 	const members = data && data.members;
 	const contents = members && [
-		"담당자가 없는 없는 이슈",
+		"담당자가 없는 이슈",
 		...members.map(({ memberId }: { memberId: string }) => memberId),
 	];
 	const imgs = members && [
@@ -36,7 +36,7 @@ function AssigneeFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 		target.checked = false;
 		setOpen(false);
 		setFilter(
-			`assignee=${contents[idx]}`,
+			`assignee=${contents[idx] === "담당자가 없는 이슈" ? "" : contents[idx]}`,
 			`assignee:${contents[idx] === "담당자가 없는 이슈" ? "no" : contents[idx]}`,
 			navigate,
 			setFilterText,
