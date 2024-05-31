@@ -31,7 +31,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             request.setAttribute(LOGIN_ID, token); // loginId 값 저장
             return true;
         } catch (Exception e) {
-            log.info("인증되지 않은 토큰");
+            log.error("인증되지 않은 토큰");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 유효하지 않은 JWT 토큰이면 401에러 반환
             return false;
         }
