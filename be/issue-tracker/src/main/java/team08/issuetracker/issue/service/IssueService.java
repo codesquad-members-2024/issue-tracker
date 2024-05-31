@@ -1,5 +1,6 @@
 package team08.issuetracker.issue.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.issue.IssueIdNotFoundException;
-import team08.issuetracker.exception.issue.IssueQueryStateException;
 import team08.issuetracker.exception.member.MemberIdNotFoundException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountResponse;
@@ -30,6 +30,7 @@ import team08.issuetracker.member.model.Member;
 import team08.issuetracker.member.repository.MemberRepository;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.repository.MilestoneRepository;
+import team08.issuetracker.statequery.StateQuery;
 
 @Slf4j
 @Service
@@ -42,17 +43,15 @@ public class IssueService {
     private final IssueAttachedLabelRepository issueAttachedLabelRepository;
     private final MemberRepository memberRepository;
 
-    private static final String OPEN_STATE_QUERY = "opened";
-    private static final String CLOSE_STATE_QUERY = "closed";
-
     public IssueOverviewResponse getAllIssuesWithCounts(String state) {
 
-        boolean openState = convertStateQueryToOpenState(state);
+        boolean openState = StateQuery.convertQueryToState(state);
 
         List<Issue> issues = issueRepository.getAllIssuesByOpenState(openState);
 
         List<IssueDetailResponse> issueDetailResponses = issues.stream()
                 .map(this::convertToIssueDetailResponse)
+                .sorted(Comparator.comparing(IssueDetailResponse::getTimestamp).reversed())
                 .toList();
 
         IssueCountResponse issueCountResponse = getIssueCountResponse();
@@ -175,15 +174,5 @@ public class IssueService {
         return issueRepository
                 .findById(id)
                 .orElseThrow(IssueIdNotFoundException::new);
-    }
-
-    private boolean convertStateQueryToOpenState(String state) {
-        if (state == null || state.equals(OPEN_STATE_QUERY)) {
-            return true;
-        }
-        if (state.equals(CLOSE_STATE_QUERY)) {
-            return false;
-        }
-        throw new IssueQueryStateException();
     }
 }
