@@ -13,18 +13,22 @@ const IssuePage = () => {
     const [resetFilterUI, setResetFilterUI] = useState(false);
 
     const handleResetFilterUI = () => setResetFilterUI(true);
-    
-    const { data, isLoading, error} = useQuery({
-        queryKey: ["issues"],
+
+    const { data, isLoading, error } = useQuery({
+        queryKey: ["issues", query],
         queryFn: () => APiUtil.getData(query),
     });
-    if (isLoading)return <div><Loading /></div>;
+    // const [filterState] = useContext(FilterContext);
+    // useEffect(() => {
+    //     console.log(11)
+    // }, [filterState]);
+    if (isLoading) return <div><Loading /></div>;
     if (error) return <div>{error.message}</div>;
-
+    
     return (
-        <main className="w-[1280px] mx-auto">
-            <Header />
-            <FilterProvider>
+        <FilterProvider>
+            <main className="w-[1280px] mx-auto">
+                <Header />
                 <Nav
                     labelCount={data.labelCount}
                     openMilestoneCount={data.openMilestoneCount}
@@ -40,8 +44,8 @@ const IssuePage = () => {
                     resetFilterUI={resetFilterUI}
                     setResetFilterUI={setResetFilterUI}
                 />
-            </FilterProvider>
-        </main>
+            </main>
+        </FilterProvider>
     );
 };
 

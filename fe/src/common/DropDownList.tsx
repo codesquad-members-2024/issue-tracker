@@ -5,6 +5,7 @@ import { SidebarLabel, SidebarMilestone, SidebarUser } from "../pages/NewPage";
 import CircleIcon from '../assets/free-icon-circle-3962612.png';
 
 interface DropDownListProps {
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
     curTableItem: string;
     data: (SidebarLabel | SidebarMilestone | SidebarUser)[];
     handleListClick: (curData: SidebarLabel | SidebarMilestone | SidebarUser, tableName: string) => void;
@@ -14,6 +15,7 @@ interface DropDownListProps {
 }
 
 const DropDownList = ({
+    setOpen,
     curTableItem,
     data,
     handleListClick,
@@ -21,6 +23,11 @@ const DropDownList = ({
     loading,
     sideBarItems,
 }: DropDownListProps) => {
+
+    const clickList = (curData: SidebarLabel | SidebarMilestone | SidebarUser, curTableItem: string) => {
+        handleListClick(curData, curTableItem);
+        setOpen(false);
+    };
     
     return (
         <div className="absolute bg-gray-100 dark:bg-darkModeBorderBG border border-gray-200 shadow-md z-10 mt-1 w-[230px] flex flex-col rounded-xl overflow-hidden">
@@ -34,7 +41,7 @@ const DropDownList = ({
                 data.map((curData, idx) => (
                     <div
                         key={idx}
-                        onClick={() => handleListClick(curData, curTableItem)}
+                        onClick={() => clickList(curData, curTableItem)}
                         className={`${sideBarItems.find((item) => item.id === curData.id) && "font-bold"} flex-grow border-t-2 border-gray-200 px-6 flex items-center h-10 text-sm justify-between bg-white dark:bg-darkModeBorderBG`}
                     >
                         

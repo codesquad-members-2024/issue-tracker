@@ -14,7 +14,6 @@ const MilestonesPage = () => {
     });
 
     if (isLoading) return <Loading/>;
-    
     return (
         <main className="w-[1280px] mx-auto">
             <Header />

@@ -5,7 +5,7 @@ interface UserImgBoxProps {
     width: string;
     height: string;
 }
-const DEFAULT_IMG_URL = "![이미지](https://issue-tracker-web.s3.ap-northeast-2.amazonaws.com/attached/%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%89%E1%85%B3%E1%84%8F%E1%85%AF%E1%84%83%E1%85%B3.jpg)"
+const DEFAULT_IMG_URL = "![이미지](https://issue-tracker-web.s3.ap-northeast-2.amazonaws.com/attached/ezgif-5-8ff8abdc7a.GIF)"
 
 export const UserImgBox = ({imgURL, margin, width, height}: UserImgBoxProps) => {
     

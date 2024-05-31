@@ -10,6 +10,7 @@ import { UserInfo } from "./IssueDetailPage";
 
 export interface SidebarMilestone {
     id: number;
+    name: string
     title: string;
     openIssueCount: number;
     closedIssueCount: number;
@@ -17,11 +18,14 @@ export interface SidebarMilestone {
 export interface SidebarLabel {
     id: number;
     name: string;
+    title?: string;
     description: string;
     textColor: string;
     backgroundColor: string;
 }
 export interface SidebarUser {
+    title?: string;
+    name?: string;
     id: string;
     imgUrl: string;
 }
@@ -33,7 +37,7 @@ export interface Users {
     role: string;
 }
 export interface PostRequestFrom {
-    userId: string;
+    userId: string | undefined;
     title: string;
     content: string;
     assigneeIds: string[];
@@ -41,7 +45,7 @@ export interface PostRequestFrom {
     milestoneId: number | null;
 }
 export interface NewIssueForm {
-    userId: string;
+    userId: string | undefined;
     title: string;
     content: string;
 }
@@ -75,7 +79,7 @@ const NewPage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [newIssueForm, setNewsIssueForm] = useState<NewIssueForm>({
-        userId: "user1",
+        userId: userInfo?.id,
         title: "",
         content: "",
     });
@@ -131,7 +135,7 @@ const NewPage = () => {
             labelIds: sideBarItems.labels
                 ? sideBarItems.labels.map((cur: SidebarLabel) => cur.id)
                 : [],
-            milestoneId: !sideBarItems.milestone
+                milestoneId: !sideBarItems.milestone || sideBarItems.milestone.length === 0
                 ? null
                 : sideBarItems.milestone[0]?.id
         };

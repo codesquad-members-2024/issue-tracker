@@ -1,4 +1,4 @@
-import { IssueDetail } from "../../pages/IssueDetailPage";
+import { IssueDetail, UserInfo } from "../../pages/IssueDetailPage";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { getDateDifference } from "../../common/Utils";
 import { useEffect, useState } from "react";
@@ -10,10 +10,10 @@ interface TitleViewProps {
     setEditState: React.Dispatch<React.SetStateAction<boolean>>;
     isOpen: boolean
     productId: string | undefined
+    userInfo: UserInfo | null
 }
 
-const TitleView = ({ issueData, editState, setEditState, isOpen, productId}: TitleViewProps) => {
-    
+const TitleView = ({ userInfo, issueData, editState, setEditState, isOpen, productId}: TitleViewProps) => {
     const [title, setTitle] = useState("")
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
@@ -21,14 +21,13 @@ const TitleView = ({ issueData, editState, setEditState, isOpen, productId}: Tit
     useEffect(() => {
         if (issueData?.title) setTitle(issueData.title)
     }, [issueData]);
-
     return (
         <>
             <div>
                 {editState ? (
                     <TitleEditUi title={title} handleTitleChange={handleTitleChange} setEditState={setEditState} productId={productId}/>
                 ) : (
-                    <TitleUi title={issueData?.title} id={issueData?.id} setEditState={setEditState}/>
+                    <TitleUi userInfo={userInfo} authorId={issueData?.authorId} title={issueData?.title} id={issueData?.id} setEditState={setEditState} isOpen={isOpen} productId={productId}/>
                 )}
             </div>
             <div className="flex font-normal">

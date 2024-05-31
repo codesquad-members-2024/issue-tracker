@@ -10,7 +10,7 @@ import { ModalComponent } from "../common/Modal";
 import { useEffect, useState } from "react";
 import { SideBarItemsForm, SidebarLabel, SidebarMilestone, SidebarUser } from "./NewPage";
 import Sidebar from "../common/Sidebar";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface Milestone {
     id: number;
     title: string;
@@ -33,6 +33,7 @@ interface Assignee {
 }
 
 export interface Comment {
+    id?: number | undefined
     authorId: string;
     contents: string;
     createdAt: string;
@@ -58,6 +59,10 @@ export interface UserInfo {
     imgUrl: string;
 }
 
+export interface SideBarUpdateForm {
+    [key: string]:  string | number | (string | number)[] | null;
+}
+
 const sideTable: {
     [key: string]: keyof SideBarItemsForm;
 } = {
@@ -74,6 +79,7 @@ const IssueProduct = () => {
     const location = useLocation();
     const isOpen = location.state;
     const { productId } = useParams();
+    const queryClient = useQueryClient();
     const { data, isLoading } = useQueryHook(productId, `issues/${productId}`);
 
     const [sideBarItems, setSideBarItems] = useState<SideBarItemsForm>({
@@ -82,31 +88,67 @@ const IssueProduct = () => {
         milestone: [],
     });
 
+    const { mutate } = useMutation({
+        mutationFn: async ({ query, bodyForm }: { query: string; bodyForm: SideBarUpdateForm }) => {
+            await APiUtil.ModifyPatch(`issues/${query}`, bodyForm);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["issueDetail", productId]});
+        },
+    });
+
     useEffect(() => {
         if (data) {
             setSideBarItems((prev) => ({
                 ...prev,
                 assignees: data.assignees,
                 labels: data.labels,
-                milestone: data.milestone ? [data.milestone] : [], // milestone이 null이 아닌 경우에만 배열에 추가
+                milestone: data.milestone ? [data.milestone] : [],
             }));
         }
     }, [data]);
 
     if (isLoading) return <div><Loading /></div>;
 
-    const handleListClick = (curData: SidebarLabel | SidebarMilestone | SidebarUser, tableName: string) => {
-        console.log(curData, tableName)
+    
+
+    const handleListClick = (
+        curData: SidebarLabel | SidebarMilestone | SidebarUser,
+        tableName: string
+    ) => {
+        const type = sideTable[tableName];
+        const query = `${data?.id}/${type}`;
+
+        let bodyData;
+        if (sideBarItems[type].find((curItem) => curItem.id === curData.id)) {
+            bodyData =
+                tableName === "마일스톤"
+                    ? null
+                    : sideBarItems[type]
+                        .filter((curItem) => curItem.id !== curData.id)
+                        .map((selectData) => selectData.id);
+        } else {
+            bodyData = tableName === "마일스톤"
+                ? curData.id
+                : [...sideBarItems[type].map((selectData) => selectData.id), curData.id];
+        }
+
+        const key: string = type === "milestone" 
+        ? "milestoneId" 
+        : type === "labels" 
+        ? "labelIds" 
+        : type === "assignees" 
+        ? "assigneeIds" 
+        : "";
+        const bodyForm = { [key]: bodyData };
+        return mutate({ query, bodyForm });
     };
 
-    
     const handleDelete = async () => {
         await APiUtil.deleteData("issues", data.id);
         navigate("/issue");
     };
 
-    
-    
     return (
         <main className="w-[1280px] mx-auto">
             <Header />
@@ -114,6 +156,7 @@ const IssueProduct = () => {
                 issueData={data}
                 isOpen={isOpen}
                 productId={productId}
+                userInfo={userInfo}
             />
             <section className="flex justify-between">
                 <CommentArea
