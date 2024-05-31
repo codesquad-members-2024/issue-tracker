@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class MilestoneSummaryDto {
+    private final Long id;
     private final String name;
-    private final Double progress;
+    private final Double milestoneProgress;
 }

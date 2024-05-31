@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
+import team08.issuetracker.exception.issue.IssueAlreadyClosedException;
+import team08.issuetracker.exception.issue.IssueAlreadyOpenedException;
 import team08.issuetracker.issue.model.dto.update.IssueAssigneeUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueContentUpdateRequest;
 import team08.issuetracker.issue.model.dto.update.IssueLabelUpdateRequest;
@@ -78,10 +80,16 @@ public class Issue {
     }
 
     public void open() {
+        if (this.isOpen) {
+            throw new IssueAlreadyOpenedException();
+        }
         this.isOpen = true;
     }
 
     public void close() {
+        if (!this.isOpen) {
+            throw new IssueAlreadyClosedException();
+        }
         this.isOpen = false;
     }
 }
