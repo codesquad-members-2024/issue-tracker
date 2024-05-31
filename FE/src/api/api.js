@@ -25,15 +25,15 @@ async function putData(url, id, data) {
       body: JSON.stringify(data),
     });
 
-    const responseData = await response.json(); 
-
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    return responseData; 
+
+    const text = await response.text();
+    return text ? JSON.parse(text) : {};
   } catch (error) {
-    console.log(error);
-    throw new Error("Failed to update data"); 
+    console.error("문제있다:", error);
+    throw new Error("Failed to update data");
   }
 }
 

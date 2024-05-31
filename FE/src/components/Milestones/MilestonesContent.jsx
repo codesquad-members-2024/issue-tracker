@@ -5,7 +5,7 @@ import { TrashIcon } from "@/icons/TrashIcon";
 import { ClosedIcon } from "@/icons/ClosedIcon";
 import { MilestonesIcon } from "@/icons/MilestonesIcon";
 import { NewMilestones } from "./NewMilestones";
-import { deleteData } from "@/api/api";
+import { deleteData, putData } from "@/api/api";
 import API_ENDPOINTS from "@/config/config";
 
 export function MilestonesContent(props) {
@@ -15,6 +15,12 @@ export function MilestonesContent(props) {
 
   const handleDelete = async (milestoneId) => {
     await deleteData(`${API_ENDPOINTS.milestones}`, milestoneId);
+    fetchData();
+  };
+
+  const handleClose = async (milestoneId) => {
+    const updatedMilestone = {status: 'closed'};
+    await putData(`${import.meta.env.VITE_SERVER}${API_ENDPOINTS.closeMilestones}`, milestoneId, updatedMilestone);
     fetchData();
   };
 
@@ -63,7 +69,7 @@ export function MilestonesContent(props) {
               </StyledDescript>
               <div className="right">
                 <Buttons>
-                  <Button>
+                  <Button onClick={() => handleClose(id)}>
                     <ClosedIcon />
                     <div>닫기</div>
                   </Button>
