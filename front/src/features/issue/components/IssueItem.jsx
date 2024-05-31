@@ -23,8 +23,13 @@ export function IssueItem({ issue, onChange, checked, profileImage }) {
 					{issue?.title}
 				</StyledIssueTitle>
 
-				{issue?.labels?.map((label, index) => (
-					<Label label={label} key={index} />
+				{issue?.labels.map(label => (
+					<Label
+						key={label.id}
+						name={label.name}
+						backgroundColor={label.backgroundColor}
+						textColor={label.textColor}
+					/>
 				))}
 			</StyledFlex>
 			<StyledDetail>
