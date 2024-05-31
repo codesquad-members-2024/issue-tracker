@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { Logo } from '../../../common/Logo';
 import { Button } from '~/common/components';
@@ -42,6 +42,7 @@ export function SignContainer() {
 			<StyledWrapper>
 				<StyledLogo />
 				<StyledButton
+					className='github'
 					type='button'
 					size='large'
 					buttonType='outline'
@@ -83,12 +84,27 @@ export function SignContainer() {
 		</>
 	);
 }
+
+const pulse = keyframes`
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1);
+	}
+`;
 const StyledWrapper = styled.div`
 	width: 342px;
 	b {
 		text-align: center;
 		display: block;
 		margin: 14px 0 18px;
+	}
+	.github {
+		animation: ${pulse} 1s infinite;
 	}
 `;
 const StyledLogo = styled(Logo)`
