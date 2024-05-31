@@ -2,7 +2,7 @@
 
 ### 🚩요구사항
 
-![피그마 링크](https://www.figma.com/design/Mx4mDJGfRZZ5wdoBWFw5UX/FE_%EC%9D%B4%EC%8A%88%ED%8A%B8%EB%9E%98%EC%BB%A4?node-id=14979-41364&t=Dx6cVZaH2fDeOwKV-0)
+[피그마 링크](https://www.figma.com/design/Mx4mDJGfRZZ5wdoBWFw5UX/FE_%EC%9D%B4%EC%8A%88%ED%8A%B8%EB%9E%98%EC%BB%A4?node-id=14979-41364&t=Dx6cVZaH2fDeOwKV-0)
 
 #### 🪃1. 로그인
 
