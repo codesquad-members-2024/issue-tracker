@@ -37,11 +37,6 @@ function Login() {
 		});
 	};
 
-	const handleOauth = () => {
-		fetchData("/oauth");
-		// setIsLoggedIn(true); // TODO 나중에 확인
-	};
-
 	useEffect(() => {
 		const jwt = localStorage.getItem("jwt");
 		if (jwt) setIsLoggedIn(true);
@@ -51,9 +46,7 @@ function Login() {
 		<div className="w-full h-full flex items-center justify-center">
 			<div className="w-[400px] h-[600px] flex items-center justify-center flex-col text-grayscale.600">
 				<Logo className="animated-path mb-20" />
-				<button className="btn-large btn-outline mb-4" onClick={handleOauth}>
-					GitHub 계정으로 로그인
-				</button>
+				<button className="btn-large btn-outline mb-4">GitHub 계정으로 로그인</button>
 				or
 				<div className="relative flex items-center justify-center flex-col">
 					<input

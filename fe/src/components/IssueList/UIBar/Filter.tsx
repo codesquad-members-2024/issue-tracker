@@ -36,7 +36,7 @@ function Filter() {
 	};
 
 	const handleFilterTextKeyDown = () => {
-		console.log(filterText.split(" ")); //TODO 필터창에 엔터시 필터처리
+		navigate("/filter?target=issue");
 	};
 
 	return (
