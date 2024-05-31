@@ -19,7 +19,7 @@ interface IssueDataType {
 	writer: string;
 	content: string;
 	createdAt: string;
-	file: null; //TODO 파일첨부
+	uploadedFile: null | string;
 	milestoneId: number | null;
 	labelIds: number[];
 	assigneeIds: string[];
@@ -27,7 +27,7 @@ interface IssueDataType {
 interface CommentDataType {
 	writer: string;
 	content: string;
-	uploadedFile: null; //TODO 파일첨부
+	uploadedFile: null | string;
 }
 interface ResponseType {
 	[key: string]: number | string;

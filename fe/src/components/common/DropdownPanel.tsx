@@ -7,7 +7,7 @@ interface PropsType {
 	contents: string[];
 	imgs?: string[];
 	color?: string[];
-	handler?: (e: React.ChangeEvent<HTMLInputElement>, idx: number) => void;
+	handler: (e: React.ChangeEvent<HTMLInputElement>, idx: number) => void;
 	isState?: boolean;
 }
 
@@ -27,30 +27,39 @@ function DropdownPanel({ top, title, contents, imgs, color, handler, isState }: 
 				{contents &&
 					contents.map((content, i) => (
 						<li
-							key={i}
+							key={`${content} ${i}`}
 							className={`py-2 flex items-center justify-between w-full bg-grayscale.50 dark:bg-grayscale.800 ${
 								i === contents.length - 1 ? " rounded-b-xl" : borderBottom
 							}`}
 						>
 							<input
+								key={`${content} ${i}`}
 								className="hidden peer"
 								type="checkbox"
 								id={content}
-								onChange={(e) => handler && handler(e, i)}
+								onChange={(e) => handler(e, i)}
 							/>
 							<label
 								className="flex items-center w-full cursor-pointer peer-checked:font-black"
 								htmlFor={content}
 							>
-								{imgs && (
-									<img
-										className="w-[20px] h-[20px] rounded-full ml-3"
-										alt="userProfile"
-										src={imgs[i]}
-									/>
-								)}
+								{imgs &&
+									(imgs[i] ? (
+										<img
+											className="w-[20px] h-[20px] rounded-full ml-3"
+											alt="userProfile"
+											src={imgs[i]}
+										/>
+									) : (
+										<></>
+									))}
 								{color && (
-									<div className={`w-[20px] h-[20px] rounded-full ml-3 bg-[${color[i]}]`}></div>
+									<div
+										className={`w-[20px] h-[20px] rounded-full ml-3`}
+										style={{
+											backgroundColor: `${color[i]}`,
+										}}
+									></div>
 								)}
 								<span className="ml-2 text-grayscale.700 dark:text-grayscale.400">{content}</span>
 							</label>

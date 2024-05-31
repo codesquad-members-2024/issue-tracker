@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import DropdownPanel from "../../common/DropdownPanel";
-import { useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import filterTarget from "../../../helper/filterTarget";
+import setFilterLeftSide from "../../../helper/setFilterLeftSide";
+import { FilterStateContext } from "../../../provider/FilterStateProvider";
 
 const textColor = "text-grayscale.700 dark:text-grayscale.400";
 const border = "component-border dark:component-border--dark";
@@ -17,9 +18,8 @@ const contents = [
 
 function Filter() {
 	const navigate = useNavigate();
+	const [filterText, setFilterText, paramRef] = useContext(FilterStateContext);
 	const [open, setOpen] = useState(false);
-	const [filterText, setFilterText] = useState("is:issue");
-	const paramRef = useRef(new URLSearchParams());
 
 	const onToggle = (event: React.MouseEvent) => {
 		event.preventDefault();
@@ -32,11 +32,11 @@ function Filter() {
 	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
 		target.checked = false;
 		setOpen(false);
-		filterTarget(idx, navigate, setFilterText, paramRef);
+		setFilterLeftSide(idx, navigate, setFilterText, paramRef);
 	};
 
 	const handleFilterTextKeyDown = () => {
-		console.log(filterText.split(" "));//TODO 필터창에 엔터시 필터처리
+		console.log(filterText.split(" ")); //TODO 필터창에 엔터시 필터처리
 	};
 
 	return (
@@ -63,7 +63,7 @@ function Filter() {
 				</details>
 				<div className="relative w-[80%] h-full ">
 					<input
-						className={`absolute top-0 h-full w-full ${textColor} rounded-r-xl pl-9 bg-grayscale.200 dark:bg-grayscale.700 focus:input-text--focus`}
+						className={`truncate pr-2 absolute top-0 h-full w-full ${textColor} rounded-r-xl pl-9 bg-grayscale.200 dark:bg-grayscale.700 focus:input-text--focus`}
 						type="text"
 						placeholder="Search all issue"
 						value={filterText}

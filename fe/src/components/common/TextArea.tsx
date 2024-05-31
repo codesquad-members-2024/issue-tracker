@@ -1,31 +1,28 @@
 import { ChangeEvent, useState, useEffect, useMemo } from "react";
+import ReactMarkdown from "react-markdown";
 import { ReactComponent as Grip } from "../../svg/Grip.svg";
-
-import Button from "./Button";
+import FileUploadButton from "./FileUploadButton";
 
 interface PropsType {
 	h: string;
 	$ref?: React.RefObject<HTMLTextAreaElement>;
 	handler?: () => void;
+	uploadedFile?: React.MutableRefObject<string | null>;
 }
 
 const moving = "scale-75 top-2 left-0";
 const DELAY = 2000;
 
-function TextArea({ h, $ref, handler }: PropsType) {
-	const [value, setValue] = useState("");
+function TextArea({ h, $ref, handler, uploadedFile }: PropsType) {
+	const [text, setText] = useState("");
 	const [isVisible, setIsVisible] = useState(true);
 	const ButtonMemo = useMemo(
-		() => (
-			<div className="flex items-center border-t-2 border-dashed h-[52px] rounded-b-xl absolute w-full bottom-0">
-				<Button size="S" type="GHOST" icon="CLIP" text="파일 첨부하기" state="DEFAULT" />
-			</div>
-		),
-		[]
+		() => <FileUploadButton uploadedFile={uploadedFile} setText={setText} />,
+		[uploadedFile]
 	);
 
-	const onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => {
-		setValue(value);
+	const handleText = ({ target: { value: textAreaValue } }: ChangeEvent<HTMLTextAreaElement>) => {
+		setText(textAreaValue);
 		if (handler) handler();
 	};
 
@@ -43,14 +40,16 @@ function TextArea({ h, $ref, handler }: PropsType) {
 		<div className={`relative mt-2 ${h}`}>
 			<textarea
 				id="textarea"
-				onChange={onChange}
-				value={value}
+				onChange={handleText}
+				value={text}
 				ref={$ref}
 				className="py-8 px-4 resize-none w-full h-full bg-grayscale.200 dark:bg-grayscale.700 rounded-2xl text-grayscale.700 dark:text-grayscale.400 focus:input-text--focus"
-			></textarea>
+			>
+				<ReactMarkdown>{text}</ReactMarkdown>
+			</textarea>
 			<label
 				className={`transition-all absolute text-grayscale.600 dark:text-grayscale.500
-        ${value ? moving : " top-8 left-5"} `}
+        ${text ? moving : " top-8 left-5"} `}
 				htmlFor="textarea"
 			>
 				내용을 입력하세요
@@ -58,7 +57,7 @@ function TextArea({ h, $ref, handler }: PropsType) {
 			<div className="flex items-center absolute right-4 bottom-16">
 				{isVisible && (
 					<p className="text-xs mt-1 mr-3 text-grayscale.600 dark:text-grayscale.500">
-						{`띄어쓰기 포함 ${value.length}자`}
+						{`띄어쓰기 포함 ${text.length}자`}
 					</p>
 				)}
 				<Grip />

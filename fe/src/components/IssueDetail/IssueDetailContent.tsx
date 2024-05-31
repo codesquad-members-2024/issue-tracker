@@ -17,6 +17,7 @@ function IssueDetailContent({ issueData }: PropsType) {
 	const { assignees, comments, issue, labels, milestone } = issueData;
 	const [disabled, setDisabled] = useState("DISABLED");
 	const $content = useRef<HTMLTextAreaElement>(null);
+	const uploadedFile = useRef<string | null>(null);
 	const { member_id } = getLocalStorageItem("user");
 	const mutate = usePost(`/issue/${issue.id}/comment`, `issue/${issue.id}`);
 
@@ -33,7 +34,7 @@ function IssueDetailContent({ issueData }: PropsType) {
 			writer: member_id,
 			content: $content.current?.value || "",
 			createdAt: getNowTime(),
-			uploadedFile: null, //TODO 파일첨부
+			uploadedFile: uploadedFile.current,
 		};
 		mutate(data);
 	};
@@ -49,7 +50,12 @@ function IssueDetailContent({ issueData }: PropsType) {
 					))}
 				</div>
 				<div className="mt-6">
-					<TextArea h="h-[184px]" $ref={$content} handler={handleCommentBtnState} />
+					<TextArea
+						h="h-[184px]"
+						$ref={$content}
+						handler={handleCommentBtnState}
+						uploadedFile={uploadedFile}
+					/>
 					<div className="mt-6 flex flex-row-reverse w-full">
 						<Button
 							size="S"

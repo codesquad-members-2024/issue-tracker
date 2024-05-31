@@ -8,11 +8,14 @@ type FilterTarget = (
 	idx: number,
 	navigate: NavigateFunction,
 	setFilterText: React.Dispatch<React.SetStateAction<string>>,
-	paramRef: React.MutableRefObject<URLSearchParams>
+	paramRef: React.RefObject<URLSearchParams>
 ) => void;
 
-const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: params }) => {
+const setFilterLeftSide: FilterTarget = (idx, navigate, setFilterText, paramRef) => {
+	const params = paramRef.current!;
 	const { member_id } = getLocalStorageItem("user");
+	const regex = /writer:[^\s]+|assignee:[^\s]+|commenter:[^\s]+/g;
+	const stateRegex = /is:open|is:closed/g;
 	const deleteMultipleParams = () => {
 		params.delete("writer");
 		params.delete("assignee");
@@ -22,14 +25,14 @@ const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: par
 		0: () => {
 			params.set("state", "opened");
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/is:open|is:closed/g, "is:open").trim();
+				const deletedStr = prev.replace(stateRegex, "is:open").trim();
 				return deletedStr.includes("is:open") ? deletedStr : `${deletedStr} is:open`;
 			});
 		},
 		1: () => {
 			params.set("state", "closed");
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/is:open|is:closed/g, "is:closed").trim();
+				const deletedStr = prev.replace(stateRegex, "is:closed").trim();
 				return deletedStr.includes("is:closed") ? deletedStr : `${deletedStr} is:closed`;
 			});
 		},
@@ -37,7 +40,7 @@ const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: par
 			deleteMultipleParams();
 			params.append("writer", member_id);
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/writer:@me|assignee:@me|commenter:@me/g, "").trim();
+				const deletedStr = prev.replace(regex, "").trim();
 				return `${deletedStr} writer:@me`.trim();
 			});
 		},
@@ -45,7 +48,7 @@ const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: par
 			deleteMultipleParams();
 			params.append("assignee", member_id);
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/writer:@me|assignee:@me|commenter:@me/g, "").trim();
+				const deletedStr = prev.replace(regex, "").trim();
 				return `${deletedStr} assignee:@me`;
 			});
 		},
@@ -53,7 +56,7 @@ const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: par
 			deleteMultipleParams();
 			params.append("commenter", member_id);
 			setFilterText((prev) => {
-				const deletedStr = prev.replace(/writer:@me|assignee:@me|commenter:@me/g, "").trim();
+				const deletedStr = prev.replace(regex, "").trim();
 				return `${deletedStr} commenter:@me`;
 			});
 		},
@@ -62,4 +65,4 @@ const filterTarget: FilterTarget = (idx, navigate, setFilterText, { current: par
 	navigate(`/filter?target=issue&${params.toString()}`);
 };
 
-export default filterTarget;
+export default setFilterLeftSide;

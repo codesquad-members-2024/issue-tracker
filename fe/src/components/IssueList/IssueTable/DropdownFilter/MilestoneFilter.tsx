@@ -1,18 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
+import { setFilter } from "../../../../helper/setFilterRightSide";
+import { useNavigate } from "react-router-dom";
+import { FilterStateContext } from "../../../../provider/FilterStateProvider";
 
 type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
 	handleFetch: (fetchedData: FetchedDataType, refetch: () => void) => void;
 	handleClearTimeOut: () => void;
-	// milestoneId?: React.MutableRefObject<number | null>; //TODO 옵셔널 삭제
 }
 
 function MilestoneFilter({ handleFetch, handleClearTimeOut }: ProsType) {
+	const navigate = useNavigate();
+	const [, setFilterText, paramRef] = useContext(FilterStateContext);
 	const [open, setOpen] = useState(false);
-	// const previousItem = useRef<HTMLInputElement | null>(null);
 
 	const { data, refetch } = useGet("milestone", "/milestone", false);
 	const milestones = data && data.milestones;
@@ -20,18 +23,25 @@ function MilestoneFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 		"마일스톤이 없는 이슈",
 		...milestones.map(({ name }: { name: string }) => name),
 	];
-	// const checkedItem = milestoneId.current && milestones[milestoneId.current - 1];
 
 	const onToggle = (event: React.MouseEvent) => {
 		event.preventDefault();
 		setOpen(!open);
 	};
-	// const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
-	// 	if (previousItem.current) previousItem.current.checked = false;
-	// 	previousItem.current = target;
-	// 	milestoneId.current = idx;
-	// 	setOpen(false);
-	// };
+	const handleCheckedItems = ({ target }: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+		target.checked = false;
+		setOpen(false);
+		const currId = idx && milestones[idx - 1].id;
+		setFilter(
+			`milestone_id=${currId}`,
+			`milestone:${contents[idx] === "마일스톤이 없는 이슈" ? "no" : contents[idx]}`,
+			navigate,
+			setFilterText,
+			paramRef,
+			"milestone_id",
+			/milestone:[^\s]+/g
+		);
+	};
 
 	return (
 		<div
@@ -51,7 +61,7 @@ function MilestoneFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 					top="top-[55px]"
 					title="마일스톤 필터"
 					contents={contents}
-					// handler={handleCheckedItems}
+					handler={handleCheckedItems}
 				/>
 			</details>
 			{open && (
