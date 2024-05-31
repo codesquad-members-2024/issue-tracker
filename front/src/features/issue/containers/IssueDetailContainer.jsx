@@ -307,10 +307,7 @@ export function IssueDetailContainer() {
 		</>
 	);
 }
-const StyledWrapper = styled.div`
-	//TODO: padding-bottom: 100px; 삭제
-	padding-bottom: 100px;
-`;
+const StyledWrapper = styled.div``;
 const StyledDetailHeader = styled.div`
 	padding-bottom: 24px;
 	margin-bottom: 24px;
