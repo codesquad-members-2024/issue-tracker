@@ -22,7 +22,7 @@ export function Login() {
   };
 
   const handleGitHubLogin = () => {
-    const url = "https://github.com/login/oauth/authorize?client_id=Ov23ctHp2vZJoN3WHd25&scope=login,name,email,avatar_url";
+    const url = "https://github.com/login/oauth/authorize?client_id=Ov23ctHp2vZJoN3WHd25&scope=login,name,email,avatar_url&redirect_uri=https://www.issuetracker.site/login/oauth2/code/github";
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
   };
