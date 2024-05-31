@@ -1,7 +1,10 @@
-import { useState, useRef } from "react";
+import { useContext, useState } from "react";
 import useGet from "../../../../hooks/useGet";
 import DropdownPanel from "../../../../components/common/DropdownPanel";
 import { ReactComponent as ChevronDown } from "../../../../svg/ChevronDown.svg";
+import { setFilter } from "../../../../helper/setFilterRightSide";
+import { useNavigate } from "react-router-dom";
+import { FilterStateContext } from "../../../../provider/FilterStateProvider";
 
 type FetchedDataType = Milestone[] | Label[] | Member[];
 interface ProsType {
@@ -10,9 +13,9 @@ interface ProsType {
 }
 
 function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
+	const navigate = useNavigate();
+	const [, setFilterText, paramRef] = useContext(FilterStateContext);
 	const [open, setOpen] = useState(false);
-	// const [idx, setIdx] = useState<number[]>([]);
-	const checkedItems = useRef<{ [key: number]: number }>({});
 
 	const { data, refetch } = useGet("member", "/member/list", false);
 	const members = data && data.members;
@@ -23,21 +26,22 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 		event.preventDefault();
 		setOpen(!open);
 	};
-	const handleCheckedItems = (
-		{ target: { checked } }: React.ChangeEvent<HTMLInputElement>,
+	const handleWriterCheckedItems = (
+		{ target }: React.ChangeEvent<HTMLInputElement>,
 		idx: number
 	) => {
-		if (checked) {
-			checkedItems.current[idx] = idx;
-			return;
-		}
-		delete checkedItems.current[idx];
+		target.checked = false;
+		setOpen(false);
+		setFilter(
+			`writer=${contents[idx]}`,
+			`writer:${contents[idx]}`,
+			navigate,
+			setFilterText,
+			paramRef,
+			"writer",
+			/writer:[^\s]+/g
+		);
 	};
-
-	// useEffect(() => {
-	// 	if (!open) setIdx(Object.values(checkedItems.current));
-	// }, [open]);
-
 	return (
 		<div
 			className="flex flex-col justify-center h-full"
@@ -53,11 +57,12 @@ function WriterFilter({ handleFetch, handleClearTimeOut }: ProsType) {
 					<ChevronDown className="mt-1 ml-3 stroke-grayscale.600 dark:stroke-grayscale.500" />
 				</summary>
 				<DropdownPanel
+					key="writer"
 					top="top-[55px]"
 					title="작성자 필터"
 					contents={contents}
 					imgs={imgs}
-					handler={handleCheckedItems}
+					handler={(e, i) => handleWriterCheckedItems(e, i)}
 				/>
 			</details>
 			{open && (

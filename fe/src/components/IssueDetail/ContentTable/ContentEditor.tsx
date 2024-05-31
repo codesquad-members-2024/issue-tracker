@@ -1,25 +1,23 @@
 import { useMemo, useState, useEffect, SetStateAction } from "react";
 import { ReactComponent as Grip } from "../../../svg/Grip.svg";
-import Button from "../../common/Button";
+import FileUploadButton from "../../common/FileUploadButton";
 
 interface PropsType {
 	preHeight: number;
 	content: string;
 	setContentValue: React.Dispatch<SetStateAction<string>>;
+	uploadedFile: React.MutableRefObject<string | null>;
 }
 
 const DELAY = 2000;
 
-function ContentEditor({ preHeight, content, setContentValue }: PropsType) {
+function ContentEditor({ preHeight, content, setContentValue, uploadedFile }: PropsType) {
 	const [isVisible, setIsVisible] = useState(true);
 	const ButtonMemo = useMemo(
-		() => (
-			<div className="flex items-center border-t-2 border-dashed h-[52px] rounded-b-xl absolute w-full bottom-0">
-				<Button size="S" type="GHOST" icon="CLIP" text="파일 첨부하기" state="DEFAULT" />
-			</div>
-		),
-		[]
+		() => <FileUploadButton uploadedFile={uploadedFile} setText={setContentValue} />,
+		[setContentValue, uploadedFile]
 	);
+
 	useEffect(() => {
 		setIsVisible(true);
 		const timer = setTimeout(() => {

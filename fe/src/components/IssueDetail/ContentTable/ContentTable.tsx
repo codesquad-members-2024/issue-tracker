@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import getTimeStamp from "../../../utility/getTimeStamp";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
@@ -19,6 +20,7 @@ function ContentTable({ issue, comment, memberId, issueId }: PropsType) {
 	const [editor, setEditor] = useState(false);
 	const [isDisabled, setIsDisabled] = useState("DEFAULT");
 	const preRef = useRef<HTMLPreElement>(null);
+	const uploadedFile = useRef<string | null>(null);
 	const data: Issue | IssueComment = (issue ? issue : comment)!;
 	const preHeight = useRef<number>(0);
 	const [contentValue, setContentValue] = useState(data.content);
@@ -38,7 +40,7 @@ function ContentTable({ issue, comment, memberId, issueId }: PropsType) {
 			? mutateIssueContent({ content: contentValue })
 			: mutateCommentContent({
 					content: contentValue,
-					uploadedFile: null, // TODO 파일
+					uploadedFile: uploadedFile.current,
 			  });
 		setTimeout(() => {
 			setEditor(!editor);
@@ -88,9 +90,10 @@ function ContentTable({ issue, comment, memberId, issueId }: PropsType) {
 						preHeight={preHeight.current}
 						content={contentValue}
 						setContentValue={setContentValue}
+						uploadedFile={uploadedFile}
 					/>
 				) : (
-					data.content
+					<ReactMarkdown>{data.content}</ReactMarkdown>
 				)}
 			</pre>
 		</div>

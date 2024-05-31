@@ -1,5 +1,3 @@
-//w-[0%] w-[5%] w-[10%] w-[15%] w-[20%] w-[25%] w-[30%] w-[35%] w-[40%] w-[45%] w-[50%] w-[55%] w-[60%] w-[65%] w-[70%] w-[75%] w-[80%] w-[85%] w-[90%] w-[95%] w-[100%]
-
 interface PercentType {
 	percent: number;
 }
@@ -18,9 +16,12 @@ const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 		<>
 			<div className="w-[224px] h-[8px] bg-grayscale.200 rounded-xl">
 				<div
-					className={`transition-[width] h-full w-[${percent}%] bg-accent.blue ${
+					className={`transition-[width] h-full bg-accent.blue ${
 						percent === 100 ? "rounded-xl" : "rounded-l-xl"
 					} `}
+					style={{
+						width: `${percent}%`,
+					}}
 				></div>
 			</div>
 		</>
@@ -28,7 +29,6 @@ const ProgressBar: React.FC<PercentType> = ({ percent }: PercentType) => {
 };
 
 function withLabel(Component: React.FC<PercentType>, { percent, name }: ProgressWithLabelProps) {
-	console.log();
 	return (
 		<>
 			<Component percent={percent} />
@@ -57,7 +57,7 @@ function withInfo(
 	);
 }
 
-const ProgressWithLabel = (props: ProgressWithLabelProps) => withLabel(ProgressBar, props); //<ProgressWithLabel>"그룹프로젝트:이슈트래커"</ProgressWithLabel>
+const ProgressWithLabel = (props: ProgressWithLabelProps) => withLabel(ProgressBar, props);
 const ProgressWithInfo = (props: ProgressWithInfoProps) => withInfo(ProgressBar, props);
 
 export { ProgressWithInfo, ProgressWithLabel };

@@ -13,7 +13,7 @@ interface PostDataType {
 	writer: string;
 	content: string;
 	createdAt: string;
-	file: null;
+	uploadedFile: null | string;
 	milestoneId: number | null;
 	labelIds: number[];
 	assigneeIds: string[];
@@ -23,6 +23,7 @@ const border = "component-border dark:component-border--dark";
 function WritingIssue() {
 	const $title = useRef<HTMLInputElement>(null);
 	const $content = useRef<HTMLTextAreaElement>(null);
+	const uploadedFile = useRef<string | null>(null);
 	const labelIds = useRef<number[]>([]);
 	const assigneeIds = useRef<string[]>([]);
 	const milestoneId = useRef<number | null>(null);
@@ -34,11 +35,8 @@ function WritingIssue() {
 	});
 
 	const handleTitle = () => {
-		if ($title.current?.value) {
-			setDisabled("DEFAULT");
-			return;
-		}
-		setDisabled("DISABLED");
+		const { value: titleValue } = $title.current || {};
+		setDisabled(titleValue ? "DEFAULT" : "DISABLED");
 	};
 
 	const handleAddData = () => {
@@ -47,7 +45,7 @@ function WritingIssue() {
 			writer: user.member_id,
 			content: $content.current?.value || "",
 			createdAt: getNowTime(),
-			file: null,
+			uploadedFile: uploadedFile.current,
 			milestoneId: milestoneId.current,
 			labelIds: labelIds.current,
 			assigneeIds: assigneeIds.current,
@@ -62,7 +60,7 @@ function WritingIssue() {
 			</h1>
 			<div className={`border-y-[1px] w-full ${border}`}>
 				<div className="flex flex-wrap md:flex-nowrap my-5">
-					<div className="w-[4%]">
+					<div className="basis-[90px] mb-3">
 						<img
 							className="w-[32px] h-[32px] rounded-full"
 							alt="userProfile"
@@ -77,7 +75,7 @@ function WritingIssue() {
 							$title={$title}
 							handler={handleTitle}
 						/>
-						<TextArea h="h-[480px]" $ref={$content} />
+						<TextArea h="h-[480px]" $ref={$content} uploadedFile={uploadedFile} />
 					</div>
 					<div className="ml-0 mt-5 md:ml-5 md:mt-0">
 						<SideBar labelIds={labelIds} assigneeIds={assigneeIds} milestoneId={milestoneId} />

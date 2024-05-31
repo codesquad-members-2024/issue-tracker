@@ -5,6 +5,7 @@ import ContentTable from "./ContentTable/ContentTable";
 import Button from "../common/Button";
 import usePost from "../../hooks/usePost";
 import getLocalStorageItem from "../../utility/getLocalStorageItem";
+import getNowTime from "../../utility/getNowTime";
 
 interface PropsType {
 	issueData: IssueDetailDataType;
@@ -13,13 +14,13 @@ interface PropsType {
 const border = "component-border dark:component-border--dark";
 
 function IssueDetailContent({ issueData }: PropsType) {
-	const { assignees, comments, issue } = issueData; // labels, milestone 추가
+	const { assignees, comments, issue, labels, milestone } = issueData;
 	const [disabled, setDisabled] = useState("DISABLED");
 	const $content = useRef<HTMLTextAreaElement>(null);
+	const uploadedFile = useRef<string | null>(null);
 	const { member_id } = getLocalStorageItem("user");
 	const mutate = usePost(`/issue/${issue.id}/comment`, `issue/${issue.id}`);
-	// console.log(labels);
-	// console.log(milestone);
+
 	const handleCommentBtnState = () => {
 		if ($content.current?.value) {
 			setDisabled("DEFAULT");
@@ -32,7 +33,8 @@ function IssueDetailContent({ issueData }: PropsType) {
 		const data = {
 			writer: member_id,
 			content: $content.current?.value || "",
-			uploadedFile: null, //TODO 파일첨부
+			createdAt: getNowTime(),
+			uploadedFile: uploadedFile.current,
 		};
 		mutate(data);
 	};
@@ -48,7 +50,12 @@ function IssueDetailContent({ issueData }: PropsType) {
 					))}
 				</div>
 				<div className="mt-6">
-					<TextArea h="h-[184px]" $ref={$content} handler={handleCommentBtnState} />
+					<TextArea
+						h="h-[184px]"
+						$ref={$content}
+						handler={handleCommentBtnState}
+						uploadedFile={uploadedFile}
+					/>
 					<div className="mt-6 flex flex-row-reverse w-full">
 						<Button
 							size="S"
@@ -62,7 +69,7 @@ function IssueDetailContent({ issueData }: PropsType) {
 				</div>
 			</div>
 			<div className="mt-6 ml-5">
-				<SideBar assignees={assignees} issueId={issue.id} />
+				<SideBar assignees={assignees} issueId={issue.id} labels={labels} milestone={milestone} />
 			</div>
 		</section>
 	);

@@ -11,8 +11,9 @@ interface PropsType {
 function MilestonesUI({ queryKey }: PropsType) {
 	const [newMilestone, setNewMilestone] = useState(false);
 	const handleShowNewMilestone = () => setNewMilestone(!newMilestone);
-	const { data } = useGet("count", "/count", true);
-	const { totalLabelCounts=0, totalMilestoneCounts=0 } =  data || {};
+	const { data, error } = useGet("count", "/count", true);
+	if (error) return <div>값을 불러오지 못했습니다</div>;
+	const { totalLabelCounts = 0, totalMilestoneCounts = 0 } = data || {};
 
 	return (
 		<>
