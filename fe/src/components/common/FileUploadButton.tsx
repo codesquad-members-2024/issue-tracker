@@ -3,15 +3,17 @@ import Button from "./Button";
 
 interface PropsType {
 	uploadedFile?: React.MutableRefObject<string | null>;
+	setText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function FileUploadButton({ uploadedFile }: PropsType) {
+function FileUploadButton({ uploadedFile, setText }: PropsType) {
 	const handleFileUpload = async ({ target: { files } }: React.ChangeEvent<HTMLInputElement>) => {
 		const [selectedFile] = files!;
 		const formData = new FormData();
 		formData.append("uploadImg", selectedFile);
-		const img = await uploadFile(formData);
-		if (uploadedFile) uploadedFile.current = img.uploadedUrl;
+		const { uploadedUrl } = await uploadFile(formData);
+		if (uploadedFile) uploadedFile.current = uploadedUrl;
+		setText((prev) => `${prev}\n![image](${selectedFile.name})`);
 	};
 
 	return (

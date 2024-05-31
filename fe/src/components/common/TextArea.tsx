@@ -13,12 +13,12 @@ const moving = "scale-75 top-2 left-0";
 const DELAY = 2000;
 
 function TextArea({ h, $ref, handler, uploadedFile }: PropsType) {
-	const [value, setValue] = useState("");
+	const [text, setText] = useState("");
 	const [isVisible, setIsVisible] = useState(true);
-	const ButtonMemo = useMemo(() => <FileUploadButton uploadedFile={uploadedFile}/>, []);
+	const ButtonMemo = useMemo(() => <FileUploadButton uploadedFile={uploadedFile} setText={setText}/>, []);
 
-	const onChange = ({ target: { value: textAreaValue } }: ChangeEvent<HTMLTextAreaElement>) => {
-		setValue(textAreaValue);
+	const handleText = ({ target: { value: textAreaValue } }: ChangeEvent<HTMLTextAreaElement>) => {
+		setText(textAreaValue);
 		if (handler) handler();
 	};
 
@@ -36,14 +36,14 @@ function TextArea({ h, $ref, handler, uploadedFile }: PropsType) {
 		<div className={`relative mt-2 ${h}`}>
 			<textarea
 				id="textarea"
-				onChange={onChange}
-				value={value}
+				onChange={handleText}
+				value={text}
 				ref={$ref}
 				className="py-8 px-4 resize-none w-full h-full bg-grayscale.200 dark:bg-grayscale.700 rounded-2xl text-grayscale.700 dark:text-grayscale.400 focus:input-text--focus"
 			></textarea>
 			<label
 				className={`transition-all absolute text-grayscale.600 dark:text-grayscale.500
-        ${value ? moving : " top-8 left-5"} `}
+        ${text ? moving : " top-8 left-5"} `}
 				htmlFor="textarea"
 			>
 				내용을 입력하세요
@@ -51,7 +51,7 @@ function TextArea({ h, $ref, handler, uploadedFile }: PropsType) {
 			<div className="flex items-center absolute right-4 bottom-16">
 				{isVisible && (
 					<p className="text-xs mt-1 mr-3 text-grayscale.600 dark:text-grayscale.500">
-						{`띄어쓰기 포함 ${value.length}자`}
+						{`띄어쓰기 포함 ${text.length}자`}
 					</p>
 				)}
 				<Grip />
