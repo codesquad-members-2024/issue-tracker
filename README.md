@@ -1,11 +1,11 @@
 
 # ⏰ 팁 협업툴 issue-tracker #team08 📊
 
-[image](https://github.com/codesquad-masters2024-team08/issue-tracker/assets/57825133/ad4ec482-7d71-42a2-8d50-dfd1c91e7328)
+![image](https://github.com/codesquad-masters2024-team08/issue-tracker/assets/57825133/ad4ec482-7d71-42a2-8d50-dfd1c91e7328)
 
 # 배포 링크
 
-![이슈트래커-팀8](https://issue-tracker-team08.site/)
+[이슈트래커-팀8](https://issue-tracker-team08.site/)
 
 ## 💻 프로젝트 정보
 
