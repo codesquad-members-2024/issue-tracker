@@ -56,6 +56,7 @@ const LabelBar = styled.div`
   justify-content: center;
   align-items: center;
   color: #4e4b66;
+  cursor: pointer;
 `;
 
 const MilestoneBar = styled.div`
@@ -66,6 +67,7 @@ const MilestoneBar = styled.div`
   align-items: center;
   border-left: 1px solid #d9dbe9;
   color: #4e4b66;
+  cursor: pointer;
 `;
 
 const SmallIcon = styled.img`

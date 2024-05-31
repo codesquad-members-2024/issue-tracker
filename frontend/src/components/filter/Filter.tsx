@@ -126,6 +126,7 @@ const FilterButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 `;
 
 const MyFilterTitle = styled.span`
@@ -164,6 +165,7 @@ const LargeTitle = styled.span`
   height: 1em;
   margin-left: 0.5em;
   font-size: 1em;
+  cursor: pointer;
 `;
 
 const LabelBar = styled.div`

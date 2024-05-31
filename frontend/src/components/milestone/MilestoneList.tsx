@@ -97,6 +97,7 @@ const MilestoneTypeText = styled.span<{ isFocused: boolean }>`
   display: flex;
   gap: 0.25em;
   ${({ isFocused }) => isFocused && "font-weight: 700;"}
+  cursor: pointer;
 `;
 
 const ScrollableArea = styled.div`
