@@ -1,33 +1,20 @@
 import React from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
-import FilterUI from "../../common/FilterUI";
-import { Filter } from "../../common/FilterUI";
 import IssueStatusFilter from "./IssueStatusFilter";
+import FeedFilter from "./FeedFilter";
 
-type TaskTable = Record<string, Filter[]>;
+export interface FeedFilterType {
+    담당자: string;
+    레이블: string;
+    마일스톤: string;
+    작성자: string;
+}
 
-const taskTable: TaskTable = {
-    담당자: [
-        { value: "담당자가 없는 이슈", query: "" },
-        { value: "george", query: "author:96limshyun" },
-        { value: "cory", query: "author:cory" },
-        { value: "jayden", query: "author:jayden" },
-    ],
-    레이블: [
-        { value: "레이블이 없는 이슈", query: "" },
-        { value: "bug", query: "label=bug" },
-        { value: "documentation", query: "label=documentation" },
-    ],
-    마일스톤: [
-        { value: "마일스톤이 없는 이슈", query: "" },
-        { value: "이슈리스트", query: "milestione=이슈리스트" },
-    ],
-    작성자: [
-        { value: "모두 보기", query: "" },
-        { value: "cory", query: "assignee=cory" },
-        { value: "jayden", query: "assignee=jayden" },
-        { value: "george", query: "assignee=george" },
-    ],
+const FEED_FILTER: FeedFilterType = {
+    담당자: "users",
+    레이블: "labels",
+    마일스톤: "milestones",
+    작성자: "users",
 };
 
 interface FeedNavProps {
@@ -39,6 +26,8 @@ interface FeedNavProps {
     isAllChecked: boolean;
     allCheckHandler: () => void;
     checkedItem: string[];
+    setCheckItem: React.Dispatch<React.SetStateAction<string[]>>
+    setIsAllChecked: React.Dispatch<React.SetStateAction<boolean>>
     openIssueCount: number;
     closedIssueCount: number;
 }
@@ -52,6 +41,8 @@ const FeedNav = ({
     isAllChecked,
     allCheckHandler,
     checkedItem,
+    setCheckItem,
+    setIsAllChecked,
     openIssueCount,
     closedIssueCount,
 }: FeedNavProps) => {
@@ -91,12 +82,12 @@ const FeedNav = ({
             </div>
             <div className="flex h-full w-[30%] items-center z-10">
                 {checkedItem.length ? (
-                    <IssueStatusFilter checkedItem={checkedItem} />
+                    <IssueStatusFilter checkedItem={checkedItem} setCheckItem={setCheckItem} setIsAllChecked={setIsAllChecked}/>
                 ) : (
-                    Object.keys(taskTable).map((key) => (
-                        <FilterUI
+                    Object.keys(FEED_FILTER).map((key) => (
+                        <FeedFilter
                             key={key}
-                            filterInfo={taskTable[key]}
+                            queryName={FEED_FILTER[key as keyof FeedFilterType]}
                             filterType={key}
                             resetFilterUI={resetFilterUI}
                             setResetFilterUI={setResetFilterUI}

@@ -6,9 +6,16 @@ import { LoginForm } from "../pages/LoginPage";
 import { PostRequestFrom } from "../pages/NewPage";
 import { notification } from "antd";
 import { CommentCreateForm } from "../components/IssueDetail/CommentArea";
+import { TitleForm } from "../components/IssueDetail/TitleUi";
+import { SideBarUpdateForm } from "../pages/IssueDetailPage";
+import { StatusModify } from "../components/IssueContainer/IssueStatusFilter";
 const SNACK_BAR_DELAY = 2000
 interface TitleState {
     title: string;
+}
+
+interface CommentModify {
+    content: string
 }
 
 export type CreateDataType = FormState | LabelFormState | PostRequestFrom | SignUpForm | LoginForm | CommentCreateForm
@@ -75,13 +82,23 @@ export const APiUtil = {
         }
     },
 
-    async patchData(tableName: string, id: number) {
-        await fetch(serverURL + `${tableName}/${id}/close`, {
+    async patchData(tableName: string) {
+        await fetch(serverURL + `${tableName}`, {
             method: "PATCH",
             headers: {
                 "content-type": "application/json",
                 "Authorization": token ? `Bearer ${token}` : "",
             },
+        });
+    },
+    async ModifyPatch(tableName: string, form : CommentModify | TitleForm | SideBarUpdateForm | StatusModify) {
+        await fetch(serverURL + `${tableName}`, {
+            method: "PATCH",
+            headers: {
+                "content-type": "application/json",
+                "Authorization": token ? `Bearer ${token}` : "",
+            },
+            body: JSON.stringify(form),
         });
     },
 };
@@ -100,10 +117,10 @@ export const changeColor = ({ setColor, setFormData }: ChangeColorProps) => {
 };
 
 export const getDateDifference = (createdAt: string | undefined) => {
-    const createdDate = new Date(createdAt as string);
+    const createdDate = new Date(createdAt as string + "-09:00");
     const nowDate = new Date();
-
-    const betweenTime = Math.floor((nowDate.getTime() - createdDate.getTime()) / 1000 / 60);
+    
+    const betweenTime = Math.floor((nowDate.getTime() - (createdDate.getTime())) / 1000 / 60 );
     if (betweenTime < 1) return "방금 전";
     if (betweenTime < 60) return `${betweenTime}분 전`;
 

@@ -36,7 +36,7 @@ export interface IssueFeedProps {
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const IssueFeed = ({
+const  IssueFeed = ({
     setQuery,
     isOpen,
     setOpen,
@@ -82,6 +82,8 @@ const IssueFeed = ({
                 isAllChecked={isAllChecked}
                 allCheckHandler={allCheckHandler}
                 checkedItem={checkedItem}
+                setCheckItem={setCheckItem}
+                setIsAllChecked={setIsAllChecked}
                 openIssueCount={issueInfo.openIssueCount}
                 closedIssueCount={issueInfo.closedIssueCount}
             />

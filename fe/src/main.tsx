@@ -6,13 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallBack from "./common/ErrorFallBack.tsx";
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: 1000 * 60,
-        },
-    },
-});
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <div className="h-full my-auto transition-colors bg-gray-100 dark:bg-darkModeBG dark:text-white">

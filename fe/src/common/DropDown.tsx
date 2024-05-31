@@ -121,6 +121,7 @@ const DropDown = ({
             ))}
             {isOpen && (
                 <DropDownList
+                    setOpen={setOpen}
                     curTableItem={curTableItem}
                     data={data}
                     handleListClick={handleListClick}

@@ -3,21 +3,46 @@ import {
     DownOutlined,
     MinusCircleOutlined,
 } from "@ant-design/icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { APiUtil } from "../../common/Utils";
+
+export interface StatusModify {
+    issueIds: string[],
+    state: string
+}
+interface IssueStatusFilterProps {
+    checkedItem: string[]
+    setCheckItem: React.Dispatch<React.SetStateAction<string[]>>
+    setIsAllChecked: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 const filterType = [
-    { type: "선택한 이슈 열기", value: "open" },
-    { type: "선택한 이슈 닫기", value: "closed" },
+    { type: "선택한 이슈 열기", value: "OPEN" },
+    { type: "선택한 이슈 닫기", value: "CLOSED" },
 ];
 
-const IssueStatusFilter = ({checkedItem}: {checkedItem: string[]}) => {
+const IssueStatusFilter = ({checkedItem, setCheckItem, setIsAllChecked}: IssueStatusFilterProps) => {
     const [isOpen, setOpen] = useState(false);
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: async (form: StatusModify) => {
+            await APiUtil.ModifyPatch("issues", form);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["issues"] });
+        },
+    });
 
     const toggleDropdown = () => setOpen(!isOpen);
 
-    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, value: string) => {
-        e.preventDefault();
-        // value에 따라서 Open, closed 를 patch 보낼지 판단 후 요청
-        console.log(value, checkedItem)
+    const handleClick = (value: string) => {
+        const modifyStateForm: StatusModify = {
+            issueIds: [...checkedItem],
+            state: value,
+        };
+        mutate(modifyStateForm);
+        setCheckItem([])
+        setIsAllChecked(false)
     }
     return (
         <button
@@ -33,7 +58,7 @@ const IssueStatusFilter = ({checkedItem}: {checkedItem: string[]}) => {
                         <div
                             key={idx}
                             className="flex-grow border-b-2 border-gray-200 px-6 flex items-center justify-between h-10"
-                            onClick={(e) => handleClick(e, curType.value)}
+                            onClick={() => handleClick(curType.value)}
                         >
                             <div>{curType.type}</div>
                             <MinusCircleOutlined />

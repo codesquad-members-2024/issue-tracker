@@ -41,7 +41,7 @@ const CommentArea = ({ detailData, authorId, userInfo, productId }: CommentAreaP
     }
     return (
         <div className="h-full">
-            <CommentCard commentInfo={authorCommentInfo} userInfo={userInfo} authorId={authorId}/>
+            <CommentCard commentInfo={authorCommentInfo} userInfo={userInfo} authorId={authorId} productId={productId}/>
             {detailData?.comments.length ? (
                 detailData.comments.map((curData, idx) => (
                     <CommentCard
@@ -49,6 +49,7 @@ const CommentArea = ({ detailData, authorId, userInfo, productId }: CommentAreaP
                         commentInfo={curData}
                         userInfo={userInfo}
                         authorId={authorId}
+                        productId={productId}
                     />
                 ))
             ) : (

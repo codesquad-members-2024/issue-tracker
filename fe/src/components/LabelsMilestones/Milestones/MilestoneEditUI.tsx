@@ -18,10 +18,16 @@ interface MutationPayload {
     id?: number;
 }
 
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
 const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
     const queryClient = useQueryClient();
+    const [isActive, setActive] = useState(false);
+    const [buttonDisable, setButtonDisable] = useState(true)
     const [ModifyDeleteState, ModifyDeleteDispatch] = useContext(ModifyDeleteContext);
-
+    
+    const handleFocus = () => setActive(true);
+    const handleBlur = () => setActive(false);
     const { mutate } = useMutation({
         mutationFn: async ({ formData, type, id }: MutationPayload) => {
             if (type === "createData") {
@@ -34,7 +40,6 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
             queryClient.invalidateQueries({queryKey: ["milestones"]});
         },
     });
-    
 
     const [formData, setFormData]: [
         FormState,
@@ -52,6 +57,15 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
             [name]: value,
         }));
     };
+
+    useEffect(() => {
+        if (formData.title !== "" && formData.description !== "" && dateRegex.test(formData.dueDate)) {
+            return setButtonDisable(false);
+        } else {
+            return setButtonDisable(true);
+        }
+            
+    }, [formData]);
 
     useEffect(() => {
         if (ModifyDeleteState.state === "modify" && setFormData) {
@@ -74,6 +88,7 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>, id?: number) => {
         const type = ModifyDeleteState.state === "create" ? "createData" : "modifyData"
         e.preventDefault();
+        console.log(formData)
         mutate({formData, type, id});
         ModifyDeleteDispatch({ type: "SET_INIT", Payload: ""})
     };
@@ -93,7 +108,10 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
                         ? "마일스톤 편집"
                         : "새로운 마일스톤 추가"}
                 </h3>
-                <form onSubmit={(e) => handleSubmit(e, curMilestone?.id)} className="flex flex-col gap-4">
+                <form
+                    onSubmit={(e) => handleSubmit(e, curMilestone?.id)}
+                    className="flex flex-col gap-4"
+                >
                     <div className="flex flex-col gap-6">
                         <div className="flex justify-between">
                             <input
@@ -109,6 +127,8 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
                                 name="dueDate"
                                 className="w-full px-3 h-[40px] py-2 ml-4 text-gray-500 border rounded-xl bg-gray-100"
                                 placeholder="완료일(선택) YYYY-MM-DD"
+                                onFocus={() => handleFocus()}
+                                onBlur={() => handleBlur()}
                                 value={formData.dueDate}
                                 onChange={handleChange}
                             />
@@ -122,10 +142,16 @@ const MilestoneEditUI = ({ curMilestone }: MilestoneEditUIProps) => {
                             onChange={handleChange}
                         />
                     </div>
+                    {isActive && !dateRegex.test(formData.dueDate) && (
+                        <div className="reality">
+                            <div className="absolute text-red-500">완료일 형식을 맞춰주세요.</div>
+                        </div>
+                    )}
                     <div className="flex flex-row-reverse gap-2 mt-2">
                         <button
                             type="submit"
-                            className="flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-10 w-32"
+                            disabled={buttonDisable}
+                            className={`${buttonDisable && "bg-gray-200"} flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-10 w-32`}
                         >
                             + 완료
                         </button>

@@ -1,6 +1,6 @@
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import FilterUI from "../../common/FilterUI";
+import FilterUI from "./FilterUI";
 import { FilterContext } from "../../Providers/FilterProvider";
 import React, { ChangeEvent, useContext } from "react";
 import LabelsAndMilestoneUI from "../../common/UtilUI";
@@ -26,7 +26,7 @@ const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI, labelCount,
     const [FilterState, FilterDispatch] = useContext(FilterContext);
     
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        FilterDispatch({type: "SEARCH", curFilter: event.target.value})
+        FilterDispatch({type: "SEARCH", selectFilter: event.target.value})
     };
 
     return (

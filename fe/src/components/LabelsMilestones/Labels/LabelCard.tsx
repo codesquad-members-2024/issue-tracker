@@ -8,9 +8,10 @@ import { APiUtil } from "../../../common/Utils";
 import { ModalComponent } from "../../../common/Modal";
 interface LabelCardProps {
     curLabel: Label;
+    isLast: boolean
 }
 
-const LabelCard = ({ curLabel }: LabelCardProps) => {
+const LabelCard = ({ curLabel, isLast }: LabelCardProps) => {
     const [ModifyDeleteState, ModifyDeleteDispatch] =
         useContext(ModifyDeleteContext);
     const queryClient = useQueryClient();
@@ -33,7 +34,7 @@ const LabelCard = ({ curLabel }: LabelCardProps) => {
             {ModifyDeleteState.id === curLabel.id ? (
                 <LabelEditUI curLabel={curLabel} />
             ) : (
-                <div className="h-[90px] flex border-t-2 border-gray-300 dark:bg-darkModeBorderBGx items-center">
+                <div className={`${isLast && "rounded-b-lg"} h-[90px] flex border-t-2 border-gray-300 dark:bg-darkModeBorderBG items-center`}>
                     <div className="w-1/5 h-4/5 ml-4 flex items-center">
                         <div
                             style={{

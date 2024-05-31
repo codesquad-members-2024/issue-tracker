@@ -12,7 +12,6 @@ interface SidebarProps {
     sideTable: { [key in TableType[keyof TableType]]: keyof SideBarItemsForm };
 }
 
-
 const sidebarQuery: TableType = {
     담당자: "users",
     레이블: "labels",
