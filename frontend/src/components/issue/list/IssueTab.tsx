@@ -159,6 +159,7 @@ const LeftMenu = styled.div`
   gap: 0.5em;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 `;
 
 const IssueMenuText = styled.span<{ isFocused: boolean }>`
