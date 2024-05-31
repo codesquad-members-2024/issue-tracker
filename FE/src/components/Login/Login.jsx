@@ -21,6 +21,12 @@ export function Login() {
     }
   };
 
+  const handleGitHubLogin = () => {
+    const url = "https://github.com/login/oauth/authorize?client_id=Ov23ctHp2vZJoN3WHd25&scope=login,name,email,avatar_url";
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
   const isInputEmpty = id.trim() === "" || password.trim() === "";
 
   return (
@@ -29,7 +35,7 @@ export function Login() {
         {!isAuthenticated && (
           <>
             <LogoIcon />
-            <GitHubBtn>GitHub 계정으로 로그인</GitHubBtn>
+            <GitHubBtn onClick={handleGitHubLogin}>GitHub 계정으로 로그인</GitHubBtn>
             <p>or</p>
             <Input type="text" placeholder="아이디" value={id}
               onChange={(event) => setId(event.target.value)}
