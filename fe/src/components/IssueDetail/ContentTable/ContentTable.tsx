@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import getTimeStamp from "../../../utility/getTimeStamp";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
@@ -92,7 +93,7 @@ function ContentTable({ issue, comment, memberId, issueId }: PropsType) {
 						uploadedFile={uploadedFile}
 					/>
 				) : (
-					data.content
+					<ReactMarkdown>{data.content}</ReactMarkdown>
 				)}
 			</pre>
 		</div>

@@ -13,7 +13,7 @@ function FileUploadButton({ uploadedFile, setText }: PropsType) {
 		formData.append("uploadImg", selectedFile);
 		const { uploadedUrl } = await uploadFile(formData);
 		if (uploadedFile) uploadedFile.current = uploadedUrl;
-		setText((prev) => `${prev}\n![image](${selectedFile.name})`);
+		setText((prev) => `${prev}\n![${selectedFile.name}](${uploadedUrl})`);
 	};
 
 	return (

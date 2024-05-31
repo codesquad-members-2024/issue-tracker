@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, useEffect, useMemo } from "react";
+import ReactMarkdown from "react-markdown";
 import { ReactComponent as Grip } from "../../svg/Grip.svg";
 import FileUploadButton from "./FileUploadButton";
 
@@ -15,7 +16,10 @@ const DELAY = 2000;
 function TextArea({ h, $ref, handler, uploadedFile }: PropsType) {
 	const [text, setText] = useState("");
 	const [isVisible, setIsVisible] = useState(true);
-	const ButtonMemo = useMemo(() => <FileUploadButton uploadedFile={uploadedFile} setText={setText}/>, []);
+	const ButtonMemo = useMemo(
+		() => <FileUploadButton uploadedFile={uploadedFile} setText={setText} />,
+		[uploadedFile]
+	);
 
 	const handleText = ({ target: { value: textAreaValue } }: ChangeEvent<HTMLTextAreaElement>) => {
 		setText(textAreaValue);
@@ -40,7 +44,9 @@ function TextArea({ h, $ref, handler, uploadedFile }: PropsType) {
 				value={text}
 				ref={$ref}
 				className="py-8 px-4 resize-none w-full h-full bg-grayscale.200 dark:bg-grayscale.700 rounded-2xl text-grayscale.700 dark:text-grayscale.400 focus:input-text--focus"
-			></textarea>
+			>
+				<ReactMarkdown>{text}</ReactMarkdown>
+			</textarea>
 			<label
 				className={`transition-all absolute text-grayscale.600 dark:text-grayscale.500
         ${text ? moving : " top-8 left-5"} `}

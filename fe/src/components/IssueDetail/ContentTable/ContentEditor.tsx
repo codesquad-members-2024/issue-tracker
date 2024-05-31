@@ -1,6 +1,5 @@
 import { useMemo, useState, useEffect, SetStateAction } from "react";
 import { ReactComponent as Grip } from "../../../svg/Grip.svg";
-import Button from "../../common/Button";
 import FileUploadButton from "../../common/FileUploadButton";
 
 interface PropsType {
@@ -16,7 +15,7 @@ function ContentEditor({ preHeight, content, setContentValue, uploadedFile }: Pr
 	const [isVisible, setIsVisible] = useState(true);
 	const ButtonMemo = useMemo(
 		() => <FileUploadButton uploadedFile={uploadedFile} setText={setContentValue} />,
-		[]
+		[setContentValue, uploadedFile]
 	);
 
 	useEffect(() => {
