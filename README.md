@@ -67,21 +67,21 @@
 <img src="https://img.shields.io/badge/githubactions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
  </div>
 
-### 협업툴
+#### 협업툴
 
 <div align=center> 
 <img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
  </div>
 
-### 디자인
+#### 디자인
 
 <div align=center> 
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
  </div>
 <a href="https://www.figma.com/file/Mx4mDJGfRZZ5wdoBWFw5UX/FE_%EC%9D%B4%EC%8A%88%ED%8A%B8%EB%9E%98%EC%BB%A4?type=design&node-id=32-242&mode=design">피그마</a><br>
 
-### 컨벤션
+#### 컨벤션
 
 <a href="https://motley-satin-81e.notion.site/9dcb83e4c07e4e8f8dcd793ada1a78d1?pvs=4">깃 브랜치 전략</a><br>
 <a href="https://motley-satin-81e.notion.site/Git-9b5e490834234e83849dc70fd8d529eb?pvs=4">깃 커밋메세지 컨벤션</a>
