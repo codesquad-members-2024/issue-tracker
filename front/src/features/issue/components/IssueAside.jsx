@@ -2,10 +2,13 @@ import React, { useReducer, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IconPlus } from '~/common/icons';
 import { Label } from '~/common/components';
+
 import {
 	PopoverAssignee,
 	Assignee,
 	PopoverLabel,
+	MilestoneIndicator,
+	PopoverMilestone,
 } from '~/features/issue/components';
 import { useCheck } from '../context/CheckProvider';
 
@@ -31,6 +34,7 @@ export function IssueAside({
 	issueId,
 	list,
 	labels,
+	miles,
 	onAddAssignee,
 	onDeleteAssignee,
 	onAddLabel,
@@ -40,6 +44,8 @@ export function IssueAside({
 	const { check, checkDispatch } = useCheck();
 	const listArray = useRef(list ? [...list] : []);
 	const lableArray = useRef(labels ? [...labels] : []);
+	const mileTarget = useRef(miles || null);
+
 	const [, forceUpdate] = useReducer(listArrayReducer, []);
 	const [, forceUpdateLabel] = useReducer(lableArrayReducer, []);
 
@@ -48,6 +54,7 @@ export function IssueAside({
 		label: false,
 		milestone: false,
 	});
+	const [mile, setMile] = useState(miles);
 
 	const toggleOpen = target =>
 		setIsOpen(prev => ({ ...prev, [target]: !prev[target] }));
@@ -205,6 +212,33 @@ export function IssueAside({
 					))}
 				</StyledContent>
 			</StyledSideItem>
+
+			{/* 마일스톤 */}
+			<StyledSideItem>
+				<StyledTitleWrapper>
+					<StyledTitle>마일스톤</StyledTitle>
+					{/* <IconPlus onClick={() => toggleOpen('milestone')} />
+					{isOpen.milestone && (
+						<PopoverMilestone
+							dropdownTitle='마일스톤 설정'
+							type='radio'
+							onChange={e => {
+								const { value, id, checked } = e.target;
+								if (checked) {
+									setMile(miles);
+								} else {
+									setMile(value);
+									console.log(mile);
+								}
+							}}
+							checkedItems={miles}
+						/>
+					)} */}
+				</StyledTitleWrapper>
+				<StyledContent>
+					{miles && <MilestoneIndicator milestone={miles} />}
+				</StyledContent>
+			</StyledSideItem>
 		</StyledWrapper>
 	);
 }
@@ -225,6 +259,8 @@ const StyledSideItem = styled.div`
 `;
 
 const StyledTitleWrapper = styled.div`
+	position: relative;
+	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	cursor: pointer;
@@ -235,7 +271,7 @@ const StyledTitle = styled.h4`
 `;
 const StyledContent = styled.div`
 	margin-top: 16px;
-	height: 100px;
+	// height: 100px;
 	.label {
 		margin-bottom: 8px;
 		&:last-child {

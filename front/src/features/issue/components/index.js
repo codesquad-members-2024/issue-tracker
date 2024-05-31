@@ -7,3 +7,4 @@ export * from './IssueCommentEdit';
 export * from './IssueAside';
 export * from './PopoverAssignee';
 export * from './PopoverLabel';
+export * from './PopoverMilestone';

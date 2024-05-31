@@ -13,8 +13,8 @@ const StyledWrapper = styled.div`
 	position: absolute;
 	z-index: 10;
 	min-width: 240px;
-	top: 56px;
-	right: 10px;
+	top: 24px;
+	right: 0px;
 	border: 1px solid ${theme.color.neutral.border.default};
 	border-radius: ${theme.radius.large};
 	overflow: hidden;

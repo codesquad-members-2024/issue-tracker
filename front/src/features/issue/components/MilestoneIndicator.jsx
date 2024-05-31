@@ -4,10 +4,7 @@ export function MilestoneIndicator({ milestone, detail }) {
 	return (
 		<StyledWrapper>
 			<span className='total'>
-				<StyledProgress
-					className='percentage'
-					$width={milestone?.progress}
-				></StyledProgress>
+				<StyledProgress className='percentage' $width={milestone?.progress} />
 			</span>
 			{!detail && <p>{milestone?.name}</p>}
 			{detail && (

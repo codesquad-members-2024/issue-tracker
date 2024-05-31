@@ -280,11 +280,12 @@ export function IssueDetailContainer() {
 						</StyledNewComment>
 					</section>
 					<aside>
+						{/* {console.log(issueDetail.milestone)} */}
 						<IssueAside
 							issueId={id}
 							list={issueDetail?.assignees}
 							labels={issueDetail?.labels}
-							// miles={issueDetail?.milestone}
+							miles={issueDetail?.milestone}
 							onAddAssignee={onAddAssignee}
 							onDeleteAssignee={onDeleteAssignee}
 							onAddLabel={onAddLabel}
