@@ -1,5 +1,6 @@
 package codesquad.issuetracker.util;
 
+import codesquad.issuetracker.issue.IssueRepositoryCustomImpl;
 import codesquad.issuetracker.issue.dto.request.IssueFilterDto;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class FilterQueryMaker {
 
         // Assignee 필터링 쿼리
         if (issueFilterDto.getAssignee() != null) {
-            if (issueFilterDto.getAssignee().equals("-1")) {
+            if (issueFilterDto.getAssignee().equals(IssueRepositoryCustomImpl.NO_ASSIGNEE)) {
                 queryJoin += makeQueryLeftJoin("issue_assignee", "ia");
                 queryWhere += makeQueryWhere("ia.login_id IS NULL");
             } else {
@@ -36,7 +37,7 @@ public class FilterQueryMaker {
 
         // Label 필터링 쿼리
         if (issueFilterDto.getLabelId() != null) {
-            if (issueFilterDto.getLabelId() == -1) {
+            if (issueFilterDto.getLabelId().equals(IssueRepositoryCustomImpl.NO_LABEL)) {
                 queryJoin += makeQueryLeftJoin("issue_label", "il");
                 queryWhere += makeQueryWhere("il.label_id IS NULL");
             } else {
@@ -47,7 +48,7 @@ public class FilterQueryMaker {
 
         // Milestone 필터링 쿼리
         if (issueFilterDto.getMilestoneId() != null) {
-            if (issueFilterDto.getMilestoneId() == -1) {
+            if (issueFilterDto.getMilestoneId().equals(IssueRepositoryCustomImpl.NO_MILESTONE)) {
                 queryWhere += makeQueryWhere("i.milestone_id IS NULL");
             } else {
                 queryWhere += makeQueryWhere("i.milestone_id = ?");

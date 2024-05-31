@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public class IssueRepositoryCustomImpl implements IssueRepositoryCustom {
 
-    private static final String NO_ASSIGNEE = "-1";
-    private static final Long NO_LABEL = -1L;
-    private static final Long NO_MILESTONE = -1L;
+    public static final String NO_ASSIGNEE = "-1";
+    public static final Long NO_LABEL = -1L;
+    public static final Long NO_MILESTONE = -1L;
 
     private final JdbcTemplate jdbcTemplate;
     private final FilterQueryMaker filterQueryMaker;
