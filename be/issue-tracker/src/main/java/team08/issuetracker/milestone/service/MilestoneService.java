@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team08.issuetracker.exception.issue.IssueIdNotFoundException;
 import team08.issuetracker.exception.milestone.InvalidMilestoneFormException;
-import team08.issuetracker.exception.milestone.MilestoneQueryStateException;
 import team08.issuetracker.issue.model.Issue;
 import team08.issuetracker.issue.model.dto.IssueCountDto;
 import team08.issuetracker.issue.repository.IssueRepository;
@@ -24,19 +23,15 @@ import team08.issuetracker.milestone.repository.MilestoneRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import team08.issuetracker.statequery.StateQuery;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MilestoneService {
-
     private final IssueCountService issueCountService;
-
     private final IssueRepository issueRepository;
     private final MilestoneRepository milestoneRepository;
-
-    private static final String OPEN_STATE_QUERY = "opened";
-    private static final String CLOSE_STATE_QUERY = "closed";
 
     public long getTotalMilestoneCounts() {
         return milestoneRepository.count();
@@ -64,7 +59,7 @@ public class MilestoneService {
 
     @Transactional
     public MilestoneOverviewResponse getAllMilestonesWithCounts(String state) {
-        boolean openState = convertStateQueryToOpenState(state);
+        boolean openState = StateQuery.convertQueryToState(state);
 
         List<MilestoneDetailResponse> milestoneDetailResponses = milestoneRepository.getAllMilestonesByOpenState(
                         openState)
@@ -133,17 +128,6 @@ public class MilestoneService {
         detailResponse.updateCount(issueCountDto);
         return detailResponse;
     }
-
-    private boolean convertStateQueryToOpenState(String state) {
-        if (state == null || state.equals(OPEN_STATE_QUERY)) {
-            return true;
-        }
-        if (state.equals(CLOSE_STATE_QUERY)) {
-            return false;
-        }
-        throw new MilestoneQueryStateException();
-    }
-
 
     private MilestoneCountResponse getMilestoneCountDto() {
         return new MilestoneCountResponse(    // 마일스톤 총 개수, 열린 개수, 닫힌 개수
