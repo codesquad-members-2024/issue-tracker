@@ -28,12 +28,11 @@ public class OAuthController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/login/oauth/github/callback")
-    public ResponseEntity<Void> githubOAuthCallback(@RequestParam String code) throws JsonProcessingException {
+    public ResponseEntity<String> githubOAuthCallback(@RequestParam String code) throws JsonProcessingException {
         OAuthToken oAuthToken = getOAuthToken(code);
         GithubUserData githubUserData = getGithubUserData(oAuthToken);
         oauthService.saveUserIfNotExist(githubUserData.getLogin(), githubUserData.getAvatarUrl());
 
-        // 클라이언트에 jwt 토큰 반환
         String jwtToken = jwtUtil.createToken(githubUserData.getLogin()); // JWT 토큰 생성
 
         HttpHeaders headers = new HttpHeaders();
@@ -42,7 +41,7 @@ public class OAuthController {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .headers(headers)
-                .build();
+                .body(GITHUB_LOGIN_SUCCESS_MESSAGE);
     }
 
     private OAuthToken getOAuthToken(String code) throws JsonProcessingException {
