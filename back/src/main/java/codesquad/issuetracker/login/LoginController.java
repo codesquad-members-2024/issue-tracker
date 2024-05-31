@@ -20,6 +20,7 @@ public class LoginController {
     private static final String LOGIN_FAILURE_MESSAGE = "잘못된 로그인 정보 입니다.";
 
     private final LoginService loginService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginForm loginForm, BindingResult bindingResult) {
@@ -37,7 +38,6 @@ public class LoginController {
         String password = loginForm.getPassword();
         // 로그인 아이디, 비밀번호 확인
         if (loginService.authenticate(loginId, password)) {
-            JwtUtil jwtUtil = new JwtUtil();
             String token = jwtUtil.createToken(loginId); // JWT 토큰 생성
             return ResponseEntity
                     .ok()
