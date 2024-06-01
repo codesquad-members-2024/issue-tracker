@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Header from "./header/Header";
 import Filter from "./filter/Filter";
-import IssueList from "./issue/list/IssueList";
+import IssueList from "./issue/IssueList";
 
 function Main() {
   return (

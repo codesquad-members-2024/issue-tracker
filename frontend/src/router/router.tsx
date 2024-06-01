@@ -1,18 +1,37 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
+<<<<<<< be-dev
+import useUserStore from "../hooks/useUserStore";
+=======
+import useUserStore from "../hooks/stores/useUserStore";
+>>>>>>> team-05
 import Login from "../components/login/Login";
 import Registration from "../components/registration/Registration";
 import Main from "../components/Main";
-import IssueCreator from "../components/issue/new/IssueCreator";
-import IssueDetail from "../components/issue/detail/IssueDetail";
+import IssueCreator from "../components/creator/IssueCreator";
+import IssueDetail from "../components/issue/IssueDetail";
 import LabelList from "../components/label/LabelList";
 import MilestoneList from "../components/milestone/MilestoneList";
-import { LabelProvider } from "../contexts/LabelContext";
-import { MilestoneProvider } from "../contexts/MilestoneContext";
+
+interface AuthRouteProps {
+  children: React.ReactNode;
+}
+
+export const AuthRoute = ({ children }: AuthRouteProps) => {
+  const { isLoggedIn } = useUserStore();
+
+  if (!isLoggedIn) return <Navigate to="/login" />;
+
+  return <>{children}</>;
+};
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: (
+      <AuthRoute>
+        <Main />
+      </AuthRoute>
+    ),
   },
   {
     path: "/login",
@@ -23,27 +42,19 @@ export const router = createBrowserRouter([
     element: <Registration />,
   },
   {
-    path: "/new",
+    path: "/new-issue",
     element: <IssueCreator />,
   },
   {
-    path: "/issue/:issueId",
+    path: "/issue-detail", // get /issues/{issueId} 구현 완료 시 수정
     element: <IssueDetail />,
   },
   {
     path: "/labels",
-    element: (
-      <LabelProvider>
-        <LabelList />
-      </LabelProvider>
-    ),
+    element: <LabelList />,
   },
   {
-    path: "/milestones",
-    element: (
-      <MilestoneProvider>
-        <MilestoneList />
-      </MilestoneProvider>
-    ),
+    path: "/milestone",
+    element: <MilestoneList />,
   },
 ]);
