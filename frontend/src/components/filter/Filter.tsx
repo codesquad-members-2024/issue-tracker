@@ -11,11 +11,6 @@ import FilterPopup from "../extension/FilterPopup";
 import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useQueryClient } from "react-query";
 
-const popupPostionStyle = {
-  top: "2.25em",
-  left: "0",
-};
-
 function Filter() {
   const client = useQueryClient();
   const { filterText, setFilterText, setPage, setIssues } = useIssueStore();
@@ -82,9 +77,7 @@ function Filter() {
             <span>이슈 작성</span>
           </NewIssueButton>
         </RightBox>
-        {filterbarVisible && (
-          <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" customStyle={popupPostionStyle} />
-        )}
+        {filterbarVisible && <FilterPopup ref={aboutMeButtonRef} filterType="aboutMe" />}
       </FilterTab>
     </>
   );

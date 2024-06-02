@@ -22,14 +22,12 @@ export const AboutMePopup = Template.bind({});
 AboutMePopup.args = {
   filterType: "aboutMe",
   items: [],
-  customStyle: {},
 };
 
 export const AssigneePopup = Template.bind({});
 AssigneePopup.args = {
   filterType: "assignee",
   items: [ "schnee98", "dao123" ],
-  customStyle: {},
 };
 
 export const LabelPopup = Template.bind({});
@@ -40,12 +38,10 @@ LabelPopup.args = {
     { labelName: "enhancement" },
     { labelName: "question" },
   ],
-  customStyle: {},
 };
 
 export const MilestonePopup = Template.bind({});
 MilestonePopup.args = {
   filterType: "milestone",
   items: [{ title: "v1.0" }, { title: "v2.0" }],
-  customStyle: {},
 };

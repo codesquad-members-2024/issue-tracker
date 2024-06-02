@@ -175,9 +175,7 @@ const RightMenus = styled.div`
   gap: 2em;
 `;
 
-const RightMenu = styled.div`
-  position: relative;
-`;
+const RightMenu = styled.div``;
 
 const MenuWrapper = styled.div`
   display: flex;
