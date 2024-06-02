@@ -12,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +40,13 @@ public class LabelService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public Long count() {
+        return labelRepository.count();
+    }
+
     public LabelResponse edit(String labelId, LabelUpdateRequest request) {
-        if (!Stream.of(request.getLabelId(), request.getDescription(), request.getTextColor(), request.getColorCode())
-                .allMatch(Objects::nonNull)) {
+        if (!request.validateNullOrBlank()) {
             throw new IllegalArgumentException();
         }
 

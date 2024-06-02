@@ -1,6 +1,5 @@
 package com.issuetracker.domain.milestone.response;
 
-import com.issuetracker.domain.milestone.Milestone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +13,7 @@ public class MilestoneListResponse {
 
     private List<MilestoneResponse> milestones;
 
-    public static MilestoneListResponse of(List<Milestone> milestones) {
+    public static MilestoneListResponse of(List<MilestoneDetails> milestones) {
         return new MilestoneListResponse(milestones.stream()
                 .map(MilestoneResponse::of).toList());
     }

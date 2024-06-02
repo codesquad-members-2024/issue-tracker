@@ -10,14 +10,16 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"}, callSuper = false)
+@Table("MILESTONE")
 public class Milestone extends BaseDateTime implements Persistable<String> {
 
     @Id
@@ -26,7 +28,7 @@ public class Milestone extends BaseDateTime implements Persistable<String> {
 
     @Builder.Default
     private boolean isOpen = true;
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
     private String description;
 
     @Transient

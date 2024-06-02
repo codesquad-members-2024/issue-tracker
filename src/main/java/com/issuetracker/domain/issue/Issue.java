@@ -16,12 +16,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.MappedCollection;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
+@Table("ISSUE")
 public class Issue extends BaseDateTime {
 
     @Id
@@ -40,14 +42,37 @@ public class Issue extends BaseDateTime {
 
     @Builder.Default
     @MappedCollection(idColumn = "ISSUE_ID")
+    private Set<Assignee> assignees = new HashSet<>();
+
+    @Builder.Default
+    @MappedCollection(idColumn = "ISSUE_ID")
     private Set<IssueLabel> issueLabels = new HashSet<>();
 
     @Column("MILESTONE_ID")
     private AggregateReference<Milestone, String> milestoneRef;
 
+    public Issue updateStatus(boolean status) {
+        this.isOpen = status;
+        return this;
+    }
+
     public void addComment(Comment comment) {
         comment.initBaseDateTime();
         this.comments.add(comment);
+    }
+
+    public void addAssignee(String memberId) {
+        Assignee ref = Assignee.of(memberId);
+        assignees.add(ref);
+    }
+
+    public void addAssignees(List<String> memberIds) {
+        memberIds.forEach(this::addAssignee);
+    }
+
+    public void deleteAssignee(String memberId) {
+        Assignee ref = Assignee.of(memberId);
+        assignees.remove(ref);
     }
 
     public void addLabel(String labelId) {

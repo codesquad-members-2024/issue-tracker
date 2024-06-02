@@ -2,16 +2,16 @@ package com.issuetracker.domain.milestone;
 
 import com.issuetracker.domain.milestone.request.MilestoneCreateRequest;
 import com.issuetracker.domain.milestone.request.MilestoneUpdateRequest;
+import com.issuetracker.domain.milestone.response.MilestoneDetails;
 import com.issuetracker.domain.milestone.response.MilestoneListResponse;
-import com.issuetracker.domain.milestone.response.MilestoneResponse;
+import com.issuetracker.global.exception.milestone.MilestoneDuplicateException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 
 @Service
 @RequiredArgsConstructor
@@ -19,17 +19,30 @@ import java.util.Map;
 public class MilestoneService {
 
     private final MilestoneRepository milestoneRepository;
-    private final MilestoneMapper milestoneMapper;
+    private final MilestoneViewMapper milestoneViewMapper;
 
-    public MilestoneResponse create(MilestoneCreateRequest request) {
+    public String create(MilestoneCreateRequest request) {
         Milestone milestone = request.toEntity();
-        Milestone savedMilestone = milestoneRepository.save(milestone);
-        return MilestoneResponse.of(savedMilestone);
+        try {
+            Milestone savedMilestone = milestoneRepository.save(milestone);
+            return savedMilestone.getId();
+        } catch (DbActionExecutionException e) {
+            if (e.getCause() instanceof DuplicateKeyException) {
+                throw new MilestoneDuplicateException();
+            }
+            throw e;
+        }
     }
 
     @Transactional(readOnly = true)
-    public MilestoneListResponse getMilestones(boolean openStatus) {
-        List<Milestone> milestones =  milestoneRepository.findMilestonesByIsOpen(openStatus);
+    public MilestoneListResponse getMilestonesByOpenCondition(boolean openStatus) {
+        List<MilestoneDetails> milestones = milestoneViewMapper.findAllByOpenStatus(openStatus);
+        return MilestoneListResponse.of(milestones);
+    }
+
+    @Transactional(readOnly = true)
+    public MilestoneListResponse getMilestones() {
+        List<MilestoneDetails> milestones = milestoneViewMapper.findAll();
         return MilestoneListResponse.of(milestones);
     }
 
@@ -41,19 +54,18 @@ public class MilestoneService {
         if (form.getId() == null && form.getDueDate() == null && form.getDescription() == null) {
             throw new IllegalArgumentException();
         }
-
-        Map<String, Object> requestMap = new HashMap<>();
-        requestMap.put("milestoneId", milestoneId);
-        requestMap.put("form", form);
-
-        milestoneMapper.update(requestMap);
+        milestoneRepository.updateMilestoneBy(milestoneId, form);
     }
 
     @Transactional(readOnly = true)
-    public Long count(boolean openStatus) {
-        return milestoneRepository.countByIsOpen(openStatus);
+    public Long count() {
+        return milestoneRepository.count();
     }
 
+    @Transactional(readOnly = true)
+    public Long countByOpenCondition(boolean openStatus) {
+        return milestoneRepository.countByIsOpen(openStatus);
+    }
 
     public void updateStatus(String milestoneId, boolean desiredState) {
         milestoneRepository.updateOpenStatus(milestoneId, desiredState);

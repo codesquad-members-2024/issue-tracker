@@ -1,15 +1,22 @@
 <script>
-  import {Route} from "tinro";
-  import IssueAddPage from "./pages/issue/IssueAddPage.svelte";
-  import Header from "./components/common/Header.svelte";
-  import IssueDetailPage from "./pages/issue/IssueDetailPage.svelte";
+  import Router from './route.svelte'
+  import { auth, isRefresh } from "./stores/auth.js";
+  import {onMount} from "svelte";
 
+  const refresh_time = 1000 * 60 * 30;
+
+  onMount(() => {
+    const onRefresh = setInterval(() => {
+      if($isRefresh) {
+        auth.refresh()
+      } else {
+        clearInterval(onRefresh)
+      }
+    }, refresh_time)
+  })
 </script>
 
-<Header />
-<div id="container">
-  <Route path="/issues/*" firstmatch>
-    <Route path="/add"><IssueAddPage/></Route>
-    <Route path="/:issueId"><IssueDetailPage/></Route>
-  </Route>
+
+<div id="main-container">
+    <Router />
 </div>

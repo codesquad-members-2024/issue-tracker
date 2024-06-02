@@ -1,10 +1,10 @@
 <script>
-    import { labels } from "../../store/label.js";
+    import { labels } from "../../stores/label.js";
+    import { onMount } from "svelte";
     import LabelList from "../../components/label/LabelList.svelte";
     import LabelAddForm from "../../components/label/LabelAddForm.svelte";
-    import { onMount } from "svelte";
-
-    let addMode = false;
+    import LabelMilestoneNavTab from "../../components/common/LabelMilestoneNavtab.svelte";
+    import Header from "../../components/common/Header.svelte";
 
     onMount(() => {
         labels.fetchLabels();
@@ -15,40 +15,21 @@
     }
 </script>
 
-<div class="label-page">
-    <h1>레이블</h1>
-    <button on:click={toggleAddMode} class:addMode={$labels.addMode}>
+<Header />
+<div class="flex my-[3rem] justify-between items-center w-full min-w-[1020px]">
+    <LabelMilestoneNavTab />
+    <button on:click={toggleAddMode} class="btn issue create max-h-[44px] h-lvh" class:addMode={$labels.addMode}>
+        <span>
+            <i class="bi bi-plus-lg"></i>
+        </span>
         레이블 추가
     </button>
+</div>
 
+<div class="mb-[3rem]">
     {#if $labels.addMode}
         <LabelAddForm />
     {/if}
-
-    <LabelList />
 </div>
 
-<style>
-    .label-page {
-        padding: 20px;
-    }
-
-    button {
-        margin: 10px 0;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: opacity 0.3s;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
-
-    button.addMode {
-        opacity: 0.5;
-    }
-</style>
+<LabelList />

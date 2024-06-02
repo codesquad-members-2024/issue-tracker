@@ -1,0 +1,590 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@tailwind base;
+@layer base {
+  body {
+    @apply px-[4rem] py-[1.6rem] bg-[#F7F7FC]
+  }
+
+  input {
+    @apply w-full rounded-lg p-3 bg-neutral-200/50 focus:bg-white focus:outline outline-2 outline-neutral-500
+  }
+
+  textarea:not(.comment-edit-textarea, .comment-add-textarea) {
+    @apply w-full rounded-lg p-3 bg-neutral-200/50 focus:bg-white focus:outline outline-2 outline-neutral-500
+  }
+
+  a:not(.no-hover-color-effect):hover {
+    @apply text-blue-600 font-bold
+  }
+
+  footer {
+    @apply flex flex-col justify-center items-center text-gray-600 text-[12px] fixed bottom-6
+  }
+}
+@tailwind components;
+@layer components {
+
+  .comment-add-textarea {
+    @apply resize-y mb-1 w-full h-[250px] rounded-lg px-3 pt-8 bg-neutral-200/50 focus:bg-white focus:outline-2 outline-neutral-500
+  }
+  .comment-edit-textarea {
+    @apply p-3 w-full min-h-[200px] rounded-lg bg-white focus:outline-none
+  }
+
+  .edit-title-container {
+    @apply flex mx-2 gap-2 px-1 min-w-[270px] justify-end items-center
+  }
+
+  .edit-title-btn {
+    @apply flex px-8 py-2 text-[14px] shadow-sm rounded-2xl justify-between items-center whitespace-nowrap
+  }
+  .edit-title-btn:active {
+    @apply scale-[0.98] shadow-none
+  }
+
+  .edit-title-btn.blue-border {
+    @apply text-blue-600/90 border border-blue-500
+  }
+
+  .edit-title-btn.blue-border:hover {
+    @apply bg-gray-50/50
+  }
+
+  .edit-title-btn.apply {
+    @apply text-gray-100 bg-blue-500 cursor-pointer
+  }
+
+  .edit-title-btn.apply:hover {
+    @apply bg-blue-600 text-gray-100 cursor-pointer
+  }
+
+  .edit-title-btn.apply:disabled {
+    @apply text-gray-100 bg-blue-300 cursor-not-allowed scale-[1.0]
+  }
+
+  .btn {
+      @apply m-1 px-4 py-2 text-sm rounded-xl whitespace-nowrap min-w-[105px]
+  }
+
+  .btn.create {
+      @apply bg-blue-500 shadow-sm text-white transition-all duration-75
+  }
+
+  .btn.cancel {
+    @apply text-gray-800 transition-all duration-75
+}
+
+  .btn:disabled {
+    @apply cursor-not-allowed transition-none scale-[1] bg-blue-500/40 shadow-none text-white
+  }
+
+  .btn.issue.create:not(:disabled):hover {
+      @apply bg-blue-600 text-gray-100 cursor-pointer
+  }
+
+  .btn.issue.cancel:hover {
+    @apply bg-red-400 text-gray-100
+  }
+
+
+  .btn.issue:not(:disabled):active {
+      @apply scale-[0.98] shadow-none
+  }
+
+  .rotate-btn:hover {
+    @apply transition-colors duration-75 text-slate-600
+  }
+
+  .rotate-btn:active {
+    @apply transition-all duration-100 scale-[0.75] shadow-none
+  }
+
+  .gray-btn:hover {
+    @apply bg-gray-200/50
+  }
+
+  .gray-btn:active {
+    @apply transition-all duration-100 scale-[0.99] shadow-none
+  }
+
+  .gray-btn:disabled {
+    @apply transition-none scale-[1] shadow-none bg-gray-200/80 cursor-pointer
+  }
+
+  .sidebar-container {
+    @apply flex flex-col -ml-6 -mb-16 items-center w-[350px] min-w-[300px] text-[15px] h-[400px] min-h-[300px]
+  }
+
+  .sidebar-group-box {
+    @apply flex flex-col relative bg-white border-2 border-gray-300/60 whitespace-nowrap
+  }
+
+  .sidebar-group-box:first-child {
+    @apply mt-3 rounded-2xl border-b-0 rounded-b-none
+  }
+
+  .sidebar-group-box:last-child {
+    @apply rounded-2xl border-t-0 rounded-t-none
+  }
+
+  .sidebar-btn {
+    @apply flex flex-col px-8 py-10 bg-white w-[290px] min-w-[290px]
+  }
+
+  .sidebar-btn:first-child {
+    @apply mt-3 rounded-2xl border-b-0 rounded-b-none
+  }
+
+  .sidebar-btn:last-child {
+    @apply rounded-2xl border-t-0 rounded-t-none
+  }
+
+  .sidebar-btn:hover {
+    @apply bg-gray-100/20
+  }
+
+  .sidebar-popup-container {
+    @apply absolute z-[98] top-7 right-0 w-[287px] bg-white shadow-md rounded-xl animate-slidein
+  }
+
+  .sidebar-popup-header {
+    @apply px-4 py-2 border border-slate-300/80 rounded-xl rounded-b-none text-[13px] text-slate-500 bg-[#F7F7FC]
+  }
+
+  .sidebar-popup-item {
+    @apply px-4 py-2 border border-t-0 border-slate-300/80 text-[13px] text-slate-500
+  }
+
+  .sidebar-popup-item:last-child {
+    @apply rounded-xl rounded-t-none
+  }
+
+  .sidebar-popup-item:hover {
+    @apply bg-gray-100/50
+  }
+
+  .sidebar-popup-item[aria-checked="true"] {
+    @apply bg-gray-200
+  }
+
+  .sidebar-popup-item-detail {
+    @apply flex justify-between items-center cursor-pointer
+  }
+
+  .sidebar-popup-label {
+    @apply ml-[10px]
+  }
+
+  .sidebar-popup-label-circle {
+    @apply inline-flex size-3 -mr-1 rounded-full border border-gray-200/80
+  }
+
+  .selected-items-list {
+    @apply flex flex-col justify-between items-center gap-2 -mt-4 mb-4
+  }
+
+  .selected-items-container {
+    @apply flex ml-6 self-start items-center gap-4
+  }
+
+  .selected-items-label {
+    @apply flex ml-2 gap-1 items-center rounded-full
+  }
+
+  .selected-items-cancel {
+    @apply text-[11px] text-gray-800 -translate-x-1
+  }
+
+  .profile-popup-container {
+    @apply absolute z-[99] top-[70px] right-[60px] max-w-[300px] min-w-[150px] bg-white shadow-md rounded-xl animate-slidein
+  }
+
+  .profile-popup-header {
+    @apply px-4 py-2 border border-slate-300/80 rounded-xl rounded-b-none text-[13px] text-center text-slate-600 bg-[#F7F7FC]
+  }
+
+  .profile-popup-btn {
+    @apply px-4 py-2 flex w-full items-center border border-t-0 border-slate-300/80 text-[13px] text-slate-600
+  }
+
+  .profile-popup-btn.error {
+    @apply text-red-500
+  }
+
+  .profile-popup-btn.error:hover {
+    @apply text-white bg-red-600/85
+  }
+
+  .profile-popup-btn:last-child {
+    @apply rounded-xl rounded-t-none
+  }
+
+  .profile-popup-btn:not(.error):hover {
+    @apply bg-gray-100
+  }
+
+  .profile-popup-btn-icon {
+    @apply mr-3 text-center whitespace-nowrap
+  }
+
+  .profile-popup-btn-label {
+    @apply ml-4 text-center whitespace-nowrap
+  }
+
+  .parent-container {
+    @apply flex-col my-3 w-full
+  }
+
+  .content-box {
+    @apply overflow-hidden w-full min-w-[500px]
+  }
+
+  .content-box.header {
+    @apply p-3 border-t-2 border-x-2 rounded-t-xl border-gray-200 text-gray-800 bg-[#F7F7FC]
+  }
+
+  .content-box.main {
+    @apply p-5 border-x-2 border-b-2 border-t-2 rounded-b-xl border-gray-200 text-gray-800 bg-white
+  }
+
+  .content-box.header-border {
+    @apply p-3 border-t-2 border-x-2 rounded-t-xl border-neutral-500 text-gray-800 bg-[#F7F7FC]
+  }
+
+  .content-box.main-border {
+    @apply p-5 border-x-2 border-x-neutral-500 border-b-2 border-t-2 border-t-gray-200 border-b-neutral-500 rounded-b-xl text-gray-800 bg-white
+  }
+
+  .outline-custom {
+    @apply outline-2 outline-neutral-500
+  }
+
+  .comment-container {
+      @apply my-2
+  }
+
+  .filter-container {
+    @apply flex w-[560px] text-sm
+  }
+
+  .input-search-box {
+    @apply bg-gray-200/50 w-[430px] p-2 rounded-md pl-[35px] text-gray-600 focus:border-white focus:bg-white focus:placeholder-transparent
+  }
+
+  .label-milestone-panel {
+    @apply flex-1 px-[2rem] py-1 h-[44px] shadow-sm whitespace-nowrap text-sm text-gray-700 border border-gray-300/60
+  }
+
+  .openCloseTab {
+    @apply flex text-sm pl-[1rem] text-gray-600 cursor-pointer
+  }
+
+  .filterBar-container {
+    @apply flex gap-5 ml-auto text-sm text-gray-600
+  }
+
+  .filterBar-btn-container {
+    @apply flex gap-1 relative
+  }
+
+  .filterBar-popup-container {
+    @apply absolute z-[99] top-[125%] right-0 w-[240px] bg-white shadow-md rounded-xl animate-slidein
+  }
+
+  .filterBar-popup-header {
+    @apply text-[13px] text-center text-slate-500 px-4 py-2 border border-slate-300/80 border-b border-b-slate-300/80 rounded-t-xl bg-[#F7F7FC]
+  }
+
+  .filterBar-popup-item {
+    @apply px-4 py-2 border border-t-0 border-slate-300/80 text-center text-[13px] text-slate-500
+  }
+
+  .filterBar-popup-item:last-child {
+    @apply rounded-xl rounded-t-none
+  }
+
+  .filterBar-popup-item:hover {
+    @apply bg-gray-100/50
+  }
+
+  .filterBar-popup-item[aria-checked="true"] {
+    @apply bg-gray-200
+  }
+
+  .filterBar-popup-item-detail {
+    @apply flex justify-between items-center cursor-pointer
+  }
+
+  .filterBar-popup-label {
+    @apply ml-[10px]
+  }
+
+  .filterBar-popup-label-circle {
+    @apply inline-flex size-3 -mr-1 rounded-full border border-gray-200/80
+  }
+
+  .issue-table-header {
+    @apply flex px-5 py-5 w-full justify-start items-center whitespace-nowrap border border-gray-300/60 rounded-t-2xl
+  }
+
+  .issue-table-row {
+    @apply flex bg-white px-5 py-5 w-full border border-gray-300/60 items-center
+  }
+
+  .issue-table-row:last-child {
+    @apply rounded-b-2xl
+  }
+
+  /* 자식 요소 중 .label-form-edit-container가 없는 경우에만 호버 효과 적용 */
+  .issue-table-row:not(:has(.label-form-edit-container)):hover {
+    @apply transition-all duration-100 bg-gray-100/70;
+  }
+
+  .label-row {
+    @apply flex w-full items-center
+  }
+
+  .label-preview-container {
+    @apply min-w-[170px] ml-4 mr-[6rem] my-1
+  }
+
+  .label-description {
+    @apply mx-4 my-1 text-[14px] min-w-[250px] text-gray-500 truncate
+  }
+
+  .label-btn-container {
+    @apply ml-auto flex gap-2 mx-4 my-1 items-center text-sm whitespace-nowrap
+  }
+
+  /* 여기서부터 레이블 입력 / 수정 폼 */
+  .label-form-container {
+    @apply w-full min-w-[1020px] bg-white p-6 border border-gray-300/60 rounded-2xl
+  }
+
+  .label-form-edit-container {
+    @apply w-full flex flex-col gap-2 justify-between
+  }
+
+  .label-form-header {
+    @apply text-lg font-bold text-gray-800 m-2
+  }
+
+  .label-form-preview-container {
+    @apply flex m-2 border border-neutral-200 rounded-xl bg-white justify-center items-center w-[360px] min-w-[360px] min-h-[180px]
+  }
+
+  .label-form-input-container {
+    @apply flex gap-2 w-full flex-col mx-4 justify-between
+  }
+
+  .label-form-input-box {
+    @apply w-full rounded-e-md relative
+  }
+
+  .label-form-input-box-bg {
+    @apply flex gap-4
+  }
+
+  .label-form-select-box {
+    @apply flex gap-2 text-[14px] justify-between items-center whitespace-nowrap
+  }
+
+  .checkbox {
+    @apply flex px-2
+  }
+
+  .label-badge-container {
+    @apply flex ml-2
+  }
+
+  .label-badge {
+    @apply flex w-full h-6 px-[1rem] rounded-2xl text-[12px] text-center justify-center items-center whitespace-nowrap
+  }
+
+  .milestone-badge {
+    @apply flex p-3 max-w-[200px] h-6 px-[1rem] border border-gray-200 rounded-2xl text-[12px] text-wrap items-center
+  }
+
+  .issue-content-container {
+    @apply flex flex-col
+  }
+
+  .issue-content-title {
+    @apply flex pl-[2rem] text-gray-900 cursor-pointer justify-start items-center
+  }
+
+  .issue-writer-timestamp {
+    @apply flex gap-3 mt-2 pl-[2rem] text-sm text-gray-500 items-center
+  }
+
+  .issue-loading-box {
+    @apply m-4 p-1 text-slate-400 animate-spin size-7 self-center
+  }
+
+  .writer-badge {
+    @apply label-badge w-[60px] text-gray-500 border border-neutral-300 bg-slate-200/50
+  }
+
+  .issue-edit-container {
+    @apply flex h-6 text-[13px] text-center text-gray-800 justify-center items-center whitespace-nowrap
+  }
+
+  .label {
+    --lightness-threshold: 0.453;
+    --border-threshold: 0.96;
+    --perceived-lightness: calc(
+            (
+            (var(--label-r) * 0.2126) + (var(--label-g) * 0.7152) +
+            (var(--label-b) * 0.0722)
+            ) / 255
+    );
+    --lightness-switch: max(
+            0,
+            min(
+                    calc((1 / (var(--lightness-threshold) - var(--perceived-lightness)))),
+                    1
+            )
+    );
+    --border-alpha: max(
+            0,
+            min(calc((var(--perceived-lightness) - var(--border-threshold)) * 100), 1)
+    );
+    color: hsl(0deg, 0%, calc(var(--lightness-switch) * 100%));
+    background: rgb(var(--label-r), var(--label-g), var(--label-b));
+    display: inline-block;
+    border-width: 1px;
+    border-style: solid;
+    border-color: hsla(
+            var(--label-h),
+            calc(var(--label-s) * 1%),
+            calc((var(--label-l) - 25) * 1%),
+            var(--border-alpha)
+    );
+    padding: 0px 10px;
+    border-radius: 16px;
+    line-height: 22px;
+    @apply text-[12px] w-max h-6 px-[1rem] whitespace-nowrap
+  }
+
+  .centered-container {
+    @apply flex justify-center items-center min-h-[480px] mt-[8rem]
+  }
+
+  .logo-container {
+    @apply w-[380px] h-[80px] select-none
+  }
+
+  .gray-text-4rem-italic {
+    @apply text-gray-800 text-[4rem] italic relative whitespace-nowrap
+  }
+
+  .logo-container-rounded {
+    @apply size-[25px] rounded-full bg-[#F7F7FC] absolute inline-flex
+  }
+
+  .login-btn-github {
+    @apply my-3 w-[350px] px-[1rem] py-3 text-[15px] font-bold rounded-xl text-blue-500 border border-blue-400/80 shadow-sm
+  }
+
+  .login-btn-github:active {
+    @apply transition-all duration-75 scale-[0.98] shadow-none
+  }
+
+  .login-btn {
+    @apply mt-3 w-[350px] px-[1rem] py-3 text-[15px] font-bold rounded-xl hover:bg-blue-600 hover:border-blue-600 text-white bg-blue-500 border border-blue-500 shadow-sm
+  }
+
+  .login-btn:active {
+    @apply transition-all duration-75 scale-[0.98] shadow-none
+  }
+
+  .login-btn:disabled {
+    @apply bg-blue-600/40 border-blue-600/0 transition-none scale-100 shadow-none cursor-not-allowed
+  }
+
+  .go-signup-btn {
+    @apply mt-3 w-[350px] px-[1rem] py-3 text-[15px] font-bold rounded-xl text-blue-500 border border-blue-50/0
+  }
+
+  .go-signup-btn:hover {
+    @apply border border-blue-400/80
+  }
+
+  .go-signup-btn:active {
+    @apply transition-all duration-75 scale-[0.98] shadow-none
+  }
+
+  .signup-btn {
+    @apply mt-3 w-[350px] px-[1rem] py-3 text-[15px] font-bold rounded-xl hover:bg-blue-600 hover:border-blue-600 text-white bg-blue-500 border border-blue-500 shadow-sm
+  }
+
+  .signup-btn:active {
+    @apply transition-all duration-75 scale-[0.98] shadow-none
+  }
+
+  .signup-btn:disabled {
+    @apply bg-blue-600/40 border-blue-600/0 transition-none scale-100 shadow-none cursor-not-allowed
+  }
+
+  .back-btn {
+    @apply mt-3 w-[350px] px-[1rem] py-3 text-[15px] font-bold rounded-xl text-blue-500
+  }
+
+  .back-btn:hover {
+    @apply transition-all duration-75 scale-[0.98] shadow-none
+  }
+
+  .text-divider {
+    @apply w-[350px] border-t border-gray-200 my-4
+  }
+
+  .login-form-input-container {
+    @apply mt-3 text-[13px] relative
+  }
+
+  .login-form-label {
+    @apply absolute translate-y-2 ml-1 text-gray-500 left-[10px] top-[6px] pointer-events-none
+  }
+
+  .login-input-field {
+    @apply pl-[6rem] pt-3.5
+  }
+
+  .auth-form {
+    @apply flex-col items-center w-[350px] h-[280px]
+  }
+
+  .footer-divider {
+    @apply border-t my-3 border-gray-200 w-[350px]
+  }
+
+  .footer-container {
+    @apply flex gap-4 justify-center items-center
+  }
+
+  .tooltip {
+    @apply relative block
+  }
+
+  .tooltip .tooltiptext {
+    @apply invisible p-2 text-gray-600 text-[12px] text-center bg-[#F7F7FC] border border-gray-300 rounded-full z-10 absolute bottom-8 -left-[9px] whitespace-nowrap
+  }
+
+  .tooltip:hover .tooltiptext {
+    @apply visible
+  }
+
+  .overlay {
+    @apply fixed top-0 left-0 w-full h-full z-[97];
+  }
+}
+
+@tailwind utilities;

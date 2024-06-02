@@ -10,16 +10,6 @@ spring:
     init:
       mode: always
 
-  # cache settings (true at prod env)
-  thymeleaf:
-    cache: false
-
-  # check file exists at template directory
-    check-template-location: true
-
-    prefix : classpath:/templates/
-    suffix : .html
-
 # mybatis
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
@@ -40,3 +30,13 @@ logging:
       issuetracker:
         domain:
           issue: TRACE
+
+# custom -> profile change needed!!! & gitignore...
+pwd:
+  encrypt:
+    secret-key:
+jwt:
+  secret-key:
+
+cors:
+  originUrl: http://localhost:5173

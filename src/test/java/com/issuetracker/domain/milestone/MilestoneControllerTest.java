@@ -3,8 +3,8 @@ package com.issuetracker.domain.milestone;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issuetracker.domain.milestone.request.MilestoneCreateRequest;
 import com.issuetracker.domain.milestone.request.MilestoneUpdateRequest;
+import com.issuetracker.domain.milestone.response.MilestoneDetails;
 import com.issuetracker.domain.milestone.response.MilestoneListResponse;
-import com.issuetracker.domain.milestone.response.MilestoneResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -42,16 +42,16 @@ class MilestoneControllerTest {
     private final String urlPrefix = "/api/v1";
 
     @Test
-    @DisplayName("마일스톤을 생성하면 200 상태코드와 마일스톤 생성 결과를 반환한다")
+    @DisplayName("마일스톤을 생성하면 200 상태코드와 마일스톤 아이디를 반환한다")
     void create() throws Exception {
         // given
         String url = urlPrefix + "/milestones";
 
-        MilestoneCreateRequest request = new MilestoneCreateRequest("testName", LocalDateTime.now(), "testDescription");
+        MilestoneCreateRequest request = new MilestoneCreateRequest(
+                "testName", LocalDate.of(2024, 5, 24), "testDescription");
         String requestJson = objectMapper.writeValueAsString(request);
-        MilestoneResponse response = MilestoneResponse.of(request.toEntity());
-        String responseJson = objectMapper.writeValueAsString(response);
-        given(milestoneService.create(any(MilestoneCreateRequest.class))).willReturn(response);
+        given(milestoneService.create(any(MilestoneCreateRequest.class))).willReturn(request.getId());
+        String responseJson = objectMapper.writeValueAsString(Collections.singletonMap("milestoneId", request.getId()));
 
         // when
         ResultActions result = mockMvc.perform(
@@ -69,20 +69,16 @@ class MilestoneControllerTest {
     @DisplayName("마일스톤 생성 시 요청값에 대한 validation을 진행한다")
     Stream<DynamicTest> create_validation() throws Exception {
         final String url = urlPrefix + "/milestones";
-        final String name = "n";
+        final String id = "n";
         final String description = "d";
-        final LocalDateTime dueDate = LocalDateTime.now();
+        final LocalDate dueDate = LocalDate.of(2024, 5, 24);
 
-        given(milestoneService.create(any(MilestoneCreateRequest.class))).willReturn(MilestoneResponse.builder()
-                .id(name)
-                .description(description)
-                .dueDate(dueDate)
-                .build());
+        given(milestoneService.create(any(MilestoneCreateRequest.class))).willReturn(id);
 
         return Stream.of(
                 dynamicTest("마일스톤 이름은 최대 30자 이내여야 한다", () -> {
                     // given
-                    MilestoneCreateRequest tooLongTitle = new MilestoneCreateRequest(name.repeat(30+1), dueDate, description);
+                    MilestoneCreateRequest tooLongTitle = new MilestoneCreateRequest(id.repeat(30+1), dueDate, description);
                     String requestJson = objectMapper.writeValueAsString(tooLongTitle);
 
                     // when
@@ -97,7 +93,7 @@ class MilestoneControllerTest {
 
                 dynamicTest("마일스톤의 설명은 최대 50자여야 한다", () -> {
                     // given
-                    MilestoneCreateRequest tooLongDescription = new MilestoneCreateRequest(name, dueDate, description.repeat(50+1));
+                    MilestoneCreateRequest tooLongDescription = new MilestoneCreateRequest(id, dueDate, description.repeat(50+1));
                     String requestJson = objectMapper.writeValueAsString(tooLongDescription);
 
                     // when
@@ -135,17 +131,27 @@ class MilestoneControllerTest {
         String urlForClosed = urlPrefix + "/milestones?isOpen=false";
 
         MilestoneListResponse openMilestones = MilestoneListResponse.of(
-                List.of(Milestone.builder().isOpen(true).id("openMilestone").build())
+                List.of(MilestoneDetails.builder()
+                        .isOpen(true)
+                        .id("openMilestone")
+                        .totalIssues(10)
+                        .openIssues(5)
+                        .build())
         );
         MilestoneListResponse closedMilestones = MilestoneListResponse.of(
-                List.of(Milestone.builder().isOpen(false).id("closedMilestone").build())
+                List.of(MilestoneDetails.builder()
+                        .isOpen(false)
+                        .id("closedMilestone")
+                        .totalIssues(10)
+                        .openIssues(5)
+                        .build())
         );
 
         String responseJsonOfOpened = objectMapper.writeValueAsString(openMilestones);
         String responseJsonOfClosed = objectMapper.writeValueAsString(closedMilestones);
 
-        given(milestoneService.getMilestones(true)).willReturn(openMilestones);
-        given(milestoneService.getMilestones(false)).willReturn(closedMilestones);
+        given(milestoneService.getMilestonesByOpenCondition(true)).willReturn(openMilestones);
+        given(milestoneService.getMilestonesByOpenCondition(false)).willReturn(closedMilestones);
 
         // when & then
         performRequestAndVerify(urlForOpened, responseJsonOfOpened);
@@ -166,17 +172,18 @@ class MilestoneControllerTest {
     @DisplayName("id가 1인 마일스톤의 제목을 수정하면 200 OK를 반환한다")
     void editTitle() throws Exception {
         // given
-        String url = urlPrefix + "/milestones/1";
+        String url = urlPrefix + "/milestones/testMilestone";
         String updatedName = "Milestone update";
 
-        MilestoneUpdateRequest request = MilestoneUpdateRequest.builder()
-                .id(updatedName)
-                .build();
+        MilestoneUpdateRequest request = new MilestoneUpdateRequest(
+                updatedName, null, null
+        );
+
         String requestJson = objectMapper.writeValueAsString(request);
 
         // when
         ResultActions result = mockMvc.perform(
-                patch(url).content(requestJson)
+                put(url).content(requestJson)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -203,12 +210,12 @@ class MilestoneControllerTest {
 
     @Test
     @DisplayName("열린 마일스톤 수를 조회할 수 있다")
-    void getMilestoneCount() throws Exception {
+    void getMilestoneCountByOpenCondition() throws Exception {
         // given
         boolean openStatus = true;
         Long countResult = 5L;
         String url = urlPrefix + "/milestones/count?isOpen=" + openStatus;
-        given(milestoneService.count(openStatus)).willReturn(countResult);
+        given(milestoneService.countByOpenCondition(openStatus)).willReturn(countResult);
 
         // when
         ResultActions result = mockMvc.perform(
