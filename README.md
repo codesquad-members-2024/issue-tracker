@@ -12,5 +12,6 @@
 | 6    | 애셔, 데이, 새턴, 그로밋        |https://github.com/codesquad-masters2024-team06/issue-tracker|
 | 7    |제이든, 죠지, 코리|https://github.com/codesquad-masters2024-team07/issue-tracker|
 | 8    |미메, 망고, 심바, 준마이|https://github.com/codesquad-masters2024-team08/issue-tracker|
+| 9    |샤피, 시드, 옐리|https://github.com/codesquad-masters2024-team09/issue-tracker|
 
 - 팀 정보를 업데이트해서 main 브랜치로 PR 보내 주세요.
