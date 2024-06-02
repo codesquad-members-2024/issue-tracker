@@ -4,6 +4,10 @@ import closedIssueIcon from "../../../img/icon/closedIssueIcon_dark.svg";
 import arrowBottom from "../../../img/icon/arrowBottom.svg";
 import useIssueStore from "../../../hooks/stores/useIssueStore";
 import { IssueType } from "../../../hooks/logics/useIssueListLogic";
+import { useEffect, useRef, useState } from "react";
+import FilterPopup from "../../extension/FilterPopup";
+
+type FilterBarKeys = "assignee" | "label" | "milestone" | "author";
 
 export interface IssueTabProps {
   focusedTab: string;
@@ -11,7 +15,47 @@ export interface IssueTabProps {
 }
 
 function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
-  const { openIssueCount, closeIssueCount } = useIssueStore();
+  const { openIssueCount, closeIssueCount, labels, milestones, users } = useIssueStore();
+
+  const [filterbarVisible, setFilterbarVisible] = useState<Record<FilterBarKeys, boolean>>({
+    assignee: false,
+    label: false,
+    milestone: false,
+    author: false,
+  });
+
+  const filterbarRefs = {
+    assignee: useRef<HTMLDivElement>(null),
+    label: useRef<HTMLDivElement>(null),
+    milestone: useRef<HTMLDivElement>(null),
+    author: useRef<HTMLDivElement>(null),
+  };
+
+  const handleRightMenuClick = (menu: FilterBarKeys) => {
+    setFilterbarVisible((prev) => ({
+      ...prev,
+      [menu]: !prev[menu as FilterBarKeys],
+    }));
+  };
+
+  const handleClickOutside = ({ target }: Event) => {
+    Object.keys(filterbarRefs).forEach((key) => {
+      const ref = filterbarRefs[key as FilterBarKeys];
+      if (ref.current && !ref.current.contains(target as Node)) {
+        setFilterbarVisible((prev) => ({
+          ...prev,
+          [key]: false,
+        }));
+      }
+    });
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Wrapper>
@@ -32,20 +76,60 @@ function IssueTab({ focusedTab, handleFocusedTabClick }: IssueTabProps) {
       </LeftMenus>
       <RightMenus>
         <RightMenu>
-          <span>담당자</span>
-          <img src={arrowBottom} />
+          <MenuWrapper onClick={() => handleRightMenuClick("assignee")}>
+            <span>담당자</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
+          {filterbarVisible.assignee && (
+            <FilterPopup
+              ref={filterbarRefs.assignee}
+              filterType="assignee"
+              onClose={() => handleRightMenuClick("assignee")}
+              items={users}
+            />
+          )}
         </RightMenu>
         <RightMenu>
-          <span>레이블</span>
-          <img src={arrowBottom} />
+          <MenuWrapper onClick={() => handleRightMenuClick("label")}>
+            <span>레이블</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
+          {filterbarVisible.label && (
+            <FilterPopup
+              ref={filterbarRefs.label}
+              filterType="label"
+              onClose={() => handleRightMenuClick("label")}
+              items={labels}
+            />
+          )}
         </RightMenu>
         <RightMenu>
-          <span>마일스톤</span>
-          <img src={arrowBottom} />
+          <MenuWrapper onClick={() => handleRightMenuClick("milestone")}>
+            <span>마일스톤</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
+          {filterbarVisible.milestone && (
+            <FilterPopup
+              ref={filterbarRefs.milestone}
+              filterType="milestone"
+              onClose={() => handleRightMenuClick("milestone")}
+              items={milestones}
+            />
+          )}
         </RightMenu>
         <RightMenu>
-          <span>작성자</span>
-          <img src={arrowBottom} />
+          <MenuWrapper onClick={() => handleRightMenuClick("author")}>
+            <span>작성자</span>
+            <img src={arrowBottom} />
+          </MenuWrapper>
+          {filterbarVisible.author && (
+            <FilterPopup
+              ref={filterbarRefs.author}
+              filterType="author"
+              onClose={() => handleRightMenuClick("author")}
+              items={users}
+            />
+          )}
         </RightMenu>
       </RightMenus>
     </Wrapper>
@@ -91,9 +175,14 @@ const RightMenus = styled.div`
 `;
 
 const RightMenu = styled.div`
+  position: relative;
+`;
+
+const MenuWrapper = styled.div`
   display: flex;
   gap: 1.5em;
   color: #4e4b66;
+  cursor: pointer;
 `;
 
 export default IssueTab;

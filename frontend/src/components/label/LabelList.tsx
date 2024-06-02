@@ -27,7 +27,7 @@ function LabelList() {
       )}
       <LabelTable>
         <LabelTab>
-          <span>{labels.length}개의 레이블</span>
+          <span>{labels?.length || 0}개의 레이블</span>
         </LabelTab>
         <ScrollableArea>
           {labels.map((label: LabelDetailType) => (

@@ -32,6 +32,8 @@ const REGISTRATION_FORMAT_ERROR_MESSAGE = "아이디, 비밀번호의 형식이 
 const REGISTRATION_DUPLICATE_VALIDATION_FAILURE_MEESAGE = "이미 존재하는 아이디로 회원가입을 시도하였습니다.";
 const SERVER_ERROR_MESSAGE = "서버 연결에 실패하였습니다.";
 
+const getAuthToken = () => localStorage.getItem("token");
+
 export const sendLoginRequest: (loginState: LoginState) => Promise<Response> = async (loginState) => {
   try {
     const request = {
@@ -48,10 +50,13 @@ export const sendLoginRequest: (loginState: LoginState) => Promise<Response> = a
       const errorMessage = LOGIN_ERROR_MEESAGE[response.status] || SERVER_ERROR_MESSAGE;
       throw new Error(errorMessage);
     }
-    
+
     if (response.status === 400) throw new Error(LOGIN_INPUT_VALIDATION_ERROR_MESSAGE);
     if (response.status === 404) throw new Error(LOGIN_ID_NOT_FOUND_ERROR_MESSAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    const token = await response.text();
+    localStorage.setItem("token", token);
 
     return response;
   } catch (error) {
@@ -73,12 +78,11 @@ export const sendRegistrationRequest: (registrationState: RegistrationState) => 
     };
     const response = await fetch(`${SERVER}/registration`, request);
 
-
     if (!response.ok) {
       const errorMessage = REGISTRATION_ERROR_MESSAGE[response.status] || SERVER_ERROR_MESSAGE;
       throw new Error(errorMessage);
     }
-    
+
     if (response.status === 400) throw new Error(REGISTRATION_FORMAT_ERROR_MESSAGE);
     if (response.status === 409) throw new Error(REGISTRATION_DUPLICATE_VALIDATION_FAILURE_MEESAGE);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
@@ -98,6 +102,26 @@ export const sendIdValidationRequest = async (idValue: string): Promise<string> 
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
 
     return ID_CHECK_SUCCESS;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
+    throw new Error(message);
+  }
+};
+
+export const sendCurrentUserRequest = async () => {
+  try {
+    const token = getAuthToken();
+    const response = await fetch(`${SERVER}/currentuser`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 401) throw new Error("로그인한 상태가 아닙니다.");
+    if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);
+
+    return response.json();
   } catch (error) {
     const message = error instanceof Error ? error.message : SERVER_ERROR_MESSAGE;
     throw new Error(message);
