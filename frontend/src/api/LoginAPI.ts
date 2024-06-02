@@ -127,11 +127,3 @@ export const sendCurrentUserRequest = async () => {
     throw new Error(message);
   }
 };
-
-export const sendGithubLoginRequest = async () => {
-  try {
-
-  } catch (error) {
-    
-  }
-}
