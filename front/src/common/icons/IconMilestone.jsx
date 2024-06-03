@@ -1,9 +1,15 @@
 import styled from 'styled-components';
 
-export function IconLandmark({ className }) {
+export function IconMilestone({ ...props }) {
 	return (
-		<StyledWrapper className={className}>
-			<svg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
+		<StyledWrapper {...props}>
+			<svg
+				width='16'
+				height='16'
+				viewBox='0 0 16 16'
+				fill='none'
+				xmlns='http://www.w3.org/2000/svg'
+			>
 				<path
 					fillRule='evenodd'
 					clipRule='evenodd'

@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from '../../../styles/theme';
-
-import { useIssueDetail } from '../hooks/useIssueDetail';
+import { useUser } from '~/common/hooks';
+import {
+	useIssueDetail,
+	useIssueStatus,
+	useUpdateAssignee,
+	useUpdateLabel,
+} from '~/features/issue/hooks';
+import { useCheck } from '../context/CheckProvider';
 import { Button, InputTitleEdit } from '~/common/components';
 import {
 	IconEdit,
@@ -11,46 +17,38 @@ import {
 	IconAlertCircle,
 	IconXsquare,
 	IconPlus,
+	IconRefresh,
+	IconArchive,
 } from '~/common/icons';
-import { timestamp } from '~/utils/util';
-import { postComment } from '../apis/postComment';
+
+import { postComment, editIssueTitle } from '~/features/issue/apis/';
 
 import {
 	IssueCommentItem,
-	IssueSidebar,
+	IssueAside,
 	IssueCommentEdit,
 } from '~/features/issue/components';
 
-// const issueData = [
-// 	{
-// 		id: 1,
-// 		title: 'title1',
-// 		content: 'my name is daniel',
-// 		milestoneId: 'm1',
-// 		assignees: [
-// 			{
-// 				loginId: 'mellisa',
-// 				profileImage:
-// 					'https://avatars.githubusercontent.com/u/140429591?s=40&v=4',
-// 			},
-// 		],
-// 		writer: 'daniel',
-// 		createTime: '2024-05-14T04:41:45.318597316',
-// 		labels: [
-// 			{
-// 				name: 'bug',
-// 				description: 'bug',
-// 				color: '#0075ca',
-// 			},
-// 		],
-// 		closed: false,
-// 	},
-// ];
-
 export function IssueDetailContainer() {
 	const { id } = useParams();
+	const navigate = useNavigate();
 
-	const { issueDetail, loading, error } = useIssueDetail(id);
+	const { issueDetail, loading, error, fetchIssueDetail } = useIssueDetail(id);
+	const { onOpenIssue, onCloseIssue, onDeleteIssue } = useIssueStatus();
+	const { onAddAssignee, onDeleteAssignee } = useUpdateAssignee();
+	const { onAddLabel, onDeleteLabel } = useUpdateLabel();
+	const { writerImage } = useUser(issueDetail.writer);
+
+	useEffect(() => {
+		fetchIssueDetail();
+	}, []);
+
+	const { check, checkDispatch } = useCheck();
+
+	const [isClosed, setIsClosed] = useState(issueDetail?.closed);
+	useEffect(() => {
+		setIsClosed(issueDetail?.closed);
+	}, [issueDetail?.closed]);
 
 	const [detailState, setDateilState] = useState({
 		title: issueDetail?.title,
@@ -88,13 +86,46 @@ export function IssueDetailContainer() {
 	const onPostComment = async () => {
 		try {
 			await postComment(issueDetail.id, detailState.newComment);
+			await fetchIssueDetail();
+			setDateilState(prevState => ({
+				...prevState,
+				newComment: '',
+			}));
 		} catch (error) {
 			console.error('Error posting comment:', error);
 		}
 	};
+
+	const editTitle = async () => {
+		try {
+			await editIssueTitle(issueDetail.id, detailState.title);
+			await fetchIssueDetail();
+			setDateilState(prevState => ({
+				...prevState,
+				isEdit: false,
+			}));
+		} catch (error) {
+			console.error('Error editing title:', error);
+		}
+	};
+
+	const deleteIssue = async () => {
+		try {
+			const isSuccess = await onDeleteIssue(issueDetail.id);
+			// BUG: 콘솔 오류 (가져오기 로드하지 못함: DELETE)
+
+			if (isSuccess) {
+				navigate('/issues');
+			} else {
+				console.error('Error deleting issue:', isSuccess);
+			}
+		} catch (error) {
+			console.error('Error deleting issue:', error);
+		}
+	};
 	const isNewComment = detailState.newComment !== '';
-	const hasChanged = detailState.title !== issueDetail?.title;
-	// TODO: error 재연
+	// const hasChanged = detailState.title !== issueDetail?.title;
+
 	return (
 		<>
 			{loading && <div>Loading...</div>}
@@ -140,29 +171,58 @@ export function IssueDetailContainer() {
 									size='small'
 									// disabled={!hasChanged}
 									buttonType='outline'
-									buttonText='편집 완료 제목'
+									buttonText='제목 편집 완료'
 									icon={<IconEdit />}
-									onClick={() => {}}
+									onClick={editTitle}
 								/>
 							) : (
-								<Button
-									type='button'
-									size='small'
-									buttonType='outline'
-									buttonText='이슈 닫기'
-									icon={<IconTrash />}
-								/>
+								<>
+									{issueDetail?.closed ? (
+										<Button
+											type='button'
+											size='small'
+											buttonType='outline'
+											buttonText='이슈 열기'
+											icon={<IconRefresh />}
+											onClick={() => {
+												onOpenIssue(issueDetail.id);
+												fetchIssueDetail();
+												setIsClosed(prev => !prev);
+											}}
+										/>
+									) : (
+										<Button
+											type='button'
+											size='small'
+											buttonType='outline'
+											buttonText='이슈 닫기'
+											icon={<IconArchive />}
+											onClick={async () => {
+												await onCloseIssue(issueDetail.id);
+												await fetchIssueDetail();
+												setIsClosed(prev => !prev);
+											}}
+										/>
+									)}
+								</>
 							)}
 						</StyledButtonWrap>
 					</StyledTitle>
 					<StyledSubHeader>
-						<StyledBadge>
-							<IconAlertCircle />
-							열린 이슈
-						</StyledBadge>
+						{isClosed ? (
+							<StyledBadge $isClosed={isClosed}>
+								<IconAlertCircle />
+								닫힌 이슈
+							</StyledBadge>
+						) : (
+							<StyledBadge $isClosed={isClosed}>
+								<IconAlertCircle />
+								열린 이슈
+							</StyledBadge>
+						)}
+
 						<p>
-							이 이슈가 {timestamp(issueDetail.createTime)}에{' '}
-							{issueDetail.writer}
+							이 이슈가 {issueDetail.duration} 전에 {issueDetail.writer}
 							님에 의해 열렸습니다
 						</p>
 
@@ -176,20 +236,27 @@ export function IssueDetailContainer() {
 				</StyledDetailHeader>
 				<StyledContents>
 					<section>
+						{/* 원작자  */}
 						<IssueCommentItem
-							// id={issueDetail.id}
+							issueId={id}
 							content={issueDetail.content}
+							writerImage={writerImage}
 							writer={issueDetail.writer}
+							duration={issueDetail.duration}
 							isWriter={true}
+							fetchIssueDetail={fetchIssueDetail}
 						/>
 						{issueDetail?.comments &&
 							issueDetail.comments.map(item => (
 								<IssueCommentItem
 									key={item.id + 1}
-									id={item.id}
+									commentId={item.id}
+									profileImage={item.profileImage}
 									content={item.content}
+									duration={item.duration}
 									writer={item.writer}
 									isWriter={issueDetail.writer === item.writer}
+									fetchIssueDetail={fetchIssueDetail}
 								/>
 							))}
 						<StyledNewComment>
@@ -205,7 +272,7 @@ export function IssueDetailContainer() {
 									size='small'
 									disabled={!isNewComment}
 									buttonType='container'
-									buttonText='코멘트 작성'
+									buttonText='새로운 코멘트 작성'
 									icon={<IconPlus />}
 									onClick={onPostComment}
 								/>
@@ -213,19 +280,25 @@ export function IssueDetailContainer() {
 						</StyledNewComment>
 					</section>
 					<aside>
-						<IssueSidebar
-							assignees={issueDetail.assignees}
-							milestone={issueDetail.milestoneId}
-							labels={issueDetail.labels}
+						{/* {console.log(issueDetail.milestone)} */}
+						<IssueAside
+							issueId={id}
+							list={issueDetail?.assignees}
+							labels={issueDetail?.labels}
+							miles={issueDetail?.milestone}
+							onAddAssignee={onAddAssignee}
+							onDeleteAssignee={onDeleteAssignee}
+							onAddLabel={onAddLabel}
+							onDeleteLabel={onDeleteLabel}
 						/>
 						<div className='right-align'>
 							<Button
 								type='button'
 								size='small'
 								buttonType='ghost'
-								onClick={() => {}}
 								buttonText='이슈 삭제'
 								icon={<IconTrash />}
+								onClick={deleteIssue}
 							/>
 						</div>
 					</aside>
@@ -234,10 +307,7 @@ export function IssueDetailContainer() {
 		</>
 	);
 }
-const StyledWrapper = styled.div`
-	//TODO: padding-bottom: 100px; 삭제
-	padding-bottom: 100px;
-`;
+const StyledWrapper = styled.div``;
 const StyledDetailHeader = styled.div`
 	padding-bottom: 24px;
 	margin-bottom: 24px;
@@ -291,9 +361,15 @@ const StyledBadge = styled.span`
 	margin-right: 6px;
 	height: 32px;
 	border-radius: ${theme.radius.large};
-	background: ${theme.color.palette.blue};
-	color: ${theme.color.brand.text.default};
+	background: ${({ $isClosed }) =>
+		$isClosed
+			? theme.color.neutral.text.weak
+			: theme.color.brand.surface.default};
 	${theme.typography.medium[12]};
+	color: ${({ $isClosed }) =>
+		$isClosed
+			? theme.color.brand.text.default
+			: theme.color.brand.text.default};
 	i {
 		padding-right: 4px;
 	}

@@ -6,44 +6,54 @@ export function IssueCommentEdit({
 	className,
 	value,
 	placeholder,
-	onChange,
+	onChange, // 필요에 따라 추가
 	onClick,
 }) {
 	const [localValue, setLocalValue] = useState(value || '');
 	const [bg, setBg] = useState(false);
-	const [fileUrl, setFileUrl] = useState([]);
+	const [fileUrls, setFileUrls] = useState([]);
 
 	const handleUploadSuccess = url => {
 		const fileURLValue = `![이미지](${url})`;
-		const combinedValue = `${localValue}\n${fileURLValue}`;
-		setLocalValue(combinedValue);
-		setFileUrl(prevUrls => [...prevUrls, fileURLValue]);
+		setFileUrls(prevUrls => [...prevUrls, fileURLValue]);
+		setLocalValue(prevValue => `${prevValue}\n${fileURLValue}`);
 	};
 
 	const handleChange = e => {
-		setLocalValue(e.target.value);
+		const newValue = e.target.value;
+		setLocalValue(newValue);
+		if (onChange) onChange(e); // 필요에 따라 부모 컴포넌트로 변경 사항 전달
 	};
+
 	useEffect(() => {
-		setLocalValue(value || '');
+		if (value !== undefined) {
+			setLocalValue(value);
+		}
 	}, [value]);
 
-	// TODO: 마크다운으로 들어간 이미지 경로 지우면 파일도 삭제 해야하나........
+	// localValue가 변경될 때 fileUrls 배열 동기화
+	useEffect(() => {
+		const newFileUrls = fileUrls.filter(url => localValue.includes(url));
+		if (newFileUrls.length !== fileUrls.length) {
+			setFileUrls(newFileUrls);
+		}
+	}, [localValue, fileUrls]);
+
 	return (
 		<StyledWrapper $bg={bg} className={className}>
 			<InputTextArea
 				value={localValue}
 				placeholder={placeholder}
-				onChange={onChange}
+				onChange={handleChange}
 				onClick={onClick}
-				type='Input.TextArea'
 				onFocus={() => setBg(true)}
 				onBlur={() => setBg(false)}
 			/>
-			<>{fileUrl}</>
 			<ImageUpload handleUploadSuccess={handleUploadSuccess} />
 		</StyledWrapper>
 	);
 }
+
 const StyledWrapper = styled.div`
 	height: 100%;
 	background-color: ${({ theme, $bg }) =>

@@ -1,4 +1,4 @@
-import { server, devServer } from '~/apis/baseApi';
+import { server } from '~/apis/baseApi';
 
 /**
  * 이슈 상세 조회 API
@@ -6,13 +6,16 @@ import { server, devServer } from '~/apis/baseApi';
  * @param {number} id : 이슈 id
  * @returns {object} : 이슈 상세 정보
  */
-// const prod = `${server}/detail?id=1`;
-// const dev = `${devServer}/detail?id=1`;
+
 export async function getIssueDetail(id) {
 	try {
-		const response = await fetch(`${server}/issues/${id}`).then(res =>
-			res.json()
-		);
+		const token = localStorage.getItem('token');
+		const response = await fetch(`${server}/issues/${id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}).then(res => res.json());
 		const data = response;
 		return data;
 	} catch (error) {
@@ -21,38 +24,54 @@ export async function getIssueDetail(id) {
 	}
 }
 
-/**
- * Response Example
-{
-  "id": 1,
-  "title": "title1",
-  "content": "my name is daniel",
-  "milestoneId": "m1",
-  "assignees": [
-    {
-      "loginId": "mellisa",
-      "profileImage": "https://avatars.githubusercontent.com/u/140429591?s=40&v=4"
-    },
-    {
-      "loginId": "wade",
-      "profileImage": "https://avatars.githubusercontent.com/u/126778700?s=40&v=4"
-    }
-  ],
-  "writer": "daniel",
-  "createTime": "2024-05-14T04:41:45.318597316",
-  "labels": [
-    {
-      "name": "bug",
-      "description": "bug",
-      "color": "#0075ca"
-    },
-    {
-      "name": "documentation",
-      "description": "documentation",
-      "color": "#008672"
-    }
-  ],
-  "closed": false
+export async function editIssueTitle(issueId, issueTitle) {
+	try {
+		const token = localStorage.getItem('token');
+		const requestOptions = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ title: issueTitle }),
+		};
+		const response = await fetch(
+			`${server}/issues/${issueId}/title`,
+			requestOptions
+		);
+		if (response.status === 200) {
+			return { success: true };
+		} else {
+			console.error('Error:', response);
+		}
+	} catch (e) {
+		console.error('Error:', e);
+	}
 }
 
-*/
+export async function editIssueContent(issueId, content) {
+	try {
+		const token = localStorage.getItem('token');
+		const requestOptions = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ content: content }),
+		};
+		const response = await fetch(
+			`${server}/issues/${issueId}/content`,
+			requestOptions
+		);
+		if (response.status === 200) {
+			return { success: true };
+		} else {
+			console.error('Error:', response);
+			return { error: response.statusText };
+		}
+	} catch (error) {
+		console.error('Error:', error);
+		return { error: error.message };
+	}
+}

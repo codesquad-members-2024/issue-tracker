@@ -1,30 +1,26 @@
-import { server } from '../../../apis/baseApi';
+import { server } from '~/apis/baseApi';
 
-export async function putComment(id, comment) {
-	console.log('putComment🎾', id, comment, typeof comment);
+export async function putComment(commentId, comment) {
 	try {
-		const response = await fetch(`${server}/comments/${id}`, {
+		const token = localStorage.getItem('token');
+		const requestOptions = {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
-			body: JSON.stringify({
-				loginId: 'daniel',
-				content: comment,
-				issueId: 1,
-			}),
-		});
-
-		const text = await response.text();
-		const data = text ? JSON.parse(text) : {};
-
-		if (!response.ok) {
-			console.error('Response status:', response.status, response.statusText);
-			console.error('Response data:', data);
-			throw new Error(data.message || '수정요청');
+			body: JSON.stringify({ content: comment }),
+		};
+		const response = await fetch(
+			`${server}/comments/${commentId}`,
+			requestOptions
+		);
+		if (response.status === 200) {
+			return { success: true };
+		} else {
+			console.error('Error:', response);
+			return { error: response.statusText };
 		}
-
-		return data;
 	} catch (error) {
 		console.error('Error:', error);
 		return { error: error.message };

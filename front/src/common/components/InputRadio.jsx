@@ -1,46 +1,50 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { IconCheckCircle, IconCheckOff, IconChecks } from '~/common/icons';
-/**
- * listName = assignees, labels, milestones, writers
- * value = [] or [id1, id2, id3, ...]
- */
+import { IconCheckCircle, IconUser } from '~/common/icons';
+
 export function InputRadio({
+	id,
 	listName,
 	value,
 	src,
 	bgColor,
 	fontColor,
+	checked,
+	onChange,
+	defaultChecked,
 	...props
 }) {
-	const radio = useRef(null);
-
 	return (
 		<StyledLabel {...props} className='radio'>
 			<span>
-				{src && <img src={src} alt={src} />}
-				{bgColor && <StyledCircle $bgColor={bgColor} className='aaa' />}
+				{src === null ? (
+					<StyledIconUser />
+				) : (
+					src && <img className='img' src={src} alt='profile' />
+				)}
+				{bgColor && <StyledCircle $bgColor={bgColor} className='bgColor' />}
 				<StyledValue $fontColor={fontColor}>{value}</StyledValue>
 			</span>
-			{/* {checked ? <IconCheckCircle /> : <IconCheckOff />} */}
 			<input
+				id={id}
 				name={listName}
 				value={value}
 				type='radio'
-				ref={radio}
-				onChange={() => {}}
+				checked={checked}
+				onChange={onChange}
+				defaultChecked={defaultChecked}
 			/>
 		</StyledLabel>
 	);
 }
-const StyledRadioList = styled.div``;
 const StyledLabel = styled.label`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	padding: 8px 16px;
 	background: ${({ theme }) => theme.color.neutral.surface.strong};
-	display: flex;
+	color: ${({ theme }) => theme.color.neutral.text.default};
+	${({ theme }) => theme.typography.medium[16]};
 	span {
 		display: flex;
 		column-gap: 8px;
@@ -53,6 +57,11 @@ const StyledLabel = styled.label`
 		border-radius: 50%;
 	}
 `;
+const StyledIconUser = styled(IconUser)`
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+`;
 const StyledCircle = styled.b`
 	display: block;
 	width: 20px;
@@ -63,5 +72,5 @@ const StyledCircle = styled.b`
 `;
 const StyledValue = styled.strong`
 	${({ theme }) => theme.typography.medium[16]};
-	color: ${({ theme }) => theme.color.neutral.text.default};
+	color: ${({ theme }) => theme.color.neutral.text.strong};
 `;

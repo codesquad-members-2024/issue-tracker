@@ -8,4 +8,5 @@ const StyledWrapper = styled.div`
 	width: 1280px;
 	min-width: 1024px;
 	margin: 0 auto;
+	padding-bottom: 100px;
 `;

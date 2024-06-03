@@ -18,4 +18,33 @@ function timestamp(createTime) {
 		: `${diffSeconds}초 전`;
 }
 
-export { timestamp };
+function colorGenerator() {
+	const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+	return color;
+}
+
+/**
+ * @ param {array} [1, 2, 3, 10, 20] 10, 20
+ * @ param {number} 10
+ * @ return {array} [1, 2, 3, 20]
+ */
+function checkItemArray(array, value) {
+	const exists = array.includes(value);
+	if (exists) {
+		return array.filter(item => item !== value);
+	} else {
+		return [...array, value];
+	}
+}
+
+// ! Refactor
+
+export function toggleItemInArray(array, item, key) {
+	if (!array || !item || !key) return;
+
+	return array.some(arrayItem => arrayItem[key] === item[key])
+		? array.filter(arrayItem => arrayItem[key] !== item[key])
+		: [...array, item];
+}
+
+export { timestamp, colorGenerator, checkItemArray };

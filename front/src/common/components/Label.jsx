@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 
-export function Label({ label }) {
+export function Label({ textColor, name, backgroundColor }) {
 	return (
-		<StyledWrapper $bg={label.color} className='label'>
-			{label.name}
+		<StyledWrapper
+			$backgroundColor={backgroundColor}
+			$textColor={textColor}
+			className='label'
+		>
+			{name}
 		</StyledWrapper>
 	);
 }
@@ -11,13 +15,12 @@ const StyledWrapper = styled.div`
 	display: inline-block;
 	padding: 4px 12px;
 	border-radius: ${({ theme }) => theme.radius.large};
-	background: ${({ $bg }) => $bg};
-	color: ${({ theme }) => theme.color.brand.text.default};
+	background: ${({ $backgroundColor }) => $backgroundColor};
+	flex-shrink: 0;
+	color: ${({ $textColor }) => $textColor};
+
 	${({ theme }) => theme.typography.medium[12]};
 	& + .label {
 		margin-left: 8px;
 	}
 `;
-// "name": "bug",
-// "description": "bug",
-// "color": "#0075CA"

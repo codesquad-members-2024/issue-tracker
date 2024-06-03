@@ -1,30 +1,68 @@
 import { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Button } from '~/common/components/Button';
 import { IconEdit, IconSmile, IconXsquare } from '~/common/icons';
 import { IssueCommentEdit } from '~/features/issue/components';
-import { putComment } from '../apis/putComment';
+import { putComment, editIssueContent } from '~/features/issue/apis';
 
-export function IssueCommentItem({ id, content, writer, isWriter }) {
+export function IssueCommentItem({
+	content,
+	writer,
+	isWriter,
+	issueId,
+	fetchIssueDetail,
+	duration,
+	writerImage,
+	commentId,
+	profileImage,
+}) {
 	const [comment, setComment] = useState(content);
 	const [isEdit, setIsEdit] = useState(false);
-	const [hasChange, setHasChange] = useState(false);
+	// const [hasChange, setHasChange] = useState(false);
 
-	useEffect(() => {
-		setComment(content);
-	}, [content]);
 	const handleCommentEdit = () => {
 		//TODO: 계정정보와 작성자 정보가 일치해야 수정 가능하도록
 		setIsEdit(!isEdit);
 	};
-	useEffect(() => {
-		setHasChange(comment !== content);
-	}, [comment, content]);
+	// useEffect(() => {
+	// 	setHasChange(comment !== content);
+	// }, [comment, content]);
+	const [isEmoji, setIsEmoji] = useState(false);
+	const [emoji, setEmoji] = useState('');
+	const reactions = ['👀', '💖', '👏🏻', '🎉'];
 
-	const putEditCmment = async () => {
+	const getRandomAnimation = () => {
+		const animations = [
+			emojiAnimation,
+			emojiFadeInOut,
+			emojiVibrate,
+			emojiRolling,
+		];
+		const randomIndex = Math.floor(Math.random() * animations.length);
+		return animations[randomIndex];
+	};
+
+	const [animation, setAnimation] = useState(getRandomAnimation());
+
+	useEffect(() => {
+		setAnimation(getRandomAnimation());
+	}, [emoji]);
+
+	const editContent = async () => {
 		try {
-			await putComment(id, comment);
-			setIsEdit(false);
+			await editIssueContent(issueId, comment);
+			await fetchIssueDetail(issueId);
+			setIsEdit(prev => !prev);
+		} catch (error) {
+			console.error('Error putting comment:', error);
+		}
+	};
+
+	const putEditComment = async () => {
+		try {
+			await putComment(commentId, comment);
+			await fetchIssueDetail(issueId);
+			setIsEdit(prev => !prev);
 		} catch (error) {
 			console.error('Error putting comment:', error);
 		}
@@ -34,12 +72,9 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 			<StyledWrapper>
 				<StyledHeader>
 					<span className='info'>
-						<img
-							src='https://avatars.githubusercontent.com/u/58014235?v=4'
-							alt='양시미'
-						/>
+						<img src={profileImage || writerImage} alt={writer} />
 						<h3>{writer}</h3>
-						<p>3분 전</p>
+						<p>{duration} 전</p>
 					</span>
 					<span className='action'>
 						{isWriter && <p className='badge'>작성자</p>}
@@ -50,9 +85,7 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 							buttonType='ghost'
 							buttonText='편집'
 							icon={<IconEdit />}
-							onClick={() => {
-								handleCommentEdit();
-							}}
+							onClick={handleCommentEdit}
 						/>
 						<Button
 							type='button'
@@ -60,17 +93,37 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 							buttonType='ghost'
 							buttonText='반응'
 							icon={<IconSmile />}
-							onClick={() => {}}
+							onClick={e => {
+								setIsEmoji(prev => !prev);
+							}}
 						/>
+						{emoji && <StyledEmoji $animation={animation}>{emoji}</StyledEmoji>}
+
+						{isEmoji && (
+							<StyledReactions>
+								{reactions.map((reaction, index) => (
+									<button
+										onClick={e => {
+											setEmoji(e.target.textContent);
+											setIsEmoji(false);
+										}}
+										key={index}
+										className='reaction'
+									>
+										{reaction}
+									</button>
+								))}
+							</StyledReactions>
+						)}
 					</span>
 				</StyledHeader>
 				{isEdit ? (
+					// TODO: 여기 value, IssueCommentEdit의 value와 연결되어 있음 -> 수정 필요
 					<IssueCommentEdit
 						value={comment}
 						placeholder={content}
 						onChange={e => {
 							setComment(e.target.value);
-							console.log(e.target.value);
 						}}
 					/>
 				) : (
@@ -93,15 +146,14 @@ export function IssueCommentItem({ id, content, writer, isWriter }) {
 						// disabled={!hasChange}
 						buttonText='편집 완료 댓글'
 						icon={<IconEdit />}
-						onClick={() => {
-							putEditCmment(id);
-						}}
+						onClick={isWriter ? editContent : putEditComment}
 					/>
 				</StyledButtons>
 			)}
 		</>
 	);
 }
+
 const StyledWrapper = styled.div`
 	overflow: hidden;
 	border: 1px solid ${({ theme }) => theme.color.neutral.border.default};
@@ -110,6 +162,7 @@ const StyledWrapper = styled.div`
 	background: ${({ theme }) => theme.color.neutral.surface.bold};
 `;
 const StyledHeader = styled.div`
+	position: relative;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -150,6 +203,9 @@ const StyledHeader = styled.div`
 		button {
 			min-width: auto;
 			padding: 8px 0;
+			&.reaction {
+				padding: 5px;
+			}
 			i {
 				padding-right: 4px;
 			}
@@ -169,4 +225,64 @@ const StyledButtons = styled.div`
 	margin-bottom: 24px;
 	justify-content: flex-end;
 	column-gap: 16px;
+`;
+const StyledReactions = styled.div`
+	padding: 4px 15px;
+
+	display: flex;
+	gap: 7px;
+	.reaction {
+		font-size: 20px;
+		padding: 8px 8px;
+		background: ${({ theme }) => theme.color.neutral.surface.strong};
+		border-radius: 6px;
+		border: 1px solid ${({ theme }) => theme.color.neutral.border.default};
+	}
+`;
+const emojiAnimation = keyframes`
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+`;
+const emojiFadeInOut = keyframes`
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+`;
+
+const emojiVibrate = keyframes`
+	0% {
+		transform: translateX(0);
+	}
+	50% {
+		transform: translateX(-5px);
+	}
+	100% {
+		transform: translateX(0);
+	}
+`;
+
+const emojiRolling = keyframes`
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+`;
+
+const StyledEmoji = styled.div`
+	animation: ${({ $animation }) => $animation} 1s infinite;
 `;

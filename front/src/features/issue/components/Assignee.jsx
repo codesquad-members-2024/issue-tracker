@@ -3,8 +3,8 @@ import styled from 'styled-components';
 export function Assignee({ assignee }) {
 	return (
 		<StyledWrapper>
-			<img src={assignee.profileImage} alt='' />
-			<span>{assignee.loginId}</span>
+			<img src={assignee?.profileImage} alt={assignee?.loginId} />
+			<span>{assignee?.loginId}</span>
 		</StyledWrapper>
 	);
 }

@@ -13,10 +13,12 @@ export function InputTextArea({
 	onBlur,
 }) {
 	const [localValue, setLocalValue] = useState(value);
-	const [showCount, setShowCount] = useState(false);
+
+	// value prop이 변경될 때 localValue 업데이트
 	useEffect(() => {
-		setLocalValue(localValue);
-	}, [localValue]);
+		setLocalValue(value);
+	}, [value]);
+
 	return (
 		<StyledWrapper className={className}>
 			<StyledTextArea
@@ -24,30 +26,25 @@ export function InputTextArea({
 				value={localValue}
 				onChange={e => {
 					setLocalValue(e.target.value);
-					onChange(e);
+					onChange(e); // 부모 컴포넌트의 onChange 호출
 				}}
 				onClick={onClick}
 				onBlur={() => {
 					onBlur();
-					setShowCount(false);
 				}}
 				onFocus={() => {
 					onFocus();
-					setShowCount(true);
 				}}
 			/>
-			{/* {showCount && <i>띄어쓰기 포함 자</i>} */}
 		</StyledWrapper>
 	);
 }
+
 const StyledWrapper = styled.div`
 	position: relative;
-
 	min-height: 132px;
 	height: 100%;
 	max-height: 500px;
-
-	// border: 1px solid ${({ $border }) => ($border ? '#003f66' : '#0075ca')};
 	.ant-input-outlined:focus-within {
 		box-shadow: none;
 	}
@@ -64,18 +61,16 @@ const StyledWrapper = styled.div`
 		font-style: normal;
 	}
 `;
+
 const StyledTextArea = styled(TextArea)`
-	// max-height: 500px;
 	height: 132px;
 	border: none;
 	&&& {
 		border-color: transparent;
 	}
-
 	&&&:hover {
 		border-color: transparent;
 	}
-
 	&&&:focus,
 	&&&:active {
 		border-color: transparent;

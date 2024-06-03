@@ -9,6 +9,7 @@ export function Button({
 	disabled,
 	icon = null, //ReactNode
 	onClick,
+	onSubmit,
 	buttonText,
 }) {
 	return (
@@ -19,6 +20,7 @@ export function Button({
 			$buttonType={buttonType}
 			disabled={disabled}
 			onClick={onClick}
+			onSubmit={onSubmit}
 		>
 			{icon && icon}
 			{buttonText}

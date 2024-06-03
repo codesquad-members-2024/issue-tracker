@@ -1,12 +1,51 @@
-import { useState } from 'react';
+import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { IconXsquare } from '~/common/icons';
-import { IssueSidebar, IssueCommentEdit } from '~/features/issue/components';
+import { IssueAside, IssueCommentEdit } from '~/features/issue/components';
 import { Button, InputTitleEdit } from '~/common/components';
+import { useNavigate } from 'react-router-dom';
+import { useCheck } from '~/features/issue/context/CheckProvider';
+import { postIssueDetail } from '~/features/issue/apis';
+
+const initialState = {
+	title: '',
+	content: '',
+};
+
+function issueReducer(state, action) {
+	switch (action.type) {
+		case 'SET_TITLE':
+			return { ...state, title: action.payload };
+		case 'SET_CONTENT':
+			return { ...state, content: action.payload };
+		default:
+			return state;
+	}
+}
 
 export function IssueCreateContainer() {
-	const [title, setTitle] = useState('');
-	const [content, setContent] = useState('');
+	const navigate = useNavigate();
+	const [state, dispatch] = useReducer(issueReducer, initialState);
+	const { check, checkDispatch } = useCheck();
+
+	async function OnCreateNewIssue() {
+		const issue = {
+			title: state.title,
+			content: state.content,
+			milestoneId: null,
+			issueAssignees: check.selectedAssignees.map(assignee => ({
+				userLoginId: assignee.loginId,
+			})),
+			issueLabels: check.selectedLabels.map(label => ({
+				labelId: label.id,
+			})),
+		};
+
+		postIssueDetail(issue).then(id => {
+			navigate(`/issues/${id}`);
+		});
+	}
+
 	return (
 		<StyledWrapper>
 			<h2>새로운 이슈 작성</h2>
@@ -19,22 +58,21 @@ export function IssueCreateContainer() {
 					<StyledInputWrapper>
 						<InputTitleEdit
 							placeholder='제목'
-							value={title}
-							onChange={e => {
-								setTitle(e.target.value);
-							}}
+							value={state.title}
+							onChange={e =>
+								dispatch({ type: 'SET_TITLE', payload: e.target.value })
+							}
 						/>
 						<StyledIssueCommentEdit
 							placeholder='코멘트를 입력하세요.'
-							value={content}
-							onChange={e => {
-								setContent(e.target.value);
-							}}
-							onClick={() => {}}
+							value={state.content}
+							onChange={e =>
+								dispatch({ type: 'SET_CONTENT', payload: e.target.value })
+							}
 						/>
 					</StyledInputWrapper>
 				</section>
-				<IssueSidebar assignees={[]} milestone={[]} labels={[]} />
+				<IssueAside />
 			</StyledContent>
 			<StyledFooter>
 				<Button
@@ -44,21 +82,20 @@ export function IssueCreateContainer() {
 					buttonText='작성 취소'
 					icon={<IconXsquare />}
 					onClick={() => {
-						console.log('포스트 요청');
+						navigate('/issues');
 					}}
 				/>
 				<Button
 					type='button'
 					size='large'
 					buttonText='완료'
-					onClick={() => {
-						console.log('포스트 요청');
-					}}
+					onClick={OnCreateNewIssue}
 				/>
 			</StyledFooter>
 		</StyledWrapper>
 	);
 }
+
 const StyledWrapper = styled.div`
 	width: 100%;
 	h2 {
