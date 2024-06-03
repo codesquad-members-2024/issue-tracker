@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { Logo } from "../../icons/logo";
-import { LoginButtonStyles } from "../../styles/commonStyles";
+import { LogoIcon } from "@/icons/LogoIcon";
+import { LoginButtonStyles } from "@/styles/commonStyles";
 
 export function Login() {
   const [id, setId] = useState("");
@@ -21,6 +21,12 @@ export function Login() {
     }
   };
 
+  const handleGitHubLogin = () => {
+    const url = "https://github.com/login/oauth/authorize?client_id=Ov23ctHp2vZJoN3WHd25&scope=login,name,email,avatar_url&redirect_uri=https://www.issuetracker.site/login/oauth2/code/github";
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
   const isInputEmpty = id.trim() === "" || password.trim() === "";
 
   return (
@@ -28,8 +34,8 @@ export function Login() {
       <LoginContainer>
         {!isAuthenticated && (
           <>
-            <Logo />
-            <GitHubBtn>GitHub 계정으로 로그인</GitHubBtn>
+            <LogoIcon />
+            <GitHubBtn onClick={handleGitHubLogin}>GitHub 계정으로 로그인</GitHubBtn>
             <p>or</p>
             <Input type="text" placeholder="아이디" value={id}
               onChange={(event) => setId(event.target.value)}

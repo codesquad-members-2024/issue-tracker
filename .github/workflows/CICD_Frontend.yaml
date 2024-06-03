@@ -1,0 +1,124 @@
+name: CI/CD with Blue/Green Deployment for Frontend
+
+on:
+  push:
+    branches:
+      - front-end
+
+concurrency:
+  group: issue-tracker-front-end
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        working-directory: ./FE
+        run: npm install
+
+      - name: Build project
+        working-directory: ./FE
+        run: npm run build
+
+      - name: List build directory contents
+        working-directory: ./FE
+        run: ls -al
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: ./FE/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: ./FE/dist
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Describe Frontend EC2 Instances
+        id: describe-frontend-instances
+        run: |
+          FRONTEND_INSTANCE_IDS=$(aws ec2 describe-instances --filters "Name=tag:Kind,Values=frontend" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text | tr '\n' ',')
+          echo "FRONTEND_INSTANCE_IDS=${FRONTEND_INSTANCE_IDS%,}" >> $GITHUB_ENV
+
+      - name: Update ALB Target Group to Route All Traffic to One Frontend Instance
+        id: update-alb
+        run: |
+          IFS=',' read -r -a FRONTEND_INSTANCE_IDS <<< "${{ env.FRONTEND_INSTANCE_IDS }}"
+          TARGET_GROUP_ARN=$(aws elbv2 describe-target-groups --names issue-tracker-front-tg --query "TargetGroups[0].TargetGroupArn" --output text)
+          echo "Registering instance: ${FRONTEND_INSTANCE_IDS[0]}"
+          aws elbv2 register-targets --target-group-arn $TARGET_GROUP_ARN --targets Id=${FRONTEND_INSTANCE_IDS[0]}
+          sleep 1
+          echo "Deregistering instance: ${FRONTEND_INSTANCE_IDS[1]}"
+          aws elbv2 deregister-targets --target-group-arn $TARGET_GROUP_ARN --targets Id=${FRONTEND_INSTANCE_IDS[1]}
+
+      - name: Deploy build files to non-selected frontend instance
+        run: |
+          echo "${{ secrets.EC2_KEY_PAIR }}" > key.pem
+          chmod 400 key.pem
+          sleep 15
+          IFS=',' read -r -a FRONTEND_INSTANCE_IDS <<< "${{ env.FRONTEND_INSTANCE_IDS }}"
+          NON_SELECTED_FRONTEND_INSTANCE=${FRONTEND_INSTANCE_IDS[1]}
+          NON_SELECTED_FRONTEND_IP=$(aws ec2 describe-instances --instance-ids $NON_SELECTED_FRONTEND_INSTANCE --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$NON_SELECTED_FRONTEND_IP "sudo rm -rf /home/ubuntu/build && mkdir /home/ubuntu/build && sudo rm -rf /var/www/html && sudo mkdir /var/www/html"
+          scp -o StrictHostKeyChecking=no -i key.pem -r ./FE/dist/* ubuntu@$NON_SELECTED_FRONTEND_IP:/home/ubuntu/build
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$NON_SELECTED_FRONTEND_IP "sudo mv build/* /var/www/html"
+          sleep 15
+          rm key.pem
+
+      - name: Update ALB to route traffic to updated frontend instance
+        run: |
+          IFS=',' read -r -a FRONTEND_INSTANCE_IDS <<< "${{ env.FRONTEND_INSTANCE_IDS }}"
+          TARGET_GROUP_ARN=$(aws elbv2 describe-target-groups --names issue-tracker-front-tg --query "TargetGroups[0].TargetGroupArn" --output text)
+          echo "Registering instance: ${FRONTEND_INSTANCE_IDS[1]}"
+          aws elbv2 register-targets --target-group-arn $TARGET_GROUP_ARN --targets Id=${FRONTEND_INSTANCE_IDS[1]}
+          sleep 1
+          echo "Deregistering instance: ${FRONTEND_INSTANCE_IDS[0]}"
+          aws elbv2 deregister-targets --target-group-arn $TARGET_GROUP_ARN --targets Id=${FRONTEND_INSTANCE_IDS[0]}
+
+      - name: Deploy build files to previously selected frontend instance
+        run: |
+          echo "${{ secrets.EC2_KEY_PAIR }}" > key.pem
+          chmod 400 key.pem
+          sleep 15
+          IFS=',' read -r -a FRONTEND_INSTANCE_IDS <<< "${{ env.FRONTEND_INSTANCE_IDS }}"
+          SELECTED_FRONTEND_INSTANCE=${FRONTEND_INSTANCE_IDS[0]}
+          SELECTED_FRONTEND_IP=$(aws ec2 describe-instances --instance-ids $SELECTED_FRONTEND_INSTANCE --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$SELECTED_FRONTEND_IP "sudo rm -rf /home/ubuntu/build && mkdir /home/ubuntu/build && sudo rm -rf /var/www/html && sudo mkdir /var/www/html"
+          scp -o StrictHostKeyChecking=no -i key.pem -r ./FE/dist/* ubuntu@$SELECTED_FRONTEND_IP:/home/ubuntu/build
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$SELECTED_FRONTEND_IP "sudo mv build/* /var/www/html"
+          sleep 15
+          rm key.pem
+
+      - name: Confirm Both Frontend Instances Handling Traffic
+        run: |
+          IFS=',' read -r -a FRONTEND_INSTANCE_IDS <<< "${{ env.FRONTEND_INSTANCE_IDS }}"
+          TARGET_GROUP_ARN=$(aws elbv2 describe-target-groups --names issue-tracker-front-tg --query "TargetGroups[0].TargetGroupArn" --output text)
+          for FRONTEND_INSTANCE_ID in "${FRONTEND_INSTANCE_IDS[@]}"; do
+            aws elbv2 register-targets --target-group-arn $TARGET_GROUP_ARN --targets Id=$FRONTEND_INSTANCE_ID
+          done

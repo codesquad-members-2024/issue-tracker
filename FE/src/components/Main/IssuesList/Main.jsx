@@ -1,26 +1,17 @@
-import styled from "styled-components";
-import { Logo } from "../../../icons/logo";
-import { Content } from "./Content";
+import useFetch from "../../../hooks/useFetch";
+import { Header } from "./Header";
+import { IssueListBar } from "./IssueListBar/IssueListBar";
+import { IssueTable } from "./IssueTable/IssueTable";
+import API_ENDPOINTS from "@/config/config";
 
 export function Main() {
+  const { state: issues, loading, error, fetchData: fetchOpenIssues } = useFetch(`${API_ENDPOINTS.openIssues}`);
+  
   return (
     <>
-      <Header>
-        <Logo />
-        <img src="/img/frog.png" />
-      </Header>
-      <Content />
+      <Header />
+      <IssueListBar />
+      <IssueTable {...{ issues, loading, error, fetchData: fetchOpenIssues }}/>
     </>
   );
 }
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 25px 100px 50px 100px;
-  img {
-    width: 32px;
-    height: 32px;
-  }
-`;

@@ -8,10 +8,19 @@ export const LoginButtonStyles = `
   font-size: 18px;
 `;
 
-export const ContentButtonStyles = `
-  padding: 0 20px;
-  border: none;
+export const ContentNavStyles = `
+  display: flex;
+  align-items: center;
+  width: 50%;
+  justify-content: center;
   cursor: pointer;
-  font-size: 18px;
-  background-color: unset;
+`;
+
+export const CommonBtnStyles = `
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: inherit;
+  cursor: pointer;
+  border-radius: 10px;
 `;
