@@ -1,40 +1,32 @@
 import { useState } from "react";
 import TitleView from "./TitleView";
-
-export interface Comment {
-    authorId: string;
-    contents: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
-export interface Issue {
-    id: number;
-    authorId: string;
-    title: string;
-    description: string | null;
-    openAt: string;
-    updatedAt: string;
-    closedAt: string | null;
-    milestoneId: number;
-    state: "OPEN" | "CLOSED";
-    comments: Comment[];
-}
+import { IssueDetail, UserInfo } from "../../pages/IssueDetailPage";
 
 export interface TitleContainerProps {
-    issueData: Issue;
+    issueData: IssueDetail | null;
+    isOpen: boolean;
+    productId: string | undefined;
+    userInfo: UserInfo | null;
 }
 
-const TitleContainer = ({ issueData }: TitleContainerProps) => {
+const TitleContainer = ({
+    issueData,
+    isOpen,
+    productId,
+    userInfo,
+}: TitleContainerProps) => {
     const [editState, setEditState] = useState(false);
 
     return (
         <>
             <div>
                 <TitleView
+                    userInfo={userInfo}
                     issueData={issueData}
                     editState={editState}
                     setEditState={setEditState}
+                    isOpen={isOpen}
+                    productId={productId}
                 />
             </div>
             <div className="border-[1px] my-6" />

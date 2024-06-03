@@ -8,21 +8,19 @@ import { useQuery } from "@tanstack/react-query";
 import { Loading } from "../common/NotFound";
 
 const MilestonesPage = () => {
-    const { data, error, isLoading } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["milestones"],
         queryFn: () => APiUtil.getData("milestones"),
     });
-    // 에러 로딩 처리 따로
-    if (isLoading) return <div><Loading/></div>;
-    if (error) return <div>error...</div>;
 
+    if (isLoading) return <Loading/>;
     return (
         <main className="w-[1280px] mx-auto">
             <Header />
             <ModifyDeleteProvider>
-                <Nav location="milestone" />
+                <Nav location="milestone" labelsCount={data.labelCount} milestoneCount={data.openMilestoneCount}/>
                 <MilestoneEditUI />
-                <MilestoneFeed milestoneData={data} />
+                <MilestoneFeed milestoneData={data.milestones} />
             </ModifyDeleteProvider>
         </main>
     );

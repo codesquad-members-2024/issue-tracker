@@ -19,6 +19,7 @@ export const ModalComponent = ({type, callBack}: ModalComponentProps) => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const message = type === "닫기" ? "정말 닫으시겠습니까?" : type === "열기" ? "정말 여시겠습니까?" : "정말 삭제하시겠습니까?"
     return (
         <>
             <button className="" onClick={showModal}>
@@ -29,9 +30,10 @@ export const ModalComponent = ({type, callBack}: ModalComponentProps) => {
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-                {type === "닫기" ? <p>정말 닫으시겠습니까?</p> : <p>정말 삭제 하시겠습니까?</p>}
+                {message}
             </Modal>
         </>
     );
 };
+
 

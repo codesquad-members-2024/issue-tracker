@@ -1,6 +1,6 @@
 import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import FilterUI from "../../common/FilterUI";
+import FilterUI from "./FilterUI";
 import { FilterContext } from "../../Providers/FilterProvider";
 import React, { ChangeEvent, useContext } from "react";
 import LabelsAndMilestoneUI from "../../common/UtilUI";
@@ -9,6 +9,8 @@ interface NavProps {
     resetFilterUI: boolean;
     setResetFilterUI: React.Dispatch<React.SetStateAction<boolean>>;
     handleResetFilterUI: () => void;
+    labelCount: number
+    openMilestoneCount: number
 }
 
 const ISSUES_FILTER = [
@@ -19,12 +21,12 @@ const ISSUES_FILTER = [
     { value: "닫힌 이슈", query: "is_open=false" },
 ];
 
-const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI}: NavProps) => {
+const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI, labelCount, openMilestoneCount}: NavProps) => {
 
     const [FilterState, FilterDispatch] = useContext(FilterContext);
     
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        FilterDispatch({type: "SEARCH", curFilter: event.target.value})
+        FilterDispatch({type: "SEARCH", selectFilter: event.target.value})
     };
 
     return (
@@ -45,7 +47,7 @@ const Nav = ({ resetFilterUI, setResetFilterUI, handleResetFilterUI}: NavProps) 
                     </div>
                 </div>
                     <div className="flex gap-2">
-                        <LabelsAndMilestoneUI/>
+                        <LabelsAndMilestoneUI labelsCount={labelCount} milestoneCount={openMilestoneCount}/>
                         <Link
                             to="/new"
                             className="flex items-center border-none bg-blue-500 px-6 rounded-xl text-white text-xs w-[128px] justify-center"

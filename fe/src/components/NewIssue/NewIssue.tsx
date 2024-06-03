@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { IssueData } from "../../pages/NewPage";
+import { NewIssueForm } from "../../pages/NewPage";
 import CommentBox from "../../common/CommentBox";
 interface CommentProps {
-    issueData: IssueData;
-    setIssueData: React.Dispatch<React.SetStateAction<IssueData>>;
+    issueData: NewIssueForm;
+    setIssueData: React.Dispatch<React.SetStateAction<NewIssueForm>>;
 }
 
 const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
@@ -11,6 +11,12 @@ const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
 
     const handleFocus = () => setActive(true);
     const handleBlur = () => setActive(false);
+    const addCommentText = (comment: string) => {
+        setIssueData(prev => ({
+            ...prev,
+            content: comment,
+        }))
+    }
 
     return (
         <div className="flex flex-col gap-2">
@@ -23,7 +29,7 @@ const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
                     <div className="text-sm font-normal opacity-60">제목</div>
                     <input
                         type="text"
-                        name="description"
+                        name="title"
                         className={`${
                             isActive ? "bg-white" : ""
                         } bg-gray-200 dark:bg-darkModeBorderBG h-full w-full outline-none rounded-xl`}
@@ -40,7 +46,7 @@ const NewIssue = ({ issueData, setIssueData }: CommentProps) => {
                 </div>
             </div>
             <div>
-                <CommentBox height={"h-[400px]"} issueData={issueData} setIssueData={setIssueData}/>
+                <CommentBox height={"h-[400px]"} addCommentText={addCommentText}/>
             </div>
         </div>
     );

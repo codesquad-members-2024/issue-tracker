@@ -1,34 +1,71 @@
-import { useState } from "react";
 import CommentBox from "../../common/CommentBox";
 import { CommentCard } from "./CommentCard";
-import { Comment } from "./TitleContainer";
-
+import { UserInfo } from "../../pages/IssueDetailPage";
+import { useState } from "react";
+import { IssueDetail } from "../../pages/IssueDetailPage";
+import { APiUtil } from "../../common/Utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface CommentAreaProps {
-    commentData: Comment[];
+    detailData: IssueDetail;
+    authorId: string | undefined;
+    userInfo: UserInfo | null;
+    productId: string | undefined
 }
-const CommentArea = ({ commentData }: CommentAreaProps) => {
-    const [comment, setComment] = useState({ description: "" });
+export interface CommentCreateForm {
+    authorId: string | undefined;
+    contents: string;
+}
 
-    const handleCreate = () => {
-        // 코멘트 생성 보내기
+
+const CommentArea = ({ detailData, authorId, userInfo, productId }: CommentAreaProps) => {
+    const queryClient = useQueryClient();
+    const [detailComment, setComment] = useState("");
+    const addCommentText = (comment: string) => setComment(comment);
+    const authorCommentInfo = {
+        authorId: detailData.authorId,
+        contents: detailData.content,
+        createdAt: detailData.openAt,
+        updatedAt: detailData.updatedAt,
+    };
+
+    const { mutate } = useMutation({
+        mutationFn: async (createForm: CommentCreateForm) => await APiUtil.createData(`issues/${detailData.id}/comments`, createForm),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["issueDetail", productId]});
+        },
+    });
+
+    const handleCreate = async() => {
+        const createForm = {authorId: userInfo?.id, contents: detailComment}
+        mutate(createForm)
     }
-
     return (
         <div className="h-full">
-            {commentData.map((curData, idx) => (
-                <CommentCard commentInfo={curData} key={idx} />
-            ))}
+            <CommentCard commentInfo={authorCommentInfo} userInfo={userInfo} authorId={authorId} productId={productId}/>
+            {detailData?.comments.length ? (
+                detailData.comments.map((curData, idx) => (
+                    <CommentCard
+                        key={idx}
+                        commentInfo={curData}
+                        userInfo={userInfo}
+                        authorId={authorId}
+                        productId={productId}
+                    />
+                ))
+            ) : (
+                <div className="w-[960px]" />
+            )}
             <CommentBox
                 height="h-[200px]"
-                issueData={comment}
-                setIssueData={setComment}
+                addCommentText={addCommentText}
+                detailComment={detailComment}
             />
             <button
-                onClick={handleCreate}
-                disabled={comment.description === ""}
+                onClick={() => handleCreate()}
+                disabled={detailComment === ""}
                 className={`${
-                    comment.description === "" && "bg-gray-200"
-                } flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px] ml-auto mt-4`}
+                    detailComment === "" && "bg-gray-200"
+                } flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px] ml-auto my-4`}
             >
                 완료
             </button>

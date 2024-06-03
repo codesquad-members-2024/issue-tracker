@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { TagOutlined, FlagOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { UserImgBox } from "./UserImgBox";
 
 interface LabelsAndMilestoneUIProps {
     labelsCount?: number
@@ -7,12 +9,20 @@ interface LabelsAndMilestoneUIProps {
 }
 
 export const Header = () => {
+    const [userImg, setUserImg] = useState<string>("")
+    useEffect(() => {
+        const userInfo = sessionStorage.getItem("user") 
+        if(userInfo){
+            const parseUserInfo = JSON.parse(userInfo)
+            setUserImg(parseUserInfo.imgUrl)
+        }
+    }, [])
     return (
         <header className="pb-10 flex justify-between">
-            <Link to="/issue" className="text-3xl font-style: italic font-normal">
+            <Link to="/issue" className="text-3xl font-style: italic font-normal flex items-center">
                 Issue Tracker
             </Link>
-            <img src="/public/img/UserImage.png" alt="User Image" />
+            <UserImgBox imgURL={userImg} margin="0 0 0 auto" width="50px" height="50px"/>
         </header>
     );
 };

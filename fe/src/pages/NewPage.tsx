@@ -1,29 +1,151 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import { Header } from "../common/UtilUI";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NewIssue from "../components/NewIssue/NewIssue";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { APiUtil } from "../common/Utils";
+import { UserImgBox } from "../common/UserImgBox";
+import { UserInfo } from "./IssueDetailPage";
 
-export interface IssueData {
-    userId: string;
+export interface SidebarMilestone {
+    id: number;
+    name: string
     title: string;
+    openIssueCount: number;
+    closedIssueCount: number;
+}
+export interface SidebarLabel {
+    id: number;
+    name: string;
+    title?: string;
     description: string;
+    textColor: string;
+    backgroundColor: string;
+}
+export interface SidebarUser {
+    title?: string;
+    name?: string;
+    id: string;
+    imgUrl: string;
+}
+export interface Users {
+    id: number;
+    username: string;
+    createdAt: string;
+    imgUrl: string;
+    role: string;
+}
+export interface PostRequestFrom {
+    userId: string | undefined;
+    title: string;
+    content: string;
     assigneeIds: string[];
     labelIds: number[];
-    milestoneId: number;
+    milestoneId: number | null;
+}
+export interface NewIssueForm {
+    userId: string | undefined;
+    title: string;
+    content: string;
 }
 
+export interface SideBarItemsForm {
+    assignees: SidebarUser[];
+    labels: SidebarLabel[];
+    milestone: SidebarMilestone[];
+}
+
+export type TableType = {
+    담당자: string;
+    레이블: string;
+    마일스톤: string;
+};
+
+const sideTable: {
+    [key: string]: keyof SideBarItemsForm;
+} = {
+    담당자: "assignees",
+    레이블: "labels",
+    마일스톤: "milestone",
+};
+
+
+
+const userString = sessionStorage.getItem("user");
+const userInfo: UserInfo | null = userString ? JSON.parse(userString) : null;
+
 const NewPage = () => {
-    const [issueData, setIssueData] = useState<IssueData>({
-        userId: "",
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const [newIssueForm, setNewsIssueForm] = useState<NewIssueForm>({
+        userId: userInfo?.id,
         title: "",
-        description: "",
-        assigneeIds: [],
-        labelIds: [],
-        milestoneId: 0,
+        content: "",
+    });
+    const [sideBarItems, setSideBarItems] = useState<SideBarItemsForm>({
+        assignees: [],
+        labels: [],
+        milestone: [],
     });
 
-    const handleCreate = () => {};
+    const handleListClick = (curData: SidebarLabel | SidebarMilestone | SidebarUser, tableName: string) => {
+        setSideBarItems((prev) => {
+            const key = sideTable[tableName];
+            const currentSideItem = prev[key] as (SidebarLabel | SidebarMilestone | SidebarUser)[];
+
+            if (currentSideItem.find((item) => item.id === curData.id)) {
+                return {
+                    ...prev,
+                    [key]: currentSideItem.filter(
+                        (item) => item.id !== curData.id
+                    ),
+                };
+            }
+
+            if(tableName === "마일스톤") {
+                return {
+                    ...prev,
+                    [key]: [curData],
+                };
+            }
+
+            return {
+                ...prev,
+                [key]: [...currentSideItem, curData],
+            };
+        });
+    };
+    const { mutate } = useMutation({
+        mutationFn: async (newData: PostRequestFrom) => {
+            await APiUtil.createData("issues", newData);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["issues"] });
+        },
+    });
+
+
+    const handleCreate = () => {
+        const newData: PostRequestFrom = {
+            ...newIssueForm,
+            assigneeIds: sideBarItems.assignees
+                ? sideBarItems.assignees.map((cur: SidebarUser) => cur.id)
+                : [],
+            labelIds: sideBarItems.labels
+                ? sideBarItems.labels.map((cur: SidebarLabel) => cur.id)
+                : [],
+                milestoneId: !sideBarItems.milestone || sideBarItems.milestone.length === 0
+                ? null
+                : sideBarItems.milestone[0]?.id
+        };
+        mutate(newData);
+        navigate("/issue");
+    };
+
+    useEffect(() => {
+        console.log(sideBarItems)
+    }, [sideBarItems])
 
     return (
         <main className="w-[1280px] mx-auto">
@@ -33,23 +155,32 @@ const NewPage = () => {
             </h1>
             <section className="flex gap-2 justify-between mt-4 py-6 border-t-2 border-b-2">
                 <div className="items-center">
-                    <img src="/public/img/UserImage.png" alt="User Image" />
+                    <UserImgBox
+                        imgURL={userInfo?.imgUrl}
+                        margin=""
+                        width="50px"
+                        height="50px"
+                    />
                 </div>
                 <div className="w-[912px]">
                     <NewIssue
-                        issueData={issueData}
-                        setIssueData={setIssueData}
+                        issueData={newIssueForm}
+                        setIssueData={setNewsIssueForm}
                     />
                 </div>
-                <Sidebar setIssueData={setIssueData} />
+                <Sidebar
+                    sideBarItems={sideBarItems}
+                    handleListClick={handleListClick}
+                    sideTable={sideTable}
+                />
             </section>
             <div className="flex justify-end gap-6 mt-4 items-center">
                 <Link to="/issue">X 작성 취소</Link>
                 <button
                     onClick={handleCreate}
-                    disabled={issueData.title === ""}
+                    disabled={newIssueForm.title === ""}
                     className={`${
-                        issueData.title === "" && "bg-gray-200"
+                        newIssueForm.title === "" && "bg-gray-200"
                     } flex justify-center items-center border-none bg-blue-500 px-6 rounded-xl text-white text-sm h-[46px] w-[200px]`}
                 >
                     완료

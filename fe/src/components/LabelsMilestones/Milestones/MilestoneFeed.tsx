@@ -2,7 +2,6 @@ import { useState } from "react";
 import { InfoCircleOutlined, CreditCardOutlined } from "@ant-design/icons";
 import NotFound from "../../../common/NotFound";
 import MilestoneCard from "./MilestoneCard";
-import { Issue } from "../../IssueContainer/IssueFeed";
 
 export interface Milestone {
     id: number;
@@ -11,9 +10,9 @@ export interface Milestone {
     dueDate: string;
     state: string;
     updatedAt: string;
-    issues: Issue[]
+    openIssueCount: number;
+    closedIssueCount: number;
 }
-
 
 interface MilestoneFeedProps {
     milestoneData: Milestone[];
@@ -31,7 +30,7 @@ export const MilestoneFeed = ({ milestoneData }: MilestoneFeedProps) => {
 
     return (
         <section className="w-full border-2 border-gray-300 rounded-xl mt-4">
-            <div className="h-[45px] bg-gray-200 transition-colors duration-500 dark:bg-darkModeBorderBG flex text-sm rounded-t-lg">
+            <div className="h-[45px] bg-gray-200 transition-colors duration-500 dark:bg-darkModeBG flex text-sm rounded-t-lg">
                 <div className="flex items-center gap-4 text-sm ml-4">
                     <button
                         className={`${isOpen === "OPEN" ? "font-bold" : ""}`}
@@ -52,10 +51,12 @@ export const MilestoneFeed = ({ milestoneData }: MilestoneFeedProps) => {
             {!isOpenInfo.length ? (
                 <NotFound />
             ) : (
-                isOpenInfo.map((curMilestone) => (
+                isOpenInfo.map((curMilestone, idx) => (
                     <MilestoneCard
+                        isOpen={isOpen}
                         curMilestone={curMilestone}
                         key={curMilestone.id}
+                        isLastIdx={isOpenInfo.length - 1 === idx}
                     />
                 ))
             )}

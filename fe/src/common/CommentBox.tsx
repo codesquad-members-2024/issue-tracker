@@ -1,22 +1,23 @@
-import { useState } from "react";
-import { IssueData } from "../pages/NewPage";
+import { useEffect, useState } from "react";
 import FileUploader from "./FileUploader";
 interface CommentBoxProps {
     height: string;
-    issueData: IssueData | {
-        description: string;
-    };
-    setIssueData: React.Dispatch<React.SetStateAction<IssueData | {
-        description: string;
-    }>>;
+    addCommentText: (comment:string) => void;
+    detailComment?: string
 }
 
-const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
+const CommentBox = ({height, addCommentText, detailComment}: CommentBoxProps) => {
     const [isActive, setActive] = useState(false)
-
+    const [comment, setComment] = useState(detailComment ? detailComment : "")
     const handleFocus = () => setActive(true);
     const handleBlur = () => setActive(false);
 
+    const addImgUrl = (url: string) => setComment((prev) => `${prev}\n${url}`)
+    
+    useEffect(() => {
+        addCommentText(comment)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [comment])
     return (
         <div
             className={`${
@@ -27,28 +28,25 @@ const CommentBox = ({height, issueData, setIssueData}: CommentBoxProps) => {
                 코맨트를 입력하세요.
             </div>
             <textarea
-                name="description"
+                name="content"
                 className={`${
                     isActive ? "bg-white" : ""
                 } h-full bg-gray-200 dark:bg-darkModeBorderBG w-full outline-none rounded-xl`}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                value={issueData.description}
+                value={comment}
                 onChange={(e) => {
-                    setIssueData({
-                        ...issueData,
-                        description: e.target.value,
-                    });
+                    setComment(e.target.value);
                 }}
             />
             <div className="relative">
                 <div
                     className={`text-sm font-normal bottom-0 right-6 absolute transition-opacity duration-500`}
                 >
-                    띄어쓰기 포함 {issueData.description.length}자
+                    띄어쓰기 포함 {comment.length}자
                 </div>
             </div>
-            <FileUploader setIssueData={setIssueData} />
+            <FileUploader addImgUrl={addImgUrl} />
         </div>
     );
 };

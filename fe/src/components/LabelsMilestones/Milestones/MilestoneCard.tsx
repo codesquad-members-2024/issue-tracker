@@ -14,7 +14,9 @@ import { APiUtil } from "../../../common/Utils";
 import { ModalComponent } from "../../../common/Modal";
 import Progressbar from "../../../common/Progressbar";
 interface MilestoneCardProps {
+    isOpen: string
     curMilestone: Milestone;
+    isLastIdx: boolean
 }
 
 interface MutationArgs {
@@ -22,12 +24,7 @@ interface MutationArgs {
     type: string;
 }
 
-const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
-    const length = {
-        open: curMilestone.issues.filter((cur) => cur.state === "OPEN").length,
-        closed: curMilestone.issues.filter((cur) => cur.state === "CLOSED").length,
-    };
-
+const MilestoneCard = ({ isOpen, curMilestone, isLastIdx }: MilestoneCardProps) => {
     const queryClient = useQueryClient();
     const [ModifyDeleteState, ModifyDeleteDispatch] =
         useContext(ModifyDeleteContext);
@@ -36,8 +33,11 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
         mutationFn: async ({ id, type }: MutationArgs) => {
             if (type === "삭제") {
                 await APiUtil.deleteData("milestones", id);
+            } else if(type === "열기"){
+                await APiUtil.patchData(`milestones/${id}/OPEN`);
+                return;
             } else {
-                await APiUtil.patchData("milestones", id);
+                await APiUtil.patchData(`milestones/${id}/CLOSED`);
             }
         },
         onSuccess: () => {
@@ -59,7 +59,7 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
             {ModifyDeleteState.id === curMilestone.id ? (
                 <MilestoneEditUI curMilestone={curMilestone} />
             ) : (
-                <div className="h-[90px] flex border-t-2 border-gray-300 dark:bg-darkModeBorderBGx items-center">
+                <div className={`${isLastIdx && "rounded-b-lg"} h-[90px] flex border-t-2 border-gray-300 dark:bg-darkModeBorderBG items-center`}>
                     <div className="w-4/5 h-4/5 ml-4">
                         <div className="flex items-center h-1/2 gap-4">
                             <div className="">
@@ -80,9 +80,9 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
                             <div>
                                 <CreditCardOutlined className="mr-1" />
                                 <ModalComponent
-                                    type="닫기"
+                                    type={isOpen === "OPEN" ? "닫기" : "열기"}
                                     callBack={(e) =>
-                                        handleClick(curMilestone.id, e, "닫기")
+                                        handleClick(curMilestone.id, e, isOpen === "OPEN" ? "닫기" : "열기")
                                     }
                                 />
                             </div>
@@ -106,11 +106,11 @@ const MilestoneCard = ({ curMilestone }: MilestoneCardProps) => {
                                 />
                             </div>
                         </div>
-                        <Progressbar open={length.open} closed={length.closed}/>
+                        <Progressbar open={curMilestone.openIssueCount} closed={curMilestone.closedIssueCount}/>
 
                         <div className="flex justify-end gap-2 text-xs">
-                            <div>열린 이슈({length.open})</div>
-                            <div>닫힌 이슈({length.closed})</div>
+                            <div>열린 이슈({curMilestone.openIssueCount})</div>
+                            <div>닫힌 이슈({curMilestone.closedIssueCount})</div>
                         </div>
                     </div>
                 </div>
