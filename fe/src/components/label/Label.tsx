@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { Label } from "../Model/types";
+import { Label } from "../../type/types";
 
 interface LabelProps {
   labelInfo?: Label;
@@ -23,4 +23,5 @@ const LabelDiv = styled.div<{ $backgroundColor: string; $textColor: string }>`
   border-radius: 16px;
   background-color: ${(props) => props.$backgroundColor};
   color: ${(props) => props.$textColor};
+  margin-right: 8px;
 `;

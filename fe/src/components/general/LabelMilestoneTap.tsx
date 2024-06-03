@@ -1,8 +1,8 @@
 import { styled } from "styled-components";
-import labelIcon from "../assets/label.svg";
-import milestoneIcon from "../assets/milestone.svg";
-import useApi from "../hooks/api/useApi";
-import { Label, Milestone } from "../Model/types";
+import labelIcon from "../../assets/label.svg";
+import milestoneIcon from "../../assets/milestone.svg";
+import useApi from "../../hooks/api/useApi";
+import { Label, Milestone } from "../../type/types";
 import { Link } from "react-router-dom";
 
 export default function LabelMilestoneTap() {
@@ -16,7 +16,9 @@ export default function LabelMilestoneTap() {
       </TapButton>
       <TapButton>
         <img src={milestoneIcon} alt="milestone icon" />
-        마일스톤({milestoneListData?.length})
+        <StyledLink to="/milestone">
+          마일스톤({milestoneListData?.length})
+        </StyledLink>
       </TapButton>
     </TapBox>
   );

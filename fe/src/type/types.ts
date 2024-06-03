@@ -39,26 +39,17 @@ export interface FilteringState {
   isOpen: boolean;
   assignee: string[];
   label: string[];
-  milestone: string[];
+  milestone: string;
   reporter: string[];
   comment: string[];
 }
 
 export interface Comment {
   id: number;
-  reporter: string;
-  contents: string;
-}
-
-export interface issueDetails {
-  id: number;
-  title: string;
-  create_At: string;
+  issue_id: number;
   reporter: User;
-  label: Label;
-  milestone: Milestone;
-  comment: Comment[];
-  assignee: User[];
+  created_at: string;
+  contents: string;
 }
 
 export interface LabelForm {
@@ -66,4 +57,22 @@ export interface LabelForm {
   background_color: string;
   text_color: string;
   description: null | string;
+}
+
+export interface MilestoneForm {
+  name: string;
+  description: string | null;
+  end_date: string;
+}
+
+export interface IssueDetails {
+  id: number;
+  title: string;
+  created_At: string;
+  is_open: boolean;
+  reporter: User;
+  label: Label[];
+  milestone: Milestone;
+  comment: Comment[];
+  assignee: User[];
 }

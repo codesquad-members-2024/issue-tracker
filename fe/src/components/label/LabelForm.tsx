@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
-import IconRefresh from "../assets/IconsRefresh.svg";
-import * as CommonS from "../styles/common";
-import { LabelForm } from "../Model/types";
+import IconRefresh from "../../assets/IconsRefresh.svg";
+import * as CommonS from "../../styles/common";
+import { LabelForm } from "../../type/types";
 
 interface LabelFormProps {
   labelObj: LabelForm;
@@ -12,6 +12,7 @@ interface LabelFormProps {
   };
   handleCancel: () => void;
   handleSubmit: () => Promise<void>;
+  isCreation: boolean;
 }
 
 export default function LabelFormBox({
@@ -19,11 +20,12 @@ export default function LabelFormBox({
   inputHandler,
   handleCancel,
   handleSubmit,
+  isCreation,
 }: LabelFormProps) {
   const { background_color, text_color, name } = labelObj;
   return (
-    <LabelCreationContainer>
-      <h3>새로운 레이블 추가</h3>
+    <LabelCreationContainer iscreation={isCreation.toString()}>
+      {isCreation ? <h3>새로운 레이블 추가</h3> : <h3>레이블 편집</h3>}
       <CreateLabelInfoArea>
         <LabelDesignShowBox>
           <LabelDiv $backgroundColor={background_color} $textColor={text_color}>
@@ -38,6 +40,7 @@ export default function LabelFormBox({
             <input
               name="name"
               placeholder="레이블의 이름을 입력하세요"
+              value={labelObj.name ? labelObj.name : ""}
               onChange={inputHandler.handleInputLabel}
             />
           </InputContainer>
@@ -48,6 +51,7 @@ export default function LabelFormBox({
             <input
               name="description"
               placeholder="레이블에 대한 설명을 입력하세요"
+              value={labelObj.description ? labelObj.description : ""}
               onChange={inputHandler.handleInputLabel}
             />
           </InputContainer>
@@ -70,22 +74,27 @@ export default function LabelFormBox({
           </ColorPickerBox>
         </CreateLabelTextArea>
       </CreateLabelInfoArea>
-      <CreateLabelButtonArea>
-        <CreateCancelButton onClick={handleCancel}>X 취소</CreateCancelButton>
-        <CreateDoneButton onClick={handleSubmit}>+ 완료</CreateDoneButton>
-      </CreateLabelButtonArea>
+      <ButtonArea>
+        <CancelButton onClick={handleCancel}>X 취소</CancelButton>
+        <DoneButton onClick={handleSubmit}>+ 완료</DoneButton>
+      </ButtonArea>
     </LabelCreationContainer>
   );
 }
 
-const LabelCreationContainer = styled.section`
+const LabelCreationContainer = styled.section<{ iscreation: string }>`
   width: 100%;
   height: 337px;
   background-color: white;
-  margin-top: 25px;
-  border-radius: 16px;
+  margin-top: ${({ iscreation }) => (iscreation === "true" ? "25px" : "0")};
+  border-radius: ${({ iscreation }) => (iscreation === "true" ? "26px" : "0")};
   padding: 32px;
-
+  border-bottom: ${({ iscreation }) =>
+    iscreation === "true" ? "none" : "1px solid rgb(218, 219, 233)"};
+  border-left: ${({ iscreation }) =>
+    iscreation === "true" ? "none" : "1px solid rgb(218, 219, 233)"};
+  border-right: ${({ iscreation }) =>
+    iscreation === "true" ? "none" : "1px solid rgb(218, 219, 233)"};
   & h3 {
     margin-top: 0;
     font-size: 20px;
@@ -119,12 +128,12 @@ const CreateLabelTextArea = styled(CommonS.ColumnFlex)`
   justify-content: space-between;
 `;
 
-const CreateLabelButtonArea = styled.div`
+const ButtonArea = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
 
-const CreateCancelButton = styled.button`
+const CancelButton = styled.button`
   width: 128px;
   height: 40px;
   border-radius: 12px;
@@ -134,7 +143,7 @@ const CreateCancelButton = styled.button`
   margin-right: 15px;
 `;
 
-const CreateDoneButton = styled.button`
+const DoneButton = styled.button`
   background-color: rgba(0, 122, 255, 1);
   border: none;
   color: white;

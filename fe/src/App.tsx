@@ -6,6 +6,8 @@ import IssueListPage from "./pages/IssueListPage";
 import { CurrentUserProvider } from "./contexts/CurrentUserProvider";
 import IssueDetailsPage from "./pages/IssueDetailsPage";
 import LabelListPage from "./pages/LabelListPage";
+import MilestoneListPage from "./pages/MilestoneListPage";
+import GitHubLoginCallback from "./pages/GithubLoginCallback";
 
 function App() {
   return (
@@ -16,8 +18,10 @@ function App() {
             <Route path={"/"} element={<IssueListPage />} />
             <Route path={"/login"} element={<LoginPage />} />
             <Route path={"/issue"} element={<IssueCreationPage />} />
-            <Route path={"/issue/:id"} element={<IssueDetailsPage />} />
+            <Route path={"/issue/:issueId"} element={<IssueDetailsPage />} />
             <Route path={"/label"} element={<LabelListPage />} />
+            <Route path={"/milestone"} element={<MilestoneListPage />} />
+            <Route path="/callback" element={<GitHubLoginCallback />} />
           </Routes>
         </CurrentUserProvider>
       </BrowserRouter>

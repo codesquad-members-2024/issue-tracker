@@ -1,9 +1,9 @@
 import * as S from "./popupStyle";
-import { Milestone } from "../../Model/types";
+import { Milestone } from "../../type/types";
 
 interface MilestonePopupProps {
   milestoneList: Milestone[];
-  selectedMilestone: string[];
+  selectedMilestone: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isMilestoneNone: boolean;
 }
@@ -27,7 +27,7 @@ export default function MilestonePopup({
             id={"none"}
             name="label"
             value={"none"}
-            checked={selectedMilestone.includes("none")}
+            checked={selectedMilestone === "none"}
             onChange={onChange}
           />
         </S.DropdownOption>
@@ -44,7 +44,7 @@ export default function MilestonePopup({
               id={name}
               name="label"
               value={id}
-              checked={selectedMilestone.includes(id.toString())}
+              checked={selectedMilestone.toString() === id.toString()}
               onChange={onChange}
             />
           </S.DropdownOption>

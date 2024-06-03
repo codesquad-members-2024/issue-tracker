@@ -1,27 +1,28 @@
 import queryString from "query-string";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import PageHeader from "../components/PageHeader";
+import PageHeader from "../components/general/PageHeader";
 import { useCurrentUser } from "../contexts/CurrentUserProvider";
 import * as CommonS from "../styles/common";
 import dropdownIcon from "../assets/dropdownIcon.svg";
 import searchIcon from "../assets/search.svg";
-import { IssueData, FilteringState } from "../Model/types";
+import { IssueData, FilteringState } from "../type/types";
 import { Link } from "react-router-dom";
-import IssueTableHeader from "../components/IssueTableHeader";
-import TableItems from "../components/IssueTableItems";
+import IssueTableHeader from "../components/issue/IssueTableHeader";
+import TableItems from "../components/issue/IssueTableItems";
 import usePopup from "../hooks/usePopup";
 import { PopupType } from "../hooks/usePopup";
 import FilterPopup from "../components/popup/FilterPopup";
 import Overlay from "../components/popup/Overlay";
 import useApi from "../hooks/api/useApi";
-import LabelMilestoneTap from "../components/LabelMilestoneTap";
+import LabelMilestoneTap from "../components/general/LabelMilestoneTap";
 
 const initialFilteringState = {
   isOpen: true,
   assignee: [],
   label: [],
-  milestone: [],
+  milestone: "",
   reporter: [],
   comment: [],
 };
@@ -30,7 +31,7 @@ const OnlyFilteringClosedState = {
   isOpen: false,
   assignee: [],
   label: [],
-  milestone: [],
+  milestone: "",
   reporter: [],
   comment: [],
 };
@@ -42,18 +43,26 @@ export default function IssueListPage() {
   const [filteringState, setFilteringState] = useState<FilteringState>(
     initialFilteringState
   );
+  const adjustedFilteringState = {
+    ...filteringState,
+    milestone: filteringState.milestone === "" ? [] : filteringState.milestone,
+  };
+  const paramString = queryString.stringify(adjustedFilteringState);
   const {
     data: issueList,
     isLoading: isIssueListLoading,
-    refetch: isssueListRefetch,
-    putData: updateIssueStatus,
-  } = useApi<IssueData>("/issue");
+    refetch: refetchIssueList,
+    patchData: updateIssueStatus,
+  } = useApi<IssueData>(`/issue/filter?${paramString}`);
   const [selectedIssue, setSelectedIssue] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   const paramString = queryString.stringify(filteringState);
-  //   // isssueListRefetch(`/issue/filter?${paramString}`);
-  // }, [filteringState]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, [currentUser, navigate]);
 
   if (!issueList) {
     return null;
@@ -104,10 +113,12 @@ export default function IssueListPage() {
     }
   };
 
-  const openOrCloseIssues = (status: string) => {
+  const openOrCloseIssues = async (status: string) => {
     const putPath = status === "open" ? "/issue/open" : "/issue/close";
     const selectedIssueIds = selectedIssue.map((id) => Number(id));
-    // updateIssueStatus(putPath, { issueIds: selectedIssueIds });
+    await updateIssueStatus(putPath, { id: selectedIssueIds });
+    setSelectedIssue([]);
+    refetchIssueList(`/issue/filter?${paramString}`);
   };
 
   const isFilteringChanged =
@@ -238,36 +249,6 @@ const ButtonsWrapper = styled(CommonS.SpaceBetween)`
   align-items: center;
   width: 465px;
   height: 100%;
-`;
-
-const TapBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 320px;
-  height: 100%;
-  border: 1px solid rgba(217, 219, 233, 1);
-  border-radius: 12px;
-  overflow: hidden;
-`;
-
-const TapButton = styled.div`
-  width: 159.5px;
-  height: 100%;
-  background-color: rgba(247, 247, 252, 1);
-  font-size: 16px;
-  border-right: 1px solid rgba(217, 219, 233, 1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:last-child {
-    border: none;
-  }
-
-  img {
-    margin-right: 4px;
-  }
 `;
 
 const IssueCreationButton = styled(Link)`
