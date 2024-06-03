@@ -31,6 +31,7 @@ public class JwtService {
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .claim("member_id", member.getMemberId())
+                .claim("profile_image_url", member.getProfileImage())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }

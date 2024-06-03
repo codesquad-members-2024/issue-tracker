@@ -2,17 +2,26 @@ import { useState } from "react";
 import Button from "../common/Button";
 import TabButton from "../common/TabButton";
 import NewLabel from "./LabelCRUD/NewLabel";
+import useGet from "../../hooks/useGet";
 
 function LabelUI() {
 	const [newLabel, setNewLabel] = useState(false);
-	const onClick = () => setNewLabel(!newLabel);
+	const handleShowNewLabel = () => setNewLabel(!newLabel);
+	const { data, error } = useGet("count", "/count", true);
+	if (error) return <div>값을 불러오지 못했습니다</div>;
+	const { totalLabelCounts = 0, totalMilestoneCounts = 0 } = data || {};
 
 	return (
 		<>
 			<div className="mt-10 flex justify-between min-w-[425px]">
-				<TabButton position="UI_BAR" click="left" />
+				<TabButton
+					position="UI_BAR"
+					click="left"
+					leftCount={totalLabelCounts}
+					rightCount={totalMilestoneCounts}
+				/>
 				<Button
-					onClick={newLabel ? () => {} : onClick}
+					onClick={newLabel ? () => {} : handleShowNewLabel}
 					size="S"
 					type="CONTAINED"
 					icon="PLUS"
@@ -21,7 +30,7 @@ function LabelUI() {
 				/>
 			</div>
 			<div className={`transition-[height] ${newLabel ? "lg:h-[360px] h-[480px]" : "h-0"}`}>
-				{newLabel && <NewLabel onClick={onClick} />}
+				{newLabel && <NewLabel handleShowNewLabel={handleShowNewLabel} />}
 			</div>
 		</>
 	);

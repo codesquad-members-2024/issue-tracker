@@ -1,10 +1,14 @@
 package team08.issuetracker.label.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import team08.issuetracker.label.model.dto.LabelUpdateRequest;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class Label {
 
     @Id

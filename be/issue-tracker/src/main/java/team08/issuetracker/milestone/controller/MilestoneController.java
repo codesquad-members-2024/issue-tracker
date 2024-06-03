@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team08.issuetracker.issue.service.IssueCountService;
+import team08.issuetracker.issue.service.IssueService;
 import team08.issuetracker.milestone.model.Milestone;
 import team08.issuetracker.milestone.model.dto.MilestoneCreationRequest;
 import team08.issuetracker.milestone.model.dto.MilestoneCreationResponse;
@@ -17,13 +19,13 @@ import team08.issuetracker.milestone.service.MilestoneService;
 @Slf4j
 @RequestMapping("/milestone")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class MilestoneController {
     private final MilestoneService milestoneService;
 
     @GetMapping()
     public ResponseEntity<?> getAllMilestonesWithCounts(@RequestParam(required = false, value = "state") String state) {
         MilestoneOverviewResponse milestoneOverviewResponse = milestoneService.getAllMilestonesWithCounts(state);
+
         return ResponseEntity.ok(milestoneOverviewResponse);
     }
 
@@ -38,7 +40,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<MilestoneUpdateResponse> updateMilestone(@PathVariable long id, @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
         Milestone milestone = milestoneService.updateMilestone(id, milestoneUpdateRequest);
 
@@ -49,7 +51,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}/open")
+    @PatchMapping("{id}/open")
     public ResponseEntity<MilestoneUpdateResponse> openMilestone(@PathVariable long id) {
         Milestone milestone = milestoneService.updateMilestoneStateToOpen(id);
 
@@ -60,7 +62,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{id}/close")
+    @PatchMapping("{id}/close")
     public ResponseEntity<MilestoneUpdateResponse> closeMilestone(@PathVariable long id) {
         Milestone milestone = milestoneService.updateMilestoneStateToClose(id);
 
@@ -71,7 +73,7 @@ public class MilestoneController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<MilestoneDeleteResponse> deleteMilestone(@PathVariable long id) {
         milestoneService.deleteMilestone(id);
 

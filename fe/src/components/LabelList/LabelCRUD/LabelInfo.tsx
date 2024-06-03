@@ -1,40 +1,45 @@
-import LabelInput from "../../common/InputText";
+import InputText from "../../common/InputText";
 
 interface PropsType {
-	handleName: React.ChangeEventHandler<HTMLInputElement>;
-	// handleExplain: React.ChangeEventHandler<HTMLInputElement>; //TODO 나중에 추가
-	handleBgColor: (color: string) => void;
-	bgColor: string;
-	handleTextBright: React.MouseEventHandler<HTMLButtonElement>;
-	textBright: boolean;
 	label?: Label;
+	bgColor: string;
+	textBright: boolean;
+	handleName: React.ChangeEventHandler<HTMLInputElement>;
+	handleTextBright: React.MouseEventHandler<HTMLButtonElement>;
+	handleExplain?: React.ChangeEventHandler<HTMLInputElement>;
+	handleBgColor: (color: string) => void;
+	$description: React.RefObject<HTMLInputElement>;
 }
 
 function LabelInfo({
+	label,
+	bgColor,
+	textBright,
 	handleName,
 	handleBgColor,
-	bgColor,
 	handleTextBright,
-	textBright,
-	label,
+	handleExplain,
+	$description,
 }: PropsType) {
 	return (
 		<div className="flex flex-col justify-between h-[153px]">
-			<LabelInput
+			<InputText
 				lable="이름"
 				placeholder={`${label ? label.name : "레이블의 이름을 입력하세요"}`}
 				w="w-full"
 				icon={false}
 				handler={handleName}
 			/>
-			<LabelInput
+			<InputText
 				lable="설명(선택)"
 				placeholder={`${label ? label.description : "레이블에 대한 설명을 입력하세요"}`}
 				w="w-full"
 				icon={false}
+				handler={handleExplain}
+				$ref={$description}
 			/>
 			<div className="flex">
-				<LabelInput
+				<InputText
 					lable="배경 색상"
 					placeholder=""
 					w="w-[240px]"

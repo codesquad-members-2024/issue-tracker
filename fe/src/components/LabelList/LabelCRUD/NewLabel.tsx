@@ -1,19 +1,31 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Button from "../../common/Button";
 import InformationTag from "../../common/InformationTag";
 import LabelInfo from "./LabelInfo";
+import usePost from "../../../hooks/usePost";
+
+interface DataType {
+	name: string;
+	description: string;
+	backgroundColor: string;
+	textBright: boolean;
+}
 
 interface PropsType {
-	onClick: React.MouseEventHandler<HTMLButtonElement>;
+	handleShowNewLabel: () => void;
 }
 
 const border = "border-[1px] rounded-2xl component-border dark:component-border--dark";
 
-function NewLabel({ onClick }: PropsType) {
+function NewLabel({ handleShowNewLabel }: PropsType) {
 	const [name, setName] = useState("Lable");
 	const [textBright, setTextBright] = useState(true);
-	const [bgColor, setBgColor] = useState("#dfdeff");
+	const [backgroundColor, setBgColor] = useState("#dfdeff");
+	const $description = useRef<HTMLInputElement>(null);
 	const [disabled, setDisabled] = useState("DISABLED");
+
+	const mutate = usePost("/label", "label", handleShowNewLabel);
+
 	const handleName = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		setName(target.value);
 		if (target.value) {
@@ -24,18 +36,29 @@ function NewLabel({ onClick }: PropsType) {
 	};
 	const handleTextBright = () => setTextBright(!textBright);
 	const handleBgColor = (color: string) => setBgColor(color);
+	const handleAddData = () => {
+		const data: DataType = {
+			name,
+			backgroundColor,
+			description: $description.current?.value || "",
+			textBright,
+		};
+		mutate(data);
+	};
 
 	return (
 		<div
 			className={`mt-5 w-full ${border} lg:h-[360px] h-[480px] min-w-[425px] bg-grayscale.50 dark:bg-grayscale.800 `}
 		>
-			<h2 className="font-bold text-xl m-8">새로운 레이블 추가</h2>
+			<h2 className="font-bold text-xl m-8 text-grayscale.900 dark:text-gray-50">
+				새로운 레이블 추가
+			</h2>
 			<div className="h-2/3 mx-8 flex flex-wrap">
 				<section className={`${border} w-[288px] h-[153px] flex justify-center items-center`}>
 					<InformationTag
 						text={name || "Label"}
 						icon={null}
-						fillColor={bgColor}
+						fillColor={backgroundColor}
 						textBright={textBright}
 					/>
 				</section>
@@ -43,15 +66,23 @@ function NewLabel({ onClick }: PropsType) {
 					<LabelInfo
 						handleName={handleName}
 						handleBgColor={handleBgColor}
-						bgColor={bgColor}
+						bgColor={backgroundColor}
 						handleTextBright={handleTextBright}
 						textBright={textBright}
+						$description={$description}
 					/>
 					<div className="flex flex-row-reverse mt-2">
-						<Button size="S" type="CONTAINED" icon="PLUS" text="완료" state={disabled} />
+						<Button
+							onClick={handleAddData}
+							size="S"
+							type="CONTAINED"
+							icon="PLUS"
+							text="완료"
+							state={disabled}
+						/>
 						<div className="mr-5">
 							<Button
-								onClick={onClick}
+								onClick={handleShowNewLabel}
 								size="S"
 								type="OUTLINE"
 								icon="X"

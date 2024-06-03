@@ -1,4 +1,5 @@
 create table member (
-                        member_id varchar(16) PRIMARY KEY ,
-                        password varchar(12)
+                        member_id VARCHAR(16) PRIMARY KEY ,
+                        password VARCHAR(12),
+                        profile_image VARCHAR(255)
 );

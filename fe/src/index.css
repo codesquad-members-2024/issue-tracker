@@ -4,7 +4,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
 
 @layer components {
-	/* TODO : 차후 공통 컴포넌트 화 예정이라 이하 클래스  삭제하면 됨 */
 	.btn-large {
 		border-radius: 16px;
 		font-size: large;
@@ -34,7 +33,6 @@
 	}
 
 	.input-text--focus {
-		outline: 1px solid theme("colors[grayscale.900]");
 		background-color: theme("colors[grayscale.50]");
 		caret-color: theme("colors[grayscale.700]");
 		color: theme("colors.black");
@@ -51,12 +49,11 @@
 		transform: translate(7px, 12px) scale(1.3);
 	}
 	.input--invalid {
-		outline-color: theme("colors[accent.red]");
+		outline: 1px solid theme("colors[accent.red]");
 		border: 1px solid theme("colors[accent.red]");
 		color: theme("colors[accent.red]");
 	}
 
-	/* 아래는 재활용 가능 */
 	.component-border {
 		border-style: solid;
 		border-color: theme("colors[grayscale.300]");
@@ -69,7 +66,7 @@
 
 	.checkbox {
 		display: inline-block;
-		width: 16px;
+		width: 20px;
 		height: 16px;
 		border: 1px solid theme("colors[grayscale.700]");
 		border-radius: 100%;
@@ -82,7 +79,7 @@
 		font-size: 10px;
 		font-weight: 900;
 		position: absolute;
-		left: 2px;
+		left: 3px;
 		top: -0.5px;
 		color: theme("colors[grayscale.700]");
 	}

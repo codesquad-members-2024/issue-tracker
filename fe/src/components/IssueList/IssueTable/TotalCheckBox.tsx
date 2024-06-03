@@ -1,6 +1,8 @@
-import { ReactComponent as CheckBoxDisable } from "./CheckBoxDisable.svg";
-import { ReactComponent as CheckBoxActive } from "./CheckBoxActive.svg";
-import { ReactComponent as CheckBoxInitial } from "./CheckBoxInitial.svg";
+import { ReactComponent as CheckBoxDisable } from "../../../svg/CheckBoxDisable.svg";
+import { ReactComponent as CheckBoxActive } from "../../../svg/CheckBoxActive.svg";
+import { ReactComponent as CheckBoxInitial } from "../../../svg/CheckBoxInitial.svg";
+import { useContext } from "react";
+import { CheckboxContext } from "../../../provider/CheckboxProvider";
 
 interface CheckboxState {
 	activeTotal: boolean;
@@ -9,25 +11,36 @@ interface CheckboxState {
 }
 
 interface PropsType {
-	state: CheckboxState;
-	dispatch: React.Dispatch<string>;
-	TOTAL_LENGTH: number;
+	length: number;
+	checkedIssues: React.MutableRefObject<{ [key: number]: number }>;
+	issues: Issue[];
 }
 
-const render = (state: CheckboxState, TOTAL_LENGTH: number) => {
-	if (state.countCheckBox === TOTAL_LENGTH) return <CheckBoxActive />;
+const CheckBoxState = (state: CheckboxState, totalLength: number) => {
+	if (state.countCheckBox && state.countCheckBox === totalLength) return <CheckBoxActive />;
 	if (state.countCheckBox > 0) return <CheckBoxDisable />;
 	if (state.activeTotal) return <CheckBoxActive />;
 	return <CheckBoxInitial />;
 };
 
-function TotalCheckBox({ state, dispatch, TOTAL_LENGTH }: PropsType) {
-	const onClick = () =>
-		state.activeTotal ? dispatch("SET_TOTAL_DISABLE") : dispatch("SET_TOTAL_ACTIVE");
+function TotalCheckBox({ length, checkedIssues, issues }: PropsType) {
+	const [state, dispatch] = useContext(CheckboxContext);
+
+	const onClick = () => {
+		if (state.activeTotal) {
+			dispatch({ type: "SET_TOTAL_DISABLE" });
+			checkedIssues.current = {};
+			return;
+		}
+		dispatch({ type: "SET_TOTAL_ACTIVE", payload: length });
+		checkedIssues.current = issues.reduce((prev, { id }) => {
+			return { ...prev, [id]: id };
+		}, {});
+	};
 
 	return (
 		<div onClick={onClick} className="cursor-pointer">
-			{render(state, TOTAL_LENGTH)}
+			{CheckBoxState(state, length)}
 		</div>
 	);
 }

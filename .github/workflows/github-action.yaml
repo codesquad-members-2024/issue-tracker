@@ -1,0 +1,72 @@
+name: Deploy Spring Application to EC2
+
+# Trigger workflow on push to specified branches
+on:
+  push:
+    branches: [ "be-dev", "main" ]
+
+# Set permissions for the workflow
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Make application.yaml
+        run: |
+          cd ./be/issue-tracker/src/main
+          mkdir -p resources
+          cd resources
+          touch application.yaml
+          echo "${{ secrets.YAML }}" > application.yaml
+        shell: bash
+
+      - name: Decode and save keystore.p12
+        run: |
+          cd ./be/issue-tracker/src/main/resources
+          mkdir -p ssl
+          cd ssl
+          echo "${{ secrets.ENCODED_KEYSTORE_P12 }}" | base64 -d > keystore.p12
+        shell: bash
+
+      - name: Grant execute permission for gradlew
+        run: |
+          cd ./be/issue-tracker
+          chmod +x gradlew
+
+      - name: Build with Gradle
+        run: |
+          cd ./be/issue-tracker
+          ./gradlew clean build -x test
+
+      - name: Docker build & push to Docker repo
+        run: |
+          cd ./be/issue-tracker 
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker build --build-arg DEPENDENCY=build/dependency -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }} --platform linux/amd64 .
+          docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            echo ${{ secrets.DOCKER_PASSWORD }} | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            sudo docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest
+            if [ $(sudo docker ps -q -f "name=spring-server") ]; then
+              sudo docker stop spring-server
+              sudo docker rm spring-server
+            fi
+            sudo docker run -d -p 80:80 -p 8080:8080 -p 443:443 --name spring-server ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPO }}:latest

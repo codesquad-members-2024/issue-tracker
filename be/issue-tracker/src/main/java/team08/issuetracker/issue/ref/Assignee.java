@@ -11,4 +11,9 @@ public class Assignee {
     private Long id;
     private final Long issueId;
     private final String memberId;
+
+    @Override
+    public String toString() {
+        return String.format("id : %d\n issueId : %d\n memberId : %s", id, issueId, memberId);
+    }
 }

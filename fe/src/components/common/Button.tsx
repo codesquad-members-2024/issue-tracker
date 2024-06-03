@@ -67,6 +67,7 @@ function Button({ onClick, size, type, icon, text, state }: PropsType) {
 		<button
 			onClick={onClick}
 			className={`${SIZE[size]} ${TYPE[type]} ${STATE[state]} relative flex items-center justify-center rounded-xl`}
+			disabled={state === "DISABLED" ? true : false}
 		>
 			{icon && <FontAwesomeIcon className="mt-[1.4px]" icon={ICON[icon]} />}
 			<span className={SIZE_PADDING[size]}>{text}</span>

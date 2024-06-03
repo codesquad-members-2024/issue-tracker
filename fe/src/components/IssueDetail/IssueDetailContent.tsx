@@ -1,61 +1,75 @@
-import SideBar from "../common/SideBar";
+import { useRef, useState } from "react";
+import SideBar from "./SideBar";
 import TextArea from "../common/TextArea";
 import ContentTable from "./ContentTable/ContentTable";
+import Button from "../common/Button";
+import usePost from "../../hooks/usePost";
+import getLocalStorageItem from "../../utility/getLocalStorageItem";
+import getNowTime from "../../utility/getNowTime";
 
 interface PropsType {
-	issue: Issue;
-	timeSince: string;
+	issueData: IssueDetailDataType;
 }
 
 const border = "component-border dark:component-border--dark";
 
-//TODO 차후 커스텀 훅으로 변경(issue.tsx에도 있당)
-const getTimeStamp = (timestamp: string) => {
-	const date = new Date(timestamp);
-	let time: number = Math.abs(date.getTime() - new Date().getTime()) / 1000;
+function IssueDetailContent({ issueData }: PropsType) {
+	const { assignees, comments, issue, labels, milestone } = issueData;
+	const [disabled, setDisabled] = useState("DISABLED");
+	const $content = useRef<HTMLTextAreaElement>(null);
+	const uploadedFile = useRef<string | null>(null);
+	const { member_id } = getLocalStorageItem("user");
+	const mutate = usePost(`/issue/${issue.id}/comment`, `issue/${issue.id}`);
 
-	const resulte = ["초", "분", "시간"].reduce((prev, curr) => {
-		if (time > 60) {
-			time /= 60;
-			return prev;
+	const handleCommentBtnState = () => {
+		if ($content.current?.value) {
+			setDisabled("DEFAULT");
+			return;
 		}
-		if (prev) return prev;
-		if (time > 24) return "";
-		return `${~~time}${curr} 전`;
-	}, "");
-
-	if (resulte) return resulte;
-	return new Intl.DateTimeFormat("ja-JP").format(date);
-};
-
-function IssueDetailContent({ issue, timeSince }: PropsType) {
+		setDisabled("DISABLED");
+	};
+	const handleClickCommentBtn = () => {
+		setDisabled("DISABLED");
+		const data = {
+			writer: member_id,
+			content: $content.current?.value || "",
+			createdAt: getNowTime(),
+			uploadedFile: uploadedFile.current,
+		};
+		mutate(data);
+	};
 	return (
 		<section className={`${border} border-t-[1px] flex`}>
-			<div className="mt-6 w-full">
-				{/* TODO 이미지 url도 추가 예정 */}
-				<ContentTable
-					writer={issue.writer}
-					timeSince={timeSince}
-					content={issue.content}
-					comment={true}
-				/>
+			<div className="mt-6 mb-24 w-full">
+				<ContentTable key={issue.id} issue={issue} memberId={member_id} issueId={issue.id} />
 				<div className="mt-6">
-					{issue.comments.map((comment) => (
-						<ContentTable
-							key={comment.id}
-							writer={comment.writer}
-							timeSince={getTimeStamp(comment.timestamp)}
-							content={comment.content}
-							comment={false}
-						/>
+					{comments.map((comment) => (
+						<div key={comment.commentId} className="mt-3">
+							<ContentTable comment={comment} memberId={member_id} issueId={issue.id} />
+						</div>
 					))}
 				</div>
 				<div className="mt-6">
-					<TextArea h="h-[184px]" />
+					<TextArea
+						h="h-[184px]"
+						$ref={$content}
+						handler={handleCommentBtnState}
+						uploadedFile={uploadedFile}
+					/>
+					<div className="mt-6 flex flex-row-reverse w-full">
+						<Button
+							size="S"
+							type="CONTAINED"
+							icon="PLUS"
+							text="코멘트 작성"
+							state={disabled}
+							onClick={handleClickCommentBtn}
+						/>
+					</div>
 				</div>
 			</div>
 			<div className="mt-6 ml-5">
-				<SideBar />
+				<SideBar assignees={assignees} issueId={issue.id} labels={labels} milestone={milestone} />
 			</div>
 		</section>
 	);
