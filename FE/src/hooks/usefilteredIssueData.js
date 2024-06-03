@@ -1,7 +1,6 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { fetchIssueListData, fetchLabelsData, fetchMembersData, fetchMilestonesData } from '../api/fetchFilterData';
+import { fetchIssueListData } from '../api/fetchFilterData';
 import { useFilterContext } from '../context/FilterContext';
-import labels from '../components/labels/Labels';
 import { getUserId } from '../utils/userUtils';
 
 const filterTypeIsClosed = (selectedFilters) => {
@@ -15,10 +14,12 @@ const filterTypeIsClosed = (selectedFilters) => {
 const filterTypeAuthorId = (selectedFilters, userId) => {
     if (!selectedFilters || Object.keys(selectedFilters).length === 0) return;
 
-    const authorObj = Object.entries(selectedFilters).filter(([key, value]) => key === 'author' && value !== null);
+    const authorObj = Object.entries(selectedFilters).filter(([key, value]) => key === 'author' && value !== null && value !== 'nonSelected');
     if (authorObj.length) return authorObj[0][1];
 
-    const issuesObj = Object.entries(selectedFilters.issues).filter(([key, value]) => key === 'authorMe' && value !== null);
+    const issuesObj = Object.entries(selectedFilters.issues).filter(
+        ([key, value]) => key === 'authorMe' && value !== null && value !== 'nonSelected'
+    );
     if (issuesObj.length) return userId;
 
     return '';
@@ -27,19 +28,24 @@ const filterTypeAuthorId = (selectedFilters, userId) => {
 const filterTypeAssigneeId = (selectedFilters, userId) => {
     if (!selectedFilters || Object.keys(selectedFilters).length === 0) return;
 
-    const assigneeObj = Object.entries(selectedFilters).filter(([key, value]) => key === 'assignee' && value !== null);
+    const assigneeObj = Object.entries(selectedFilters).filter(([key, value]) => key === 'assignee' && value !== null && value !== 'nonSelected');
     if (assigneeObj.length) return assigneeObj[0][1];
 
-    const issuesObj = Object.entries(selectedFilters.issues).filter(([key, value]) => key === 'assigneeMe' && value !== null);
+    const issuesObj = Object.entries(selectedFilters.issues).filter(
+        ([key, value]) => key === 'assigneeMe' && value !== null && value !== 'nonSelected'
+    );
     if (issuesObj.length) return userId;
 
     return '';
 };
 
-//TODO: 선택안한 값들 필터링
 const filterTypeNoValues = (selectedFilters) => {
     if (!selectedFilters || Object.keys(selectedFilters).length === 0) return;
 
+    const nonSelectedObj = Object.entries(selectedFilters).filter(([key, value]) => value === 'nonSelected');
+    if (nonSelectedObj.length) {
+        return nonSelectedObj.map((e) => e[0]).join(';');
+    }
     return '';
 };
 

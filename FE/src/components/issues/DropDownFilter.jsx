@@ -5,20 +5,31 @@ import styled from 'styled-components';
 import { DropTitle } from '../../styles/theme.js';
 import DropDownTitle from './DropDownTitle.jsx';
 import { useFilterContext } from '../../context/FilterContext.jsx';
+import { CustomProfile } from '../../assets/CustomProfile.jsx';
+import CustomNoProfile from '../../assets/CustomNoProfile.jsx';
+import { useIssueListStateToggle } from '../../hooks/useIssueDetailData.js';
 
 const filterMapping = {
     issue: '이슈 필터',
     state: '상태 변경',
 };
 
-export default function DropDownFilter({ filterTitle, filterItems, dispatchTypeByFilterContents, children }) {
+const dispatchTypeByFilter = {
+    author: 'SET_SELECTED_AUTHOR_FILTER',
+    label: 'SET_SELECTED_LABEL_FILTER',
+    milestone: 'SET_SELECTED_MILESTONE_FILTER',
+    assignee: 'SET_SELECTED_ASSIGNEE_FILTER',
+};
+
+export default function DropDownFilter({ filterTitle, filterItems, dispatchTypeByFilterContents, checkedItems, setCheckedItems, children }) {
+    const { mutate: toggleIssueState } = useIssueListStateToggle();
     const [selectedKey, setSelectedKey] = useState(null);
     const { state: selectedFilters, dispatch } = useFilterContext();
 
     const filterReset = (filterOject, keys) => {
         return Object.entries(filterOject)
-            .filter(([key, value]) => !keys.includes(key))
-            .every(([key, value]) => value === null);
+            .filter(([key, _]) => !keys.includes(key))
+            .every(([_, value]) => value === null);
     };
 
     const isResetFilters = (selectedFilters) => {
@@ -31,29 +42,62 @@ export default function DropDownFilter({ filterTitle, filterItems, dispatchTypeB
         return isResetIssueFilters && isResetRestFilters;
     };
 
-    useEffect(() => {
-        if (isResetFilters(selectedFilters)) setSelectedKey(null);
-    }, [selectedFilters]);
+    const isClosedState = (selectedFilters) => {
+        if (!selectedFilters || Object.keys(selectedFilters).length === 0 || !selectedFilters.issues) return;
 
-    const dispatchTypeByFilter = {
-        author: 'SET_SELECTED_AUTHOR_FILTER',
-        label: 'SET_SELECTED_LABEL_FILTER',
-        milestone: 'SET_SELECTED_MILESTONE_FILTER',
-        assignee: 'SET_SELECTED_ASSIGNEE_FILTER',
+        const issues = selectedFilters.issues || {};
+        if (issues.isOpen === null && issues.isClosed === null) return false;
+        else return Object.entries(issues).filter(([key, value]) => (key === 'isOpen' || key === 'isClosed') && value !== null)[0][0] === 'isClosed';
     };
 
-    const handleMenuClick = ({ key }) => {
-        setSelectedKey(key);
-        message.info(`${key === 'null' ? `${children} 초기화` : key} 필터 선택`);
+    const getIssueFilterTitle = (key) => filterItems.find(({ value }) => value === key).title;
 
-        if (filterTitle === 'issue') {
-            dispatch({ type: dispatchTypeByFilterContents[key], payload: key });
+    const handleStateFilter = (checkedItems) => {
+        const isClosed = isClosedState(selectedFilters); //true면 닫힌이슈상태임
+        message.info(`선택한 이슈를 ${isClosed ? '열었습니다.' : '닫았습니다.'}`);
+
+        if (isClosed) {
+            setCheckedItems([]);
+            toggleIssueState({ toIssueState: false, issueIds: checkedItems }); //이슈열기
         } else {
-            dispatch({ type: dispatchTypeByFilter[filterTitle], payload: key });
+            setCheckedItems([]);
+            toggleIssueState({ toIssueState: true, issueIds: checkedItems }); //이슈 닫기
+        }
+    };
+
+    const handleIssueFilter = (key) => {
+        message.info(`${getIssueFilterTitle(key)} 필터 선택`);
+        dispatch({ type: dispatchTypeByFilterContents[key], payload: key });
+    };
+
+    const handleDefaultFilter = (filterTitle, key) => {
+        message.info(`${key === 'null' ? `${children} 초기화` : key} 필터 선택`);
+        dispatch({ type: dispatchTypeByFilter[filterTitle], payload: key });
+    };
+
+    const handleMenuClick = (key, checkedItems) => {
+        setSelectedKey(key);
+
+        switch (filterTitle) {
+            case 'state':
+                handleStateFilter(checkedItems);
+                break;
+
+            case 'issue':
+                handleIssueFilter(key);
+                break;
+
+            default:
+                handleDefaultFilter(filterTitle, key);
+                break;
         }
     };
 
     const dropBoxTitle = () => filterMapping[filterTitle] || `${children} 필터`;
+
+    useEffect(() => {
+        if (isResetFilters(selectedFilters)) setSelectedKey(null);
+    }, [selectedFilters]);
 
     const titleItem = {
         label: (
@@ -83,14 +127,16 @@ export default function DropDownFilter({ filterTitle, filterItems, dispatchTypeB
         key: 'nonSelected',
     };
 
-    const defaultTypeItems = () => {
+    const defaultTypeItems = (checkType) => {
         return filterItems
             ? filterItems.reduce((acc, cur) => {
                   acc.push({
                       label: (
                           <ItemContainer>
                               <div className="itemTitle">
-                                  <DropTitle>{cur.title}</DropTitle>
+                                  <DropTitle>
+                                      {checkType ? (isClosedState(selectedFilters) ? `${cur.title} 열기` : `${cur.title} 닫기`) : cur.title}
+                                  </DropTitle>
                               </div>
                               <div className="ItemRadio">
                                   <Radio
@@ -115,7 +161,7 @@ export default function DropDownFilter({ filterTitle, filterItems, dispatchTypeB
                           <ItemContainer>
                               <div className="itemTitle">
                                   <DropTitle>
-                                      <AvatarImage src={cur.avatarSrc}></AvatarImage>
+                                      {cur.avatarSrc ? <CustomProfile src={cur.avatarSrc} /> : <CustomNoProfile />}
                                       <UserName>{cur.userName}</UserName>
                                   </DropTitle>
                               </div>
@@ -156,18 +202,25 @@ export default function DropDownFilter({ filterTitle, filterItems, dispatchTypeB
     };
 
     const itemByType = {
-        issue: [titleItem, ...defaultTypeItems()],
+        issue: [titleItem, ...defaultTypeItems(false)],
         assignee: [titleItem, clearTypeItem, ...imageTypeItems()],
         label: [titleItem, clearTypeItem, ...labelTypeItems()],
-        milestone: [titleItem, clearTypeItem, ...defaultTypeItems()],
+        milestone: [titleItem, clearTypeItem, ...defaultTypeItems(false)],
         author: [titleItem, ...imageTypeItems()],
-        state: [titleItem, , ...defaultTypeItems()],
+        state: [titleItem, , ...defaultTypeItems(true)],
     };
 
     const items = itemByType[filterTitle];
 
     return (
-        <StyledDropdown menu={{ items, onClick: handleMenuClick }} getPopupContainer={(triggerNode) => triggerNode.parentNode} trigger={['click']}>
+        <StyledDropdown
+            menu={{
+                items,
+                onClick: (e) => handleMenuClick(e.key, checkedItems),
+            }}
+            getPopupContainer={(triggerNode) => triggerNode.parentNode}
+            trigger={['click']}
+        >
             <a onClick={(e) => e.preventDefault()}>
                 <Space>
                     {children}
@@ -178,22 +231,10 @@ export default function DropDownFilter({ filterTitle, filterItems, dispatchTypeB
     );
 }
 
-//TODO:
-//3. 다크모드 테마에 따른 색상변경
-
 const StyledColor = styled.div`
     border-radius: 50%;
     width: 20px;
     height: 20px;
-`;
-const AvatarImage = styled.img`
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    border: 1px solid;
-    border-color: ${(props) => props.theme.borderColor};
-    background-color: ${(props) => props.theme.bgColorBody};
-    display: block;
 `;
 
 const StyledDropdown = styled(Dropdown)`

@@ -8,12 +8,16 @@ import { useFilterContext } from '../../context/FilterContext';
 import NavStateType from './NavStateType';
 import NavFilterType from './NavFilterType';
 import { MainContainer } from '../../styles/theme';
+import { TagsOutlined, PlusOutlined } from '@ant-design/icons';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLabelsFilter, useMembersFilter, useMilestonesFilter } from '../../hooks/useFiltersData';
 import { usefilteredIssueData } from '../../hooks/usefilteredIssueData';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { useLabelMilestoneCountData } from '../../hooks/useLabelData';
+import { CustomButton } from '../../assets/CustomButton';
+import { IconMilestone } from '../../assets/icons/IconMilestone';
 
-const stateModifyFilters = [{ title: '선택한 이슈 열기' }, { title: '선택한 이슈 닫기' }];
+const stateModifyFilters = [{ title: '선택한 이슈' }];
 
 const mainIssueFilters = [
     { title: '열린 이슈', value: 'is:open' },
@@ -23,12 +27,20 @@ const mainIssueFilters = [
     { title: '닫힌 이슈', value: 'is:closed' },
 ];
 
+const dispatchTypeByInputContents = {
+    'is:open': 'SET_SELECTED_IS_OPEN_FILTER',
+    'is:closed': 'SET_SELECTED_IS_CLOSED_FILTER',
+    'assignee:@me': 'SET_SELECTED_ASSIGNEE_ME_FILTER',
+    'mentions:@me': 'SET_SELECTED_MENTIONS_ME_FILTER',
+    'author:@me': 'SET_SELECTED_AUTHOR_ME_FILTER',
+};
+
 const dispatchTypeByFilterContents = {
     'is:open': 'SET_SELECTED_IS_OPEN_FILTER',
     'is:closed': 'SET_SELECTED_IS_CLOSED_FILTER',
-    'assignee:@me': 'SET_SELECTED_AUTHOR_ME_FILTER',
-    'mentions:@me': 'SET_SELECTED_ASSIGNEE_ME_FILTER',
-    'author:@me': 'SET_SELECTED_MENTIONS_ME_FILTER',
+    'assignee:@me': 'SET_SELECTED_ASSIGNEE_ME_FILTER',
+    'mentions:@me': 'SET_SELECTED_MENTIONS_ME_FILTER',
+    'author:@me': 'SET_SELECTED_AUTHOR_ME_FILTER',
 };
 
 const issueFilters = {
@@ -58,6 +70,11 @@ const initFetched = {
 };
 const resetListData = { id: null, title: null, createDate: null, milestoneName: null, author: null, assignees: null, labels: null };
 
+const initIssueCount = {
+    isOpen: 0,
+    isClosed: 0,
+};
+
 export default function Main() {
     const navigate = useNavigate();
     const { state: selectedFilters, dispatch } = useFilterContext();
@@ -66,11 +83,17 @@ export default function Main() {
     const [checkedItems, setCheckedItems] = useState([]);
     const [filterItemsByType, setFilterItemsByType] = useState(initFilterItems);
     const [issueDatas, setIssueDatas] = useState(initIssueDatas);
+    const [hasFetched, setHasFetched] = useState(initFetched);
+    const [labelCount, setLabelCount] = useState(0);
+    const [milestoneCount, setMilestoneCount] = useState(0);
+    const [issueCount, setIssueCount] = useState(initIssueCount);
 
+    const { data: countData } = useLabelMilestoneCountData();
     const { data: issueList, isLoading: issueListIsLoading } = usefilteredIssueData();
-    const { data: labelsFilter, isLoading: labelsFilterIsLoading } = useLabelsFilter();
-    const { data: milestonesFilter, isLoading: milestonesFilterIsLoading } = useMilestonesFilter();
-    const { data: membersFilter, isLoading: membersFilterIsLoading } = useMembersFilter();
+
+    const { data: labelsFilter, isLoading: labelsFilterIsLoading } = useLabelsFilter({ enabled: hasFetched.label });
+    const { data: milestonesFilter, isLoading: milestonesFilterIsLoading } = useMilestonesFilter({ enabled: hasFetched.milestone });
+    const { data: membersFilter, isLoading: membersFilterIsLoading } = useMembersFilter({ enabled: hasFetched.assignee });
 
     const clearFilter = () => dispatch({ type: 'SET_CLEAR_FILTER', payload: '' });
 
@@ -111,8 +134,6 @@ export default function Main() {
         return checkedItems.includes(key);
     };
 
-    const [hasFetched, setHasFetched] = useState(initFetched);
-
     const setterFechedByType = {
         assignee: () => setHasFetched((prev) => ({ ...prev, assignee: true })),
         label: () => setHasFetched((prev) => ({ ...prev, label: true })),
@@ -131,6 +152,12 @@ export default function Main() {
         if (!hasFetched[type]) {
             useQueryByType[type](); // 마우스를 올렸을 때 쿼리 실행
             setterFechedByType[type](); //상태 업데이트
+        }
+    };
+
+    const handleInputFilter = (e) => {
+        if (e.key === 'Enter') {
+            const inputValues = e.target.value.replaceAll('"', '').split(' ');
         }
     };
 
@@ -184,11 +211,18 @@ export default function Main() {
         const newIsOpenCount = issueListCount.openedIssueCount;
         const newIsClosedCount = issueListCount.closedIssueCount;
 
+        setIssueCount({ isOpen: issueList.count.openedCount, isClosed: issueList.count.closedCount });
         const newIssueList = issueList.filteredIssues;
         setIssueDatas((prev) => ({ ...prev, count: { ...prev.count, isOpen: newIsOpenCount } }));
         setIssueDatas((prev) => ({ ...prev, count: { ...prev.count, isClosed: newIsClosedCount } }));
         setIssueDatas((prev) => ({ ...prev, list: newIssueList }));
     }, [issueList]);
+
+    useEffect(() => {
+        if (!countData) return;
+        setLabelCount(countData.labelCount.count);
+        setMilestoneCount(countData.milestoneCount.isOpened + countData.milestoneCount.isClosed);
+    }, [countData]);
 
     return (
         <MainContainer>
@@ -201,19 +235,29 @@ export default function Main() {
                                 filterItems={mainIssueFilters}
                                 dispatch={dispatch}
                                 dispatchTypeByFilterContents={dispatchTypeByFilterContents}
+                                checkedItems={checkedItems}
+                                setCheckedItems={setCheckedItems}
                             >
                                 필터
                             </DropDownFilter>
                         </IssueFilter>
-                        <InputFilter value={inputFilter} onChange={(e) => setInputFilter(e.target.value)}></InputFilter>
+                        <InputFilter value={inputFilter} onKeyDown={handleInputFilter} onChange={(e) => setInputFilter(e.target.value)} />
                     </FlexRow>
 
                     <NavBtnContainer>
-                        <StyledBtn onClick={() => navigate('/labels')}>레이블()</StyledBtn>
-                        <StyledBtn onClick={() => navigate('/milestones')}>마일스톤()</StyledBtn>
-                        <StyledBtn onClick={() => navigate('/issues/new')} type="primary">
-                            + 이슈작성
-                        </StyledBtn>
+                        <StyledLabelBtn type={'outline'} size={'large'} isDisabled={false} onClick={() => navigate('/labels')}>
+                            <TagsOutlined />
+                            레이블({labelCount})
+                        </StyledLabelBtn>
+                        <StyledMilestoneBtn type={'outline'} size={'large'} isDisabled={false} onClick={() => navigate('/milestones')}>
+                            <IconMilestone />
+                            마일스톤({milestoneCount})
+                        </StyledMilestoneBtn>
+
+                        <StyledNewIssueBtn onClick={() => navigate('/issues/new')} size={'large'} isDisabled={false}>
+                            <PlusOutlined />
+                            이슈작성
+                        </StyledNewIssueBtn>
                     </NavBtnContainer>
                 </FlexRow>
 
@@ -230,10 +274,16 @@ export default function Main() {
                         className="checkbox"
                     />
                     {checkedItems.length > 0 ? (
-                        <NavStateType checkedItemsCount={checkedItems.length} stateModifyFilters={stateModifyFilters} dispatch={dispatch} />
+                        <NavStateType
+                            checkedItemsCount={checkedItems.length}
+                            stateModifyFilters={stateModifyFilters}
+                            dispatch={dispatch}
+                            checkedItems={checkedItems}
+                            setCheckedItems={setCheckedItems}
+                        />
                     ) : (
                         <NavFilterType
-                            issueCount={issueDatas.count}
+                            issueCount={issueCount}
                             dispatchTypeByFilterContents={dispatchTypeByFilterContents}
                             imageTypeItems={filterItemsByType.members}
                             labelTypeItems={filterItemsByType.labels}
@@ -241,6 +291,8 @@ export default function Main() {
                             dispatch={dispatch}
                             ischecked={selectedFilters.issues.isClosed}
                             handleMouseEnter={handleMouseEnter}
+                            labelCount={labelCount}
+                            milestoneCount={milestoneCount}
                         />
                     )}
                 </StyledBoxHeader>
@@ -268,6 +320,30 @@ export default function Main() {
         </MainContainer>
     );
 }
+
+const StyledNewIssueBtn = styled(CustomButton)`
+    width: 120px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    margin-left: 10px;
+`;
+
+const StyledMilestoneBtn = styled(CustomButton)`
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 130px;
+    font-size: 15px;
+    font-weight: 500;
+`;
+const StyledLabelBtn = styled(CustomButton)`
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 130px;
+    font-size: 15px;
+    font-weight: 500;
+`;
+
 const StyledLoader = styled.div`
     height: 100px;
     align-content: center;
@@ -396,6 +472,14 @@ const StyledNav = styled.nav`
     }
 `;
 
-const NavBtnContainer = styled.div`
-    width: 380px;
+const NavBtnContainer = styled(FlexRow)`
+    justify-content: end;
+    margin-left: 10px;
+
+    & .createBtn {
+        margin-left: 10px;
+    }
+    button {
+        font-size: 16px;
+    }
 `;
