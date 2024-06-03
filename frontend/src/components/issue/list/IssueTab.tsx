@@ -159,6 +159,7 @@ const LeftMenu = styled.div`
   gap: 0.5em;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 `;
 
 const IssueMenuText = styled.span<{ isFocused: boolean }>`
@@ -174,9 +175,7 @@ const RightMenus = styled.div`
   gap: 2em;
 `;
 
-const RightMenu = styled.div`
-  position: relative;
-`;
+const RightMenu = styled.div``;
 
 const MenuWrapper = styled.div`
   display: flex;

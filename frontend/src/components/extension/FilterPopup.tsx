@@ -1,4 +1,4 @@
-import { CSSProperties, forwardRef } from "react";
+import { CSSProperties, forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import useIssueStore from "../../hooks/stores/useIssueStore";
 import { useQueryClient } from "react-query";
@@ -11,7 +11,6 @@ export interface FilterbarProps {
   filterType: FilterType;
   onClose?: (menu: FilterBarKeys) => void;
   items?: string[] | object[];
-  customStyle?: CSSProperties;
 }
 
 const HEADER_NAME = {
@@ -29,14 +28,32 @@ const TITLE_KEY = {
 
 const FIRST_PAGE = 1;
 
+function updateFilterText(filterText: string, filterType: string, option: string) {
+  const regex = new RegExp(`${filterType}:"[^"]*"`);
+
+  if (regex.test(filterText)) return filterText.replace(regex, `${filterType}:"${option}"`);
+  return `${filterText} ${filterType}:"${option}"`;
+}
+
 const FilterPopup = forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
   const client = useQueryClient();
-  const { filterType, items, customStyle } = props;
+  const { filterType, items } = props;
   const { filterText, setFilterText, setIssues, setPage } = useIssueStore();
+  const [popupTop, setPopupTop] = useState<number>(0);
+  const [popupLeft, setPopupLeft] = useState<number>(0);
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (parentRef.current) {
+      const parentRect = parentRef.current.getBoundingClientRect();
+      setPopupTop(parentRect.top);
+      setPopupLeft(parentRect.left);
+    }
+  }, []);
 
   const handleCheckboxChange = (option: string, { target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
     if (checked) {
-      const newFilterText = `${filterText} ${filterType}:"${option}"`;
+      const newFilterText = updateFilterText(filterText, filterType, option);
 
       setFilterText(newFilterText);
       setIssues([]);
@@ -96,24 +113,20 @@ const FilterPopup = forwardRef<HTMLDivElement, FilterbarProps>((props, ref) => {
   };
 
   return (
-    <Wrapper ref={ref} customStyle={customStyle} style={customStyle}>
-      <div>
-        <Header>{HEADER_NAME[filterType]} 필터</Header>
-        {renderOptions()}
-      </div>
-    </Wrapper>
+    <div ref={parentRef}>
+      <Wrapper ref={ref} top={popupTop} left={popupLeft}>
+        <div>
+          <Header>{HEADER_NAME[filterType]} 필터</Header>
+          {renderOptions()}
+        </div>
+      </Wrapper>
+    </div>
   );
 });
 
-const Wrapper = styled.div<{ customStyle?: CSSProperties }>`
+const Wrapper = styled.div<{ top: number; left: number }>`
   position: absolute;
-  ${({ customStyle }) =>
-    customStyle
-      ? ""
-      : `
-    top: 2.75em;
-    left: -9em;
-  `}
+  ${({ top, left }) => `top: ${top}; left: ${left};`}
   width: 15em;
   display: flex;
   flex-direction: column;

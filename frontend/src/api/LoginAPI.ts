@@ -96,7 +96,7 @@ export const sendRegistrationRequest: (registrationState: RegistrationState) => 
 
 export const sendIdValidationRequest = async (idValue: string): Promise<string> => {
   try {
-    const response = await fetch(`${SERVER}/validation/${idValue}`);
+    const response = await fetch(`${SERVER}/registration/validate/${idValue}`);
 
     if (response.status === 409) throw new Error(ID_CHECK_FAIL);
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);

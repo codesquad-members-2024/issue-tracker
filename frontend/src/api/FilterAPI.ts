@@ -7,16 +7,16 @@ const getAuthToken = () => localStorage.getItem("token");
 const parseQueryText = (query: string) => {
   const regex = /(?:[^\s"]+|"[^"]*")+/g;
   const matches = query.match(regex);
-  const params = new URLSearchParams();
+  const params: Record<string, string> = {};
 
   if (!matches) return "";
 
   matches.forEach((match) => {
     const [key, value] = match.split(":").map((part) => part.replace(/"/g, ""));
-    params.append(key, value);
+    params[key] = value;
   });
 
-  return params.toString();
+  return new URLSearchParams(params).toString();
 };
 
 export const sendFiltersRequest = async () => {
@@ -45,9 +45,9 @@ export const sendIssuesRequestByFilter = async (filterText: string, page: number
     const request = {
       credentials: "include" as RequestCredentials,
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
+        Authorization: `Bearer ${token}`,
+      },
+    };
     const response = await fetch(`${SERVER}/filters/issues?page=${page}&${queryText}`, request);
 
     if (!response.ok) throw new Error(SERVER_ERROR_MESSAGE);

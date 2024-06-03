@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import useLoginLogic from "../../hooks/logics/useLoginLogic";
 import Loading from "./Loading";
 
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+const GITHUB_FULL_LINK = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=repo:status read:repo_hook user:email&redirect_uri=${REDIRECT_URI}`;
+
 function Login() {
   const { isSubmitable, errorMessage, isLoading, idValueRef, passwordValueRef, handleLoginClick, handleOnChange } =
     useLoginLogic();
@@ -13,7 +17,7 @@ function Login() {
   return (
     <LoginWrapper>
       <Logo src={pageLogo} alt="page-logo" onClick={() => navigate("/")} />
-      <GithubLoginButton>Github 계정으로 로그인</GithubLoginButton>
+      <GithubLoginButton href={GITHUB_FULL_LINK}>Github 계정으로 로그인</GithubLoginButton>
       <div>or</div>
       <AuthorizationForm ref={idValueRef} type="id" onChange={handleOnChange} />
       <AuthorizationForm ref={passwordValueRef} type="password" onChange={handleOnChange} />
@@ -41,15 +45,20 @@ const Logo = styled.img`
   cursor: pointer;
 `;
 
-const GithubLoginButton = styled.button`
+const GithubLoginButton = styled.a`
+  box-sizing: border-box;
   width: 320px;
   height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #7e7e7e;
   border-radius: 16px;
   padding: 0 24px;
   color: #7e7e7e;
   background-color: transparent;
   font-size: 20px;
+  text-decoration: none;
   cursor: pointer;
 `;
 
